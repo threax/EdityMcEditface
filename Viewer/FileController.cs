@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 
 namespace OwinSelfhostSample
@@ -13,9 +15,12 @@ namespace OwinSelfhostSample
         }
 
         // GET api/values/5 
-        public string Get(String file)
+        public HttpResponseMessage Get(String file)
         {
-            return file;
+            var response = new HttpResponseMessage();
+            response.Content = new StringContent("<html><body>Hello World</body></html>");
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+            return response;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using Viewer.TemplateFormatter;
 
 namespace OwinSelfhostSample
 {
@@ -19,6 +20,9 @@ namespace OwinSelfhostSample
         // GET api/values/5 
         public HttpResponseMessage Get(String file)
         {
+            // set the default HTML formatter for all future conversions
+            CommonMarkSettings.Default.OutputDelegate = (doc, output, settings) => new FileTemplateHtmlFormatter(".", output, settings).WriteDocument(doc);
+
             String content;
             using (var reader = new StreamReader(file))
             {

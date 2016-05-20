@@ -28,8 +28,8 @@ namespace Viewer.TemplateFormatter
             bool runDefault = true;
             if(!this.RenderPlainTextInlines.Peek())
             {
-                var tag = inlineTags.getTag(inline.Tag);
-                if(tag != null)
+                String tag;
+                if(inlineTags.tryGetTag(inline.Tag, out tag))
                 {
                     runDefault = false;
 
@@ -48,6 +48,35 @@ namespace Viewer.TemplateFormatter
             if(runDefault)
             {
                 base.WriteInline(inline, isOpening, isClosing, out ignoreChildNodes);
+            }
+        }
+
+        protected override void WriteBlock(Block block, bool isOpening, bool isClosing, out bool ignoreChildNodes)
+        {
+            ignoreChildNodes = false;
+            bool runDefault = true;
+            if (!this.RenderPlainTextInlines.Peek())
+            {
+                String tag;
+                if(blockTags.tryGetTag(block.Tag, out tag))
+                {
+                    runDefault = false;
+
+                    if (isOpening)
+                    {
+
+                    }
+
+                    if (isClosing)
+                    {
+
+                    }
+                }
+            }
+
+            if (runDefault)
+            {
+                base.WriteBlock(block, isOpening, isClosing, out ignoreChildNodes);
             }
         }
     }

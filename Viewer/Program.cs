@@ -10,6 +10,10 @@ namespace Viewer
     {
         static void Main(string[] args)
         {
+            using (OwinMicroSite site = new OwinMicroSite(9000))
+            {
+                site.run();
+            }
         }
     }
 }

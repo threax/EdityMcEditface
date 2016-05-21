@@ -114,5 +114,21 @@ namespace Viewer.TemplateFormatter
                 return this.Settings;
             }
         }
+
+        public Stack<bool> TheRenderTightParagraphs
+        {
+            get
+            {
+                return this.RenderTightParagraphs;
+            }
+        }
+
+        public Stack<bool> TheRenderPlainTextInlines
+        {
+            get
+            {
+                return this.RenderPlainTextInlines;
+            }
+        }
     }
 }

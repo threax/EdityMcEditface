@@ -100,8 +100,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="FileController.cs" />
-    <Compile Include="TemplateFormatter\TagCache.cs" />
-    <Compile Include="TemplateFormatter\TagRenderer.cs" />
+    <Compile Include="TemplateFormatter\HtmlTagIdentifier.cs" />
+    <Compile Include="TemplateFormatter\HtmlTagMap.cs" />
+    <Compile Include="TemplateFormatter\HtmlRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md">

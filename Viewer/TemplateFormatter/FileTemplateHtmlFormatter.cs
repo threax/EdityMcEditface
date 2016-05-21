@@ -12,14 +12,14 @@ namespace Viewer.TemplateFormatter
 {
     class FileTemplateHtmlFormatter : HtmlFormatter
     {
-        TagCache<InlineTag> inlineTags;
-        TagCache<BlockTag> blockTags;
+        HtmlTagMap tagMap;
+        HtmlTagIdentifier tagIdentifier;
 
-        public FileTemplateHtmlFormatter(String templateDirectory, TextWriter target, CommonMarkSettings settings)
+        public FileTemplateHtmlFormatter(HtmlTagMap tagMap, HtmlTagIdentifier tagIdentifier, TextWriter target, CommonMarkSettings settings)
             :base(target, settings)
         {
-            inlineTags = new TagCache<InlineTag>(templateDirectory);
-            blockTags = new TagCache<BlockTag>(templateDirectory);
+            this.tagMap = tagMap;
+            this.tagIdentifier = tagIdentifier;
         }
 
         protected override void WriteInline(Inline inline, bool isOpening, bool isClosing, out bool ignoreChildNodes)
@@ -28,20 +28,12 @@ namespace Viewer.TemplateFormatter
             bool runDefault = true;
             if(!this.RenderPlainTextInlines.Peek())
             {
-                String tag;
-                if(inlineTags.tryGetTag(inline.Tag, out tag))
+                String tag = tagIdentifier.identify(inline, isOpening, isClosing);
+                HtmlRenderer renderer;
+                if(tag != null && tagMap.tryGetTag(tag, out renderer))
                 {
                     runDefault = false;
-
-                    if(isOpening)
-                    {
-
-                    }
-
-                    if(isClosing)
-                    {
-
-                    }
+                    renderer.write(inline, isOpening, isClosing, out ignoreChildNodes);
                 }
             }
 
@@ -55,23 +47,12 @@ namespace Viewer.TemplateFormatter
         {
             ignoreChildNodes = false;
             bool runDefault = true;
-            if (!this.RenderPlainTextInlines.Peek())
+            String tag = tagIdentifier.identify(block, isOpening, isClosing);
+            HtmlRenderer renderer;
+            if (tag != null && tagMap.tryGetTag(tag, out renderer))
             {
-                String tag;
-                if(blockTags.tryGetTag(block.Tag, out tag))
-                {
-                    runDefault = false;
-
-                    if (isOpening)
-                    {
-
-                    }
-
-                    if (isClosing)
-                    {
-
-                    }
-                }
+                runDefault = false;
+                renderer.write(block, isOpening, isClosing, out ignoreChildNodes);
             }
 
             if (runDefault)

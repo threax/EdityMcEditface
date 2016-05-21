@@ -1,4 +1,6 @@
-﻿using Microsoft.Owin.Hosting;
+﻿using Microsoft.Owin.FileSystems;
+using Microsoft.Owin.Hosting;
+using Microsoft.Owin.StaticFiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +8,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Owin;
+using Microsoft.Owin.StaticFiles.ContentTypes;
 
 namespace Viewer
 {
@@ -15,12 +19,19 @@ namespace Viewer
         private IDisposable site;
         private int port;
 
-        public OwinMicroSite(int port)
+        public OwinMicroSite(int port, String root, IContentTypeProvider contentTypeProvider)
         {
+            var fileSystem = new PhysicalFileSystem(root);
+            var options = new FileServerOptions();
+
+            options.EnableDirectoryBrowsing = true;
+            options.FileSystem = fileSystem;
+            options.StaticFileOptions.ContentTypeProvider = contentTypeProvider;
+
             this.port = port;
             siteWake = new ManualResetEventSlim(false);
             // Start OWIN host 
-            site = WebApp.Start<Startup>(url: $"http://localhost:{port}");
+            site = WebApp.Start($"http://localhost:{port}", builder => builder.UseFileServer(options));
         }
 
         public void Dispose()

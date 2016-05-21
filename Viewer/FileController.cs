@@ -26,6 +26,8 @@ namespace OwinSelfhostSample
             //var tagMap = new HtmlTagMap()
             //CommonMarkSettings.Default.OutputDelegate = (doc, output, settings) => new FileTemplateHtmlFormatter(".", output, settings).WriteDocument(doc);
 
+            
+
             try
             {
                 String content;

@@ -12,21 +12,23 @@ namespace Viewer
         static void Main(string[] args)
         {
             int port = 9000;
-            string path = "";
-            if(args.Length > 0)
+            String rootDir = args.Length > 0 ? args[0] : ".";
+            if(args.Length > 1)
             {
-                path = args[0];
-            }
-            try
-            {
-                Process.Start($"http://localhost:{port}/{path}");
-            }
-            catch (Exception e)
-            {
-                
+                string path = "";
+                path = args[1];
+
+                try
+                {
+                    Process.Start($"http://localhost:{port}/{path}");
+                }
+                catch (Exception e)
+                {
+
+                }
             }
 
-            using (OwinMicroSite site = new OwinMicroSite(port))
+            using (OwinMicroSite site = new OwinMicroSite(port, rootDir, new CommonMarkContentTypeProvider()))
             {
                 site.run();
             }

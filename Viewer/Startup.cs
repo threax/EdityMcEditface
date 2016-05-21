@@ -16,14 +16,12 @@ namespace Viewer
             HttpConfiguration config = new HttpConfiguration();
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "v/{*file}",
+                routeTemplate: "{*file}",
                 defaults: new
                 {
                     controller = "File",
                 }
             );
-
-            appBuilder.UseWebApi(config);
 
             var fileSystem = new PhysicalFileSystem(Environment.CurrentDirectory);
             var options = new FileServerOptions();
@@ -32,8 +30,9 @@ namespace Viewer
             options.FileSystem = fileSystem;
             options.StaticFileOptions.ContentTypeProvider = new CommonMarkContentTypeProvider();
 
-
+            //Building in this order makes everything work
             appBuilder.UseFileServer(options);
+            appBuilder.UseWebApi(config);
         }
     }
 }

@@ -21,6 +21,11 @@ namespace OwinSelfhostSample
         // GET api/values/5 
         public HttpResponseMessage Get(String file)
         {
+            if (!Path.GetExtension(file).Equals(".md", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return statusCodeResponse(HttpStatusCode.NotFound);
+            }
+
             //var identifier = new HtmlTagIdentifier();
             //var rendererFinder
             //var tagMap = new HtmlTagMap()

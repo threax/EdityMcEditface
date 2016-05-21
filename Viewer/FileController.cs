@@ -26,12 +26,9 @@ namespace OwinSelfhostSample
                 return statusCodeResponse(HttpStatusCode.NotFound);
             }
 
-            //var identifier = new HtmlTagIdentifier();
-            //var rendererFinder
-            //var tagMap = new HtmlTagMap()
-            //CommonMarkSettings.Default.OutputDelegate = (doc, output, settings) => new FileTemplateHtmlFormatter(".", output, settings).WriteDocument(doc);
-
-            
+            var identifier = new DefaultHtmlTagIdentiifer();
+            var tagMap = new HtmlTagMap(htmlTag => null);
+            CommonMarkSettings.Default.OutputDelegate = (doc, output, settings) => new FileTemplateHtmlFormatter(tagMap, identifier, output, settings).WriteDocument(doc);
 
             try
             {

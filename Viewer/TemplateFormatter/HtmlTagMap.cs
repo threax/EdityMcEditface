@@ -6,17 +6,17 @@ namespace Viewer.TemplateFormatter
 {
     class HtmlTagMap
     {
-        public delegate HtmlRenderer GetRenderer(String htmlTag);
+        public delegate HtmlRenderer GetRenderer(HtmlElements htmlTag);
 
         private GetRenderer tagProvider;
-        private Dictionary<String, HtmlRenderer> inlineTemplateCache = new Dictionary<String, HtmlRenderer>();
+        private Dictionary<HtmlElements, HtmlRenderer> inlineTemplateCache = new Dictionary<HtmlElements, HtmlRenderer>();
 
         public HtmlTagMap(GetRenderer tagProvider)
         {
             this.tagProvider = tagProvider;
         }
 
-        public bool tryGetTag(String htmlTag, out HtmlRenderer ret)
+        public bool tryGetTag(HtmlElements htmlTag, out HtmlRenderer ret)
         {
             ret = null;
             bool result = false;

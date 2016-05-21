@@ -28,9 +28,9 @@ namespace Viewer.TemplateFormatter
             bool runDefault = true;
             if(!this.RenderPlainTextInlines.Peek())
             {
-                String tag = tagIdentifier.identify(inline, isOpening, isClosing);
+                HtmlElements tag = tagIdentifier.identify(inline, isOpening, isClosing);
                 HtmlRenderer renderer;
-                if(tag != null && tagMap.tryGetTag(tag, out renderer))
+                if(tag != HtmlElements.unidentified && tagMap.tryGetTag(tag, out renderer))
                 {
                     runDefault = false;
                     renderer.write(inline, isOpening, isClosing, out ignoreChildNodes);
@@ -47,9 +47,9 @@ namespace Viewer.TemplateFormatter
         {
             ignoreChildNodes = false;
             bool runDefault = true;
-            String tag = tagIdentifier.identify(block, isOpening, isClosing);
+            HtmlElements tag = tagIdentifier.identify(block, isOpening, isClosing);
             HtmlRenderer renderer;
-            if (tag != null && tagMap.tryGetTag(tag, out renderer))
+            if (tag != HtmlElements.unidentified && tagMap.tryGetTag(tag, out renderer))
             {
                 runDefault = false;
                 renderer.write(block, isOpening, isClosing, out ignoreChildNodes);

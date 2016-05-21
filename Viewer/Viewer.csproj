@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonMarkContentTypeProvider.cs" />
+    <Compile Include="TemplateFormatter\DefaultHtmlTagIdentiifer.cs" />
     <Compile Include="TemplateFormatter\FileTemplateHtmlFormatter.cs" />
     <Compile Include="OwinMicroSite.cs" />
     <Compile Include="Program.cs" />

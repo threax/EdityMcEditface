@@ -9,9 +9,9 @@ namespace Viewer.TemplateFormatter
 {
     class DefaultHtmlTagIdentiifer : HtmlTagIdentifier
     {
-        public HtmlElements identify(Block block, bool isOpening, bool isClosing)
+        public HtmlElements identify(Block block, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter)
         {
-            switch(block.Tag)
+            switch (block.Tag)
             {
                 case BlockTag.AtxHeading:
                 case BlockTag.SetextHeading:
@@ -33,6 +33,15 @@ namespace Viewer.TemplateFormatter
                             return HtmlElements.p;
                     }
                 case BlockTag.BlockQuote:
+                    if (isOpening)
+                    {
+                        htmlFormatter.TheRenderTightParagraphs.Push(false);
+                    }
+
+                    if (isClosing)
+                    {
+                        htmlFormatter.TheRenderTightParagraphs.Pop();
+                    }
                     return HtmlElements.blockquote;
                 case BlockTag.Document:
                     return HtmlElements.document;
@@ -43,17 +52,31 @@ namespace Viewer.TemplateFormatter
                 case BlockTag.IndentedCode:
                     return HtmlElements.indentedcode;
                 case BlockTag.List:
-                    switch(block.ListData.ListType)
+                    if (isOpening)
+                    {
+                        htmlFormatter.TheRenderTightParagraphs.Push(block.ListData.IsTight);
+                    }
+
+                    if (isClosing)
+                    {
+                        htmlFormatter.TheRenderTightParagraphs.Pop();
+                    }
+
+                    switch (block.ListData.ListType)
                     {
                         default:
                         case ListType.Bullet:
-                            return HtmlElements.ul; 
+                            return HtmlElements.ul;
                         case ListType.Ordered:
                             return HtmlElements.ol;
                     }
                 case BlockTag.ListItem:
                     return HtmlElements.li;
                 case BlockTag.Paragraph:
+                    if (htmlFormatter.TheRenderTightParagraphs.Peek())
+                    {
+                        return HtmlElements.unidentified;
+                    }
                     return HtmlElements.p;
                 case BlockTag.ThematicBreak:
                     return HtmlElements.hr;
@@ -63,11 +86,12 @@ namespace Viewer.TemplateFormatter
             }
         }
 
-        public HtmlElements identify(Inline inline, bool isOpening, bool isClosing)
+        public HtmlElements identify(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter)
         {
-            switch(inline.Tag)
+            switch (inline.Tag)
             {
                 case InlineTag.RawHtml:
+                    return HtmlElements.htmlblock;
                 case InlineTag.String:
                     return HtmlElements.text;
                 case InlineTag.LineBreak:
@@ -79,6 +103,14 @@ namespace Viewer.TemplateFormatter
                 case InlineTag.Link:
                     return HtmlElements.a;
                 case InlineTag.Image:
+                    if (isOpening)
+                    {
+                        htmlFormatter.TheRenderPlainTextInlines.Push(true);
+                    }
+                    if (isClosing)
+                    {
+                        htmlFormatter.TheRenderPlainTextInlines.Pop();
+                    }
                     return HtmlElements.img;
                 case InlineTag.Strong:
                     return HtmlElements.strong;

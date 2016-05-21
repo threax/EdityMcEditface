@@ -34,8 +34,8 @@ namespace Viewer.TemplateFormatter
 
     interface HtmlTagIdentifier
     {
-        HtmlElements identify(Inline inline, bool isOpening, bool isClosing);
+        HtmlElements identify(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter);
 
-        HtmlElements identify(Block block, bool isOpening, bool isClosing);
+        HtmlElements identify(Block block, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter);
     }
 }

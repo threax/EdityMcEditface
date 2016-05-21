@@ -28,7 +28,7 @@ namespace Viewer.TemplateFormatter
             bool runDefault = true;
             if(!this.RenderPlainTextInlines.Peek())
             {
-                HtmlElements tag = tagIdentifier.identify(inline, isOpening, isClosing);
+                HtmlElements tag = tagIdentifier.identify(inline, isOpening, isClosing, this);
                 HtmlRenderer renderer;
                 if(tag != HtmlElements.unidentified && tagMap.tryGetTag(tag, out renderer))
                 {
@@ -47,7 +47,7 @@ namespace Viewer.TemplateFormatter
         {
             ignoreChildNodes = false;
             bool runDefault = true;
-            HtmlElements tag = tagIdentifier.identify(block, isOpening, isClosing);
+            HtmlElements tag = tagIdentifier.identify(block, isOpening, isClosing, this);
             HtmlRenderer renderer;
             if (tag != HtmlElements.unidentified && tagMap.tryGetTag(tag, out renderer))
             {

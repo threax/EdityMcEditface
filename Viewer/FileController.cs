@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using Viewer.TemplateFormatter;
+using Viewer.TemplateFormatter.HtmlRenderers;
 
 namespace OwinSelfhostSample
 {
@@ -27,7 +28,9 @@ namespace OwinSelfhostSample
             }
 
             var identifier = new DefaultHtmlTagIdentiifer();
-            var tagMap = new HtmlTagMap(htmlTag => null);
+            var renderers = new TemplatedHtmlRenderer();
+            renderers.openDoc("template.html");
+            var tagMap = new HtmlTagMap(renderers.getRenderer);
             CommonMarkSettings.Default.OutputDelegate = (doc, output, settings) => new FileTemplateHtmlFormatter(tagMap, identifier, output, settings).WriteDocument(doc);
 
             try

@@ -19,12 +19,12 @@ namespace Viewer.TemplateFormatter
         public bool tryGetTag(HtmlElements htmlTag, out HtmlRenderer ret)
         {
             ret = null;
-            bool result = false;
             if (!inlineTemplateCache.TryGetValue(htmlTag, out ret))
             {
-                inlineTemplateCache.Add(htmlTag, tagProvider(htmlTag));
+                ret = tagProvider(htmlTag);
+                inlineTemplateCache.Add(htmlTag, ret);
             }
-            return result;
+            return ret != null;
         }
     }
 }

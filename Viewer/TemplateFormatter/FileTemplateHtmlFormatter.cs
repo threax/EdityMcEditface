@@ -10,7 +10,7 @@ using CommonMark.Syntax;
 
 namespace Viewer.TemplateFormatter
 {
-    class FileTemplateHtmlFormatter : HtmlFormatter
+    class FileTemplateHtmlFormatter : AccessibleHtmlFormatter
     {
         HtmlTagMap tagMap;
         HtmlTagIdentifier tagIdentifier;
@@ -33,7 +33,7 @@ namespace Viewer.TemplateFormatter
                 if(tag != HtmlElements.unidentified && tagMap.tryGetTag(tag, out renderer))
                 {
                     runDefault = false;
-                    renderer.write(inline, isOpening, isClosing, out ignoreChildNodes);
+                    renderer.write(inline, isOpening, isClosing, this, out ignoreChildNodes);
                 }
             }
 
@@ -52,7 +52,7 @@ namespace Viewer.TemplateFormatter
             if (tag != HtmlElements.unidentified && tagMap.tryGetTag(tag, out renderer))
             {
                 runDefault = false;
-                renderer.write(block, isOpening, isClosing, out ignoreChildNodes);
+                renderer.write(block, isOpening, isClosing, this, out ignoreChildNodes);
             }
 
             if (runDefault)

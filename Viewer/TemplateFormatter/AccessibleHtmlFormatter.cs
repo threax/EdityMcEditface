@@ -106,5 +106,13 @@ namespace Viewer.TemplateFormatter
         {
             this.WritePositionAttribute(inline);
         }
+
+        public CommonMarkSettings TheSettings
+        {
+            get
+            {
+                return this.Settings;
+            }
+        }
     }
 }

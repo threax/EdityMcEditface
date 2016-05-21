@@ -9,9 +9,9 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
 {
     class SplitHtmlTemplate : HtmlRenderer
     {
-        private String prefix;
-        private String postfix;
-        private bool ignoreChildNodes;
+        protected String prefix;
+        protected String postfix;
+        protected bool ignoreChildNodes;
 
         public SplitHtmlTemplate(String html, bool ignoreChildNodes = false, char delimiter = '|')
         {
@@ -26,7 +26,7 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
             this.ignoreChildNodes = ignoreChildNodes;
         }
 
-        public void write(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, out bool ignoreChildNodes)
+        public virtual void write(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, out bool ignoreChildNodes)
         {
             ignoreChildNodes = this.ignoreChildNodes;
 
@@ -42,7 +42,7 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
             }
         }
 
-        public void write(Block block, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, out bool ignoreChildNodes)
+        public virtual void write(Block block, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, out bool ignoreChildNodes)
         {
             ignoreChildNodes = this.ignoreChildNodes;
 

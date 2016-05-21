@@ -21,25 +21,50 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
         {
             switch(element)
             {
+                case HtmlElements.document:
+                    return null;
                 case HtmlElements.text:
                     return new EncodedHtmlRenderer();
-                default:
+                case HtmlElements.htmlblock:
+                    return new WriteRenderer();
+                case HtmlElements.br:
+                case HtmlElements.hr:
                     var template = doc.DocumentNode.SelectNodes($"//templates/{element}").FirstOrDefault();
                     if (template == null)
                     {
                         return null;
                     }
 
-                    if (template.GetAttributeValue("exclude", false))
+                    return new LiteralHtmlTemplate(this.getNodeHtml(template));
+                case HtmlElements.a:
+                    template = doc.DocumentNode.SelectNodes($"//templates/{element}").FirstOrDefault();
+                    if (template == null)
                     {
-                        return new SplitHtmlTemplate(template.InnerHtml);
+                        return null;
                     }
-                    else
+
+                    return new LinkRenderer(this.getNodeHtml(template));
+                default:
+                    template = doc.DocumentNode.SelectNodes($"//templates/{element}").FirstOrDefault();
+                    if (template == null)
                     {
-                        return new SplitHtmlTemplate(template.OuterHtml);
+                        return null;
                     }
+
+                    return new SplitHtmlTemplate(this.getNodeHtml(template));
             }
         }
 
+        private String getNodeHtml(HtmlNode template)
+        {
+            if (template.GetAttributeValue("exclude", false))
+            {
+                return template.InnerHtml;
+            }
+            else
+            {
+                return template.OuterHtml;
+            }
+        }
     }
 }

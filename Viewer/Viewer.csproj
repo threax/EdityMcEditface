@@ -116,8 +116,11 @@
     <Compile Include="Startup.cs" />
     <Compile Include="FileController.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\EncodedHtmlRenderer.cs" />
+    <Compile Include="TemplateFormatter\HtmlRenderers\LinkRenderer.cs" />
+    <Compile Include="TemplateFormatter\HtmlRenderers\LiteralHtmlTemplate.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\SplitHtmlTemplate.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\TemplatedHtmlRenderer.cs" />
+    <Compile Include="TemplateFormatter\HtmlRenderers\WriteRenderer.cs" />
     <Compile Include="TemplateFormatter\HtmlTagIdentifier.cs" />
     <Compile Include="TemplateFormatter\HtmlTagMap.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderer.cs" />

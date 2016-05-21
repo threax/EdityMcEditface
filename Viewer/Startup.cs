@@ -1,6 +1,7 @@
 ﻿using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.StaticFiles;
 using Owin;
+using System;
 using System.Web.Http;
 
 namespace Viewer
@@ -15,7 +16,7 @@ namespace Viewer
             HttpConfiguration config = new HttpConfiguration();
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "{*file}",
+                routeTemplate: "v/{*file}",
                 defaults: new
                 {
                     controller = "File",
@@ -24,15 +25,15 @@ namespace Viewer
 
             appBuilder.UseWebApi(config);
 
-            //var fileSystem = new PhysicalFileSystem(Root);
-            //var options = new FileServerOptions();
-            //
-            //options.EnableDirectoryBrowsing = true;
-            //options.FileSystem = fileSystem;
-            //options.StaticFileOptions.ContentTypeProvider = new CommonMarkContentTypeProvider();
+            var fileSystem = new PhysicalFileSystem(Environment.CurrentDirectory);
+            var options = new FileServerOptions();
+            
+            options.EnableDirectoryBrowsing = true;
+            options.FileSystem = fileSystem;
+            options.StaticFileOptions.ContentTypeProvider = new CommonMarkContentTypeProvider();
 
 
-            //appBuilder.UseFileServer(options);
+            appBuilder.UseFileServer(options);
         }
     }
 }

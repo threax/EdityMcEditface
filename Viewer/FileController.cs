@@ -13,13 +13,6 @@ namespace OwinSelfhostSample
 {
     public class FileController : ApiController
     {
-        // GET api/values 
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        // GET api/values/5 
         public HttpResponseMessage Get(String file)
         {
             if (!Path.GetExtension(file).Equals(".md", StringComparison.InvariantCultureIgnoreCase))
@@ -45,18 +38,7 @@ namespace OwinSelfhostSample
                     }
                 }
 
-                var page =
-$@"<!DOCTYPE html>
-<html>
-<head>
-<title>{file} as html</title>
-</head>
-    <body>
-        {content}
-    </body>
-</html>
-";
-                return htmlResponse(page);
+                return htmlResponse(content);
             }
             catch(FileNotFoundException)
             {

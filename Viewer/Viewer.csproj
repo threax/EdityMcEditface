@@ -116,6 +116,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="FileController.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\CodeRenderer.cs" />
+    <Compile Include="TemplateFormatter\HtmlRenderers\DocumentRenderer.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\EncodedHtmlRenderer.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\ImageHtmlRenderer.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\LinkRenderer.cs" />

@@ -9,12 +9,14 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
 {
     class TemplatedHtmlRenderer
     {
-        HtmlDocument doc;
+        private HtmlDocument doc;
+        private DocumentRenderer docRenderer;
 
         public void openDoc(String file)
         {
             doc = new HtmlDocument();
             doc.Load(file);
+            docRenderer = new DocumentRenderer(doc.DocumentNode.OuterHtml);
         }
 
         public HtmlRenderer getRenderer(HtmlElements element)
@@ -22,7 +24,7 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
             switch(element)
             {
                 case HtmlElements.document:
-                    return null;
+                    return docRenderer;
                 case HtmlElements.text:
                     return new EncodedHtmlRenderer();
                 case HtmlElements.htmlblock:

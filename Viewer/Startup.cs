@@ -1,4 +1,6 @@
-﻿using Owin;
+﻿using Microsoft.Owin.FileSystems;
+using Microsoft.Owin.StaticFiles;
+using Owin;
 using System.Web.Http;
 
 namespace Viewer
@@ -21,6 +23,16 @@ namespace Viewer
             );
 
             appBuilder.UseWebApi(config);
+
+            //var fileSystem = new PhysicalFileSystem(Root);
+            //var options = new FileServerOptions();
+            //
+            //options.EnableDirectoryBrowsing = true;
+            //options.FileSystem = fileSystem;
+            //options.StaticFileOptions.ContentTypeProvider = new CommonMarkContentTypeProvider();
+
+
+            //appBuilder.UseFileServer(options);
         }
     }
 }

@@ -7,23 +7,21 @@ using CommonMark.Syntax;
 
 namespace Viewer.TemplateFormatter.HtmlRenderers
 {
-    class LinkRenderer : SplitHtmlTemplate
+    class ImageHtmlRenderer : SplitHtmlTemplate
     {
-        public LinkRenderer(String html, bool ignoreChildNodes = false, String delimiter = "|")
-            :base(html, ignoreChildNodes, delimiter)
+        public ImageHtmlRenderer(String html, bool ignoreChildNodes = false)
+            :base(html, ignoreChildNodes, "<img />")
         {
-            if(prefix.EndsWith(">"))
-            {
-                prefix = prefix.Substring(0, prefix.Length - 1);
-            }
         }
 
         public override void write(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, out bool ignoreChildNodes)
         {
             ignoreChildNodes = this.ignoreChildNodes;
+
             if(isOpening)
             {
-                htmlFormatter.write($"{prefix} href=\"");
+                htmlFormatter.write(prefix);
+                htmlFormatter.write("<img src=\"");
                 var uriResolver = htmlFormatter.TheSettings.UriResolver;
                 if (uriResolver != null)
                 {
@@ -34,8 +32,16 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
                     htmlFormatter.writeEncodedUrl(inline.TargetUrl);
                 }
 
+                htmlFormatter.write("\" alt=\"");
 
-                htmlFormatter.write("\"");
+                htmlFormatter.TheRenderPlainTextInlines.Push(true);
+            }
+
+            if (isClosing)
+            {
+                htmlFormatter.TheRenderPlainTextInlines.Pop();
+
+                htmlFormatter.write('\"');
                 if (inline.LiteralContent.Length > 0)
                 {
                     htmlFormatter.write(" title=\"");
@@ -43,16 +49,8 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
                     htmlFormatter.write('\"');
                 }
 
-                if (htmlFormatter.TheSettings.TrackSourcePosition)
-                {
-                    htmlFormatter.writePositionAttribute(inline);
-                }
-
-                htmlFormatter.write('>');
-            }
-            if(isClosing)
-            {
-                base.write(inline, isOpening, isClosing, htmlFormatter, out ignoreChildNodes);
+                htmlFormatter.write(" />");
+                htmlFormatter.write(postfix);
             }
         }
     }

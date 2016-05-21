@@ -44,6 +44,23 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
                     }
 
                     return new LinkRenderer(this.getNodeHtml(template));
+                case HtmlElements.fencedcode:
+                case HtmlElements.indentedcode:
+                    template = doc.DocumentNode.SelectNodes($"//templates/{element}").FirstOrDefault();
+                    if (template == null)
+                    {
+                        return null;
+                    }
+
+                    return new CodeRenderer(this.getNodeHtml(template));
+                case HtmlElements.img:
+                    template = doc.DocumentNode.SelectNodes($"//templates/{element}").FirstOrDefault();
+                    if (template == null)
+                    {
+                        return null;
+                    }
+
+                    return new ImageHtmlRenderer(this.getNodeHtml(template));
                 default:
                     template = doc.DocumentNode.SelectNodes($"//templates/{element}").FirstOrDefault();
                     if (template == null)

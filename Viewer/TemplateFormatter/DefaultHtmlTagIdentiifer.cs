@@ -103,14 +103,6 @@ namespace Viewer.TemplateFormatter
                 case InlineTag.Link:
                     return HtmlElements.a;
                 case InlineTag.Image:
-                    if (isOpening)
-                    {
-                        htmlFormatter.TheRenderPlainTextInlines.Push(true);
-                    }
-                    if (isClosing)
-                    {
-                        htmlFormatter.TheRenderPlainTextInlines.Pop();
-                    }
                     return HtmlElements.img;
                 case InlineTag.Strong:
                     return HtmlElements.strong;

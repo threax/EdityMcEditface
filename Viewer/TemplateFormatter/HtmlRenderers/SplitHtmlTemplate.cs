@@ -13,9 +13,9 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
         protected String postfix;
         protected bool ignoreChildNodes;
 
-        public SplitHtmlTemplate(String html, bool ignoreChildNodes = false, char delimiter = '|')
+        public SplitHtmlTemplate(String html, bool ignoreChildNodes = false, String delimiter = "|")
         {
-            String[] split = html.Split(new char[]{ delimiter });
+            String[] split = html.Split(new String[]{ delimiter }, StringSplitOptions.None);
             if(split.Length != 2)
             {
                 throw new Exception($"invalid split line {html} too many delimiters {delimiter}");

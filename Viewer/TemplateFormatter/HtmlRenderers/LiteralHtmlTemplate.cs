@@ -18,14 +18,14 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
             this.ignoreChildNodes = ignoreChildNodes;
         }
 
-        public void write(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, out bool ignoreChildNodes)
+        public virtual void write(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, out bool ignoreChildNodes)
         {
             ignoreChildNodes = this.ignoreChildNodes;
             htmlFormatter.ensureNewLine();
             htmlFormatter.write(html);
         }
 
-        public void write(Block block, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, out bool ignoreChildNodes)
+        public virtual void write(Block block, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, out bool ignoreChildNodes)
         {
             ignoreChildNodes = this.ignoreChildNodes;
             htmlFormatter.ensureNewLine();

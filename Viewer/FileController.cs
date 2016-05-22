@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web;
 using System.Web.Http;
 using Viewer.TemplateFormatter;
 using Viewer.TemplateFormatter.HtmlRenderers;
@@ -49,7 +50,7 @@ namespace OwinSelfhostSample
                     }
                     else
                     {
-                        content = $"<html><head></head><body><pre>{reader.ReadToEnd()}</pre></body></html>";
+                        content = $"<html><head></head><body><pre>{HttpUtility.HtmlEncode(reader.ReadToEnd())}</pre></body></html>";
                     }
                 }
 

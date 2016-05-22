@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.XPath;
 
 namespace Viewer.TemplateFormatter.HtmlRenderers
 {
@@ -28,7 +29,7 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
                 case HtmlElements.text:
                     return new EncodedHtmlRenderer();
                 case HtmlElements.htmlblock:
-                    return new WriteRenderer();
+                    return new HtmlRendererFinder(this);
                 case HtmlElements.br:
                 case HtmlElements.hr:
                     var template = doc.DocumentNode.SelectNodes($"//templates/{element}").FirstOrDefault();
@@ -72,6 +73,26 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
 
                     return new SplitHtmlTemplate(this.getNodeHtml(template));
             }
+        }
+
+        private RawWriteHtmlElementRenderer htmlWriteRenderer = new RawWriteHtmlElementRenderer();
+
+        public HtmlElementRenderer getHtmlTemplateElementRenderer(String elementName)
+        {
+            try
+            {
+                var template = doc.DocumentNode.SelectNodes($"//htmltemplates/{elementName}").FirstOrDefault();
+                if (template == null)
+                {
+                    return htmlWriteRenderer;
+                }
+
+                return new CustomHtmlElementRenderer(this.getNodeHtml(template));
+            }
+            catch (ArgumentNullException) { }
+            catch (XPathException) { }
+
+            return htmlWriteRenderer;
         }
 
         private String getNodeHtml(HtmlNode template)

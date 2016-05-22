@@ -116,13 +116,17 @@
     <Compile Include="Startup.cs" />
     <Compile Include="FileController.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\CodeRenderer.cs" />
+    <Compile Include="TemplateFormatter\HtmlRenderers\CustomHtmlElementRenderer.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\DocumentRenderer.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\EncodedHtmlRenderer.cs" />
+    <Compile Include="TemplateFormatter\HtmlRenderers\HtmlElementRenderer.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\ImageHtmlRenderer.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\LinkRenderer.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\LiteralHtmlTemplate.cs" />
+    <Compile Include="TemplateFormatter\HtmlRenderers\RawWriteHtmlElementRenderer.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\SplitHtmlTemplate.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\TemplatedHtmlRenderer.cs" />
+    <Compile Include="TemplateFormatter\HtmlRenderers\HtmlRendererFinder.cs" />
     <Compile Include="TemplateFormatter\HtmlRenderers\WriteRenderer.cs" />
     <Compile Include="TemplateFormatter\HtmlTagIdentifier.cs" />
     <Compile Include="TemplateFormatter\HtmlTagMap.cs" />
@@ -154,6 +158,7 @@
     <Content Include="..\template.html">
       <Link>template.html</Link>
     </Content>
+    <Content Include="defaultTemplate.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

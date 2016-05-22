@@ -26,6 +26,12 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
             template.ParentNode.InsertAfter(doc.CreateTextNode("SPLIT_HERE"), template);
             template.Remove();
 
+            var htmlTemplates = doc.DocumentNode.SelectNodes($"//htmltemplates").FirstOrDefault();
+            if(htmlTemplates != null)
+            {
+                htmlTemplates.Remove();
+            }
+
             var html = doc.DocumentNode.OuterHtml;
             String[] split = html.Split(new String[] { "SPLIT_HERE" }, StringSplitOptions.None);
             prefix = split[0];

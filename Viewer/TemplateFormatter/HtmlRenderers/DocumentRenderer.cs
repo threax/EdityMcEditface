@@ -26,10 +26,13 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
             template.ParentNode.InsertAfter(doc.CreateTextNode("SPLIT_HERE"), template);
             template.Remove();
 
-            var htmlTemplates = doc.DocumentNode.SelectNodes($"//htmltemplates").FirstOrDefault();
+            var htmlTemplates = doc.DocumentNode.SelectNodes($"//htmltemplates");
             if(htmlTemplates != null)
             {
-                htmlTemplates.Remove();
+                foreach(var tempate in htmlTemplates)
+                {
+                    tempate.Remove();
+                }
             }
 
             var html = doc.DocumentNode.OuterHtml;

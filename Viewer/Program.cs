@@ -33,9 +33,27 @@ namespace Viewer
                 }
             }
 
+            var qInfo = new ConsoleKeyInfo('q', ConsoleKey.Q, false, false, false);
+            var bInfo = new ConsoleKeyInfo('b', ConsoleKey.B, false, false, false);
+
             using (OwinMicroSite site = new OwinMicroSite(port))
             {
-                site.run();
+                Console.WriteLine($"Running site on {Environment.CurrentDirectory}");
+                Console.WriteLine("Press b to open your browser");
+                Console.WriteLine("Press q to quit.");
+
+                while (true)
+                {
+                    var key = Console.ReadKey();
+                    if(key == qInfo)
+                    {
+                        break;
+                    }
+                    if(key == bInfo)
+                    {
+                        Process.Start($"http://localhost:{port}");
+                    }
+                }
             }
         }
     }

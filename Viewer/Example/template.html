@@ -47,13 +47,21 @@
                 </templates>
                 <htmltemplates>
                     <imageWithCaption exclude="true">
-                        <div class="thumbnail">
-                            <img src="{src}" alt="{alt}">
-                            <div class="caption">
-                                {content}
+                        <div class="{class}">
+                            <div class="thumbnail">
+                                <img src="{src}" alt="{alt}">
+                                <div class="caption">
+                                    {content}
+                                </div>
                             </div>
                         </div>
                     </imageWithCaption>
+                    <startColumn exclude="true">
+                        <div class="{class}">
+                    </startColumn>
+                    <endColumn exclude="true">
+                        </div>
+                    </endColumn>
                 </htmltemplates>
             </div>
         </div>

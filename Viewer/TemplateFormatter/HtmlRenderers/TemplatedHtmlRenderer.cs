@@ -49,6 +49,7 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
                     return new LinkRenderer(this.getNodeHtml(template));
                 case HtmlElements.fencedcode:
                 case HtmlElements.indentedcode:
+                case HtmlElements.code:
                     template = doc.DocumentNode.SelectNodes($"//templates/{element}").FirstOrDefault();
                     if (template == null)
                     {

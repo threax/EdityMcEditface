@@ -24,5 +24,15 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
             htmlFormatter.writeEncodedHtml(block.StringContent);
             htmlFormatter.write(postfix);
         }
+
+        public override void write(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, out bool ignoreChildNodes)
+        {
+            ignoreChildNodes = this.ignoreChildNodes;
+
+            htmlFormatter.ensureNewLine();
+            htmlFormatter.write(prefix);
+            htmlFormatter.writeEncodedHtml(inline.LiteralContent);
+            htmlFormatter.write(postfix);
+        }
     }
 }

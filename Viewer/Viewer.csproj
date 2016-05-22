@@ -136,7 +136,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Example\Example.md" />
-    <None Include="Example\sample.md" />
+    <None Include="Example\syntax.md" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

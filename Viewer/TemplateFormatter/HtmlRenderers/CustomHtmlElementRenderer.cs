@@ -17,16 +17,14 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
             this.template = template;
         }
 
-        public void write(Block block, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, HtmlNode element, out bool ignoreChildNodes)
+        public void write(Block block, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, HtmlNode element)
         {
             writeNode(htmlFormatter, element);
-            ignoreChildNodes = true;
         }
 
-        public void write(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, HtmlNode element, out bool ignoreChildNodes)
+        public void write(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, HtmlNode element)
         {
             writeNode(htmlFormatter, element);
-            ignoreChildNodes = true;
         }
 
         public void writeNode(AccessibleHtmlFormatter htmlFormatter, HtmlNode element)

@@ -10,8 +10,8 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
 {
     interface HtmlElementRenderer
     {
-        void write(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, HtmlNode element, out bool ignoreChildNodes);
+        void write(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, HtmlNode element);
 
-        void write(Block block, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, HtmlNode element, out bool ignoreChildNodes);
+        void write(Block block, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, HtmlNode element);
     }
 }

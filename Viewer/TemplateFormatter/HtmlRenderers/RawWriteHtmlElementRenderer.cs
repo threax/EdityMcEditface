@@ -10,24 +10,18 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
 {
     class RawWriteHtmlElementRenderer : HtmlElementRenderer
     {
-        private bool ignoreChildNodes;
-
-        public RawWriteHtmlElementRenderer(bool ignoreChildNodes = true)
+        public RawWriteHtmlElementRenderer()
         {
-            this.ignoreChildNodes = ignoreChildNodes;
+
         }
 
-        public void write(Block block, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, HtmlNode elementNode, out bool ignoreChildNodes)
+        public void write(Block block, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, HtmlNode elementNode)
         {
-            ignoreChildNodes = this.ignoreChildNodes;
-
             htmlFormatter.write(block.StringContent);
         }
 
-        public void write(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, HtmlNode elementNode, out bool ignoreChildNodes)
+        public void write(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, HtmlNode elementNode)
         {
-            ignoreChildNodes = this.ignoreChildNodes;
-
             htmlFormatter.write(inline.LiteralContent);
         }
     }

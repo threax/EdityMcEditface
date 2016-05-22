@@ -15,6 +15,14 @@ namespace OwinSelfhostSample
     {
         public HttpResponseMessage Get(String file)
         {
+            bool parse = true;
+
+            if(file.EndsWith(".text", StringComparison.InvariantCultureIgnoreCase))
+            {
+                file = file.Substring(0, file.Length - 5);
+                parse = false;
+            }
+
             if (!Path.GetExtension(file).Equals(".md", StringComparison.InvariantCultureIgnoreCase))
             {
                 return statusCodeResponse(HttpStatusCode.NotFound);
@@ -31,10 +39,17 @@ namespace OwinSelfhostSample
                 String content;
                 using (var reader = new StreamReader(file))
                 {
-                    using (var writer = new StringWriter())
+                    if(parse)
                     {
-                        CommonMarkConverter.Convert(reader, writer);
-                        content = writer.ToString();
+                        using (var writer = new StringWriter())
+                        {
+                            CommonMarkConverter.Convert(reader, writer);
+                            content = writer.ToString();
+                        }
+                    }
+                    else
+                    {
+                        content = $"<html><head></head><body><pre>{reader.ReadToEnd()}</pre></body></html>";
                     }
                 }
 

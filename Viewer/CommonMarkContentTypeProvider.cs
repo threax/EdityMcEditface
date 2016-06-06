@@ -11,7 +11,7 @@ namespace Viewer
     {
         public CommonMarkContentTypeProvider()
         {
-            //Mappings.Add(".md", "text/markdown");
+            Mappings.Add(".json", "application/json");
         }
     }
 }

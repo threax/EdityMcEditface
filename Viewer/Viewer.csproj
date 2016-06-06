@@ -155,7 +155,7 @@
   <ItemGroup>
     <EmbeddedResource Include="BackendTemplates\text.html" />
     <EmbeddedResource Include="BackendTemplates\editmd.html" />
-    <EmbeddedResource Include="BackendTemplates\edit.html" />
+    <EmbeddedResource Include="BackendTemplates\tmce.html" />
     <Content Include="defaultTemplate.html" />
     <EmbeddedResource Include="BackendTemplates\smd.html" />
     <Content Include="Example\320x240.png" />

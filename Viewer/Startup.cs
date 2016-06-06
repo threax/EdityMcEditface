@@ -14,6 +14,16 @@ namespace Viewer
         {
             // Configure Web API for self-host. 
             HttpConfiguration config = new HttpConfiguration();
+
+            config.Routes.MapHttpRoute(
+                name: "Embedded",
+                routeTemplate: "embd/{*file}",
+                defaults: new
+                {
+                    controller = "EmbeddedFile",
+                }
+            );
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "{*file}",

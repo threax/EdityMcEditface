@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonMarkContentTypeProvider.cs" />
+    <Compile Include="EmbeddedFileController.cs" />
     <Compile Include="TemplateFormatter\AccessibleHtmlFormatter.cs" />
     <Compile Include="TemplateFormatter\DefaultHtmlTagIdentiifer.cs" />
     <Compile Include="TemplateFormatter\FileTemplateHtmlFormatter.cs" />
@@ -157,7 +158,9 @@
     <EmbeddedResource Include="BackendTemplates\edit.html" />
     <Content Include="Example\320x240.png" />
     <Content Include="Example\template.html" />
+    <EmbeddedResource Include="Resources\**\*.*" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

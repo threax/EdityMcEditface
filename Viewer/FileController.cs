@@ -20,13 +20,20 @@ namespace OwinSelfhostSample
 
             if(file.EndsWith(".text", StringComparison.InvariantCultureIgnoreCase))
             {
-                file = file.Substring(0, file.Length - 5);
+                file = file.Substring(0, file.Length - 5) + ".md";
                 parse = false;
             }
-
-            if (!Path.GetExtension(file).Equals(".md", StringComparison.InvariantCultureIgnoreCase))
+            else if (!Path.GetExtension(file).Equals(".md", StringComparison.InvariantCultureIgnoreCase))
             {
-                return statusCodeResponse(HttpStatusCode.NotFound);
+                var autoFile = file + ".md";
+                if (File.Exists(autoFile))
+                {
+                    file = autoFile;
+                }
+                else
+                {
+                    return statusCodeResponse(HttpStatusCode.NotFound);
+                }
             }
 
             var identifier = new DefaultHtmlTagIdentiifer();

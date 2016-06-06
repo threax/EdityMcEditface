@@ -5,22 +5,34 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using Viewer.TemplateFormatter;
 using Viewer.TemplateFormatter.HtmlRenderers;
 
-namespace OwinSelfhostSample
+namespace Viewer
 {
     public class FileController : ApiController
     {
+        private static char[] seps = { '|' };
+        private static Assembly assembly = Assembly.GetExecutingAssembly();
+
         public HttpResponseMessage Get(String file)
         {
-            bool parse = true;
-
-            if(file.EndsWith(".text", StringComparison.InvariantCultureIgnoreCase))
+            if (file.EndsWith(".edit", StringComparison.InvariantCultureIgnoreCase))
             {
-                file = file.Substring(0, file.Length - 5) + ".md";
+
+            }
+
+            bool parse = true;
+            String extension = Path.GetExtension(file).ToLowerInvariant().Replace(".", "");
+            Tuple<String, String> template = null;
+
+            if(isTemplate(extension))
+            {
+                template = loadEmbeddedTemplate(extension);
+                file = file.Substring(0, file.Length - extension.Length - 1) + ".md";
                 parse = false;
             }
             else if (!Path.GetExtension(file).Equals(".md", StringComparison.InvariantCultureIgnoreCase))
@@ -57,7 +69,7 @@ namespace OwinSelfhostSample
                     }
                     else
                     {
-                        content = $"<html><head></head><body><pre>{HttpUtility.HtmlEncode(reader.ReadToEnd())}</pre></body></html>";
+                        content = template.Item1 + HttpUtility.HtmlEncode(reader.ReadToEnd()) + template.Item2;
                     }
                 }
 
@@ -86,6 +98,31 @@ namespace OwinSelfhostSample
             response.Content = new StringContent(content);
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(mimeType);
             return response;
+        }
+
+        public Tuple<String, String> loadEmbeddedTemplate(String name)
+        {
+            String template;
+            using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(makeTemplateName(name))))
+            {
+                template = reader.ReadToEnd();
+            }
+            var split = template.Split(seps);
+            if(split.Length != 2)
+            {
+                throw new Exception($"Invalid template {name}, split length was {split.Length} should be 2");
+            }
+            return Tuple.Create(split[0], split[1]);
+        }
+
+        private bool isTemplate(String name)
+        {
+            return !String.IsNullOrEmpty(name) && assembly.GetManifestResourceInfo(makeTemplateName(name)) != null;
+        }
+
+        private String makeTemplateName(String name)
+        {
+            return $"Viewer.BackendTemplates.{name.ToLowerInvariant()}.html";
         }
     }
 }

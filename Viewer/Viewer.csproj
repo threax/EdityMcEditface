@@ -152,7 +152,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BackendTemplates\text.html" />
     <Content Include="defaultTemplate.html" />
+    <EmbeddedResource Include="BackendTemplates\edit.html" />
     <Content Include="Example\320x240.png" />
     <Content Include="Example\template.html" />
   </ItemGroup>

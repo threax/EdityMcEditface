@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,13 @@ namespace Viewer.TemplateFormatter.HtmlRenderers
         {
             doc = new HtmlDocument();
             doc.Load(file);
+            docRenderer = new DocumentRenderer(doc.DocumentNode.OuterHtml);
+        }
+
+        public void openDoc(Stream stream)
+        {
+            doc = new HtmlDocument();
+            doc.Load(stream);
             docRenderer = new DocumentRenderer(doc.DocumentNode.OuterHtml);
         }
 

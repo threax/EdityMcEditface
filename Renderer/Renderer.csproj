@@ -49,25 +49,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TemplateFormatter\AccessibleHtmlFormatter.cs" />
-    <Compile Include="TemplateFormatter\DefaultHtmlTagIdentiifer.cs" />
-    <Compile Include="TemplateFormatter\FileTemplateHtmlFormatter.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\CodeRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\CustomHtmlElementRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\DocumentRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\EncodedHtmlRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\HtmlElementRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\HtmlRendererFinder.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\ImageHtmlRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\LinkRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\LiteralHtmlTemplate.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\RawWriteHtmlElementRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\SplitHtmlTemplate.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\TemplatedHtmlRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\WriteRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlTagIdentifier.cs" />
-    <Compile Include="TemplateFormatter\HtmlTagMap.cs" />
+    <Compile Include="AccessibleHtmlFormatter.cs" />
+    <Compile Include="DefaultHtmlTagIdentiifer.cs" />
+    <Compile Include="FileTemplateHtmlFormatter.cs" />
+    <Compile Include="HtmlRenderer.cs" />
+    <Compile Include="HtmlRenderers\CodeRenderer.cs" />
+    <Compile Include="HtmlRenderers\CustomHtmlElementRenderer.cs" />
+    <Compile Include="HtmlRenderers\DocumentRenderer.cs" />
+    <Compile Include="HtmlRenderers\EncodedHtmlRenderer.cs" />
+    <Compile Include="HtmlRenderers\HtmlElementRenderer.cs" />
+    <Compile Include="HtmlRenderers\HtmlRendererFinder.cs" />
+    <Compile Include="HtmlRenderers\ImageHtmlRenderer.cs" />
+    <Compile Include="HtmlRenderers\LinkRenderer.cs" />
+    <Compile Include="HtmlRenderers\LiteralHtmlTemplate.cs" />
+    <Compile Include="HtmlRenderers\RawWriteHtmlElementRenderer.cs" />
+    <Compile Include="HtmlRenderers\SplitHtmlTemplate.cs" />
+    <Compile Include="HtmlRenderers\TemplatedHtmlRenderer.cs" />
+    <Compile Include="HtmlRenderers\WriteRenderer.cs" />
+    <Compile Include="HtmlTagIdentifier.cs" />
+    <Compile Include="HtmlTagMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

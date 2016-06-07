@@ -145,7 +145,8 @@
               'indent', 'outdent', 'bold', 'italic', 'underline', 'createlink'
             ],
             class: 'nopenstyle',
-            stay: false
+            stay: false,
+            cleanAttrs: []
         };
 
         // create editor
@@ -157,23 +158,22 @@
 
         $('#EditSource').click(function ()
         {
-            var text = toMarkdown(pen.getContent(), {});
+            var penContent = pen.getContent();
+            var text = toMarkdown(penContent, {});
             sourceText.val(text);
         });
 
         $('#ApplySourceChanges').submit(function (event)
         {
-            var data = {};
-            $(this).serializeArray().map(function (x) { data[x.name] = x.value; });
-
             pen.destroy();
             var reader = new commonmark.Parser();
             var writer = new commonmark.HtmlRenderer();
-            var parsed = reader.parse(data.markdown); // parsed is a 'Node' tree
+            var parsed = reader.parse(sourceText.val()); // parsed is a 'Node' tree
             // transform parsed if you like...
             var result = writer.render(parsed); // result is a String
             pen.setContent(result);
             pen.rebuild();
+            $('#sourceModal').modal('hide');
             return false;
         });
 

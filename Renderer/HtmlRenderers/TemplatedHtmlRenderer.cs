@@ -14,18 +14,18 @@ namespace CommonMarkTools.Renderer.HtmlRenderers
         private HtmlDocument doc;
         private DocumentRenderer docRenderer;
 
-        public void openDoc(String file)
+        public void openDoc(String file, TemplateEnvironment environment)
         {
             doc = new HtmlDocument();
             doc.Load(file);
-            docRenderer = new DocumentRenderer(doc.DocumentNode.OuterHtml);
+            docRenderer = new DocumentRenderer(doc.DocumentNode.OuterHtml, environment);
         }
 
-        public void openDoc(Stream stream)
+        public void openDoc(Stream stream, TemplateEnvironment environment)
         {
             doc = new HtmlDocument();
             doc.Load(stream);
-            docRenderer = new DocumentRenderer(doc.DocumentNode.OuterHtml);
+            docRenderer = new DocumentRenderer(doc.DocumentNode.OuterHtml, environment);
         }
 
         public HtmlRenderer getRenderer(HtmlElements element)

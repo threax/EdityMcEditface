@@ -68,6 +68,7 @@
     <Compile Include="HtmlRenderers\WriteRenderer.cs" />
     <Compile Include="HtmlTagIdentifier.cs" />
     <Compile Include="HtmlTagMap.cs" />
+    <Compile Include="TemplateEnvironment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

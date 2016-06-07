@@ -34,6 +34,7 @@ namespace Viewer
                 }
                 var markdownFile = file + ".md";
 
+                TemplateEnvironment environment = new TemplateEnvironment("/" + file);
                 using (var markdown = new StreamReader(File.OpenRead(markdownFile)))
                 {
                     switch (extension)
@@ -43,14 +44,14 @@ namespace Viewer
                             {
                                 using (var template = File.OpenRead("edit.html"))
                                 {
-                                    return parsedResponse(markdown, template);
+                                    return parsedResponse(markdown, template, environment);
                                 }
                             }
                             else
                             {
                                 using (var template = assembly.GetManifestResourceStream("Viewer.BackendTemplates.edit.html"))
                                 {
-                                    return parsedResponse(markdown, template);
+                                    return parsedResponse(markdown, template, environment);
                                 }
                             }
                         case ".text":
@@ -61,7 +62,7 @@ namespace Viewer
                         default:
                             using (var template = File.OpenRead("template.html"))
                             {
-                                return parsedResponse(markdown, template);
+                                return parsedResponse(markdown, template, environment);
                             }
                     }
                 }
@@ -76,11 +77,11 @@ namespace Viewer
             }
         }
 
-        public HttpResponseMessage parsedResponse(StreamReader markdown, Stream template)
+        public HttpResponseMessage parsedResponse(StreamReader markdown, Stream template, TemplateEnvironment environment)
         {
             var identifier = new DefaultHtmlTagIdentiifer();
             var renderers = new TemplatedHtmlRenderer();
-            renderers.openDoc(template);
+            renderers.openDoc(template, environment);
             var tagMap = new HtmlTagMap(renderers.getRenderer);
             CommonMarkSettings.Default.OutputDelegate = (doc, output, settings) => new FileTemplateHtmlFormatter(tagMap, identifier, output, settings).WriteDocument(doc);
 

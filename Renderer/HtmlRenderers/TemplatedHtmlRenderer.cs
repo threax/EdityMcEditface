@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.XPath;
 
-namespace Viewer.TemplateFormatter.HtmlRenderers
+namespace CommonMarkTools.Renderer.HtmlRenderers
 {
     class TemplatedHtmlRenderer
     {

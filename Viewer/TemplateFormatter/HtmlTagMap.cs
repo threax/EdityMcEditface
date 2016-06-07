@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Viewer.TemplateFormatter
+namespace CommonMarkTools.Renderer
 {
     class HtmlTagMap
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{70B97610-1440-4CBB-8D41-F864E156ECE5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Renderer</RootNamespace>
-    <AssemblyName>Renderer</AssemblyName>
+    <RootNamespace>CommonMarkTools.Renderer</RootNamespace>
+    <AssemblyName>CommonMarkTools.Renderer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

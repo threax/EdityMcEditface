@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CommonMark.Syntax;
 using HtmlAgilityPack;
 
-namespace Viewer.TemplateFormatter.HtmlRenderers
+namespace CommonMarkTools.Renderer.HtmlRenderers
 {
     class CustomHtmlElementRenderer : HtmlElementRenderer
     {

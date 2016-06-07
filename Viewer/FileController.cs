@@ -8,8 +8,8 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
-using Viewer.TemplateFormatter;
-using Viewer.TemplateFormatter.HtmlRenderers;
+using CommonMarkTools.Renderer;
+using CommonMarkTools.Renderer.HtmlRenderers;
 
 namespace Viewer
 {

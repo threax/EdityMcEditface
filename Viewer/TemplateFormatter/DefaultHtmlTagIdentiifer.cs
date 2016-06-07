@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommonMark.Syntax;
 
-namespace Viewer.TemplateFormatter
+namespace CommonMarkTools.Renderer
 {
     class DefaultHtmlTagIdentiifer : HtmlTagIdentifier
     {

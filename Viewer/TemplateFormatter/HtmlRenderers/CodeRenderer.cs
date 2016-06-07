@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommonMark.Syntax;
 
-namespace Viewer.TemplateFormatter.HtmlRenderers
+namespace CommonMarkTools.Renderer.HtmlRenderers
 {
     class CodeRenderer : SplitHtmlTemplate
     {

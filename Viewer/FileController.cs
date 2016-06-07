@@ -28,12 +28,24 @@ namespace Viewer
             bool parse = true;
             String extension = Path.GetExtension(file).ToLowerInvariant().Replace(".", "");
             Tuple<String, String> template = null;
+            Stream cheatingFileStream = null;
 
             if(isTemplate(extension))
             {
-                template = loadEmbeddedTemplate(extension);
+                //Cheating, will remove or make this better, tiny mce is html, so we need to render that, if we keep it tmce will render md files (as html)
+                if(extension == "tmce")
+                {
+                    parse = true;
+                    cheatingFileStream = assembly.GetManifestResourceStream($"Viewer.BackendTemplates.tmce.html");
+                }
+                else //Cheating end (remove the else, but not the contents of the block)
+                {
+                    template = loadEmbeddedTemplate(extension);
+                    parse = false;
+                }
+
                 file = file.Substring(0, file.Length - extension.Length - 1) + ".md";
-                parse = false;
+
             }
             else if (!Path.GetExtension(file).Equals(".md", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -50,7 +62,15 @@ namespace Viewer
 
             var identifier = new DefaultHtmlTagIdentiifer();
             var renderers = new TemplatedHtmlRenderer();
-            renderers.openDoc("template.html");
+            if (cheatingFileStream != null)
+            {
+                renderers.openDoc(cheatingFileStream);
+                cheatingFileStream.Dispose();
+            }
+            else
+            {
+                renderers.openDoc("template.html");
+            }
             var tagMap = new HtmlTagMap(renderers.getRenderer);
             CommonMarkSettings.Default.OutputDelegate = (doc, output, settings) => new FileTemplateHtmlFormatter(tagMap, identifier, output, settings).WriteDocument(doc);
 

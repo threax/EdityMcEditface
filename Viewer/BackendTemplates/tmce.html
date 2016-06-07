@@ -7,10 +7,43 @@
 <body>
     <div id="layout">
         <header>
-            <h1>Simple.md</h1>
+            <h1>Tiny MCE</h1>
         </header>
         <div id="test-editormd">
-            <textarea>|
+            <textarea style="height:600px;">
+                <templates>
+                    <h1>|</h1>
+                    <h2>|</h2>
+                    <h3>|</h3>
+                    <h4>|</h4>
+                    <h5>|</h5>
+                    <h6>|</h6>
+                    <blockquote>|</blockquote>
+                    <document>|</document>
+                    <fencedcode exclude="true">
+                        <pre><code>|</code></pre>
+                    </fencedcode>
+                    <htmlblock>|</htmlblock>
+                    <indentedcode exclude="true">
+                        <pre><code>|</code></pre>
+                    </indentedcode>
+                    <ul>|</ul>
+                    <ol>|</ol>
+                    <li>|</li>
+                    <p>|</p>
+                    <hr />
+                    <text>|</text>
+                    <br />
+                    <softbr exclude="true">|</softbr>
+                    <code>|</code>
+                    <a>|</a>
+                    <img />
+                    <strong>|</strong>
+                    <em>|</em>
+                    <del>|</del>
+                </templates>
+                <htmltemplates>
+                </htmltemplates>
             </textarea>
         </div>
     </div>
@@ -19,6 +52,7 @@
     <script type="text/javascript">
         tinymce.init({
             selector: 'textarea',
+            content_css: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'  // resolved to http://domain.mine/myLayout.css
         });
     </script>
 </body>

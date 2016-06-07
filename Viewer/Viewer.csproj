@@ -162,7 +162,12 @@
     <Content Include="Example\template.html" />
     <EmbeddedResource Include="Resources\**\*.*" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Renderer\Renderer.csproj">
+      <Project>{70b97610-1440-4cbb-8d41-f864e156ece5}</Project>
+      <Name>Renderer</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

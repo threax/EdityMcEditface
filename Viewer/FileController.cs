@@ -18,63 +18,52 @@ namespace Viewer
         private static char[] seps = { '|' };
         private static Assembly assembly = Assembly.GetExecutingAssembly();
 
+        private String currentFile;
+
         public HttpResponseMessage Get(String file)
         {
             try
             {
-                bool parse = true;
+                this.currentFile = file;
                 var extension = Path.GetExtension(file).ToLowerInvariant();
 
-                using (var templateStream = new DisposeShim<Stream>())
+                //Fix file name
+                if (extension.Length != 0 && file.Length > extension.Length)
+                {
+                    file = file.Remove(file.Length - extension.Length);
+                }
+                var markdownFile = file + ".md";
+
+                using (var markdown = new StreamReader(File.OpenRead(markdownFile)))
                 {
                     switch (extension)
                     {
                         case ".edit":
-                            parse = true;
-                            templateStream.Target = assembly.GetManifestResourceStream($"Viewer.BackendTemplates.edit.html");
-                            break;
+                            if (File.Exists("edit.html"))
+                            {
+                                using (var template = File.OpenRead("edit.html"))
+                                {
+                                    return parsedResponse(markdown, template);
+                                }
+                            }
+                            else
+                            {
+                                using (var template = assembly.GetManifestResourceStream("Viewer.BackendTemplates.edit.html"))
+                                {
+                                    return parsedResponse(markdown, template);
+                                }
+                            }
                         case ".text":
-                            parse = false;
-                            break;
+                            return viewMarkdownResponse(markdown);
                         case ".md":
                         case ".html":
                             throw new FileNotFoundException("Not supporting these file types", file);
                         default:
-                            templateStream.Target = File.OpenRead("template.html");
-                            break;
-                    }
-
-                    //Fix file name
-                    if (extension.Length != 0 && file.Length > extension.Length)
-                    {
-                        file = file.Remove(file.Length - extension.Length);
-                    }
-                    file = file + ".md";
-
-                    String content;
-                    using (var reader = new StreamReader(file))
-                    {
-                        if (parse)
-                        {
-                            var identifier = new DefaultHtmlTagIdentiifer();
-                            var renderers = new TemplatedHtmlRenderer();
-                            renderers.openDoc(templateStream.Target);
-                            var tagMap = new HtmlTagMap(renderers.getRenderer);
-                            CommonMarkSettings.Default.OutputDelegate = (doc, output, settings) => new FileTemplateHtmlFormatter(tagMap, identifier, output, settings).WriteDocument(doc);
-
-                            using (var writer = new StringWriter())
+                            using (var template = File.OpenRead("template.html"))
                             {
-                                CommonMarkConverter.Convert(reader, writer);
-                                content = writer.ToString();
+                                return parsedResponse(markdown, template);
                             }
-                        }
-                        else
-                        {
-                            content = $@"<html><head><title>{file}</title><meta charset=""utf-8"" /></head><body><pre>{reader.ReadToEnd()}</pre></body></html>";
-                        }
                     }
-
-                    return htmlResponse(content);
                 }
             }
             catch (FileNotFoundException)
@@ -85,6 +74,26 @@ namespace Viewer
             {
                 return statusCodeResponse(HttpStatusCode.InternalServerError);
             }
+        }
+
+        public HttpResponseMessage parsedResponse(StreamReader markdown, Stream template)
+        {
+            var identifier = new DefaultHtmlTagIdentiifer();
+            var renderers = new TemplatedHtmlRenderer();
+            renderers.openDoc(template);
+            var tagMap = new HtmlTagMap(renderers.getRenderer);
+            CommonMarkSettings.Default.OutputDelegate = (doc, output, settings) => new FileTemplateHtmlFormatter(tagMap, identifier, output, settings).WriteDocument(doc);
+
+            using (var writer = new StringWriter())
+            {
+                CommonMarkConverter.Convert(markdown, writer);
+                return htmlResponse(writer.ToString());
+            }
+        }
+
+        public HttpResponseMessage viewMarkdownResponse(StreamReader markdown)
+        {
+            return htmlResponse($@"<html><head><title>{this.currentFile}</title><meta charset=""utf-8"" /></head><body><pre>{markdown.ReadToEnd()}</pre></body></html>");
         }
 
         public HttpResponseMessage statusCodeResponse(HttpStatusCode code)
@@ -100,31 +109,6 @@ namespace Viewer
             response.Content = new StringContent(content);
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(mimeType);
             return response;
-        }
-
-        public Tuple<String, String> loadEmbeddedTemplate(String name)
-        {
-            String template;
-            using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(makeTemplateName(name))))
-            {
-                template = reader.ReadToEnd();
-            }
-            var split = template.Split(seps);
-            if (split.Length != 2)
-            {
-                throw new Exception($"Invalid template {name}, split length was {split.Length} should be 2");
-            }
-            return Tuple.Create(split[0], split[1]);
-        }
-
-        private bool isTemplate(String name)
-        {
-            return !String.IsNullOrEmpty(name) && assembly.GetManifestResourceInfo(makeTemplateName(name)) != null;
-        }
-
-        private String makeTemplateName(String name)
-        {
-            return $"Viewer.BackendTemplates.{name.ToLowerInvariant()}.html";
         }
     }
 }

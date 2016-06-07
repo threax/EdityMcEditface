@@ -43,58 +43,86 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">File <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{DocLink}">Goto</a></li>
-                                <li><a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" href="#">Toggle Source</a></li>
+                                <li><a data-toggle="collapse" href="#markdownView" aria-expanded="false" aria-controls="markdownView">Toggle Source</a></li>
                                 <li><a href="{DocLink}.text">View Markdown</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a data-toggle="modal" data-target="#myModal">Settings</a></li>
                             </ul>
                         </li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
-            <div class="row">
-                <div class="col-md-4 collapse" id="collapseExample">
-                    <textarea id="source" class="form-control" rows="30"></textarea>
-                </div>
-                <div class="editable col-md-8" id="">
-                    <templates>
-                        <h1>|</h1>
-                        <h2>|</h2>
-                        <h3>|</h3>
-                        <h4>|</h4>
-                        <h5>|</h5>
-                        <h6>|</h6>
-                        <blockquote>|</blockquote>
-                        <document>|</document>
-                        <fencedcode exclude="true">
-                            <pre><code>|</code></pre>
-                        </fencedcode>
-                        <htmlblock>|</htmlblock>
-                        <indentedcode exclude="true">
-                            <pre><code>|</code></pre>
-                        </indentedcode>
-                        <ul>|</ul>
-                        <ol>|</ol>
-                        <li>|</li>
-                        <p>|</p>
-                        <hr />
-                        <text>|</text>
-                        <br />
-                        <softbr exclude="true">|</softbr>
-                        <code>|</code>
-                        <a>|</a>
-                        <img />
-                        <strong>|</strong>
-                        <em>|</em>
-                        <del>|</del>
-                    </templates>
-                    <htmltemplates>
-                    </htmltemplates>
+        <div class="row">
+            <div class="col-md-4 collapse" id="markdownView">
+                <textarea id="source" class="form-control" rows="30"></textarea>
+            </div>
+            <div class="editable col-md-8" id="">
+                <templates>
+                    <h1>|</h1>
+                    <h2>|</h2>
+                    <h3>|</h3>
+                    <h4>|</h4>
+                    <h5>|</h5>
+                    <h6>|</h6>
+                    <blockquote>|</blockquote>
+                    <document>|</document>
+                    <fencedcode exclude="true">
+                        <pre><code>|</code></pre>
+                    </fencedcode>
+                    <htmlblock>|</htmlblock>
+                    <indentedcode exclude="true">
+                        <pre><code>|</code></pre>
+                    </indentedcode>
+                    <ul>|</ul>
+                    <ol>|</ol>
+                    <li>|</li>
+                    <p>|</p>
+                    <hr />
+                    <text>|</text>
+                    <br />
+                    <softbr exclude="true">|</softbr>
+                    <code>|</code>
+                    <a>|</a>
+                    <img />
+                    <strong>|</strong>
+                    <em>|</em>
+                    <del>|</del>
+                </templates>
+                <htmltemplates>
+                </htmltemplates>
+            </div>
+        </div>
+        <!-- Settings Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{DocLink} Settings</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <input type="text" name="title" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="link">Link</label>
+                                <input type="text" name="link" value="{DocLink}" class="form-control" />
+                            </div>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button class="btn btn-danger">Delete Page</button>
+                    </div>
                 </div>
             </div>
-
-
+        </div>
     </div>
-    
+
     <script src="/embd/lib/jquery/jquery.min.js"></script>
     <script src="/embd/lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="/embd/lib/jquery-ui/jquery-ui.min.js"></script>

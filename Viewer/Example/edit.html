@@ -116,15 +116,14 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="sourceModalLabel">{DocLink} Source</h4>
                     </div>
-                    <div class="modal-body">
-                        <form>
-                            <textarea id="source" class="form-control" rows="30">default thing</textarea>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button id="ApplySourceChanges" class="btn btn-primary">Apply Changes</button>
-                    </div>
+                    <form id="ApplySourceChanges">
+                        <div class="modal-body">
+                            <textarea id="source" name="markdown" class="form-control" rows="30">default thing</textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary">Apply Changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -159,19 +158,23 @@
         $('#EditSource').click(function ()
         {
             var text = toMarkdown(pen.getContent(), {});
-            sourceText.html(text);
+            sourceText.val(text);
         });
 
-        $('#ApplySourceChanges').click(function ()
+        $('#ApplySourceChanges').submit(function (event)
         {
+            var data = {};
+            $(this).serializeArray().map(function (x) { data[x.name] = x.value; });
+
             pen.destroy();
             var reader = new commonmark.Parser();
             var writer = new commonmark.HtmlRenderer();
-            var parsed = reader.parse(sourceText.html()); // parsed is a 'Node' tree
+            var parsed = reader.parse(data.markdown); // parsed is a 'Node' tree
             // transform parsed if you like...
             var result = writer.render(parsed); // result is a String
             pen.setContent(result);
             pen.rebuild();
+            return false;
         });
 
         // toggle editor mode

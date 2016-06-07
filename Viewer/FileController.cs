@@ -20,91 +20,68 @@ namespace Viewer
 
         public HttpResponseMessage Get(String file)
         {
-            if (file.EndsWith(".edit", StringComparison.InvariantCultureIgnoreCase))
-            {
-
-            }
-
-            bool parse = true;
-            String extension = Path.GetExtension(file).ToLowerInvariant().Replace(".", "");
-            Tuple<String, String> template = null;
-            Stream cheatingFileStream = null;
-
-            if(isTemplate(extension))
-            {
-                //Cheating, will remove or make this better, tiny mce is html, so we need to render that, if we keep it tmce will render md files (as html)
-                if(extension == "tmce")
-                {
-                    parse = true;
-                    cheatingFileStream = assembly.GetManifestResourceStream($"Viewer.BackendTemplates.tmce.html");
-                }
-                else if (extension == "edit")
-                {
-                    parse = true;
-                    cheatingFileStream = assembly.GetManifestResourceStream($"Viewer.BackendTemplates.edit.html");
-                }
-                else //Cheating end (remove the else, but not the contents of the block)
-                {
-                    template = loadEmbeddedTemplate(extension);
-                    parse = false;
-                }
-
-                file = file.Substring(0, file.Length - extension.Length - 1) + ".md";
-
-            }
-            else if (!Path.GetExtension(file).Equals(".md", StringComparison.InvariantCultureIgnoreCase))
-            {
-                var autoFile = file + ".md";
-                if (File.Exists(autoFile))
-                {
-                    file = autoFile;
-                }
-                else
-                {
-                    return statusCodeResponse(HttpStatusCode.NotFound);
-                }
-            }
-
-            var identifier = new DefaultHtmlTagIdentiifer();
-            var renderers = new TemplatedHtmlRenderer();
-            if (cheatingFileStream != null)
-            {
-                renderers.openDoc(cheatingFileStream);
-                cheatingFileStream.Dispose();
-            }
-            else
-            {
-                renderers.openDoc("template.html");
-            }
-            var tagMap = new HtmlTagMap(renderers.getRenderer);
-            CommonMarkSettings.Default.OutputDelegate = (doc, output, settings) => new FileTemplateHtmlFormatter(tagMap, identifier, output, settings).WriteDocument(doc);
-
             try
             {
-                String content;
-                using (var reader = new StreamReader(file))
+                bool parse = true;
+                var extension = Path.GetExtension(file).ToLowerInvariant();
+
+                using (var templateStream = new DisposeShim<Stream>())
                 {
-                    if(parse)
+                    switch (extension)
                     {
-                        using (var writer = new StringWriter())
+                        case ".edit":
+                            parse = true;
+                            templateStream.Target = assembly.GetManifestResourceStream($"Viewer.BackendTemplates.edit.html");
+                            break;
+                        case ".text":
+                            parse = false;
+                            break;
+                        case ".md":
+                        case ".html":
+                            throw new FileNotFoundException("Not supporting these file types", file);
+                        default:
+                            templateStream.Target = File.OpenRead("template.html");
+                            break;
+                    }
+
+                    //Fix file name
+                    if (extension.Length != 0 && file.Length > extension.Length)
+                    {
+                        file = file.Remove(file.Length - extension.Length);
+                    }
+                    file = file + ".md";
+
+                    String content;
+                    using (var reader = new StreamReader(file))
+                    {
+                        if (parse)
                         {
-                            CommonMarkConverter.Convert(reader, writer);
-                            content = writer.ToString();
+                            var identifier = new DefaultHtmlTagIdentiifer();
+                            var renderers = new TemplatedHtmlRenderer();
+                            renderers.openDoc(templateStream.Target);
+                            var tagMap = new HtmlTagMap(renderers.getRenderer);
+                            CommonMarkSettings.Default.OutputDelegate = (doc, output, settings) => new FileTemplateHtmlFormatter(tagMap, identifier, output, settings).WriteDocument(doc);
+
+                            using (var writer = new StringWriter())
+                            {
+                                CommonMarkConverter.Convert(reader, writer);
+                                content = writer.ToString();
+                            }
+                        }
+                        else
+                        {
+                            content = $@"<html><head><title>{file}</title><meta charset=""utf-8"" /></head><body><pre>{reader.ReadToEnd()}</pre></body></html>";
                         }
                     }
-                    else
-                    {
-                        content = template.Item1 + HttpUtility.HtmlEncode(reader.ReadToEnd()) + template.Item2;
-                    }
-                }
 
-                return htmlResponse(content);
+                    return htmlResponse(content);
+                }
             }
-            catch(FileNotFoundException)
+            catch (FileNotFoundException)
             {
                 return statusCodeResponse(HttpStatusCode.NotFound);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return statusCodeResponse(HttpStatusCode.InternalServerError);
             }
@@ -133,7 +110,7 @@ namespace Viewer
                 template = reader.ReadToEnd();
             }
             var split = template.Split(seps);
-            if(split.Length != 2)
+            if (split.Length != 2)
             {
                 throw new Exception($"Invalid template {name}, split length was {split.Length} should be 2");
             }

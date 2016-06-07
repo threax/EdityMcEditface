@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonMarkContentTypeProvider.cs" />
+    <Compile Include="DisposeShim.cs" />
     <Compile Include="EmbeddedFileController.cs" />
     <Compile Include="OwinMicroSite.cs" />
     <Compile Include="Program.cs" />
@@ -135,7 +136,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="BackendTemplates\text.html" />
     <EmbeddedResource Include="BackendTemplates\edit.html" />
     <Content Include="defaultTemplate.html" />
     <Content Include="Example\320x240.png" />

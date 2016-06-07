@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/embd/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/embd/lib/bootstrap/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/embd/lib/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
     <style>
         body {
         }
@@ -123,13 +124,27 @@
         </div>
     </div>
 
-    <script src="/embd/lib/jquery/jquery.min.js"></script>
-    <script src="/embd/lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/embd/lib/jquery-ui/jquery-ui.min.js"></script>
-    <script src="/embd/lib/hallojs/rangy-core.js"></script>
-    <script src="/embd/lib/hallojs/hallo.js"></script>
-    <script src="/embd/lib/hallojs/showdown.js"></script>
-    <script src="/embd/lib/hallojs/to-markdown.js"></script>
-    <script src="/embd/lib/hallojs/editor.js"></script>
+    <script type="text/javascript" src="/embd/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/embd/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/embd/lib/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/embd/lib/hallojs/rangy-core.js"></script>
+    <script type="text/javascript" src="/embd/lib/hallojs/hallo.js"></script>
+    <script type="text/javascript" src="/embd/lib/hallojs/showdown.js"></script>
+    <script type="text/javascript" src="/embd/lib/hallojs/to-markdown.js"></script>
+    <script type="text/javascript" src="/embd/lib/hallojs/editor.js"></script>
+    <script>
+        jQuery('.editable').hallo({
+            plugins: {
+                'halloformat': {},
+                'halloheadings': {},
+                'hallojustify': {},
+                'hallolists': {},
+                'halloreundo': {},
+                'hallolink': {},
+                'halloimage': {},
+                'halloblacklist': {}
+            }
+        });
+    </script>
 </body>
 </html>

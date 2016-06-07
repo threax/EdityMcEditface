@@ -118,6 +118,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Example\Example.md" />
+    <None Include="Example\hallo.md" />
     <None Include="Example\syntax.md" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -137,6 +138,7 @@
     <EmbeddedResource Include="BackendTemplates\text.html" />
     <EmbeddedResource Include="BackendTemplates\editmd.html" />
     <EmbeddedResource Include="BackendTemplates\tmce.html" />
+    <EmbeddedResource Include="BackendTemplates\edit.html" />
     <Content Include="defaultTemplate.html" />
     <EmbeddedResource Include="BackendTemplates\smd.html" />
     <Content Include="Example\320x240.png" />

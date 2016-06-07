@@ -38,6 +38,11 @@ namespace Viewer
                     parse = true;
                     cheatingFileStream = assembly.GetManifestResourceStream($"Viewer.BackendTemplates.tmce.html");
                 }
+                else if (extension == "edit")
+                {
+                    parse = true;
+                    cheatingFileStream = assembly.GetManifestResourceStream($"Viewer.BackendTemplates.edit.html");
+                }
                 else //Cheating end (remove the else, but not the contents of the block)
                 {
                     template = loadEmbeddedTemplate(extension);

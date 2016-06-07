@@ -10,7 +10,7 @@ using CommonMark.Syntax;
 
 namespace CommonMarkTools.Renderer
 {
-    class FileTemplateHtmlFormatter : AccessibleHtmlFormatter
+    public class FileTemplateHtmlFormatter : AccessibleHtmlFormatter
     {
         HtmlTagMap tagMap;
         HtmlTagIdentifier tagIdentifier;

@@ -4,7 +4,7 @@ using System.IO;
 
 namespace CommonMarkTools.Renderer
 {
-    class HtmlTagMap
+    public class HtmlTagMap
     {
         public delegate HtmlRenderer GetRenderer(HtmlElements htmlTag);
 

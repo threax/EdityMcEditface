@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CommonMarkTools.Renderer
 {
-    class AccessibleHtmlFormatter : HtmlFormatter
+    public class AccessibleHtmlFormatter : HtmlFormatter
     {
         public AccessibleHtmlFormatter(TextWriter target, CommonMarkSettings settings)
             :base(target, settings)

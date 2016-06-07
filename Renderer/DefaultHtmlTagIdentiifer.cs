@@ -7,7 +7,7 @@ using CommonMark.Syntax;
 
 namespace CommonMarkTools.Renderer
 {
-    class DefaultHtmlTagIdentiifer : HtmlTagIdentifier
+    public class DefaultHtmlTagIdentiifer : HtmlTagIdentifier
     {
         public HtmlElements identify(Block block, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter)
         {

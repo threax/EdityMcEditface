@@ -9,7 +9,7 @@ using System.Xml.XPath;
 
 namespace CommonMarkTools.Renderer.HtmlRenderers
 {
-    class TemplatedHtmlRenderer
+    public class TemplatedHtmlRenderer
     {
         private HtmlDocument doc;
         private DocumentRenderer docRenderer;

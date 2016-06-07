@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CommonMarkTools.Renderer.HtmlRenderers
 {
-    interface HtmlElementRenderer
+    public interface HtmlElementRenderer
     {
         void write(Inline inline, bool isOpening, bool isClosing, AccessibleHtmlFormatter htmlFormatter, HtmlNode element);
 

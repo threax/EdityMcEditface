@@ -109,30 +109,11 @@
   <ItemGroup>
     <Compile Include="CommonMarkContentTypeProvider.cs" />
     <Compile Include="EmbeddedFileController.cs" />
-    <Compile Include="TemplateFormatter\AccessibleHtmlFormatter.cs" />
-    <Compile Include="TemplateFormatter\DefaultHtmlTagIdentiifer.cs" />
-    <Compile Include="TemplateFormatter\FileTemplateHtmlFormatter.cs" />
     <Compile Include="OwinMicroSite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="FileController.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\CodeRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\CustomHtmlElementRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\DocumentRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\EncodedHtmlRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\HtmlElementRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\ImageHtmlRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\LinkRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\LiteralHtmlTemplate.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\RawWriteHtmlElementRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\SplitHtmlTemplate.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\TemplatedHtmlRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\HtmlRendererFinder.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderers\WriteRenderer.cs" />
-    <Compile Include="TemplateFormatter\HtmlTagIdentifier.cs" />
-    <Compile Include="TemplateFormatter\HtmlTagMap.cs" />
-    <Compile Include="TemplateFormatter\HtmlRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

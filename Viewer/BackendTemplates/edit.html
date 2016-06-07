@@ -33,7 +33,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">File <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{DocLink}">Goto</a></li>
-                                <li><a data-toggle="collapse" href="#markdownView" aria-expanded="false" aria-controls="markdownView" id="toggleSourceButton">Toggle Source</a></li>
+                                <li><a id="EditSource" data-toggle="modal" data-target="#sourceModal">Edit Source</a></li>
                                 <li><a href="{DocLink}.text">View Markdown</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a data-toggle="modal" data-target="#settingsModal">Settings</a></li>
@@ -44,9 +44,6 @@
             </div><!-- /.container-fluid -->
         </nav>
         <div class="row">
-            <div class="col-md-4 collapse" id="markdownView">
-                <textarea id="source" class="form-control" rows="30"></textarea>
-            </div>
             <div class="editable col-md-8" id="editArea">
                 <templates>
                     <h1>|</h1>
@@ -111,11 +108,33 @@
                 </div>
             </div>
         </div>
+        <!-- source Modal -->
+        <div class="modal fade" id="sourceModal" tabindex="-1" role="dialog" aria-labelledby="sourceModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="sourceModalLabel">{DocLink} Source</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <textarea id="source" class="form-control" rows="30">default thing</textarea>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button id="ApplySourceChanges" class="btn btn-primary">Apply Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript" src="/embd/lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/embd/lib/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/embd/lib/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/embd/lib/to-markdown/to-markdown.js"></script>
+    <script type="text/javascript" src="/embd/lib/commonmark/commonmark.min.js"></script>
     <script type="text/javascript" src="/embd/lib/pen/src/pen.js"></script>
     <script type="text/javascript" src="/embd/lib/pen/src/markdown.js"></script>
     <script type="text/javascript">
@@ -136,9 +155,24 @@
 
         pen.focus();
 
-        $(toggleSourceButton).click(function ()
-        {
+        var sourceText = $('#source');
 
+        $('#EditSource').click(function ()
+        {
+            var text = toMarkdown(pen.getContent(), {});
+            sourceText.html(text);
+        });
+
+        $('#ApplySourceChanges').click(function ()
+        {
+            pen.destroy();
+            var reader = new commonmark.Parser();
+            var writer = new commonmark.HtmlRenderer();
+            var parsed = reader.parse(sourceText.html()); // parsed is a 'Node' tree
+            // transform parsed if you like...
+            var result = writer.render(parsed); // result is a String
+            pen.setContent(result);
+            pen.rebuild();
         });
 
         // toggle editor mode

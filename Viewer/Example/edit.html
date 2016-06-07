@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/embd/lib/pen/src/pen.css" />
     <link rel="stylesheet" href="/embd/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/embd/lib/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/embd/lib/simplemd/simplemde.min.css">
     <style>
     </style>
 </head>
@@ -135,7 +136,10 @@
     <script type="text/javascript" src="/embd/lib/commonmark/commonmark.min.js"></script>
     <script type="text/javascript" src="/embd/lib/pen/src/pen.js"></script>
     <script type="text/javascript" src="/embd/lib/pen/src/markdown.js"></script>
+    <script type="text/javascript" src="/embd/lib/simplemd/simplemde.min.js"></script>
     <script type="text/javascript">
+
+        var simplemde = new SimpleMDE({ element: $("#source")[0] });
 
         // config
         var options = {
@@ -160,7 +164,9 @@
         {
             var penContent = pen.getContent();
             var text = toMarkdown(penContent, {});
-            sourceText.val(text);
+            //sourceText.val(text);
+            simplemde.value(text);
+            simplemde.focus();
         });
 
         $('#ApplySourceChanges').submit(function (event)

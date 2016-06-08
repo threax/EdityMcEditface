@@ -8,8 +8,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
-using CommonMarkTools.Renderer;
-using CommonMarkTools.Renderer.HtmlRenderers;
+using CommonMarkTools.HtmlRenderer;
 
 namespace Viewer
 {
@@ -32,7 +31,7 @@ namespace Viewer
                 {
                     file = file.Remove(file.Length - extension.Length);
                 }
-                var markdownFile = file + ".md";
+                var markdownFile = file + ".html";
 
                 TemplateEnvironment environment = new TemplateEnvironment("/" + file);
                 using (var markdown = new StreamReader(File.OpenRead(markdownFile)))
@@ -40,27 +39,25 @@ namespace Viewer
                     switch (extension)
                     {
                         case ".edit":
+                        case ".html":
                             if (File.Exists("edit.html"))
                             {
-                                using (var template = File.OpenRead("edit.html"))
+                                using (var template = new StreamReader(File.OpenRead("edit.html")))
                                 {
                                     return parsedResponse(markdown, template, environment);
                                 }
                             }
                             else
                             {
-                                using (var template = assembly.GetManifestResourceStream("Viewer.BackendTemplates.edit.html"))
+                                using (var template = new StreamReader(assembly.GetManifestResourceStream("Viewer.BackendTemplates.edit.html")))
                                 {
                                     return parsedResponse(markdown, template, environment);
                                 }
                             }
                         case ".text":
                             return viewMarkdownResponse(markdown);
-                        case ".md":
-                        case ".html":
-                            throw new FileNotFoundException("Not supporting these file types", file);
                         default:
-                            using (var template = File.OpenRead("template.html"))
+                            using (var template = new StreamReader(File.OpenRead("template.html")))
                             {
                                 return parsedResponse(markdown, template, environment);
                             }
@@ -77,19 +74,10 @@ namespace Viewer
             }
         }
 
-        public HttpResponseMessage parsedResponse(StreamReader markdown, Stream template, TemplateEnvironment environment)
+        public HttpResponseMessage parsedResponse(StreamReader markdown, StreamReader template, TemplateEnvironment environment)
         {
-            var identifier = new DefaultHtmlTagIdentiifer();
-            var renderers = new TemplatedHtmlRenderer();
-            renderers.openDoc(template, environment);
-            var tagMap = new HtmlTagMap(renderers.getRenderer);
-            CommonMarkSettings.Default.OutputDelegate = (doc, output, settings) => new FileTemplateHtmlFormatter(tagMap, identifier, output, settings).WriteDocument(doc);
-
-            using (var writer = new StringWriter())
-            {
-                CommonMarkConverter.Convert(markdown, writer);
-                return htmlResponse(writer.ToString());
-            }
+            DocumentRenderer dr = new DocumentRenderer(template.ReadToEnd(), environment);
+            return htmlResponse(dr.getDocument(markdown.ReadToEnd()));
         }
 
         public HttpResponseMessage viewMarkdownResponse(StreamReader markdown)

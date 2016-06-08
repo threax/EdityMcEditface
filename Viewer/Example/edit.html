@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="/embd/lib/pen/src/pen.css" />
     <link rel="stylesheet" href="/embd/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/embd/lib/bootstrap/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="/embd/lib/simplemd/simplemde.min.css">
     <style>
     </style>
 </head>
@@ -46,39 +45,7 @@
         </nav>
         <div class="row">
             <div class="editable col-md-8" id="editArea">
-                <templates>
-                    <h1>|</h1>
-                    <h2>|</h2>
-                    <h3>|</h3>
-                    <h4>|</h4>
-                    <h5>|</h5>
-                    <h6>|</h6>
-                    <blockquote>|</blockquote>
-                    <document>|</document>
-                    <fencedcode exclude="true">
-                        <pre><code>|</code></pre>
-                    </fencedcode>
-                    <htmlblock>|</htmlblock>
-                    <indentedcode exclude="true">
-                        <pre><code>|</code></pre>
-                    </indentedcode>
-                    <ul>|</ul>
-                    <ol>|</ol>
-                    <li>|</li>
-                    <p>|</p>
-                    <hr />
-                    <text>|</text>
-                    <br />
-                    <softbr exclude="true">|</softbr>
-                    <code>|</code>
-                    <a>|</a>
-                    <img />
-                    <strong>|</strong>
-                    <em>|</em>
-                    <del>|</del>
-                </templates>
-                <htmltemplates>
-                </htmltemplates>
+                {MainContent}
             </div>
         </div>
         <!-- Settings Modal -->
@@ -132,15 +99,8 @@
 
     <script type="text/javascript" src="/embd/lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/embd/lib/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/embd/lib/to-markdown/to-markdown.js"></script>
-    <script type="text/javascript" src="/embd/lib/commonmark/commonmark.min.js"></script>
     <script type="text/javascript" src="/embd/lib/pen/src/pen.js"></script>
-    <script type="text/javascript" src="/embd/lib/pen/src/markdown.js"></script>
-    <script type="text/javascript" src="/embd/lib/simplemd/simplemde.min.js"></script>
     <script type="text/javascript">
-
-        var simplemde = new SimpleMDE({ element: $("#source")[0] });
-
         // config
         var options = {
             editor: document.getElementById('editArea'),
@@ -163,21 +123,13 @@
         $('#EditSource').click(function ()
         {
             var penContent = pen.getContent();
-            var text = toMarkdown(penContent, {});
-            //sourceText.val(text);
-            simplemde.value(text);
-            simplemde.focus();
+            sourceText.val(penContent);
         });
 
         $('#ApplySourceChanges').submit(function (event)
         {
             pen.destroy();
-            var reader = new commonmark.Parser();
-            var writer = new commonmark.HtmlRenderer();
-            var parsed = reader.parse(sourceText.val()); // parsed is a 'Node' tree
-            // transform parsed if you like...
-            var result = writer.render(parsed); // result is a String
-            pen.setContent(result);
+            pen.setContent(sourceText.val());
             pen.rebuild();
             $('#sourceModal').modal('hide');
             return false;

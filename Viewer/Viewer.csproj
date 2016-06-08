@@ -117,8 +117,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Example\Example.md" />
-    <None Include="Example\hallo.md" />
     <None Include="Example\syntax.md" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -139,13 +137,14 @@
     <Content Include="defaultTemplate.html" />
     <Content Include="Example\320x240.png" />
     <None Include="Example\edit.html" />
+    <Content Include="Example\Sample.html" />
     <Content Include="Example\template.html" />
     <EmbeddedResource Include="Resources\**\*.*" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Renderer\Renderer.csproj">
-      <Project>{70b97610-1440-4cbb-8d41-f864e156ece5}</Project>
-      <Name>Renderer</Name>
+    <ProjectReference Include="..\HtmlRenderer\HtmlRenderer.csproj">
+      <Project>{b8bb7fc0-0a2a-453e-ab2a-6822fea1770c}</Project>
+      <Name>HtmlRenderer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

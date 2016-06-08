@@ -11,7 +11,7 @@ using System.Web.Http;
 using CommonMarkTools.HtmlRenderer;
 using System.Threading.Tasks;
 
-namespace Viewer
+namespace Edity.McEditface
 {
     public class FileController : ApiController
     {
@@ -53,7 +53,7 @@ namespace Viewer
                             }
                             else
                             {
-                                using (var template = new StreamReader(assembly.GetManifestResourceStream("Viewer.BackendTemplates.edit.html")))
+                                using (var template = new StreamReader(assembly.GetManifestResourceStream("Edity.McEditface.BackendTemplates.edit.html")))
                                 {
                                     return parsedResponse(markdown, template, environment);
                                 }

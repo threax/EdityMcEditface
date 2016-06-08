@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EdityMcEditface")]
+[assembly: AssemblyTitle("Edity.McEditface")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("EdityMcEditface")]
+[assembly: AssemblyProduct("Edity.McEditface")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("17c8600b-ba15-4af0-bc97-2c10ca3a7d57")]
+[assembly: Guid("ad290669-0758-4f88-8772-65851438ee6b")]
 
 // Version information for an assembly consists of the following four values:
 //

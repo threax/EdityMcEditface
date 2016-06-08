@@ -4,7 +4,7 @@ using Owin;
 using System;
 using System.Web.Http;
 
-namespace Viewer
+namespace Edity.McEditface
 {
     public class Startup
     {

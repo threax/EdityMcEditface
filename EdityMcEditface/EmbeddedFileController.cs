@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Http;
 
-namespace Viewer
+namespace Edity.McEditface
 {
     public class EmbeddedFileController : ApiController
     {
@@ -47,7 +47,7 @@ namespace Viewer
 
         private String makeTemplateName(String name)
         {
-            return $"Viewer.Resources.{this.escapeTemplate(name)}";
+            return $"Edity.McEditface.Resources.{this.escapeTemplate(name)}";
         }
     }
 }

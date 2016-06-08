@@ -40,9 +40,9 @@ namespace Viewer
                     {
                         case ".edit":
                         case ".html":
-                            if (File.Exists("edit.html"))
+                            if (File.Exists("layouts/edit.html"))
                             {
-                                using (var template = new StreamReader(File.OpenRead("edit.html")))
+                                using (var template = new StreamReader(File.OpenRead("layouts/edit.html")))
                                 {
                                     return parsedResponse(markdown, template, environment);
                                 }
@@ -57,7 +57,7 @@ namespace Viewer
                         case ".text":
                             return viewMarkdownResponse(markdown);
                         default:
-                            using (var template = new StreamReader(File.OpenRead("template.html")))
+                            using (var template = new StreamReader(File.OpenRead("layouts/default.html")))
                             {
                                 return parsedResponse(markdown, template, environment);
                             }

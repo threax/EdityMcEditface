@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CommonMarkTools.HtmlRenderer
+namespace Edity.McEditface.HtmlRenderer
 {
     public class TemplateEnvironment
     {

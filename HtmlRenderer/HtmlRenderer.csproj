@@ -7,8 +7,8 @@
     <ProjectGuid>{B8BB7FC0-0A2A-453E-AB2A-6822FEA1770C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CommonMarkTools.HtmlRenderer</RootNamespace>
-    <AssemblyName>CommonMarkTools.HtmlRenderer</AssemblyName>
+    <RootNamespace>Edity.McEditface.HtmlRenderer</RootNamespace>
+    <AssemblyName>Edity.McEditface.HtmlRenderer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

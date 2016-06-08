@@ -8,7 +8,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
-using CommonMarkTools.HtmlRenderer;
+using Edity.McEditface.HtmlRenderer;
 using System.Threading.Tasks;
 
 namespace Edity.McEditface

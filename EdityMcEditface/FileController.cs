@@ -44,9 +44,9 @@ namespace Edity.McEditface
                     {
                         case ".edit":
                         case ".html":
-                            if (File.Exists("layouts/edit.html"))
+                            if (File.Exists(".edity/layouts/edit.html"))
                             {
-                                using (var template = new StreamReader(File.OpenRead("layouts/edit.html")))
+                                using (var template = new StreamReader(File.OpenRead(".edity/layouts/edit.html")))
                                 {
                                     return parsedResponse(markdown, template, environment);
                                 }
@@ -61,7 +61,7 @@ namespace Edity.McEditface
                         case ".text":
                             return viewMarkdownResponse(markdown);
                         default:
-                            using (var template = new StreamReader(File.OpenRead("layouts/default.html")))
+                            using (var template = new StreamReader(File.OpenRead(".edity/layouts/default.html")))
                             {
                                 return parsedResponse(markdown, template, environment);
                             }

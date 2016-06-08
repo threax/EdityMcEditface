@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonMarkContentTypeProvider.cs" />
+    <Compile Include="ControllerExtensions.cs" />
     <Compile Include="EmbeddedFileController.cs" />
     <Compile Include="OwinMicroSite.cs" />
     <Compile Include="Program.cs" />

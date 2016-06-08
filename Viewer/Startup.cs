@@ -25,8 +25,19 @@ namespace Viewer
             );
 
             config.Routes.MapHttpRoute(
+                name: "Upload",
+                routeTemplate: FileController.UploadPath + "{*file}",
+                defaults: new
+                {
+                    controller = "File",
+                    action = "Post"
+                }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "{*file}",
+                
                 defaults: new
                 {
                     controller = "File",

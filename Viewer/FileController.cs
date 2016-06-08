@@ -9,16 +9,20 @@ using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using CommonMarkTools.HtmlRenderer;
+using System.Threading.Tasks;
 
 namespace Viewer
 {
     public class FileController : ApiController
     {
+        public const String UploadPath = "ide/api/upload/";
+
         private static char[] seps = { '|' };
         private static Assembly assembly = Assembly.GetExecutingAssembly();
 
         private String currentFile;
 
+        [HttpGet]
         public HttpResponseMessage Get(String file)
         {
             try
@@ -71,6 +75,30 @@ namespace Viewer
             catch (Exception)
             {
                 return this.statusCodeResponse(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        public async Task<HttpResponseMessage> Post(HttpRequestMessage request)
+        {
+            try
+            {
+                MultipartMemoryStreamProvider x = await request.Content.ReadAsMultipartAsync();
+                String file = request.RequestUri.AbsolutePath.Remove(0, UploadPath.Length + 1); //Starts with a slash where our defined path does not so + 1
+                String directory = Path.GetDirectoryName(file);
+                if(!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                using (Stream stream = File.OpenWrite(file))
+                {
+                    await x.Contents[0].CopyToAsync(stream);
+                }
+                return this.statusCodeResponse(System.Net.HttpStatusCode.OK);
+            }
+            catch (Exception)
+            {
+                return this.statusCodeResponse(System.Net.HttpStatusCode.InternalServerError);
             }
         }
 

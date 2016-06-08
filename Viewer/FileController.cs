@@ -90,7 +90,7 @@ namespace Viewer
                 {
                     Directory.CreateDirectory(directory);
                 }
-                using (Stream stream = File.OpenWrite(file))
+                using (Stream stream = File.Open(file, FileMode.Create, FileAccess.Write))
                 {
                     await x.Contents[0].CopyToAsync(stream);
                 }

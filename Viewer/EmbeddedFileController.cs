@@ -27,44 +27,17 @@ namespace Viewer
                     {
                         throw new FileNotFoundException();
                     }
-                    return streamResponse(stream, mime);
+                    return this.streamResponse(stream, mime);
                 }
             }
             catch(FileNotFoundException)
             {
-                return statusCodeResponse(HttpStatusCode.NotFound);
+                return this.statusCodeResponse(HttpStatusCode.NotFound);
             }
             catch(Exception)
             {
-                return statusCodeResponse(HttpStatusCode.InternalServerError);
+                return this.statusCodeResponse(HttpStatusCode.InternalServerError);
             }
-        }
-
-        public HttpResponseMessage statusCodeResponse(HttpStatusCode code)
-        {
-            var response = new HttpResponseMessage();
-            response.StatusCode = code;
-            return response;
-        }
-
-        public HttpResponseMessage htmlResponse(String content, String mimeType = "text/html")
-        {
-            var response = new HttpResponseMessage();
-            response.Content = new StringContent(content);
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(mimeType);
-            return response;
-        }
-
-        public HttpResponseMessage streamResponse(Stream content, String mimeType)
-        {
-            StreamContent streamContent = new StreamContent(content);
-            var task = streamContent.LoadIntoBufferAsync();
-            task.Wait();
-
-            var response = new HttpResponseMessage();
-            response.Content = streamContent;
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(mimeType);
-            return response;
         }
 
         private Stream loadResource(String name)
@@ -74,15 +47,7 @@ namespace Viewer
 
         private String makeTemplateName(String name)
         {
-            return $"Viewer.Resources.{escapeTemplate(name)}";
-        }
-
-        private String escapeTemplate(String name)
-        {
-            //this could be better
-            var dir = Path.GetDirectoryName(name);
-            var file = Path.GetFileName(name);
-            return dir.Replace('\\', '.').Replace('/', '.').Replace('-', '_') + "." + file;
+            return $"Viewer.Resources.{this.escapeTemplate(name)}";
         }
     }
 }

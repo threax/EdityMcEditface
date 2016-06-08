@@ -66,38 +66,23 @@ namespace Viewer
             }
             catch (FileNotFoundException)
             {
-                return statusCodeResponse(HttpStatusCode.NotFound);
+                return this.statusCodeResponse(HttpStatusCode.NotFound);
             }
             catch (Exception)
             {
-                return statusCodeResponse(HttpStatusCode.InternalServerError);
+                return this.statusCodeResponse(HttpStatusCode.InternalServerError);
             }
         }
 
         public HttpResponseMessage parsedResponse(StreamReader markdown, StreamReader template, TemplateEnvironment environment)
         {
             DocumentRenderer dr = new DocumentRenderer(template.ReadToEnd(), environment);
-            return htmlResponse(dr.getDocument(markdown.ReadToEnd()));
+            return this.htmlResponse(dr.getDocument(markdown.ReadToEnd()));
         }
 
         public HttpResponseMessage viewMarkdownResponse(StreamReader markdown)
         {
-            return htmlResponse($@"<html><head><title>{this.currentFile}</title><meta charset=""utf-8"" /></head><body><pre>{markdown.ReadToEnd()}</pre></body></html>");
-        }
-
-        public HttpResponseMessage statusCodeResponse(HttpStatusCode code)
-        {
-            var response = new HttpResponseMessage();
-            response.StatusCode = code;
-            return response;
-        }
-
-        public HttpResponseMessage htmlResponse(String content, String mimeType = "text/html")
-        {
-            var response = new HttpResponseMessage();
-            response.Content = new StringContent(content);
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(mimeType);
-            return response;
+            return this.htmlResponse($@"<html><head><title>{this.currentFile}</title><meta charset=""utf-8"" /></head><body><pre>{markdown.ReadToEnd()}</pre></body></html>");
         }
     }
 }

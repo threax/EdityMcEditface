@@ -12,6 +12,7 @@ namespace Viewer
         public CommonMarkContentTypeProvider()
         {
             Mappings.Add(".json", "application/json");
+            Mappings.Remove(".html");
         }
     }
 }

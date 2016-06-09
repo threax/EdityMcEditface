@@ -18,6 +18,12 @@ namespace Edity.McEditface
             {
                 Environment.CurrentDirectory = Path.GetFullPath(args[0]);
             }
+#if DEBUG
+            else
+            {
+                Environment.CurrentDirectory = "../../Example";
+            }
+#endif
             if(args.Length > 1)
             {
                 string path = "";

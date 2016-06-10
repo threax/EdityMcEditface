@@ -35,6 +35,16 @@ namespace Edity.McEditface
             );
 
             config.Routes.MapHttpRoute(
+                name: "Directory",
+                routeTemplate: FileController.UploadPath + "{*file}",
+                defaults: new
+                {
+                    controller = "File",
+                    action = "File"
+                }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "{*file}",
                 

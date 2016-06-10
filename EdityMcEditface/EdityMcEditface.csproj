@@ -137,9 +137,9 @@
     <EmbeddedResource Include="BackendTemplates\edit.html" />
     <Content Include="defaultTemplate.html" />
     <Content Include="Example\320x240.png" />
-    <None Include="Example\.edity\layouts\edit.html" />
+    <None Include="Example\edity\layouts\edit.html" />
     <Content Include="Example\Sample.html" />
-    <Content Include="Example\.edity\layouts\default.html" />
+    <Content Include="Example\edity\layouts\default.html" />
     <EmbeddedResource Include="Resources\**\*.*" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +147,9 @@
       <Project>{b8bb7fc0-0a2a-453e-ab2a-6822fea1770c}</Project>
       <Name>HtmlRenderer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Example\NewFolder1\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

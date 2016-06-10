@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,6 +29,25 @@ namespace Edity.McEditface
             response.Content = new StringContent(content);
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(mimeType);
             return response;
+        }
+
+        public static HttpResponseMessage jsonResponse(this ApiController apiController, Object content, String mimeType = "text/json", StringEscapeHandling escapeHandling = StringEscapeHandling.EscapeHtml)
+        {
+            //Probably not the most optimized way
+            JsonSerializer serializer = new JsonSerializer()
+            {
+                StringEscapeHandling = escapeHandling,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
+            using (StringWriter sw = new StringWriter())
+            {
+                serializer.Serialize(sw, content);
+                var response = new HttpResponseMessage();
+                response.Content = new StringContent(sw.ToString());
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue(mimeType);
+                return response;
+            }
         }
 
         public static HttpResponseMessage streamResponse(this ApiController apiController, Stream content, String mimeType)

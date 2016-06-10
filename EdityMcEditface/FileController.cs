@@ -23,6 +23,9 @@ namespace Edity.McEditface
         private static Assembly assembly = Assembly.GetExecutingAssembly();
 
         private String currentFile;
+        private String sourceFile;
+        private String sourceDir;
+        private TemplateEnvironment environment;
 
         [HttpGet]
         public HttpResponseMessage Get(String file)
@@ -33,7 +36,7 @@ namespace Edity.McEditface
                 var extension = Path.GetExtension(file).ToLowerInvariant();
 
                 //Fix file name
-                var sourceFile = file;
+                sourceFile = file;
                 if (extension.Length != 0 && sourceFile.Length > extension.Length)
                 {
                     sourceFile = sourceFile.Remove(sourceFile.Length - extension.Length);
@@ -43,7 +46,7 @@ namespace Edity.McEditface
                 {
                     sourceFile = sourceFile.Substring(FileController.DirApiPath.Length);
                 }
-                var sourceDir = sourceFile;
+                sourceDir = sourceFile;
                 sourceFile = sourceFile + ".html";
 
                 if (string.IsNullOrEmpty(extension))
@@ -63,33 +66,34 @@ namespace Edity.McEditface
                     }
                 }
 
-                TemplateEnvironment environment = new TemplateEnvironment("/" + file);
+                environment = new TemplateEnvironment("/" + file);
                 using (var source = new StreamReader(File.OpenRead(sourceFile)))
                 {
                     switch (extension)
                     {
                         case ".edit":
                         case ".html":
-                            if (File.Exists("edity/layouts/edit.html"))
+                            var editFile = "/editor/edity/layouts/edit.html";
+                            if (File.Exists(editFile))
                             {
-                                using (var template = new StreamReader(File.OpenRead("edity/layouts/edit.html")))
+                                using (var layout = new StreamReader(File.OpenRead(editFile)))
                                 {
-                                    return parsedResponse(source, template, environment);
+                                    return parsedResponse(source, layout, environment);
                                 }
                             }
                             else
                             {
-                                using (var template = new StreamReader(assembly.GetManifestResourceStream("Edity.McEditface.BackendTemplates.edit.html")))
+                                using (var layout = new StreamReader(assembly.GetManifestResourceStream("Edity.McEditface.BackendTemplates.edit.html")))
                                 {
-                                    return parsedResponse(source, template, environment);
+                                    return parsedResponse(source, layout, environment);
                                 }
                             }
                         case ".text":
                             return viewMarkdownResponse(source);
                         case "":
-                            using (var template = new StreamReader(File.OpenRead("edity/layouts/default.html")))
+                            using (var layout = new StreamReader(File.OpenRead("edity/layouts/default.html")))
                             {
-                                return parsedResponse(source, template, environment);
+                                return parsedResponse(source, layout, environment);
                             }
                         default:
                             throw new FileNotFoundException();
@@ -98,6 +102,28 @@ namespace Edity.McEditface
             }
             catch (FileNotFoundException)
             {
+                //We can get here for a number of reasons, but if the html file does not exist offer to make it
+                if (!File.Exists(sourceFile))
+                {
+                    try
+                    {
+                        String newLayout = "edity/layouts/editor/new.html";
+                        if (File.Exists(newLayout))
+                        {
+                            using (var source = new StringReader(""))
+                            {
+                                using (var layout = new StreamReader(File.OpenRead(newLayout)))
+                                {
+                                    return parsedResponse(source, layout, environment);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        return this.statusCodeResponse(HttpStatusCode.InternalServerError);
+                    }
+                }
                 return this.statusCodeResponse(HttpStatusCode.NotFound);
             }
             catch (Exception)
@@ -130,7 +156,7 @@ namespace Edity.McEditface
             }
         }
 
-        public HttpResponseMessage parsedResponse(StreamReader markdown, StreamReader template, TemplateEnvironment environment)
+        public HttpResponseMessage parsedResponse(TextReader markdown, TextReader template, TemplateEnvironment environment)
         {
             DocumentRenderer dr = new DocumentRenderer(template.ReadToEnd(), environment);
             return this.htmlResponse(dr.getDocument(markdown.ReadToEnd()));

@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <title>New</title>
+    <link rel="stylesheet" href="/embd/lib/pen/src/pen.css" />
+    <link rel="stylesheet" href="/embd/lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/embd/lib/bootstrap/css/bootstrap-theme.min.css">
+    <style>
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{EditorRoot}">{DocLink}</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{DocLink}" target="_blank">Preview</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">File <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{DocLink}">Goto</a></li>
+                                <li><a id="EditSource" data-toggle="modal" data-target="#sourceModal">Edit Source</a></li>
+                                <li><a href="{DocLink}.text">View Markdown</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a data-toggle="modal" data-target="#settingsModal">Settings</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+        <div class="row">
+            <div class="editable col-md-8" id="editArea">
+                {MainContent}
+            </div>
+        </div>
+        <!-- Settings Modal -->
+        <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="settingsModalLabel">{DocLink} Settings</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <input type="text" name="title" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label for="link">Link</label>
+                                <input type="text" name="link" value="{DocLink}" class="form-control" />
+                            </div>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button class="btn btn-danger">Delete Page</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- source Modal -->
+        <div class="modal fade" id="sourceModal" tabindex="-1" role="dialog" aria-labelledby="sourceModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="sourceModalLabel">{DocLink} Source</h4>
+                    </div>
+                    <form id="ApplySourceChanges">
+                        <div class="modal-body">
+                            <textarea id="source" name="markdown" class="form-control" rows="30">default thing</textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary">Apply Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/embd/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/embd/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/embd/lib/pen/src/pen.js"></script>
+    <script type="text/javascript">
+        // config
+        var options = {
+            editor: document.getElementById('editArea'),
+            list: [
+              'insertimage', 'blockquote', 'h2', 'h3', 'p', 'code', 'insertorderedlist', 'insertunorderedlist', 'inserthorizontalrule',
+              'indent', 'outdent', 'bold', 'italic', 'underline', 'createlink'
+            ],
+            class: 'nopenstyle',
+            stay: false,
+            cleanAttrs: []
+        };
+
+        // create editor
+        var pen = window.pen = new Pen(options);
+
+        pen.focus();
+
+        var sourceText = $('#source');
+
+        $('#EditSource').click(function ()
+        {
+            var penContent = pen.getContent();
+            sourceText.val(penContent);
+        });
+
+        $('#ApplySourceChanges').submit(function (event)
+        {
+            pen.destroy();
+            pen.setContent(sourceText.val());
+            pen.rebuild();
+            $('#sourceModal').modal('hide');
+            return false;
+        });
+
+        // toggle editor mode
+        //document.querySelector('#mode').addEventListener('click', function ()
+        //{
+        //    var text = this.textContent;
+        //
+        //    if (this.classList.contains('disabled'))
+        //    {
+        //        this.classList.remove('disabled');
+        //        pen.rebuild();
+        //    } else
+        //    {
+        //        this.classList.add('disabled');
+        //        pen.destroy();
+        //    }
+        //});
+
+        // export content as markdown
+        //document.querySelector('#tomd').addEventListener('click', function ()
+        //{
+        //    var text = pen.toMd();
+        //    document.body.innerHTML = '<a href="javascript:location.reload()">&larr;back to editor</a><br><br><pre>' + text + '</pre>';
+        //});
+
+        // toggle editor mode
+        //document.querySelector('#hinted').addEventListener('click', function ()
+        //{
+        //    var pen = document.querySelector('.pen')
+        //
+        //    if (pen.classList.contains('hinted'))
+        //    {
+        //        pen.classList.remove('hinted');
+        //        this.classList.add('disabled');
+        //    } else
+        //    {
+        //        pen.classList.add('hinted');
+        //        this.classList.remove('disabled');
+        //    }
+        //});
+    </script>
+</body>
+</html>

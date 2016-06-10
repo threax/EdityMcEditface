@@ -137,7 +137,8 @@
     <EmbeddedResource Include="BackendTemplates\edit.html" />
     <Content Include="defaultTemplate.html" />
     <Content Include="Example\320x240.png" />
-    <None Include="Example\edity\layouts\edit.html" />
+    <None Include="Example\edity\layouts\editor\edit.html" />
+    <None Include="Example\edity\layouts\editor\new.html" />
     <Content Include="Example\Sample.html" />
     <Content Include="Example\edity\layouts\default.html" />
     <EmbeddedResource Include="Resources\**\*.*" />

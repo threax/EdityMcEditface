@@ -1,1 +1,4 @@
-﻿
+﻿(function ($, h)
+{
+
+})(jQuery, htmlrest)

@@ -1,0 +1,3 @@
+[submodule "EdityMcEditface/Resources/lib/htmlrest"]
+	path = EdityMcEditface/Resources/lib/htmlrest
+	url = https://github.com/threax/htmlrest.git

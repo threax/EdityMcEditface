@@ -47,6 +47,7 @@ namespace Edity.McEditface
                     sourceFile = sourceFile.Substring(FileController.DirApiPath.Length);
                 }
                 sourceDir = sourceFile;
+                environment = new TemplateEnvironment("/" + sourceFile);
                 sourceFile = sourceFile + ".html";
 
                 if (string.IsNullOrEmpty(extension))
@@ -66,14 +67,17 @@ namespace Edity.McEditface
                     }
                 }
 
-                environment = new TemplateEnvironment("/" + file);
                 using (var source = new StreamReader(File.OpenRead(sourceFile)))
                 {
                     switch (extension)
                     {
                         case ".edit":
                         case ".html":
-                            var editFile = "/edity/editor/edit.html";
+                            var editFile = "edity/editor/edit.html";
+                            if(sourceFile.StartsWith("edity/templates", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                return this.streamResponse(source.BaseStream, "text/html");
+                            }
                             if (File.Exists(editFile))
                             {
                                 using (var layout = new StreamReader(File.OpenRead(editFile)))

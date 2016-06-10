@@ -118,6 +118,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Example\edity\editor\edit.html" />
+    <None Include="Example\edity\editor\new.html" />
     <None Include="Example\syntax.md" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -137,9 +139,8 @@
     <EmbeddedResource Include="BackendTemplates\edit.html" />
     <Content Include="defaultTemplate.html" />
     <Content Include="Example\320x240.png" />
-    <None Include="Example\edity\editor\edit.html" />
-    <None Include="Example\edity\editor\new.html" />
-    <Content Include="Example\edity\editor\js\new.js" />
+    <Content Include="Example\edity\editor\edit.js" />
+    <Content Include="Example\edity\editor\new.js" />
     <Content Include="Example\edity\templates\WeirdTemplate.html" />
     <Content Include="Example\edity\templates\CoolTemplate.html" />
     <Content Include="Example\Sample.html" />

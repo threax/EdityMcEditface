@@ -20,16 +20,48 @@ namespace Edity.McEditface.HtmlRenderer
 
         public string getDocument(String innerHtml)
         {
-            innerHtml = templateHtml.Replace("{MainContent}", innerHtml);
-            //Replace variables in template, note that this could be way better than this version
-            //This creates a ton of stings and is not good code, but will get this up and running quickly
-            //TODO: QuickFix - Make the environment variables for templates more efficient
-            foreach (var variable in environment.Variables)
+            //Replace main content first then main replace will get its variables
+            return formatText(templateHtml.Replace("{MainContent}", innerHtml));
+        }
+
+        public string formatText(String text)
+        {
+            StringBuilder output = new StringBuilder(text.Length);
+            var textStart = 0;
+            var bracketStart = 0;
+            var bracketEnd = 0;
+            for (var i = 0; i < text.Length; ++i)
             {
-                innerHtml = innerHtml.Replace("{" + variable.Key + "}", variable.Value);
+                switch (text[i])
+                {
+                    case '{':
+                        if (text[i + 1] != '{')
+                        {
+                            bracketStart = i;
+                        }
+                        break;
+                    case '}':
+                        if (i + 1 == text.Length || text[i + 1] != '}')
+                        {
+                            bracketEnd = i;
+
+                            if (bracketStart < bracketEnd - 1)
+                            {
+                                var value = environment.getVariable(text.Substring(bracketStart + 1, bracketEnd - bracketStart - 1), "");
+                                output.Append(text.Substring(textStart, bracketStart - textStart));
+                                output.Append(System.Net.WebUtility.HtmlEncode(value));
+                                textStart = i + 1;
+                            }
+                        }
+                        break;
+                }
             }
 
-            return innerHtml;
+            if (textStart < text.Length)
+            {
+                output.Append(text.Substring(textStart, text.Length - textStart));
+            }
+            return output.ToString();
         }
     }
 }

@@ -131,7 +131,7 @@ namespace Edity.McEditface
                 }
                 return this.statusCodeResponse(HttpStatusCode.NotFound);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return this.statusCodeResponse(HttpStatusCode.InternalServerError);
             }

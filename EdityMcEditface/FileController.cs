@@ -25,6 +25,7 @@ namespace Edity.McEditface
         private String currentFile;
         private String sourceFile;
         private String sourceDir;
+        private String extension;
         private TemplateEnvironment environment;
 
         [HttpGet]
@@ -33,7 +34,7 @@ namespace Edity.McEditface
             try
             {
                 this.currentFile = file;
-                var extension = Path.GetExtension(file).ToLowerInvariant();
+                extension = Path.GetExtension(file).ToLowerInvariant();
 
                 //Fix file name
                 sourceFile = file;
@@ -107,7 +108,7 @@ namespace Edity.McEditface
             catch (FileNotFoundException)
             {
                 //We can get here for a number of reasons, but if the html file does not exist offer to make it
-                if (!File.Exists(sourceFile))
+                if (!File.Exists(sourceFile) && extension == "")
                 {
                     try
                     {

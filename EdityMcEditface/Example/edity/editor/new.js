@@ -24,9 +24,9 @@
                         h.func(function (data) {
                             return data.data;
                         }),
-                        h.rest.upload('/ide/api/upload' + window.location.pathname),
+                        h.rest.upload('/ide/api/upload' + window.location.pathname + ".html"),
                         h.func(function (data) {
-                            window.location.reload(true);
+                            window.location.href = window.location.href + ".html";
                         })
                     ];
                 }));

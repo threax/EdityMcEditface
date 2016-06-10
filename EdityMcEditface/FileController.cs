@@ -73,7 +73,7 @@ namespace Edity.McEditface
                     {
                         case ".edit":
                         case ".html":
-                            var editFile = "/editor/edity/layouts/edit.html";
+                            var editFile = "/edity/editor/edit.html";
                             if (File.Exists(editFile))
                             {
                                 using (var layout = new StreamReader(File.OpenRead(editFile)))
@@ -107,7 +107,7 @@ namespace Edity.McEditface
                 {
                     try
                     {
-                        String newLayout = "edity/layouts/editor/new.html";
+                        String newLayout = "edity/editor/new.html";
                         if (File.Exists(newLayout))
                         {
                             using (var source = new StringReader(""))

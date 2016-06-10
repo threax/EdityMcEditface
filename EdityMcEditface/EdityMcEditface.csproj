@@ -137,8 +137,11 @@
     <EmbeddedResource Include="BackendTemplates\edit.html" />
     <Content Include="defaultTemplate.html" />
     <Content Include="Example\320x240.png" />
-    <None Include="Example\edity\layouts\editor\edit.html" />
-    <None Include="Example\edity\layouts\editor\new.html" />
+    <None Include="Example\edity\editor\edit.html" />
+    <None Include="Example\edity\editor\new.html" />
+    <Content Include="Example\edity\editor\js\new.js" />
+    <Content Include="Example\edity\templates\WeirdTemplate.html" />
+    <Content Include="Example\edity\templates\CoolTemplate.html" />
     <Content Include="Example\Sample.html" />
     <Content Include="Example\edity\layouts\default.html" />
     <EmbeddedResource Include="Resources\**\*.*" />
@@ -149,9 +152,7 @@
       <Name>HtmlRenderer</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Example\NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using EdityMcEditface.NetCore.Controllers;
 
 namespace EdityMcEditface.NetCore
 {
@@ -54,7 +55,7 @@ namespace EdityMcEditface.NetCore
                 routes.MapRoute(
                     name: "default",
                     template: "{*file}",
-                    defaults: new { controller = "Home", action = "Get" }
+                    defaults: new { controller = "Home", action = "Index" }
                 );
             });
         }

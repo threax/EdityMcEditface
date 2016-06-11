@@ -8,6 +8,7 @@ using System.Reflection;
 using Edity.McEditface.HtmlRenderer;
 using System.Net;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.Http;
 
 namespace EdityMcEditface.NetCore.Controllers
 {
@@ -22,7 +23,6 @@ namespace EdityMcEditface.NetCore.Controllers
         private String sourceFile;
         private String sourceDir;
         private String extension;
-        private String tempViewPath;
         private TemplateEnvironment environment;
 
         public HomeController()
@@ -30,16 +30,8 @@ namespace EdityMcEditface.NetCore.Controllers
 
         }
 
-        public void Dispose()
-        {
-            if(tempViewPath != null)
-            {
-                Console.WriteLine(tempViewPath);
-            }
-        }
-
         [HttpGet]
-        public IActionResult Get(String file)
+        public IActionResult Index(String file)
         {
             try
             {
@@ -47,7 +39,10 @@ namespace EdityMcEditface.NetCore.Controllers
                 {
                     file = "index";
                 }
-                file = Path.GetFullPath(file);
+                if(file.Equals(".html", StringComparison.OrdinalIgnoreCase))
+                {
+                    file = "index.html";
+                }
 
                 this.currentFile = file;
                 extension = Path.GetExtension(file).ToLowerInvariant();
@@ -91,7 +86,7 @@ namespace EdityMcEditface.NetCore.Controllers
                         var editFile = "edity/editor/edit.html";
                         if (sourceFile.StartsWith("edity/templates", StringComparison.OrdinalIgnoreCase))
                         {
-                            return this.PhysicalFile(sourceFile, "text/html");
+                            return this.PhysicalFile(Path.GetFullPath(sourceFile), "text/html");
                         }
                         using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
                         {
@@ -113,7 +108,7 @@ namespace EdityMcEditface.NetCore.Controllers
                         String contentType;
                         if(content.TryGetContentType(file, out contentType))
                         {
-                            return PhysicalFile(file, contentType);
+                            return PhysicalFile(Path.GetFullPath(file), contentType);
                         }
                         break;
                 }
@@ -151,29 +146,31 @@ namespace EdityMcEditface.NetCore.Controllers
             }
         }
 
-        //[HttpPost]
-        //public async Task<HttpResponseMessage> Post(HttpRequestMessage request)
-        //{
-        //    try
-        //    {
-        //        MultipartMemoryStreamProvider x = await request.Content.ReadAsMultipartAsync();
-        //        String file = request.RequestUri.AbsolutePath.Remove(0, UploadPath.Length + 1); //Starts with a slash where our defined path does not so + 1
-        //        String directory = Path.GetDirectoryName(file);
-        //        if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-        //        {
-        //            Directory.CreateDirectory(directory);
-        //        }
-        //        using (Stream stream = File.Open(file, FileMode.Create, FileAccess.Write))
-        //        {
-        //            await x.Contents[0].CopyToAsync(stream);
-        //        }
-        //        return this.statusCodeResponse(System.Net.HttpStatusCode.OK);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return this.statusCodeResponse(System.Net.HttpStatusCode.InternalServerError);
-        //    }
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Index(ICollection<IFormFile> files)
+        {
+            try
+            {
+                //Starts with a slash where our defined path does not so + 1
+                String savePath = this.Request.Path.ToString().Remove(0, UploadPath.Length + 1);
+                savePath = Path.GetFullPath(savePath);
+                String directory = Path.GetDirectoryName(savePath);
+                if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                using (Stream stream = System.IO.File.Open(savePath, FileMode.Create, FileAccess.Write))
+                {
+                    await files.First().CopyToAsync(stream);
+                }
+                return StatusCode((int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
         //data-settings-form
         public String getConvertedDocument(TextReader markdown, TextReader template, TemplateEnvironment environment)
         {

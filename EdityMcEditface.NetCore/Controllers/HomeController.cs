@@ -7,6 +7,7 @@ using System.IO;
 using System.Reflection;
 using Edity.McEditface.HtmlRenderer;
 using System.Net;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace EdityMcEditface.NetCore.Controllers
 {
@@ -44,8 +45,9 @@ namespace EdityMcEditface.NetCore.Controllers
             {
                 if(file == null)
                 {
-                    file = "";
+                    file = "index";
                 }
+                file = Path.GetFullPath(file);
 
                 this.currentFile = file;
                 extension = Path.GetExtension(file).ToLowerInvariant();
@@ -82,41 +84,40 @@ namespace EdityMcEditface.NetCore.Controllers
                     }
                 }
 
-                using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
+                
+                switch (extension)
                 {
-                    switch (extension)
-                    {
-                        case ".edit":
-                        case ".html":
-                            var editFile = "edity/editor/edit.html";
-                            if (sourceFile.StartsWith("edity/templates", StringComparison.OrdinalIgnoreCase))
+                    case ".html":
+                        var editFile = "edity/editor/edit.html";
+                        if (sourceFile.StartsWith("edity/templates", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return this.PhysicalFile(sourceFile, "text/html");
+                        }
+                        using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
+                        {
+                            using (var layout = new StreamReader(System.IO.File.OpenRead(editFile)))
                             {
-                                return this.PhysicalFile(sourceFile, "text/html");
+                                return parsedResponse(source, layout, environment);
                             }
-                            if (System.IO.File.Exists(editFile))
-                            {
-                                using (var layout = new StreamReader(System.IO.File.OpenRead(editFile)))
-                                {
-                                    return parsedResponse(source, layout, environment);
-                                }
-                            }
-                            else
-                            {
-                                throw new FileNotFoundException();
-                                //using (var layout = new StreamReader(assembly.GetManifestResourceStream("Edity.McEditface.BackendTemplates.edit.html")))
-                                //{
-                                //    return parsedResponse(source, layout, environment);
-                                //}
-                            }
-                        case "":
+                        }
+                    case "":
+                        using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
+                        {
                             using (var layout = new StreamReader(System.IO.File.OpenRead("edity/layouts/default.html")))
                             {
                                 return parsedResponse(source, layout, environment);
                             }
-                        default:
-                            throw new FileNotFoundException();
-                    }
+                        }
+                    default:
+                        var content = new FileExtensionContentTypeProvider();
+                        String contentType;
+                        if(content.TryGetContentType(file, out contentType))
+                        {
+                            return PhysicalFile(file, contentType);
+                        }
+                        break;
                 }
+                throw new FileNotFoundException();
             }
             catch (FileNotFoundException)
             {
@@ -185,12 +186,7 @@ namespace EdityMcEditface.NetCore.Controllers
         public ActionResult parsedResponse(TextReader markdown, TextReader template, TemplateEnvironment environment)
         {
             String doc = getConvertedDocument(markdown, template, environment);
-            tempViewPath = $"Views/Temp/{Guid.NewGuid().ToString()}.cshtml";
-            using (var stream = new StreamWriter(System.IO.File.Open(tempViewPath, FileMode.Create)))
-            {
-                stream.Write(doc);
-            }
-            return View(tempViewPath);
+            return Content(doc, "text/html");
         }
 
         public IActionResult Error()

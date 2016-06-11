@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using EdityMcEditface.NetCore.Controllers;
+using Edity.McEditface.NetCore.Controllers;
 
-namespace EdityMcEditface.NetCore
+namespace Edity.McEditface.NetCore
 {
     public class Startup
     {
@@ -48,7 +48,10 @@ namespace EdityMcEditface.NetCore
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                ContentTypeProvider = new CommonMarkContentTypeProvider()
+            });
 
             app.UseMvc(routes =>
             {

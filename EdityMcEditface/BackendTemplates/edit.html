@@ -23,19 +23,19 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="{EditorRoot}">{DocLink}</a>
+                    <a class="navbar-brand" href="{editorRoot}">{docLink}</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{DocLink}" target="_blank">Preview</a></li>
+                        <li><a href="{docLink}" target="_blank">Preview</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">File <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{DocLink}">Goto</a></li>
+                                <li><a href="{docLink}">Goto</a></li>
                                 <li><a id="EditSource" data-toggle="modal" data-target="#sourceModal">Edit Source</a></li>
-                                <li><a href="{DocLink}.text">View Markdown</a></li>
+                                <li><a href="{docLink}.text">View Markdown</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a data-toggle="modal" data-target="#settingsModal">Settings</a></li>
                             </ul>
@@ -46,7 +46,7 @@
         </nav>
         <div class="row">
             <div class="editable col-md-8" id="editArea">
-                {MainContent}
+                {mainContent}
             </div>
         </div>
         <!-- Settings Modal -->
@@ -55,7 +55,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="settingsModalLabel">{DocLink} Settings</h4>
+                        <h4 class="modal-title" id="settingsModalLabel">{docLink} Settings</h4>
                     </div>
                     <div class="modal-body">
                         <form>
@@ -65,7 +65,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="link">Link</label>
-                                <input type="text" name="link" value="{DocLink}" class="form-control" />
+                                <input type="text" name="link" value="{docLink}" class="form-control" />
                             </div>
                             <button type="button" class="btn btn-primary">Save changes</button>
                         </form>
@@ -83,7 +83,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="sourceModalLabel">{DocLink} Source</h4>
+                        <h4 class="modal-title" id="sourceModalLabel">{docLink} Source</h4>
                     </div>
                     <form id="ApplySourceChanges">
                         <div class="modal-body">

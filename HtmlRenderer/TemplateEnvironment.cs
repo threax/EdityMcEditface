@@ -12,8 +12,8 @@ namespace Edity.McEditface.HtmlRenderer
 
         public TemplateEnvironment(String docLink)
         {
-            vars.Add("EditorRoot", "/");
-            vars.Add("DocLink", docLink);
+            vars.Add("editorRoot", "/");
+            vars.Add("docLink", docLink);
         }
 
         public void setVariable(String key, String value)

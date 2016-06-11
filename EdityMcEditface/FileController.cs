@@ -160,11 +160,16 @@ namespace Edity.McEditface
                 return this.statusCodeResponse(System.Net.HttpStatusCode.InternalServerError);
             }
         }
+        //data-settings-form
+        public String getConvertedDocument(TextReader markdown, TextReader template, TemplateEnvironment environment)
+        {
+            DocumentRenderer dr = new DocumentRenderer(template.ReadToEnd(), environment);
+            return dr.getDocument(markdown.ReadToEnd());
+        }
 
         public HttpResponseMessage parsedResponse(TextReader markdown, TextReader template, TemplateEnvironment environment)
         {
-            DocumentRenderer dr = new DocumentRenderer(template.ReadToEnd(), environment);
-            return this.htmlResponse(dr.getDocument(markdown.ReadToEnd()));
+            return this.htmlResponse(getConvertedDocument(markdown, template, environment));
         }
 
         public HttpResponseMessage viewMarkdownResponse(StreamReader markdown)

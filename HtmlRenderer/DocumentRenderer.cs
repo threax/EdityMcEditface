@@ -21,7 +21,7 @@ namespace Edity.McEditface.HtmlRenderer
         public string getDocument(String innerHtml)
         {
             //Replace main content first then main replace will get its variables
-            return formatText(templateHtml.Replace("{MainContent}", innerHtml));
+            return formatText(templateHtml.Replace("{mainContent}", innerHtml));
         }
 
         public string formatText(String text)
@@ -47,7 +47,8 @@ namespace Edity.McEditface.HtmlRenderer
 
                             if (bracketStart < bracketEnd - 1)
                             {
-                                var value = environment.getVariable(text.Substring(bracketStart + 1, bracketEnd - bracketStart - 1), "");
+                                var variable = text.Substring(bracketStart + 1, bracketEnd - bracketStart - 1);
+                                var value = environment.getVariable(variable, "");
                                 output.Append(text.Substring(textStart, bracketStart - textStart));
                                 output.Append(System.Net.WebUtility.HtmlEncode(value));
                                 textStart = i + 1;

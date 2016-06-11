@@ -14,15 +14,13 @@ namespace EdityMcEditface.NetCore.Controllers
 {
     public class HomeController : Controller
     {
-        public const String UploadPath = "ide/api/upload/";
-        public const String DirApiPath = "ide/api/dir/";
-
         private static char[] seps = { '|' };
 
         private String currentFile;
         private String sourceFile;
         private String sourceDir;
         private String extension;
+        private String rootDir = "wwwroot";
         private TemplateEnvironment environment;
 
         public HomeController()
@@ -54,10 +52,6 @@ namespace EdityMcEditface.NetCore.Controllers
                     sourceFile = sourceFile.Remove(sourceFile.Length - extension.Length);
                 }
 
-                if (sourceFile.StartsWith(HomeController.DirApiPath))
-                {
-                    sourceFile = sourceFile.Substring(HomeController.DirApiPath.Length);
-                }
                 sourceDir = sourceFile;
                 environment = new TemplateEnvironment("/" + sourceFile);
                 sourceFile = sourceFile + ".html";
@@ -147,12 +141,11 @@ namespace EdityMcEditface.NetCore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(ICollection<IFormFile> files)
+        public async Task<IActionResult> Index()
         {
             try
             {
-                //Starts with a slash where our defined path does not so + 1
-                String savePath = this.Request.Path.ToString().Remove(0, UploadPath.Length + 1);
+                String savePath = rootDir + this.Request.Path.ToString();
                 savePath = Path.GetFullPath(savePath);
                 String directory = Path.GetDirectoryName(savePath);
                 if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
@@ -161,7 +154,7 @@ namespace EdityMcEditface.NetCore.Controllers
                 }
                 using (Stream stream = System.IO.File.Open(savePath, FileMode.Create, FileAccess.Write))
                 {
-                    await files.First().CopyToAsync(stream);
+                    await this.Request.Form.Files.First().CopyToAsync(stream);
                 }
                 return StatusCode((int)HttpStatusCode.OK);
             }

@@ -4,7 +4,7 @@
     h.run(templates, function ()
     {
         return [
-            h.rest.get('/ide/api/dir/edity/templates/'),
+            h.rest.get('/edity/templates/'),
             h.func(function (data)
             {
                 //This should be sanitized, also check for server error
@@ -21,10 +21,13 @@
                     var boundry = "blob";
                     return [
                         h.rest.get(sender.attr('data-template')),
-                        h.func(function (data) {
-                            return data.data;
+                        h.func(function (data)
+                        {
+                            //Make a blob
+                            var blob = new Blob([data.data], { type: "text/html" });
+                            return blob;
                         }),
-                        h.rest.upload('/ide/api/upload' + window.location.pathname + ".html"),
+                        h.rest.upload(window.location.pathname + ".html"),
                         h.func(function (data) {
                             window.location.href = window.location.href + ".html";
                         })

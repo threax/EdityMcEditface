@@ -53,7 +53,9 @@ namespace EdityMcEditface.NetCore
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{*file}",
+                    defaults: new { controller = "Home", action = "Get" }
+                );
             });
         }
     }

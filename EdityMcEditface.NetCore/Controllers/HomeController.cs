@@ -10,7 +10,7 @@ using System.Net;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Http;
 
-namespace EdityMcEditface.NetCore.Controllers
+namespace Edity.McEditface.NetCore.Controllers
 {
     public class HomeController : Controller
     {
@@ -33,14 +33,7 @@ namespace EdityMcEditface.NetCore.Controllers
         {
             try
             {
-                if(file == null)
-                {
-                    file = "index";
-                }
-                if(file.Equals(".html", StringComparison.OrdinalIgnoreCase))
-                {
-                    file = "index.html";
-                }
+                file = detectIndexFile(file);
 
                 this.currentFile = file;
                 extension = Path.GetExtension(file).ToLowerInvariant();
@@ -73,7 +66,7 @@ namespace EdityMcEditface.NetCore.Controllers
                     }
                 }
 
-                
+
                 switch (extension)
                 {
                     case ".html":
@@ -82,7 +75,7 @@ namespace EdityMcEditface.NetCore.Controllers
                         {
                             return this.PhysicalFile(Path.GetFullPath(sourceFile), "text/html");
                         }
-                        using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
+                        using (var source = new StreamReader(System.IO.File.OpenRead(Path.Combine(rootDir, sourceFile))))
                         {
                             using (var layout = new StreamReader(System.IO.File.OpenRead(editFile)))
                             {
@@ -90,7 +83,7 @@ namespace EdityMcEditface.NetCore.Controllers
                             }
                         }
                     case "":
-                        using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
+                        using (var source = new StreamReader(System.IO.File.OpenRead(Path.Combine(rootDir, sourceFile))))
                         {
                             using (var layout = new StreamReader(System.IO.File.OpenRead("edity/layouts/default.html")))
                             {
@@ -100,7 +93,7 @@ namespace EdityMcEditface.NetCore.Controllers
                     default:
                         var content = new FileExtensionContentTypeProvider();
                         String contentType;
-                        if(content.TryGetContentType(file, out contentType))
+                        if (content.TryGetContentType(file, out contentType))
                         {
                             return PhysicalFile(Path.GetFullPath(file), contentType);
                         }
@@ -140,12 +133,27 @@ namespace EdityMcEditface.NetCore.Controllers
             }
         }
 
+        private static string detectIndexFile(string file)
+        {
+            if (file == null)
+            {
+                file = "index";
+            }
+            if (file.Equals(".html", StringComparison.OrdinalIgnoreCase))
+            {
+                file = "index.html";
+            }
+
+            return file;
+        }
+
         [HttpPost]
         public async Task<IActionResult> Index()
         {
             try
             {
-                String savePath = rootDir + this.Request.Path.ToString();
+                var file = detectIndexFile(this.Request.Path.ToString());
+                String savePath = rootDir + file;
                 savePath = Path.GetFullPath(savePath);
                 String directory = Path.GetDirectoryName(savePath);
                 if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))

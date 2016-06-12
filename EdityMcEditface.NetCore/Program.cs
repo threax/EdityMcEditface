@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 
-namespace EdityMcEditface.NetCore
+namespace Edity.McEditface.NetCore
 {
     public class Program
     {

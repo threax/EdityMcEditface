@@ -1,69 +1,66 @@
-﻿using Microsoft.Owin.FileSystems;
-using Microsoft.Owin.StaticFiles;
-using Owin;
-using System;
-using System.Web.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Edity.McEditface.NetCore.Controllers;
 
-namespace Edity.McEditface
+namespace EdityMcEditface
 {
     public class Startup
     {
-        // This code configures Web API. The Startup class is specified as a type
-        // parameter in the WebApp.Start method.
-        public void Configuration(IAppBuilder appBuilder)
+        public Startup(IHostingEnvironment env)
         {
-            // Configure Web API for self-host. 
-            HttpConfiguration config = new HttpConfiguration();
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+            Configuration = builder.Build();
+        }
 
-            config.Routes.MapHttpRoute(
-                name: "Embedded",
-                routeTemplate: "embd/{*file}",
-                defaults: new
-                {
-                    controller = "EmbeddedFile",
-                }
-            );
+        public IConfigurationRoot Configuration { get; }
 
-            config.Routes.MapHttpRoute(
-                name: "Upload",
-                routeTemplate: FileController.UploadPath + "{*file}",
-                defaults: new
-                {
-                    controller = "File",
-                    action = "Post"
-                }
-            );
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            // Add framework services.
+            services.AddMvc();
+        }
 
-            config.Routes.MapHttpRoute(
-                name: "Directory",
-                routeTemplate: FileController.UploadPath + "{*file}",
-                defaults: new
-                {
-                    controller = "File",
-                    action = "File"
-                }
-            );
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "{*file}",
-                
-                defaults: new
-                {
-                    controller = "File",
-                }
-            );
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
 
-            var fileSystem = new PhysicalFileSystem(Environment.CurrentDirectory);
-            var options = new FileServerOptions();
-            
-            options.EnableDirectoryBrowsing = true;
-            options.FileSystem = fileSystem;
-            options.StaticFileOptions.ContentTypeProvider = new CommonMarkContentTypeProvider();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                ContentTypeProvider = new CommonMarkContentTypeProvider()
+            });
 
-            //Building in this order makes everything work
-            appBuilder.UseFileServer(options);
-            appBuilder.UseWebApi(config);
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{*file}",
+                    defaults: new { controller = "Home", action = "Index" }
+                );
+            });
         }
     }
 }

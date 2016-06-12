@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Edity.McEditface.HtmlRenderer
+namespace EdityMcEditface.HtmlRenderer
 {
     public class TemplateEnvironment
     {

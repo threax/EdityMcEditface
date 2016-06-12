@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Reflection;
-using Edity.McEditface.HtmlRenderer;
+using EdityMcEditface.HtmlRenderer;
 using System.Net;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Http;
 
-namespace Edity.McEditface.NetCore.Controllers
+namespace EdityMcEditface.NetCore.Controllers
 {
     public class HomeController : Controller
     {

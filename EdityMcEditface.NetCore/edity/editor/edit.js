@@ -26,12 +26,13 @@
     $('[data-edit-save]').click(h.event(function () {
         return [
             h.func(function(){
-                return pen.getContent();
+                var blob = new Blob([pen.getContent()], { type: "text/html" });
+                return blob;
             }),
-            h.func(function (data) {
-                return data.data;
-            }),
-            h.rest.upload('/ide/api/upload' + window.location.pathname),
+            //h.func(function (data) {
+            //    return data.data;
+            //}),
+            h.rest.upload(window.location.pathname),
         ];
     }));
 

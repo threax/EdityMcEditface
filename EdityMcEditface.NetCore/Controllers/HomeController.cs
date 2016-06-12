@@ -152,8 +152,12 @@ namespace Edity.McEditface.NetCore.Controllers
         {
             try
             {
-                var file = detectIndexFile(this.Request.Path.ToString());
-                String savePath = rootDir + file;
+                var file = detectIndexFile(this.Request.Path.ToString().Substring(1));
+                if(file == "index")
+                {
+                    file += ".html";
+                }
+                String savePath = Path.Combine(rootDir, file);
                 savePath = Path.GetFullPath(savePath);
                 String directory = Path.GetDirectoryName(savePath);
                 if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
@@ -178,8 +182,6 @@ namespace Edity.McEditface.NetCore.Controllers
             DocumentRenderer dr = new DocumentRenderer(template.ReadToEnd(), environment);
             return dr.getDocument(markdown.ReadToEnd());
         }
-
-        private const String TempViewPath = "Views/Temp/";
 
         public ActionResult parsedResponse(TextReader markdown, TextReader template, TemplateEnvironment environment)
         {

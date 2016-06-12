@@ -11,6 +11,8 @@
         cleanAttrs: []
     };
 
+    var loading = $(".load-linebar");
+
     // create editor
     var pen = window.pen = new Pen(options);
 
@@ -25,7 +27,9 @@
 
     $('[data-edit-save]').click(h.event(function () {
         return [
-            h.func(function(){
+            h.func(function ()
+            {
+                loading.fadeIn(200);
                 var blob = new Blob([pen.getContent()], { type: "text/html" });
                 return blob;
             }),
@@ -33,6 +37,10 @@
             //    return data.data;
             //}),
             h.rest.upload(window.location.pathname),
+            h.func(function ()
+            {
+                loading.fadeOut(200);
+            })
         ];
     }));
 

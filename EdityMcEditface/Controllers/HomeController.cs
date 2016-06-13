@@ -75,12 +75,12 @@ namespace EdityMcEditface.NetCore.Controllers
                 switch (extension)
                 {
                     case ".html":
-                        var editFile = "edity/editor/edit.html";
+                        var editFile = getLayoutFile("edit");
                         if (sourceFile.StartsWith("edity/templates", StringComparison.OrdinalIgnoreCase))
                         {
                             return this.PhysicalFile(Path.GetFullPath(sourceFile), "text/html");
                         }
-                        using (var source = new StreamReader(System.IO.File.OpenRead(getRootedPath(sourceFile))))
+                        using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
                         {
                             using (var layout = new StreamReader(System.IO.File.OpenRead(editFile)))
                             {
@@ -88,7 +88,7 @@ namespace EdityMcEditface.NetCore.Controllers
                             }
                         }
                     case "":
-                        using (var source = new StreamReader(System.IO.File.OpenRead(getRootedPath(sourceFile))))
+                        using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
                         {
                             using (var layout = new StreamReader(System.IO.File.OpenRead("edity/layouts/default.html")))
                             {
@@ -104,12 +104,12 @@ namespace EdityMcEditface.NetCore.Controllers
             {
                 //We can get here for a number of reasons, but if the html file does not exist offer to make it
                 if (extension == "" && 
-                    !System.IO.File.Exists(getRootedPath(sourceFile)) && 
-                    !Directory.Exists(getRootedPath(sourceDir)))
+                    !System.IO.File.Exists(sourceFile) && 
+                    !Directory.Exists(sourceDir))
                 {
                     try
                     {
-                        String newLayout = "edity/editor/new.html";
+                        String newLayout = getLayoutFile("new");
                         if (System.IO.File.Exists(newLayout))
                         {
                             using (var source = new StringReader(""))
@@ -134,43 +134,6 @@ namespace EdityMcEditface.NetCore.Controllers
             }
         }
 
-        private PhysicalFileResult returnFile(String file)
-        {
-            var content = new FileExtensionContentTypeProvider();
-            String contentType;
-            if (content.TryGetContentType(file, out contentType))
-            {
-                if(System.IO.File.Exists(file))
-                {
-                    return PhysicalFile(Path.GetFullPath(file), contentType);
-                }
-                //See if the file exists in the backup file location
-                if (!String.IsNullOrEmpty(BackupFileSource))
-                {
-                    var backupFileLoc = Path.Combine(BackupFileSource, file);
-                    if (System.IO.File.Exists(backupFileLoc))
-                    {
-                        return PhysicalFile(Path.GetFullPath(backupFileLoc), contentType);
-                    }
-                }
-            }
-            throw new FileNotFoundException($"Cannot find file", file);
-        }
-
-        private static string detectIndexFile(string file)
-        {
-            if (file == null)
-            {
-                file = "index";
-            }
-            if (file.Equals(".html", StringComparison.OrdinalIgnoreCase))
-            {
-                file = "index.html";
-            }
-
-            return file;
-        }
-
         [HttpPost]
         public async Task<IActionResult> Index()
         {
@@ -181,8 +144,7 @@ namespace EdityMcEditface.NetCore.Controllers
                 {
                     file += ".html";
                 }
-                String savePath = getRootedPath(file);
-                savePath = Path.GetFullPath(savePath);
+                var savePath = Path.GetFullPath(file);
                 String directory = Path.GetDirectoryName(savePath);
                 if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
                 {
@@ -218,8 +180,51 @@ namespace EdityMcEditface.NetCore.Controllers
             return View();
         }
 
-        private String getRootedPath(String file)
+        private PhysicalFileResult returnFile(String file)
         {
+            var content = new FileExtensionContentTypeProvider();
+            String contentType;
+            if (content.TryGetContentType(file, out contentType))
+            {
+                return PhysicalFile(findRealFile(file), contentType);
+            }
+            throw new FileNotFoundException($"Cannot find file type for '{file}'", file);
+        }
+
+        private static String findRealFile(String file)
+        {
+            if (System.IO.File.Exists(file))
+            {
+                return Path.GetFullPath(file);
+            }
+
+            var backupFileLoc = Path.Combine(BackupFileSource, file);
+            if (System.IO.File.Exists(backupFileLoc))
+            {
+                return Path.GetFullPath(backupFileLoc);
+            }
+
+            throw new FileNotFoundException($"Cannot find file '{file}' or backup at '{backupFileLoc}'");
+        }
+
+        private static string getLayoutFile(String layoutName)
+        {
+            //returnFile
+            String file = $"edity/editor/{layoutName}.html";
+            return findRealFile(file);
+        }
+
+        private static string detectIndexFile(string file)
+        {
+            if (file == null)
+            {
+                file = "index";
+            }
+            if (file.Equals(".html", StringComparison.OrdinalIgnoreCase))
+            {
+                file = "index.html";
+            }
+
             return file;
         }
     }

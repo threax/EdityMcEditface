@@ -24,12 +24,14 @@ namespace SchemaGenerator
             Directory.SetCurrentDirectory(dir);
 
             JSchemaGenerator generator = new JSchemaGenerator();
+            generator.DefaultRequired = Newtonsoft.Json.Required.Default;
 
             // change contract resolver so property names are camel case
             generator.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             writeSchema<PageDefinition>(generator);
             writeSchema<LinkedContentEntry>(generator);
+            writeSchema<EdityProject>(generator);
         }
 
         static void writeSchema<T>(JSchemaGenerator generator)

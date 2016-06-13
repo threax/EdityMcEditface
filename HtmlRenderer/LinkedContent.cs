@@ -9,7 +9,6 @@ namespace EdityMcEditface.HtmlRenderer
 {
     public class LinkedContent
     {
-        [JsonProperty]
         private Dictionary<String, LinkedContentEntry> entries = new Dictionary<String, LinkedContentEntry>();
 
         public LinkedContent()
@@ -21,9 +20,9 @@ namespace EdityMcEditface.HtmlRenderer
         /// Add everything from other that is not already in this collection
         /// </summary>
         /// <param name="other"></param>
-        public void merge(LinkedContent other)
+        public void merge(IEnumerable<KeyValuePair<String, LinkedContentEntry>> other)
         {
-            foreach(var entry in other.entries)
+            foreach(var entry in other)
             {
                 if (!entries.ContainsKey(entry.Key))
                 {

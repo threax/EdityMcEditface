@@ -1,0 +1,51 @@
+{
+  "definitions": {
+    "LinkedContentEntry": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "css": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "javascript": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "hasMin": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "contentLinks": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": {
+        "$ref": "#/definitions/LinkedContentEntry"
+      }
+    }
+  }
+}

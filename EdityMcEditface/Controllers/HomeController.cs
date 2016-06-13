@@ -9,6 +9,7 @@ using EdityMcEditface.HtmlRenderer;
 using System.Net;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace EdityMcEditface.NetCore.Controllers
 {
@@ -50,8 +51,10 @@ namespace EdityMcEditface.NetCore.Controllers
                     sourceFile = sourceFile.Remove(sourceFile.Length - extension.Length);
                 }
 
+                var project = JsonConvert.DeserializeObject<EdityProject>(findRealFile("edity/edity.json"));
+
                 sourceDir = sourceFile;
-                environment = new TemplateEnvironment("/" + sourceFile);
+                environment = new TemplateEnvironment("/" + sourceFile, project);
                 sourceFile = sourceFile + ".html";
 
                 if (string.IsNullOrEmpty(extension))

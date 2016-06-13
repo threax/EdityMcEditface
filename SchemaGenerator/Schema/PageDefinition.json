@@ -25,9 +25,5 @@
         ]
       }
     }
-  },
-  "required": [
-    "vars",
-    "linkedContent"
-  ]
+  }
 }

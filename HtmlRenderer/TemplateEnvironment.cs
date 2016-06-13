@@ -12,7 +12,7 @@ namespace EdityMcEditface.HtmlRenderer
         private HashSet<String> usedVars = new HashSet<string>();
         private LinkedContent linkedContent = new LinkedContent();
 
-        public TemplateEnvironment(String docLink)
+        public TemplateEnvironment(String docLink, EdityProject project)
         {
             vars.Add("editorRoot", "/");
             vars.Add("docLink", docLink);

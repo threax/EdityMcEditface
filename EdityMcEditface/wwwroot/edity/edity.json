@@ -1,0 +1,7 @@
+﻿{
+  "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
+  "contentLinks": {
+    "jQuery": {
+    }
+  }
+}

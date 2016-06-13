@@ -1,9 +1,3 @@
-[submodule "EdityMcEditface/Resources/lib/htmlrest"]
-	path = EdityMcEditface/Resources/lib/htmlrest
-	url = https://github.com/threax/htmlrest.git
-[submodule "EdityMcEditface.NetCore/wwwroot/lib/htmlrest"]
-	path = EdityMcEditface.NetCore/wwwroot/lib/htmlrest
-	url = https://github.com/threax/htmlrest.git
 [submodule "EdityMcEditface/wwwroot/lib/htmlrest"]
 	path = EdityMcEditface/wwwroot/lib/htmlrest
 	url = https://github.com/threax/htmlrest.git

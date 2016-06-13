@@ -14,13 +14,18 @@ namespace EdityMcEditface.NetCore.Controllers
 {
     public class HomeController : Controller
     {
+        /// <summary>
+        /// This is the location of an additional directory to try to serve files from,
+        /// best used to serve the default files this app needs to run.
+        /// </summary>
+        public static String BackupFileSource = null;
+
         private static char[] seps = { '|' };
 
         private String currentFile;
         private String sourceFile;
         private String sourceDir;
         private String extension;
-        private String rootDir = "wwwroot";
         private TemplateEnvironment environment;
 
         public HomeController()
@@ -75,7 +80,7 @@ namespace EdityMcEditface.NetCore.Controllers
                         {
                             return this.PhysicalFile(Path.GetFullPath(sourceFile), "text/html");
                         }
-                        using (var source = new StreamReader(System.IO.File.OpenRead(Path.Combine(rootDir, sourceFile))))
+                        using (var source = new StreamReader(System.IO.File.OpenRead(getRootedPath(sourceFile))))
                         {
                             using (var layout = new StreamReader(System.IO.File.OpenRead(editFile)))
                             {
@@ -83,7 +88,7 @@ namespace EdityMcEditface.NetCore.Controllers
                             }
                         }
                     case "":
-                        using (var source = new StreamReader(System.IO.File.OpenRead(Path.Combine(rootDir, sourceFile))))
+                        using (var source = new StreamReader(System.IO.File.OpenRead(getRootedPath(sourceFile))))
                         {
                             using (var layout = new StreamReader(System.IO.File.OpenRead("edity/layouts/default.html")))
                             {
@@ -91,20 +96,16 @@ namespace EdityMcEditface.NetCore.Controllers
                             }
                         }
                     default:
-                        var content = new FileExtensionContentTypeProvider();
-                        String contentType;
-                        if (content.TryGetContentType(file, out contentType))
-                        {
-                            return PhysicalFile(Path.GetFullPath(file), contentType);
-                        }
-                        break;
+                        return returnFile(file);
                 }
                 throw new FileNotFoundException();
             }
             catch (FileNotFoundException)
             {
                 //We can get here for a number of reasons, but if the html file does not exist offer to make it
-                if (!System.IO.File.Exists(sourceFile) && extension == "")
+                if (extension == "" && 
+                    !System.IO.File.Exists(getRootedPath(sourceFile)) && 
+                    !Directory.Exists(getRootedPath(sourceDir)))
                 {
                     try
                     {
@@ -133,6 +134,29 @@ namespace EdityMcEditface.NetCore.Controllers
             }
         }
 
+        private PhysicalFileResult returnFile(String file)
+        {
+            var content = new FileExtensionContentTypeProvider();
+            String contentType;
+            if (content.TryGetContentType(file, out contentType))
+            {
+                if(System.IO.File.Exists(file))
+                {
+                    return PhysicalFile(Path.GetFullPath(file), contentType);
+                }
+                //See if the file exists in the backup file location
+                if (!String.IsNullOrEmpty(BackupFileSource))
+                {
+                    var backupFileLoc = Path.Combine(BackupFileSource, file);
+                    if (System.IO.File.Exists(backupFileLoc))
+                    {
+                        return PhysicalFile(Path.GetFullPath(backupFileLoc), contentType);
+                    }
+                }
+            }
+            throw new FileNotFoundException($"Cannot find file", file);
+        }
+
         private static string detectIndexFile(string file)
         {
             if (file == null)
@@ -157,7 +181,7 @@ namespace EdityMcEditface.NetCore.Controllers
                 {
                     file += ".html";
                 }
-                String savePath = Path.Combine(rootDir, file);
+                String savePath = getRootedPath(file);
                 savePath = Path.GetFullPath(savePath);
                 String directory = Path.GetDirectoryName(savePath);
                 if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
@@ -192,6 +216,11 @@ namespace EdityMcEditface.NetCore.Controllers
         public IActionResult Error()
         {
             return View();
+        }
+
+        private String getRootedPath(String file)
+        {
+            return file;
         }
     }
 }

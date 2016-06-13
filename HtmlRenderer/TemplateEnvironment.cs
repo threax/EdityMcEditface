@@ -10,6 +10,7 @@ namespace EdityMcEditface.HtmlRenderer
     {
         private Dictionary<String, String> vars = new Dictionary<string, string>();
         private HashSet<String> usedVars = new HashSet<string>();
+        private LinkedContent linkedContent = new LinkedContent();
 
         public TemplateEnvironment(String docLink)
         {
@@ -52,6 +53,14 @@ namespace EdityMcEditface.HtmlRenderer
             get
             {
                 return usedVars;
+            }
+        }
+
+        public LinkedContent LinkedContent
+        {
+            get
+            {
+                return linkedContent;
             }
         }
     }

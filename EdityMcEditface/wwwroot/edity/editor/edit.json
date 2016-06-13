@@ -1,3 +1,21 @@
 ﻿{
-  "LinkedContent":  
+  "LinkedContent": {
+    "jQuery": {
+      "css": [
+
+      ],
+      "javascript": [
+        "/lib/jquery/dist/jquery.js"
+      ]
+    },
+    "bootstrap": {
+      "css": [
+        "/lib/bootstrap/dist/css/bootstrap.css",
+        "/lib/bootstrap/dist/css/bootstrap-theme.css"
+      ],
+      "javascript": [
+        "/lib/bootstrap/dist/js/bootstrap.js"
+      ]
+    }
+  }
 }

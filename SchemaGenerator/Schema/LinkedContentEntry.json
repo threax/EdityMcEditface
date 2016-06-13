@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "css": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "javascript": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "hasMin": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "css",
+    "javascript",
+    "hasMin"
+  ]
+}

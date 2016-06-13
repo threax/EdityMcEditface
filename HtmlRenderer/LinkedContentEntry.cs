@@ -31,6 +31,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         public bool HasMin { get; set; }
 
+        [JsonIgnore]
         public IEnumerable<String> Css
         {
             get
@@ -39,6 +40,7 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        [JsonIgnore]
         public IEnumerable<String> Javascript
         {
             get

@@ -1,0 +1,72 @@
+{
+  "definitions": {
+    "LinkedContentEntry": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "css": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "javascript": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "hasMin": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "css",
+        "javascript",
+        "hasMin"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "vars": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "linkedContent": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": {
+        "$ref": "#/definitions/LinkedContentEntry"
+      }
+    }
+  },
+  "required": [
+    "vars",
+    "linkedContent"
+  ]
+}

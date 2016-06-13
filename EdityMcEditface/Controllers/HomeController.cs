@@ -163,10 +163,11 @@ namespace EdityMcEditface.NetCore.Controllers
         }
 
         //data-settings-form
-        public String getConvertedDocument(TextReader markdown, TextReader template, TemplateEnvironment environment)
+        public String getConvertedDocument(TextReader content, TextReader template, TemplateEnvironment environment)
         {
-            DocumentRenderer dr = new DocumentRenderer(template.ReadToEnd(), environment);
-            return dr.getDocument(markdown.ReadToEnd());
+            DocumentRenderer dr = new DocumentRenderer(environment);
+            dr.pushTemplate(template.ReadToEnd());
+            return dr.getDocument(content.ReadToEnd());
         }
 
         public ActionResult parsedResponse(TextReader markdown, TextReader template, TemplateEnvironment environment)

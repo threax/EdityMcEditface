@@ -9,6 +9,7 @@ namespace EdityMcEditface.HtmlRenderer
     public class TemplateEnvironment
     {
         private Dictionary<String, String> vars = new Dictionary<string, string>();
+        private HashSet<String> usedVars = new HashSet<string>();
 
         public TemplateEnvironment(String docLink)
         {
@@ -23,6 +24,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         public String getVariable(String key, String defaultVal)
         {
+            usedVars.Add(key);
             String value;
             if(vars.TryGetValue(key, out value))
             {
@@ -31,11 +33,25 @@ namespace EdityMcEditface.HtmlRenderer
             return defaultVal;
         }
 
+        /// <summary>
+        /// The variables in the collection
+        /// </summary>
         public IEnumerable<KeyValuePair<String, String>> Variables
         {
             get
             {
                 return vars;
+            }
+        }
+
+        /// <summary>
+        /// A collection of vars that have been used already
+        /// </summary>
+        public IEnumerable<String> UsedVars
+        {
+            get
+            {
+                return usedVars;
             }
         }
     }

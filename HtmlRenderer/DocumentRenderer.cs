@@ -1,6 +1,8 @@
-﻿using HtmlAgilityPack;
+﻿using Edity.McEditface.HtmlRenderer;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +13,7 @@ namespace EdityMcEditface.HtmlRenderer
     {
         private TemplateEnvironment environment;
         private String templateHtml;
+        private List<ServerSideTransform> transforms = new List<ServerSideTransform>();
 
         public DocumentRenderer(String templateHtml, TemplateEnvironment environment)
         {
@@ -18,13 +21,45 @@ namespace EdityMcEditface.HtmlRenderer
             this.environment = environment;
         }
 
-        public string getDocument(String innerHtml)
+        public String getDocument(String innerHtml)
         {
-            //Replace main content first then main replace will get its variables
-            return formatText(templateHtml.Replace("{mainContent}", innerHtml));
+            using (var stream = new MemoryStream(innerHtml.Length * sizeof(char)))
+            {
+                getDocument(innerHtml, stream);
+                stream.Position = 0;
+                using(var sr = new StreamReader(stream))
+                {
+                    return sr.ReadToEnd();
+                }
+            }
         }
 
-        public string formatText(String text)
+        public void getDocument(String innerHtml, Stream outStream)
+        {
+            //Replace main content first then main replace will get its variables
+            var withContent = templateHtml.Replace("{mainContent}", innerHtml);
+            String sb = formatText(withContent);
+
+            HtmlDocument document = new HtmlDocument();
+            document.LoadHtml(sb);
+            //Run transforms
+            foreach (var transform in transforms)
+            {
+                transform.transform(document);
+            }
+
+            document.Save(outStream);
+        }
+
+        public ICollection<ServerSideTransform> Transforms
+        {
+            get
+            {
+                return transforms;
+            }
+        }
+
+        private String formatText(String text)
         {
             StringBuilder output = new StringBuilder(text.Length);
             var textStart = 0;

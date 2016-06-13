@@ -1,46 +1,4 @@
 {
-  "definitions": {
-    "LinkedContentEntry": {
-      "type": [
-        "object",
-        "null"
-      ],
-      "properties": {
-        "css": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
-            "type": [
-              "string",
-              "null"
-            ]
-          }
-        },
-        "javascript": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
-            "type": [
-              "string",
-              "null"
-            ]
-          }
-        },
-        "hasMin": {
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "css",
-        "javascript",
-        "hasMin"
-      ]
-    }
-  },
   "type": "object",
   "properties": {
     "vars": {
@@ -61,7 +19,10 @@
         "null"
       ],
       "additionalProperties": {
-        "$ref": "#/definitions/LinkedContentEntry"
+        "type": [
+          "string",
+          "null"
+        ]
       }
     }
   },

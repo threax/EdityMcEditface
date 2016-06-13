@@ -12,6 +12,6 @@ namespace EdityMcEditface.HtmlRenderer
         private Dictionary<String, String> vars = new Dictionary<string, string>();
 
         [JsonProperty]
-        private Dictionary<String, LinkedContentEntry> linkedContent = new Dictionary<string, LinkedContentEntry>();
+        private Dictionary<String, String> linkedContent = new Dictionary<string, String>();
     }
 }

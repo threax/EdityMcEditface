@@ -12,11 +12,10 @@ namespace EdityMcEditface.HtmlRenderer
         private List<String> css = new List<string>();
         [JsonProperty]
         private List<String> javascript = new List<string>();
-        private bool hasMin;
 
         public LinkedContentEntry(bool hasMin = true)
         {
-            this.hasMin = hasMin;
+            this.HasMin = hasMin;
         }
 
         public void addCss(String file)
@@ -30,6 +29,8 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         public bool HasMin { get; set; }
+
+        public List<String> Dependencies { get; set; }
 
         [JsonIgnore]
         public IEnumerable<String> Css

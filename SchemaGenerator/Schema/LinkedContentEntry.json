@@ -27,6 +27,18 @@
     },
     "hasMin": {
       "type": "boolean"
+    },
+    "dependencies": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
     }
   }
 }

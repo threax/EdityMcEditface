@@ -17,9 +17,9 @@
     },
     "EdityMcEditface": {
       "commandName": "Project",
-      "workingDirectory": "C:\\Development\\LightKb\\src\\MyCoursesSupport\\wwwroot",
+      "workingDirectory": "C:\\Development\\EdityMcEditface\\EdityMcEditface\\wwwroot",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5000/mycourses-support.html",
+      "launchUrl": "http://localhost:5000/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

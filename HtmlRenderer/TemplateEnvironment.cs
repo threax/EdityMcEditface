@@ -8,13 +8,46 @@ namespace EdityMcEditface.HtmlRenderer
 {
     public class TemplateEnvironment
     {
-        private Dictionary<String, String> vars = new Dictionary<string, string>();
+        private Dictionary<String, String> vars;
         private HashSet<String> usedVars = new HashSet<string>();
+        private LinkedContent linkedContent = new LinkedContent();
+        private String docLink;
+        private EdityProject project;
 
-        public TemplateEnvironment(String docLink)
+        public TemplateEnvironment(String docLink, EdityProject project)
         {
-            vars.Add("editorRoot", "/");
-            vars.Add("docLink", docLink);
+            this.docLink = docLink;
+            this.project = project;
+            vars = project.Vars;
+            if (!vars.ContainsKey("editorRoot"))
+            {
+                vars.Add("editorRoot", "/");
+            }
+            if (!vars.ContainsKey("docLink"))
+            {
+                vars.Add("docLink", docLink);
+            }
+        }
+
+        public void setPage(PageDefinition pageDefinition)
+        {
+            vars.Clear();
+            vars = pageDefinition.Vars;
+            foreach(var var in project.Vars)
+            {
+                if (!vars.ContainsKey(var.Key))
+                {
+                    vars.Add(var.Key, var.Value);
+                }
+            }
+            if (!vars.ContainsKey("editorRoot"))
+            {
+                vars.Add("editorRoot", "/");
+            }
+            if (!vars.ContainsKey("docLink"))
+            {
+                vars.Add("docLink", docLink);
+            }
         }
 
         public void setVariable(String key, String value)
@@ -52,6 +85,14 @@ namespace EdityMcEditface.HtmlRenderer
             get
             {
                 return usedVars;
+            }
+        }
+
+        public LinkedContent LinkedContent
+        {
+            get
+            {
+                return linkedContent;
             }
         }
     }

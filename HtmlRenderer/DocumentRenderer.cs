@@ -12,13 +12,17 @@ namespace EdityMcEditface.HtmlRenderer
     public class DocumentRenderer
     {
         private TemplateEnvironment environment;
-        private String templateHtml;
+        private Stack<String> templateStack = new Stack<string>();
         private List<ServerSideTransform> transforms = new List<ServerSideTransform>();
 
-        public DocumentRenderer(String templateHtml, TemplateEnvironment environment)
+        public DocumentRenderer(TemplateEnvironment environment)
         {
-            this.templateHtml = templateHtml;
             this.environment = environment;
+        }
+
+        public void pushTemplate(String template)
+        {
+            templateStack.Push(template);
         }
 
         public String getDocument(String innerHtml)
@@ -37,8 +41,13 @@ namespace EdityMcEditface.HtmlRenderer
         public void getDocument(String innerHtml, Stream outStream)
         {
             //Replace main content first then main replace will get its variables
-            var withContent = templateHtml.Replace("{mainContent}", innerHtml);
-            String sb = formatText(withContent);
+            //Not the best algo
+            while(templateStack.Count > 0)
+            {
+                String template = templateStack.Pop();
+                innerHtml = template.Replace("{mainContent}", innerHtml);
+            }
+            String sb = formatText(innerHtml);
 
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(sb);

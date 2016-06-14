@@ -1,0 +1,13 @@
+﻿{
+  "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
+  "contentLinks": {
+    "jQuery": {
+      "javascript": [ "/lib/jquery/dist/jquery.js" ]
+    },
+    "bootstrap": {
+      "css": [ "/lib/bootstrap/dist/css/bootstrap.css", "/lib/bootstrap/dist/css/bootstrap-theme.css" ],
+      "javascript": [ "/lib/bootstrap/dist/js/bootstrap.js" ],
+      "dependencies": ["jQuery"]
+    }
+  }
+}

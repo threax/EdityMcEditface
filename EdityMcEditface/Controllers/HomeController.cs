@@ -9,6 +9,7 @@ using EdityMcEditface.HtmlRenderer;
 using System.Net;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace EdityMcEditface.NetCore.Controllers
 {
@@ -50,8 +51,16 @@ namespace EdityMcEditface.NetCore.Controllers
                     sourceFile = sourceFile.Remove(sourceFile.Length - extension.Length);
                 }
 
+                String projectStr = "";
+                using (var reader = new StreamReader(System.IO.File.Open(findRealFile("edity/edity.json"), FileMode.Open, FileAccess.Read, FileShare.Read)))
+                {
+                    projectStr = reader.ReadToEnd();
+                }
+
+                var project = JsonConvert.DeserializeObject<EdityProject>(projectStr);
+
                 sourceDir = sourceFile;
-                environment = new TemplateEnvironment("/" + sourceFile);
+                environment = new TemplateEnvironment("/" + sourceFile, project);
                 sourceFile = sourceFile + ".html";
 
                 if (string.IsNullOrEmpty(extension))
@@ -163,10 +172,19 @@ namespace EdityMcEditface.NetCore.Controllers
         }
 
         //data-settings-form
-        public String getConvertedDocument(TextReader markdown, TextReader template, TemplateEnvironment environment)
+        public String getConvertedDocument(TextReader content, TextReader template, TemplateEnvironment environment)
         {
-            DocumentRenderer dr = new DocumentRenderer(template.ReadToEnd(), environment);
-            return dr.getDocument(markdown.ReadToEnd());
+            DocumentRenderer dr = new DocumentRenderer(environment);
+
+            String settingsPath = sourceFile.Substring(0, sourceFile.Length - 4) + "json";
+            if (System.IO.File.Exists(settingsPath))
+            {
+                var pageSettings = JsonConvert.DeserializeObject<PageDefinition>(settingsPath);
+                environment.setPage(pageSettings);
+            }
+
+            dr.pushTemplate(template.ReadToEnd());
+            return dr.getDocument(content.ReadToEnd());
         }
 
         public ActionResult parsedResponse(TextReader markdown, TextReader template, TemplateEnvironment environment)

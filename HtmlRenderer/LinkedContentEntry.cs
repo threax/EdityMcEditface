@@ -30,7 +30,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         public bool HasMin { get; set; }
 
-        public List<String> Dependencies { get; set; }
+        public List<String> Dependencies { get; set; } = new List<String>();
 
         [JsonIgnore]
         public IEnumerable<String> Css

@@ -91,18 +91,12 @@ namespace EdityMcEditface.NetCore.Controllers
                         }
                         using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
                         {
-                            using (var layout = new StreamReader(System.IO.File.OpenRead(editFile)))
-                            {
-                                return parsedResponse(source, layout, environment);
-                            }
+                            return parsedResponse(source, editFile, environment);
                         }
                     case "":
                         using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
                         {
-                            using (var layout = new StreamReader(System.IO.File.OpenRead("edity/layouts/default.html")))
-                            {
-                                return parsedResponse(source, layout, environment);
-                            }
+                            return parsedResponse(source, "edity/layouts/default.html", environment);
                         }
                     default:
                         return returnFile(file);
@@ -123,10 +117,7 @@ namespace EdityMcEditface.NetCore.Controllers
                         {
                             using (var source = new StringReader(""))
                             {
-                                using (var layout = new StreamReader(System.IO.File.OpenRead(newLayout)))
-                                {
-                                    return parsedResponse(source, layout, environment);
-                                }
+                                return parsedResponse(source, newLayout, environment);
                             }
                         }
                     }
@@ -136,10 +127,6 @@ namespace EdityMcEditface.NetCore.Controllers
                     }
                 }
                 return StatusCode((int)HttpStatusCode.NotFound);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -172,29 +159,18 @@ namespace EdityMcEditface.NetCore.Controllers
         }
 
         //data-settings-form
-        public String getConvertedDocument(TextReader content, TextReader template, TemplateEnvironment environment)
+        public String getConvertedDocument(TextReader content, String template, TemplateEnvironment environment)
         {
             DocumentRenderer dr = new DocumentRenderer(environment);
 
-            String settingsPath = Path.ChangeExtension(sourceFile, "json");
-            PageDefinition pageSettings;
-            if (System.IO.File.Exists(settingsPath))
+            using (var layout = new StreamReader(System.IO.File.OpenRead(template)))
             {
-                using (var stream = new StreamReader(System.IO.File.Open(settingsPath, FileMode.Open, FileAccess.Read, FileShare.Read)))
-                {
-                    pageSettings = JsonConvert.DeserializeObject<PageDefinition>(stream.ReadToEnd());
-                }
+                dr.pushTemplate(layout.ReadToEnd(), getPageSettings(template));
             }
-            else
-            {
-                pageSettings = new PageDefinition();
-            }
-
-            dr.pushTemplate(template.ReadToEnd());
-            return dr.getDocument(content.ReadToEnd(), pageSettings);
+            return dr.getDocument(content.ReadToEnd(), getPageSettings(sourceFile));
         }
 
-        public ActionResult parsedResponse(TextReader markdown, TextReader template, TemplateEnvironment environment)
+        public ActionResult parsedResponse(TextReader markdown, String template, TemplateEnvironment environment)
         {
             String doc = getConvertedDocument(markdown, template, environment);
             return Content(doc, "text/html");
@@ -251,6 +227,24 @@ namespace EdityMcEditface.NetCore.Controllers
             }
 
             return file;
+        }
+
+        private PageDefinition getPageSettings(String file)
+        {
+            String settingsPath = Path.ChangeExtension(file, "json");
+            PageDefinition pageSettings;
+            if (System.IO.File.Exists(settingsPath))
+            {
+                using (var stream = new StreamReader(System.IO.File.Open(settingsPath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                {
+                    pageSettings = JsonConvert.DeserializeObject<PageDefinition>(stream.ReadToEnd());
+                }
+            }
+            else
+            {
+                pageSettings = new PageDefinition();
+            }
+            return pageSettings;
         }
     }
 }

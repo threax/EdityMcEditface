@@ -28,6 +28,10 @@ namespace EdityMcEditface.HtmlRenderer
             buildVariables(new PageDefinition[] { page });
         }
 
+        /// <summary>
+        /// Build the page variables
+        /// </summary>
+        /// <param name="pages">An enumerator over the pages in inside -> out order.</param>
         public void buildVariables(IEnumerable<PageDefinition> pages)
         {
             usedVars.Clear();
@@ -96,6 +100,18 @@ namespace EdityMcEditface.HtmlRenderer
                 return value;
             }
             return defaultVal;
+        }
+
+        /// <summary>
+        /// This will be true unless key is css or javascript, these are the only variables allowed 
+        /// to write raw. Be sure to encode everything else.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool encodeOutput(String key)
+        {
+            //ONLY the css and javascript tags should be written insecurly
+            return key != "css" && key != "javascript";
         }
 
         /// <summary>

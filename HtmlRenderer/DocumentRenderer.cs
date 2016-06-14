@@ -12,7 +12,7 @@ namespace EdityMcEditface.HtmlRenderer
     public class DocumentRenderer
     {
         private TemplateEnvironment environment;
-        private Stack<String> templateStack = new Stack<string>();
+        private Stack<Tuple<String, PageDefinition>> templateStack = new Stack<Tuple<string, PageDefinition>>();
         private List<ServerSideTransform> transforms = new List<ServerSideTransform>();
 
         public DocumentRenderer(TemplateEnvironment environment)
@@ -20,9 +20,9 @@ namespace EdityMcEditface.HtmlRenderer
             this.environment = environment;
         }
 
-        public void pushTemplate(String template)
+        public void pushTemplate(String template, PageDefinition pageSettings)
         {
-            templateStack.Push(template);
+            templateStack.Push(Tuple.Create(template, pageSettings));
         }
 
         public String getDocument(String innerHtml, PageDefinition pageSettings)
@@ -40,16 +40,20 @@ namespace EdityMcEditface.HtmlRenderer
 
         public void getDocument(String innerHtml, Stream outStream, PageDefinition pageSettings)
         {
-            //Build variables up
-            environment.buildVariables(pageSettings);
-
             //Replace main content first then main replace will get its variables
             //Not the best algo
+            List<PageDefinition> pageDefinitions = new List<PageDefinition>(templateStack.Count + 1);
+            pageDefinitions.Add(pageSettings);
             while(templateStack.Count > 0)
             {
-                String template = templateStack.Pop();
-                innerHtml = template.Replace("{mainContent}", innerHtml);
+                var template = templateStack.Pop();
+                innerHtml = template.Item1.Replace("{mainContent}", innerHtml);
+                pageDefinitions.Add(template.Item2);
             }
+
+            //Build variables up
+            environment.buildVariables(pageDefinitions);
+
             String sb = formatText(innerHtml);
 
             HtmlDocument document = new HtmlDocument();
@@ -105,7 +109,11 @@ namespace EdityMcEditface.HtmlRenderer
                                     value = environment.getVariable(variable, "");
                                 }
                                 output.Append(text.Substring(textStart, bracketStart - textStart));
-                                output.Append(System.Net.WebUtility.HtmlEncode(value));
+                                if (environment.encodeOutput(variable))
+                                {
+                                    value = System.Net.WebUtility.HtmlEncode(value);
+                                }
+                                output.Append(value);
                                 textStart = i + 1;
                             }
                         }

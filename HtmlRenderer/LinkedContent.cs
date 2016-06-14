@@ -76,7 +76,7 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 foreach (var css in entry.Css)
                 {
-                    sb.AppendLine($@"<link rel=""stylesheet"" href=""{css}"" type=""text/css"" />");
+                    sb.AppendLine($"<link rel=\"stylesheet\" href=\"{css}\" type=\"text/css\" />");
                 }
             }
             return sb.ToString();
@@ -89,7 +89,7 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 foreach (var js in entry.Javascript)
                 {
-                    sb.AppendLine($@"<script type=""text/javascript"" src=""{js}""></script>");
+                    sb.AppendLine($"<script type=\"text/javascript\" src=\"{js}\"></script>");
                 }
             }
             return sb.ToString();

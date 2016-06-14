@@ -8,18 +8,10 @@ namespace EdityMcEditface.HtmlRenderer
 {
     public class EdityProject
     {
-        [JsonProperty]
-        private Dictionary<String, LinkedContentEntry> contentLinks = new Dictionary<String, LinkedContentEntry>();
-
-        [JsonIgnore]
-        public IEnumerable<LinkedContentEntry> ContentLinks
-        {
-            get
-            {
-                return contentLinks.Values;
-            }
-        }
+        public Dictionary<String, LinkedContentEntry> ContentMap { get; set; } = new Dictionary<string, LinkedContentEntry>();
 
         public Dictionary<String, String> Vars { get; set; } = new Dictionary<string, string>();
+
+        public List<String> LinkedContent { get; set; } = new List<string>();
     }
 }

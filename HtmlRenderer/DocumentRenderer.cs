@@ -25,11 +25,11 @@ namespace EdityMcEditface.HtmlRenderer
             templateStack.Push(template);
         }
 
-        public String getDocument(String innerHtml)
+        public String getDocument(String innerHtml, PageDefinition pageSettings)
         {
             using (var stream = new MemoryStream(innerHtml.Length * sizeof(char)))
             {
-                getDocument(innerHtml, stream);
+                getDocument(innerHtml, stream, pageSettings);
                 stream.Position = 0;
                 using(var sr = new StreamReader(stream))
                 {
@@ -38,8 +38,11 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
-        public void getDocument(String innerHtml, Stream outStream)
+        public void getDocument(String innerHtml, Stream outStream, PageDefinition pageSettings)
         {
+            //Build variables up
+            environment.buildVariables(pageSettings);
+
             //Replace main content first then main replace will get its variables
             //Not the best algo
             while(templateStack.Count > 0)

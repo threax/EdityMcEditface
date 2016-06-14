@@ -176,15 +176,22 @@ namespace EdityMcEditface.NetCore.Controllers
         {
             DocumentRenderer dr = new DocumentRenderer(environment);
 
-            String settingsPath = sourceFile.Substring(0, sourceFile.Length - 4) + "json";
+            String settingsPath = Path.ChangeExtension(sourceFile, "json");
+            PageDefinition pageSettings;
             if (System.IO.File.Exists(settingsPath))
             {
-                var pageSettings = JsonConvert.DeserializeObject<PageDefinition>(settingsPath);
-                environment.setPage(pageSettings);
+                using (var stream = new StreamReader(System.IO.File.Open(settingsPath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                {
+                    pageSettings = JsonConvert.DeserializeObject<PageDefinition>(stream.ReadToEnd());
+                }
+            }
+            else
+            {
+                pageSettings = new PageDefinition();
             }
 
             dr.pushTemplate(template.ReadToEnd());
-            return dr.getDocument(content.ReadToEnd());
+            return dr.getDocument(content.ReadToEnd(), pageSettings);
         }
 
         public ActionResult parsedResponse(TextReader markdown, TextReader template, TemplateEnvironment environment)

@@ -15,10 +15,10 @@
     },
     "linkedContent": {
       "type": [
-        "object",
+        "array",
         "null"
       ],
-      "additionalProperties": {
+      "items": {
         "type": [
           "string",
           "null"

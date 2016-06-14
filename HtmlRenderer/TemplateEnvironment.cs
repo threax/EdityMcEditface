@@ -8,38 +8,42 @@ namespace EdityMcEditface.HtmlRenderer
 {
     public class TemplateEnvironment
     {
-        private Dictionary<String, String> vars;
+        private Dictionary<String, String> vars = new Dictionary<string, string>();
         private HashSet<String> usedVars = new HashSet<string>();
         private LinkedContent linkedContent = new LinkedContent();
         private String docLink;
         private EdityProject project;
+        private List<LinkedContentEntry> pageContent = null;
+        private PageDefinition pageDefinition = new PageDefinition();
 
         public TemplateEnvironment(String docLink, EdityProject project)
         {
             this.docLink = docLink;
             this.project = project;
-            vars = project.Vars;
-            if (!vars.ContainsKey("editorRoot"))
-            {
-                vars.Add("editorRoot", "/");
-            }
-            if (!vars.ContainsKey("docLink"))
-            {
-                vars.Add("docLink", docLink);
-            }
+            linkedContent.mergeEntries(project.ContentMap);
         }
 
-        public void setPage(PageDefinition pageDefinition)
+        public void buildVariables(PageDefinition page)
         {
+            buildVariables(new PageDefinition[] { page });
+        }
+
+        public void buildVariables(IEnumerable<PageDefinition> pages)
+        {
+            usedVars.Clear();
             vars.Clear();
-            vars = pageDefinition.Vars;
-            foreach(var var in project.Vars)
+            foreach(var page in pages)
             {
-                if (!vars.ContainsKey(var.Key))
+                foreach(var var in page.Vars)
                 {
-                    vars.Add(var.Key, var.Value);
+                    mergeVar(var);
                 }
             }
+            foreach (var var in project.Vars)
+            {
+                mergeVar(var);
+            }
+            
             if (!vars.ContainsKey("editorRoot"))
             {
                 vars.Add("editorRoot", "/");
@@ -48,11 +52,39 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 vars.Add("docLink", docLink);
             }
+
+            List<LinkedContentEntry> links = new List<LinkedContentEntry>(linkedContent.buildResourceList(findLinkedContent(pages)));
+            if (!vars.ContainsKey("css"))
+            {
+                vars.Add("css", linkedContent.renderCss(links));
+            }
+            if (!vars.ContainsKey("javascript"))
+            {
+                vars.Add("javascript", linkedContent.renderJavascript(links));
+            }
         }
 
-        public void setVariable(String key, String value)
+        private IEnumerable<String> findLinkedContent(IEnumerable<PageDefinition> pages)
         {
-            vars[key] = value;
+            foreach(var page in pages)
+            {
+                foreach(var content in page.LinkedContent)
+                {
+                    yield return content;
+                }
+            }
+            foreach(var content in project.LinkedContent)
+            {
+                yield return content;
+            }
+        }
+
+        private void mergeVar(KeyValuePair<string, string> var)
+        {
+            if (!vars.ContainsKey(var.Key))
+            {
+                vars.Add(var.Key, var.Value);
+            }
         }
 
         public String getVariable(String key, String defaultVal)

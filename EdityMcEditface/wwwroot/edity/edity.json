@@ -1,6 +1,6 @@
 ﻿{
   "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
-  "contentLinks": {
+  "contentMap": {
     "jQuery": {
       "javascript": [ "/lib/jquery/dist/jquery.js" ]
     },

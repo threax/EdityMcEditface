@@ -50,7 +50,7 @@
   },
   "type": "object",
   "properties": {
-    "contentLinks": {
+    "contentMap": {
       "type": [
         "object",
         "null"
@@ -65,6 +65,18 @@
         "null"
       ],
       "additionalProperties": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "linkedContent": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
         "type": [
           "string",
           "null"

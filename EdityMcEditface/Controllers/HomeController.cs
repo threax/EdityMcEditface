@@ -76,7 +76,7 @@ namespace EdityMcEditface.NetCore.Controllers
                 {
                     case ".html":
                         var editFile = getLayoutFile("edit");
-                        if (sourceFile.StartsWith("edity/templates", StringComparison.OrdinalIgnoreCase))
+                        if (sourceFile.StartsWith("edity/", StringComparison.OrdinalIgnoreCase))
                         {
                             return this.PhysicalFile(Path.GetFullPath(sourceFile), "text/html");
                         }

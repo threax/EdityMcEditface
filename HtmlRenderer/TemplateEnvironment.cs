@@ -52,20 +52,11 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 vars.Add("editorRoot", "/");
             }
-            if (!vars.ContainsKey("docLink"))
-            {
-                vars.Add("docLink", docLink);
-            }
+            vars["docLink"] = docLink;
 
             List<LinkedContentEntry> links = new List<LinkedContentEntry>(linkedContent.buildResourceList(findLinkedContent(pages)));
-            if (!vars.ContainsKey("css"))
-            {
-                vars.Add("css", linkedContent.renderCss(links));
-            }
-            if (!vars.ContainsKey("javascript"))
-            {
-                vars.Add("javascript", linkedContent.renderJavascript(links));
-            }
+            vars["css"] = linkedContent.renderCss(links);
+            vars["javascript"] = linkedContent.renderJavascript(links);
         }
 
         private IEnumerable<String> findLinkedContent(IEnumerable<PageDefinition> pages)

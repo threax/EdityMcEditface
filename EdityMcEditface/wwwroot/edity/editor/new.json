@@ -1,6 +1,6 @@
 ﻿{
   "$schema": "../../../../SchemaGenerator/Schema/PageDefinition.json",
-  "linkedContent": [ "jQuery", "bootstrap" ],
+  "linkedContent": [ "jquery", "bootstrap" ],
   "vars": {
     "title": "edit"
   }

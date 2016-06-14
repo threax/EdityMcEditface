@@ -1,13 +1,17 @@
 ﻿{
   "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
   "contentMap": {
-    "jQuery": {
+    "jquery": {
       "javascript": [ "/lib/jquery/dist/jquery.js" ]
     },
     "bootstrap": {
       "css": [ "/lib/bootstrap/dist/css/bootstrap.css", "/lib/bootstrap/dist/css/bootstrap-theme.css" ],
       "javascript": [ "/lib/bootstrap/dist/js/bootstrap.js" ],
-      "dependencies": ["jQuery"]
+      "dependencies": [ "jquery" ]
+    },
+    "pen": {
+      "css": [ "/lib/pen/src/pen.css" ],
+      "javascript": [ "/lib/pen/src/pen.js" ]
     }
   }
 }

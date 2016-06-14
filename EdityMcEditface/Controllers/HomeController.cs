@@ -51,7 +51,13 @@ namespace EdityMcEditface.NetCore.Controllers
                     sourceFile = sourceFile.Remove(sourceFile.Length - extension.Length);
                 }
 
-                var project = JsonConvert.DeserializeObject<EdityProject>(findRealFile("edity/edity.json"));
+                String projectStr = "";
+                using (var reader = new StreamReader(System.IO.File.Open(findRealFile("edity/edity.json"), FileMode.Open, FileAccess.Read, FileShare.Read)))
+                {
+                    projectStr = reader.ReadToEnd();
+                }
+
+                var project = JsonConvert.DeserializeObject<EdityProject>(projectStr);
 
                 sourceDir = sourceFile;
                 environment = new TemplateEnvironment("/" + sourceFile, project);

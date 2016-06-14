@@ -92,7 +92,15 @@ namespace EdityMcEditface.HtmlRenderer
                             if (bracketStart < bracketEnd - 1)
                             {
                                 var variable = text.Substring(bracketStart + 1, bracketEnd - bracketStart - 1);
-                                var value = environment.getVariable(variable, "");
+                                String value;
+                                if (variable[0] == '|') //Starts with a pipe, pass it to the client side without the pipe.
+                                {
+                                    value = $"{{{variable.Substring(1)}}}";
+                                }
+                                else
+                                {
+                                    value = environment.getVariable(variable, "");
+                                }
                                 output.Append(text.Substring(textStart, bracketStart - textStart));
                                 output.Append(System.Net.WebUtility.HtmlEncode(value));
                                 textStart = i + 1;

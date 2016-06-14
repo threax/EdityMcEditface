@@ -169,6 +169,14 @@ namespace EdityMcEditface.NetCore.Controllers
         public String getConvertedDocument(TextReader content, TextReader template, TemplateEnvironment environment)
         {
             DocumentRenderer dr = new DocumentRenderer(environment);
+
+            String settingsPath = sourceFile.Substring(0, sourceFile.Length - 4) + "json";
+            if (System.IO.File.Exists(settingsPath))
+            {
+                var pageSettings = JsonConvert.DeserializeObject<PageDefinition>(settingsPath);
+                environment.setPage(pageSettings);
+            }
+
             dr.pushTemplate(template.ReadToEnd());
             return dr.getDocument(content.ReadToEnd());
         }

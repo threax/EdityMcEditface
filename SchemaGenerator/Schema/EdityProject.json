@@ -58,6 +58,18 @@
       "additionalProperties": {
         "$ref": "#/definitions/LinkedContentEntry"
       }
+    },
+    "vars": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
     }
   }
 }

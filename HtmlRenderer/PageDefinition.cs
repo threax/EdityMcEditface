@@ -8,10 +8,8 @@ namespace EdityMcEditface.HtmlRenderer
 {
     public class PageDefinition
     {
-        [JsonProperty]
-        private Dictionary<String, String> vars = new Dictionary<string, string>();
+        public Dictionary<String, String> Vars { get; set; }
 
-        [JsonProperty]
-        private Dictionary<String, String> linkedContent = new Dictionary<string, String>();
+        public Dictionary<String, String> LinkedContent { get; set; }
     }
 }

@@ -13,5 +13,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         [JsonIgnore]
         public IEnumerable<LinkedContentEntry> ContentLinks { get; set; }
+
+        public Dictionary<String, String> Vars { get; set; }
     }
 }

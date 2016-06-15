@@ -169,14 +169,16 @@ namespace EdityMcEditface.NetCore.Controllers
                 {
                     Content = layout.ReadToEnd(),
                     PageDefinition = getPageDefinition(template),
-                    PageScriptPath = getPageScriptFile(template)
+                    PageScriptPath = getPageFile(template, "js"),
+                    PageCssPath = getPageFile(template, "css"),
                 });
             }
             var document = dr.getDocument(new PageStackItem()
             {
                 Content = content.ReadToEnd(),
                 PageDefinition = getPageDefinition(sourceFile),
-                PageScriptPath = getPageScriptFile(sourceFile)
+                PageScriptPath = getPageFile(sourceFile, "js"),
+                PageCssPath = getPageFile(sourceFile, "css"),
             });
             
             return document.DocumentNode.OuterHtml;
@@ -260,9 +262,9 @@ namespace EdityMcEditface.NetCore.Controllers
             return pageSettings;
         }
 
-        private String getPageScriptFile(String file)
+        private String getPageFile(String file, String extension)
         {
-            String jsPath = Path.ChangeExtension(file, "js");
+            String jsPath = Path.ChangeExtension(file, extension);
             if (System.IO.File.Exists(jsPath))
             {
                 return jsPath;

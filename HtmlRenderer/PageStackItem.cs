@@ -12,5 +12,7 @@ namespace EdityMcEditface.HtmlRenderer
         public String Content { get; set; }
 
         public String PageScriptPath { get; set; }
+
+        public String PageCssPath { get; set; }
     }
 }

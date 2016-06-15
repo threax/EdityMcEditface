@@ -2,5 +2,9 @@
   {
     "outputFile": "edity/css/loading.css",
     "inputFile": "edity/css/loading.less"
+  },
+  {
+    "outputFile": "wwwroot/edity/css/loading.css",
+    "inputFile": "wwwroot/edity/css/loading.less"
   }
 ]

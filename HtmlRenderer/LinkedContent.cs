@@ -69,28 +69,44 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
-        public String renderCss(IEnumerable<LinkedContentEntry> entries)
+        private const String cssHtml = "<link rel=\"stylesheet\" href=\"{0}\" type=\"text/css\" />";
+
+        public String renderCss(IEnumerable<LinkedContentEntry> entries, IEnumerable<String> additionalFiles)
         {
             StringBuilder sb = new StringBuilder();
             foreach (var entry in entries)
             {
                 foreach (var css in entry.Css)
                 {
-                    sb.AppendLine($"<link rel=\"stylesheet\" href=\"{css}\" type=\"text/css\" />");
+                    sb.AppendFormat(cssHtml, css);
+                    sb.AppendLine();
                 }
+            }
+            foreach(var file in additionalFiles)
+            {
+                sb.AppendFormat(cssHtml, file);
+                sb.AppendLine();
             }
             return sb.ToString();
         }
 
-        public String renderJavascript(IEnumerable<LinkedContentEntry> entries)
+        private const String javascriptHtml = "<script type=\"text/javascript\" src=\"{0}\"></script>";
+
+        public String renderJavascript(IEnumerable<LinkedContentEntry> entries, IEnumerable<String> additionalFiles)
         {
             StringBuilder sb = new StringBuilder();
             foreach (var entry in entries)
             {
                 foreach (var js in entry.Javascript)
                 {
-                    sb.AppendLine($"<script type=\"text/javascript\" src=\"{js}\"></script>");
+                    sb.AppendFormat(javascriptHtml, js);
+                    sb.AppendLine();
                 }
+            }
+            foreach(var file in additionalFiles)
+            {
+                sb.AppendFormat(javascriptHtml, file);
+                sb.AppendLine();
             }
             return sb.ToString();
         }

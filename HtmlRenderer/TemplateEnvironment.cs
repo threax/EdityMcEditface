@@ -55,8 +55,8 @@ namespace EdityMcEditface.HtmlRenderer
             vars["docLink"] = docLink;
 
             List<LinkedContentEntry> links = new List<LinkedContentEntry>(linkedContent.buildResourceList(findLinkedContent(pages.Select(p => p.PageDefinition))));
-            vars["css"] = linkedContent.renderCss(links);
-            vars["javascript"] = linkedContent.renderJavascript(links);
+            vars["css"] = linkedContent.renderCss(links, new String[0]);
+            vars["javascript"] = linkedContent.renderJavascript(links, pages.Where(p => p.PageScriptPath != null).Select(p => p.PageScriptPath));
         }
 
         private IEnumerable<String> findLinkedContent(IEnumerable<PageDefinition> pages)

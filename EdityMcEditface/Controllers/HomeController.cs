@@ -182,9 +182,9 @@ namespace EdityMcEditface.NetCore.Controllers
             return document.DocumentNode.OuterHtml;
         }
 
-        public ActionResult parsedResponse(TextReader markdown, String template, TemplateEnvironment environment)
+        public ActionResult parsedResponse(TextReader content, String template, TemplateEnvironment environment)
         {
-            String doc = getConvertedDocument(markdown, template, environment);
+            String doc = getConvertedDocument(content, template, environment);
             return Content(doc, "text/html");
         }
 
@@ -224,7 +224,7 @@ namespace EdityMcEditface.NetCore.Controllers
         {
             //returnFile
             String file = $"edity/editor/{layoutName}.html";
-            return findRealFile(file);
+            return file;
         }
 
         private static string detectIndexFile(string file)

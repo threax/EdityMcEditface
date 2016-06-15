@@ -12,6 +12,13 @@
     "pen": {
       "css": [ "/lib/pen/src/pen.css" ],
       "javascript": [ "/lib/pen/src/pen.js" ]
+    },
+    "edityLoading": {
+      "css": [ "/edity/css/loading.min.css" ]
+    },
+    "htmlrest": {
+      "javascript": [ "/lib/htmlrest/src/runner.js", "/lib/htmlrest/src/output.js", "/lib/htmlrest/src/rest.js" ],
+      "dependencies": [ "jquery" ]
     }
   }
 }

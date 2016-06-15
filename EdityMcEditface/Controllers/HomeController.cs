@@ -165,7 +165,12 @@ namespace EdityMcEditface.NetCore.Controllers
 
             using (var layout = new StreamReader(System.IO.File.OpenRead(template)))
             {
-                dr.pushTemplate(layout.ReadToEnd(), getPageSettings(template));
+                dr.pushTemplate(new PageStackItem()
+                {
+                    Content = layout.ReadToEnd(),
+                    PageDefinition = getPageSettings(template),
+                    PageScriptPath = getPageScriptFile(template)
+                });
             }
             return dr.getDocument(content.ReadToEnd(), getPageSettings(sourceFile));
         }
@@ -244,7 +249,18 @@ namespace EdityMcEditface.NetCore.Controllers
             {
                 pageSettings = new PageDefinition();
             }
+
             return pageSettings;
+        }
+
+        private String getPageScriptFile(String file)
+        {
+            String jsPath = Path.ChangeExtension(file, "js");
+            if (System.IO.File.Exists(jsPath))
+            {
+                return jsPath;
+            }
+            return null;
         }
     }
 }

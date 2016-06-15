@@ -12,7 +12,7 @@ namespace EdityMcEditface.HtmlRenderer
     public class DocumentRenderer
     {
         private TemplateEnvironment environment;
-        private Stack<Tuple<String, PageDefinition>> templateStack = new Stack<Tuple<string, PageDefinition>>();
+        private Stack<PageStackItem> templateStack = new Stack<PageStackItem>();
         private List<ServerSideTransform> transforms = new List<ServerSideTransform>();
 
         public DocumentRenderer(TemplateEnvironment environment)
@@ -20,9 +20,9 @@ namespace EdityMcEditface.HtmlRenderer
             this.environment = environment;
         }
 
-        public void pushTemplate(String template, PageDefinition pageSettings)
+        public void pushTemplate(PageStackItem layout)
         {
-            templateStack.Push(Tuple.Create(template, pageSettings));
+            templateStack.Push(layout);
         }
 
         public String getDocument(String innerHtml, PageDefinition pageSettings)
@@ -47,8 +47,8 @@ namespace EdityMcEditface.HtmlRenderer
             while(templateStack.Count > 0)
             {
                 var template = templateStack.Pop();
-                innerHtml = template.Item1.Replace("{mainContent}", innerHtml);
-                pageDefinitions.Add(template.Item2);
+                innerHtml = template.Content.Replace("{mainContent}", innerHtml);
+                pageDefinitions.Add(template.PageDefinition);
             }
 
             //Build variables up

@@ -80,28 +80,28 @@ namespace EdityMcEditface.NetCore.Controllers
                     }
                 }
 
-
+                List<String> templates = new List<string>();
                 switch (extension)
                 {
                     case ".html":
-                        var editFile = getLayoutFile("edit");
                         if (sourceFile.StartsWith("edity/", StringComparison.OrdinalIgnoreCase))
                         {
                             return this.PhysicalFile(Path.GetFullPath(sourceFile), "text/html");
                         }
-                        using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
-                        {
-                            return parsedResponse(source, editFile, environment);
-                        }
+                        templates.Add(getLayoutFile("default"));
+                        templates.Add(getEditorFile("edit"));
+                        break;
                     case "":
-                        using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
-                        {
-                            return parsedResponse(source, "edity/layouts/default.html", environment);
-                        }
+                        templates.Add(getLayoutFile("default"));
+                        break;
                     default:
                         return returnFile(file);
                 }
-                throw new FileNotFoundException();
+
+                using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
+                {
+                    return parsedResponse(source, templates, environment);
+                }
             }
             catch (FileNotFoundException)
             {
@@ -112,12 +112,12 @@ namespace EdityMcEditface.NetCore.Controllers
                 {
                     try
                     {
-                        String newLayout = getLayoutFile("new");
+                        String newLayout = getEditorFile("new");
                         if (System.IO.File.Exists(newLayout))
                         {
                             using (var source = new StringReader(""))
                             {
-                                return parsedResponse(source, newLayout, environment);
+                                return parsedResponse(source, new String[] { newLayout }, environment);
                             }
                         }
                     }
@@ -159,19 +159,22 @@ namespace EdityMcEditface.NetCore.Controllers
         }
 
         //data-settings-form
-        public String getConvertedDocument(TextReader content, String template, TemplateEnvironment environment)
+        public String getConvertedDocument(TextReader content, IEnumerable<String> templates, TemplateEnvironment environment)
         {
             DocumentRenderer dr = new DocumentRenderer(environment);
 
-            using (var layout = new StreamReader(System.IO.File.OpenRead(template)))
+            foreach (var template in templates)
             {
-                dr.pushTemplate(new PageStackItem()
+                using (var layout = new StreamReader(System.IO.File.OpenRead(template)))
                 {
-                    Content = layout.ReadToEnd(),
-                    PageDefinition = getPageDefinition(template),
-                    PageScriptPath = getPageFile(template, "js"),
-                    PageCssPath = getPageFile(template, "css"),
-                });
+                    dr.pushTemplate(new PageStackItem()
+                    {
+                        Content = layout.ReadToEnd(),
+                        PageDefinition = getPageDefinition(template),
+                        PageScriptPath = getPageFile(template, "js"),
+                        PageCssPath = getPageFile(template, "css"),
+                    });
+                }
             }
             var document = dr.getDocument(new PageStackItem()
             {
@@ -184,9 +187,9 @@ namespace EdityMcEditface.NetCore.Controllers
             return document.DocumentNode.OuterHtml;
         }
 
-        public ActionResult parsedResponse(TextReader content, String template, TemplateEnvironment environment)
+        public ActionResult parsedResponse(TextReader content, IEnumerable<String> templates, TemplateEnvironment environment)
         {
-            String doc = getConvertedDocument(content, template, environment);
+            String doc = getConvertedDocument(content, templates, environment);
             return Content(doc, "text/html");
         }
 
@@ -222,10 +225,17 @@ namespace EdityMcEditface.NetCore.Controllers
             throw new FileNotFoundException($"Cannot find file '{file}' or backup at '{backupFileLoc}'");
         }
 
-        private static string getLayoutFile(String layoutName)
+        private static string getEditorFile(String layoutName)
         {
             //returnFile
             String file = $"edity/editor/{layoutName}.html";
+            return file;
+        }
+
+        private static string getLayoutFile(String layoutName)
+        {
+            //returnFile
+            String file = $"edity/layouts/{layoutName}.html";
             return file;
         }
 

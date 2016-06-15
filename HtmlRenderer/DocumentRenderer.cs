@@ -12,7 +12,7 @@ namespace EdityMcEditface.HtmlRenderer
     public class DocumentRenderer
     {
         private TemplateEnvironment environment;
-        private Stack<PageStackItem> templateStack = new Stack<PageStackItem>();
+        private Stack<PageStackItem> pageStack = new Stack<PageStackItem>();
         private List<ServerSideTransform> transforms = new List<ServerSideTransform>();
 
         public DocumentRenderer(TemplateEnvironment environment)
@@ -22,21 +22,21 @@ namespace EdityMcEditface.HtmlRenderer
 
         public void pushTemplate(PageStackItem layout)
         {
-            templateStack.Push(layout);
+            pageStack.Push(layout);
         }
 
         public HtmlDocument getDocument(PageStackItem page)
         {
             //Replace main content first then main replace will get its variables
             //Not the best algo
-            List<PageDefinition> pageDefinitions = new List<PageDefinition>(templateStack.Count + 1);
-            pageDefinitions.Add(page.PageDefinition);
+            List<PageStackItem> pageDefinitions = new List<PageStackItem>(pageStack.Count + 1);
+            pageDefinitions.Add(page);
             String innerHtml = page.Content;
-            while(templateStack.Count > 0)
+            while(pageStack.Count > 0)
             {
-                var template = templateStack.Pop();
+                var template = pageStack.Pop();
                 innerHtml = template.Content.Replace("{mainContent}", innerHtml);
-                pageDefinitions.Add(template.PageDefinition);
+                pageDefinitions.Add(template);
             }
 
             //Build variables up

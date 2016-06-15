@@ -23,22 +23,22 @@ namespace EdityMcEditface.HtmlRenderer
             linkedContent.mergeEntries(project.ContentMap);
         }
 
-        public void buildVariables(PageDefinition page)
+        public void buildVariables(PageStackItem page)
         {
-            buildVariables(new PageDefinition[] { page });
+            buildVariables(new PageStackItem[] { page });
         }
 
         /// <summary>
         /// Build the page variables
         /// </summary>
         /// <param name="pages">An enumerator over the pages in inside -> out order.</param>
-        public void buildVariables(IEnumerable<PageDefinition> pages)
+        public void buildVariables(IEnumerable<PageStackItem> pages)
         {
             usedVars.Clear();
             vars.Clear();
             foreach(var page in pages)
             {
-                foreach(var var in page.Vars)
+                foreach(var var in page.PageDefinition.Vars)
                 {
                     mergeVar(var);
                 }
@@ -54,7 +54,7 @@ namespace EdityMcEditface.HtmlRenderer
             }
             vars["docLink"] = docLink;
 
-            List<LinkedContentEntry> links = new List<LinkedContentEntry>(linkedContent.buildResourceList(findLinkedContent(pages)));
+            List<LinkedContentEntry> links = new List<LinkedContentEntry>(linkedContent.buildResourceList(findLinkedContent(pages.Select(p => p.PageDefinition))));
             vars["css"] = linkedContent.renderCss(links);
             vars["javascript"] = linkedContent.renderJavascript(links);
         }

@@ -25,25 +25,13 @@ namespace EdityMcEditface.HtmlRenderer
             templateStack.Push(layout);
         }
 
-        public String getDocument(String innerHtml, PageDefinition pageSettings)
-        {
-            using (var stream = new MemoryStream(innerHtml.Length * sizeof(char)))
-            {
-                getDocument(innerHtml, stream, pageSettings);
-                stream.Position = 0;
-                using(var sr = new StreamReader(stream))
-                {
-                    return sr.ReadToEnd();
-                }
-            }
-        }
-
-        public void getDocument(String innerHtml, Stream outStream, PageDefinition pageSettings)
+        public HtmlDocument getDocument(PageStackItem page)
         {
             //Replace main content first then main replace will get its variables
             //Not the best algo
             List<PageDefinition> pageDefinitions = new List<PageDefinition>(templateStack.Count + 1);
-            pageDefinitions.Add(pageSettings);
+            pageDefinitions.Add(page.PageDefinition);
+            String innerHtml = page.Content;
             while(templateStack.Count > 0)
             {
                 var template = templateStack.Pop();
@@ -54,17 +42,17 @@ namespace EdityMcEditface.HtmlRenderer
             //Build variables up
             environment.buildVariables(pageDefinitions);
 
-            String sb = formatText(innerHtml);
+            String formattedText = formatText(innerHtml);
 
             HtmlDocument document = new HtmlDocument();
-            document.LoadHtml(sb);
+            document.LoadHtml(formattedText);
             //Run transforms
             foreach (var transform in transforms)
             {
                 transform.transform(document);
             }
 
-            document.Save(outStream);
+            return document;
         }
 
         public ICollection<ServerSideTransform> Transforms

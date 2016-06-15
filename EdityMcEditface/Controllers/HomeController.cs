@@ -168,11 +168,18 @@ namespace EdityMcEditface.NetCore.Controllers
                 dr.pushTemplate(new PageStackItem()
                 {
                     Content = layout.ReadToEnd(),
-                    PageDefinition = getPageSettings(template),
+                    PageDefinition = getPageDefinition(template),
                     PageScriptPath = getPageScriptFile(template)
                 });
             }
-            return dr.getDocument(content.ReadToEnd(), getPageSettings(sourceFile));
+            var document = dr.getDocument(new PageStackItem()
+            {
+                Content = content.ReadToEnd(),
+                PageDefinition = getPageDefinition(sourceFile),
+                PageScriptPath = getPageScriptFile(sourceFile)
+            });
+            
+            return document.DocumentNode.OuterHtml;
         }
 
         public ActionResult parsedResponse(TextReader markdown, String template, TemplateEnvironment environment)
@@ -234,7 +241,7 @@ namespace EdityMcEditface.NetCore.Controllers
             return file;
         }
 
-        private PageDefinition getPageSettings(String file)
+        private PageDefinition getPageDefinition(String file)
         {
             String settingsPath = Path.ChangeExtension(file, "json");
             PageDefinition pageSettings;

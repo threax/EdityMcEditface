@@ -25,6 +25,11 @@ namespace EdityMcEditface.HtmlRenderer
             pageStack.Push(layout);
         }
 
+        public void addTransform(ServerSideTransform transform)
+        {
+            this.transforms.Add(transform);
+        }
+
         public HtmlDocument getDocument(PageStackItem page)
         {
             HtmlDocument document = new HtmlDocument();

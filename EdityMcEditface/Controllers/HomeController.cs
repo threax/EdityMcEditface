@@ -51,16 +51,7 @@ namespace EdityMcEditface.NetCore.Controllers
                     sourceFile = sourceFile.Remove(sourceFile.Length - extension.Length);
                 }
 
-                String projectStr = "";
-                using (var reader = new StreamReader(System.IO.File.Open(findRealFile("edity/edity.json"), FileMode.Open, FileAccess.Read, FileShare.Read)))
-                {
-                    projectStr = reader.ReadToEnd();
-                }
-
-                var project = JsonConvert.DeserializeObject<EdityProject>(projectStr);
-
                 sourceDir = sourceFile;
-                environment = new TemplateEnvironment("/" + sourceFile, project);
                 sourceFile = sourceFile + ".html";
 
                 if (string.IsNullOrEmpty(extension))
@@ -99,6 +90,9 @@ namespace EdityMcEditface.NetCore.Controllers
                         return returnFile(file);
                 }
 
+                EdityProject project = loadProject();
+                environment = new TemplateEnvironment("/" + sourceFile, project);
+
                 using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
                 {
                     return parsedResponse(source, templates, environment);
@@ -129,6 +123,36 @@ namespace EdityMcEditface.NetCore.Controllers
                 }
                 return StatusCode((int)HttpStatusCode.NotFound);
             }
+        }
+
+        const string ProjectFilePath = "edity/edity.json";
+        private static EdityProject loadProject()
+        {
+            String projectStr = "";
+            bool usedBackup = false;
+            String file = findRealFile(ProjectFilePath, out usedBackup);
+            using (var reader = new StreamReader(System.IO.File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            {
+                projectStr = reader.ReadToEnd();
+            }
+
+            var project = JsonConvert.DeserializeObject<EdityProject>(projectStr);
+
+            if (!usedBackup)
+            {
+                //Also load the backup file and merge it in
+                file = getBackupPath(ProjectFilePath);
+                using (var reader = new StreamReader(System.IO.File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                {
+                    projectStr = reader.ReadToEnd();
+                }
+
+                var backupProject = JsonConvert.DeserializeObject<EdityProject>(projectStr);
+
+                project.merge(backupProject);
+            }
+
+            return project;
         }
 
         [HttpPost]
@@ -219,19 +243,39 @@ namespace EdityMcEditface.NetCore.Controllers
         /// <returns>The full path to the real file, searching all dirs.</returns>
         private static String findRealFile(String file)
         {
+            bool usedBackup;
+            return findRealFile(file, out usedBackup);
+        }
+
+        /// <summary>
+        /// Find the full real file path if the file exists, if not returns the original
+        /// </summary>
+        /// <param name="file">The file to look for.</param>
+        /// <param name="usedBackup">Will be set to true if the backup file was used.</param>
+        /// <returns></returns>
+        private static String findRealFile(String file, out bool usedBackup)
+        {
+            usedBackup = false;
+
             if (System.IO.File.Exists(file))
             {
                 return Path.GetFullPath(file);
             }
 
-            var backupFileLoc = Path.Combine(BackupFileSource, file);
+            string backupFileLoc = getBackupPath(file);
             if (System.IO.File.Exists(backupFileLoc))
             {
+                usedBackup = true;
                 return Path.GetFullPath(backupFileLoc);
             }
 
             //Not found, just return the file
             return file;
+        }
+
+        private static string getBackupPath(string file)
+        {
+            return Path.Combine(BackupFileSource, file);
         }
 
         private static string getEditorFile(String layoutName)

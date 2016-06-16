@@ -88,8 +88,9 @@ namespace EdityMcEditface.NetCore.Controllers
                         {
                             return this.PhysicalFile(Path.GetFullPath(sourceFile), "text/html");
                         }
-                        templates.Add(getLayoutFile("default"));
                         templates.Add(getEditorFile("edit"));
+                        templates.Add(getLayoutFile("default"));
+                        templates.Add(getEditorFile("editarea"));
                         break;
                     case "":
                         templates.Add(getLayoutFile("default"));

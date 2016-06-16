@@ -24,6 +24,7 @@ namespace EdityMcEditface.NetCore.Controllers
         private static char[] seps = { '|' };
 
         private String currentFile;
+        private String currentFileNoExtension;
         private String sourceFile;
         private String sourceDir;
         private String extension;
@@ -45,14 +46,14 @@ namespace EdityMcEditface.NetCore.Controllers
                 extension = Path.GetExtension(file).ToLowerInvariant();
 
                 //Fix file name
-                sourceFile = file;
-                if (extension.Length != 0 && sourceFile.Length > extension.Length)
+                currentFileNoExtension = file;
+                if (extension.Length != 0 && currentFileNoExtension.Length > extension.Length)
                 {
-                    sourceFile = sourceFile.Remove(sourceFile.Length - extension.Length);
+                    currentFileNoExtension = currentFileNoExtension.Remove(currentFileNoExtension.Length - extension.Length);
                 }
 
-                sourceDir = sourceFile;
-                sourceFile = sourceFile + ".html";
+                sourceDir = currentFileNoExtension;
+                sourceFile = currentFileNoExtension + ".html";
 
                 if (string.IsNullOrEmpty(extension))
                 {
@@ -91,7 +92,7 @@ namespace EdityMcEditface.NetCore.Controllers
                 }
 
                 EdityProject project = loadProject();
-                environment = new TemplateEnvironment("/" + sourceFile, project);
+                environment = new TemplateEnvironment("/" + currentFileNoExtension, project);
 
                 using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
                 {
@@ -141,6 +142,8 @@ namespace EdityMcEditface.NetCore.Controllers
             if (!usedBackup)
             {
                 //Also load the backup file and merge it in
+                //This does load twice if the backup loc is the project loc, but that won't be common
+                //and if so can check for it here.
                 file = getBackupPath(ProjectFilePath);
                 using (var reader = new StreamReader(System.IO.File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
                 {

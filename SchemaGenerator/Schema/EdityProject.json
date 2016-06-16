@@ -18,15 +18,26 @@
             ]
           }
         },
-        "javascript": {
+        "js": {
           "type": [
             "array",
             "null"
           ],
           "items": {
             "type": [
-              "string",
+              "object",
               "null"
+            ],
+            "properties": {
+              "file": {
+                "type": "string"
+              },
+              "async": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "file"
             ]
           }
         },
@@ -46,6 +57,9 @@
           }
         }
       }
+    },
+    "JavascriptEntry": {
+      "$ref": "#/definitions/LinkedContentEntry/properties/js/items/0"
     }
   },
   "type": "object",

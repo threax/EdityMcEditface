@@ -91,24 +91,43 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         private const String javascriptHtml = "<script type=\"text/javascript\" src=\"{0}\"></script>";
+        private const String javascriptAsyncHtml = "<script type=\"text/javascript\" src=\"{0}\" async></script>";
 
-        public String renderJavascript(IEnumerable<LinkedContentEntry> entries, IEnumerable<String> additionalFiles)
+        public String renderJavascript(IEnumerable<LinkedContentEntry> entries, IEnumerable<JavascriptEntry> additionalFiles)
         {
             StringBuilder sb = new StringBuilder();
+            String currentFormat;
             foreach (var entry in entries)
             {
                 foreach (var js in entry.Javascript)
                 {
-                    sb.AppendFormat(javascriptHtml, js);
+                    currentFormat = getTag(js);
+                    sb.AppendFormat(currentFormat, js.File);
                     sb.AppendLine();
                 }
             }
-            foreach(var file in additionalFiles)
+            foreach(var js in additionalFiles)
             {
-                sb.AppendFormat(javascriptHtml, file);
+                currentFormat = getTag(js);
+                sb.AppendFormat(currentFormat, js.File);
                 sb.AppendLine();
             }
             return sb.ToString();
+        }
+
+        private static string getTag(JavascriptEntry js)
+        {
+            string currentFormat;
+            if (js.Async)
+            {
+                currentFormat = javascriptAsyncHtml;
+            }
+            else
+            {
+                currentFormat = javascriptHtml;
+            }
+
+            return currentFormat;
         }
     }
 }

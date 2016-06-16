@@ -11,7 +11,7 @@ namespace EdityMcEditface.HtmlRenderer
         [JsonProperty]
         private List<String> css = new List<string>();
         [JsonProperty]
-        private List<String> javascript = new List<string>();
+        private List<JavascriptEntry> js = new List<JavascriptEntry>();
 
         public LinkedContentEntry(bool hasMin = true)
         {
@@ -23,9 +23,9 @@ namespace EdityMcEditface.HtmlRenderer
             css.Add(file);
         }
 
-        public void addJavascript(String file)
+        public void addJavascript(JavascriptEntry file)
         {
-            javascript.Add(file);
+            js.Add(file);
         }
 
         public bool HasMin { get; set; }
@@ -42,11 +42,11 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         [JsonIgnore]
-        public IEnumerable<String> Javascript
+        public IEnumerable<JavascriptEntry> Javascript
         {
             get
             {
-                return javascript;
+                return js;
             }
         }
     }

@@ -54,6 +54,9 @@
     <Compile Include="..\HtmlRenderer\EdityProject.cs">
       <Link>EdityProject.cs</Link>
     </Compile>
+    <Compile Include="..\HtmlRenderer\JavascriptEntry.cs">
+      <Link>JavascriptEntry.cs</Link>
+    </Compile>
     <Compile Include="..\HtmlRenderer\LinkedContentEntry.cs">
       <Link>LinkedContentEntry.cs</Link>
     </Compile>

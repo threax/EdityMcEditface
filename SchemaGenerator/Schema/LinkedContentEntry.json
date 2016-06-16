@@ -1,4 +1,23 @@
 {
+  "definitions": {
+    "JavascriptEntry": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "file": {
+          "type": "string"
+        },
+        "async": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "file"
+      ]
+    }
+  },
   "type": "object",
   "properties": {
     "css": {
@@ -13,16 +32,13 @@
         ]
       }
     },
-    "javascript": {
+    "js": {
       "type": [
         "array",
         "null"
       ],
       "items": {
-        "type": [
-          "string",
-          "null"
-        ]
+        "$ref": "#/definitions/JavascriptEntry"
       }
     },
     "hasMin": {

@@ -2,31 +2,31 @@
   "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
   "contentMap": {
     "jquery": {
-      "javascript": [ "/lib/jquery/dist/jquery.js" ]
+      "js": [ { "file": "/lib/jquery/dist/jquery.js" } ]
     },
     "bootstrap": {
       "css": [ "/lib/bootstrap/dist/css/bootstrap.css", "/lib/bootstrap/dist/css/bootstrap-theme.css" ],
-      "javascript": [ "/lib/bootstrap/dist/js/bootstrap.js" ],
+      "js": [ { "file": "/lib/bootstrap/dist/js/bootstrap.js" } ],
       "dependencies": [ "jquery" ]
     },
     "pen": {
       "css": [ "/lib/pen/src/pen.css" ],
-      "javascript": [ "/lib/pen/src/pen.js" ]
+      "js": [ { "file": "/lib/pen/src/pen.js" } ]
     },
     "edityLoading": {
       "css": [ "/edity/css/loading.min.css" ]
     },
     "htmlrest": {
-      "javascript": [
-        "/lib/htmlrest/src/polyfill.js",
-        "/lib/htmlrest/src/runner.js",
-        "/lib/htmlrest/src/output.js",
-        "/lib/htmlrest/src/rest.js",
-        "/lib/htmlrest/src/storage.js",
-        "/lib/htmlrest/src/table.js",
-        "/lib/htmlrest/src/form.js",
-        "/lib/htmlrest/src/dispatcher.js",
-        "/lib/htmlrest/src/components.js"
+      "js": [
+        { "file": "/lib/htmlrest/src/polyfill.js" },
+        { "file": "/lib/htmlrest/src/runner.js" },
+        { "file": "/lib/htmlrest/src/output.js" },
+        { "file": "/lib/htmlrest/src/rest.js" },
+        { "file": "/lib/htmlrest/src/storage.js" },
+        { "file": "/lib/htmlrest/src/table.js" },
+        { "file": "/lib/htmlrest/src/form.js" },
+        { "file": "/lib/htmlrest/src/dispatcher.js" },
+        { "file": "/lib/htmlrest/src/components.js" }
       ],
       "dependencies": [ "jquery" ]
     }

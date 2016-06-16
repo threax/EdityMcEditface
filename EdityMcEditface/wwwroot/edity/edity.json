@@ -17,7 +17,17 @@
       "css": [ "/edity/css/loading.min.css" ]
     },
     "htmlrest": {
-      "javascript": [ "/lib/htmlrest/src/runner.js", "/lib/htmlrest/src/output.js", "/lib/htmlrest/src/rest.js" ],
+      "javascript": [
+        "/lib/htmlrest/src/polyfill.js",
+        "/lib/htmlrest/src/runner.js",
+        "/lib/htmlrest/src/output.js",
+        "/lib/htmlrest/src/rest.js",
+        "/lib/htmlrest/src/storage.js",
+        "/lib/htmlrest/src/table.js",
+        "/lib/htmlrest/src/form.js",
+        "/lib/htmlrest/src/dispatcher.js",
+        "/lib/htmlrest/src/components.js"
+      ],
       "dependencies": [ "jquery" ]
     }
   }

@@ -165,14 +165,15 @@ namespace EdityMcEditface.NetCore.Controllers
 
             foreach (var template in templates)
             {
-                using (var layout = new StreamReader(System.IO.File.OpenRead(template)))
+                var realTemplate = findRealFile(template);
+                using (var layout = new StreamReader(System.IO.File.OpenRead(realTemplate)))
                 {
                     dr.pushTemplate(new PageStackItem()
                     {
                         Content = layout.ReadToEnd(),
-                        PageDefinition = getPageDefinition(template),
-                        PageScriptPath = getPageFile(template, "js"),
-                        PageCssPath = getPageFile(template, "css"),
+                        PageDefinition = getPageDefinition(realTemplate),
+                        PageScriptPath = getPageFile(realTemplate, template, "js"),
+                        PageCssPath = getPageFile(realTemplate, template, "css"),
                     });
                 }
             }
@@ -180,8 +181,8 @@ namespace EdityMcEditface.NetCore.Controllers
             {
                 Content = content.ReadToEnd(),
                 PageDefinition = getPageDefinition(sourceFile),
-                PageScriptPath = getPageFile(sourceFile, "js"),
-                PageCssPath = getPageFile(sourceFile, "css"),
+                PageScriptPath = getPageFile(sourceFile, sourceFile, "js"),
+                PageCssPath = getPageFile(sourceFile, sourceFile, "css"),
             });
             
             return document.DocumentNode.OuterHtml;
@@ -209,6 +210,12 @@ namespace EdityMcEditface.NetCore.Controllers
             throw new FileNotFoundException($"Cannot find file type for '{file}'", file);
         }
 
+        /// <summary>
+        /// Find the full real file path if the file exists, if not returns the original
+        /// file name.
+        /// </summary>
+        /// <param name="file">The file to look for.</param>
+        /// <returns>The full path to the real file, searching all dirs.</returns>
         private static String findRealFile(String file)
         {
             if (System.IO.File.Exists(file))
@@ -222,7 +229,8 @@ namespace EdityMcEditface.NetCore.Controllers
                 return Path.GetFullPath(backupFileLoc);
             }
 
-            throw new FileNotFoundException($"Cannot find file '{file}' or backup at '{backupFileLoc}'");
+            //Not found, just return the file
+            return file;
         }
 
         private static string getEditorFile(String layoutName)
@@ -272,12 +280,21 @@ namespace EdityMcEditface.NetCore.Controllers
             return pageSettings;
         }
 
-        private String getPageFile(String file, String extension)
+        /// <summary>
+        /// Get the page file with the given extension that exists in the same folder as hostFile,
+        /// the linkFile will be returned with the correct path so you can easily stay in web
+        /// server instead of file system scope.
+        /// </summary>
+        /// <param name="hostFile">The file to check for a matching file, the extension will be replaced.</param>
+        /// <param name="linkFile">The file to use to link to the hostFile in the webserver context.</param>
+        /// <param name="extension">The extension of the file to look for.</param>
+        /// <returns>The matching linkFile name or null if it is not found.</returns>
+        private String getPageFile(String hostFile, String linkFile, String extension)
         {
-            String jsPath = Path.ChangeExtension(file, extension);
-            if (System.IO.File.Exists(jsPath))
+            String realPath = Path.ChangeExtension(hostFile, extension);
+            if (System.IO.File.Exists(realPath))
             {
-                return jsPath;
+                return Path.ChangeExtension(linkFile, extension);
             }
             return null;
         }

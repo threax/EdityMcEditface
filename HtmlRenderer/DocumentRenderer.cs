@@ -36,17 +36,18 @@ namespace EdityMcEditface.HtmlRenderer
             while(pageStack.Count > 0)
             {
                 var template = pageStack.Pop();
-                if(template.Content.StartsWith("<html", StringComparison.OrdinalIgnoreCase) && pageStack.Count > 0)
+                var templateContent = template.Content;
+                if(templateContent.StartsWith("<!doctype", StringComparison.OrdinalIgnoreCase) && pageStack.Count > 0)
                 {
                     //Not the last template with an html tag, remove it and only take the body
-                    document.LoadHtml(template.Content);
+                    document.LoadHtml(templateContent);
                     var body = document.DocumentNode.Select("body").FirstOrDefault();
                     if(body != null)
                     {
-                        innerHtml = body.InnerHtml;
+                        templateContent = body.InnerHtml;
                     }
                 }
-                innerHtml = template.Content.Replace("{mainContent}", innerHtml);
+                innerHtml = templateContent.Replace("{mainContent}", innerHtml);
                 pageDefinitions.Add(template);
             }
 

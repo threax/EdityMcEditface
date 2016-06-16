@@ -19,7 +19,7 @@
       "commandName": "Project",
       "workingDirectory": "C:\\Development\\EdityMcEditface\\EdityMcEditface\\wwwroot",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5000/",
+      "launchUrl": "http://localhost:5000/.html",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -27,6 +27,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         public HtmlDocument getDocument(PageStackItem page)
         {
+            HtmlDocument document = new HtmlDocument();
             //Replace main content first then main replace will get its variables
             //Not the best algo
             List<PageStackItem> pageDefinitions = new List<PageStackItem>(pageStack.Count + 1);
@@ -35,6 +36,16 @@ namespace EdityMcEditface.HtmlRenderer
             while(pageStack.Count > 0)
             {
                 var template = pageStack.Pop();
+                if(template.Content.StartsWith("<html", StringComparison.OrdinalIgnoreCase) && pageStack.Count > 0)
+                {
+                    //Not the last template with an html tag, remove it and only take the body
+                    document.LoadHtml(template.Content);
+                    var body = document.DocumentNode.Select("body").FirstOrDefault();
+                    if(body != null)
+                    {
+                        innerHtml = body.InnerHtml;
+                    }
+                }
                 innerHtml = template.Content.Replace("{mainContent}", innerHtml);
                 pageDefinitions.Add(template);
             }
@@ -44,7 +55,6 @@ namespace EdityMcEditface.HtmlRenderer
 
             String formattedText = formatText(innerHtml);
 
-            HtmlDocument document = new HtmlDocument();
             document.LoadHtml(formattedText);
             //Run transforms
             foreach (var transform in transforms)

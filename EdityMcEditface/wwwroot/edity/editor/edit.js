@@ -25,24 +25,14 @@
         sourceText.val(penContent);
     });
 
-    $('[data-edit-save]').click(h.event(function () {
-        return [
-            h.func(function ()
-            {
-                loading.fadeIn(200);
-                var blob = new Blob([pen.getContent()], { type: "text/html" });
-                return blob;
-            }),
-            //h.func(function (data) {
-            //    return data.data;
-            //}),
-            h.rest.upload(window.location.pathname),
-            h.func(function ()
-            {
-                loading.fadeOut(200);
-            })
-        ];
-    }));
+    $('[data-edit-save]').click(function () {
+        loading.fadeIn(200);
+        var blob = new Blob([pen.getContent()], { type: "text/html" });
+        h.rest.upload(window.location.pathname, blob, function ()
+        {
+            loading.fadeOut(200);
+        }, true);
+    });
 
     $('#ApplySourceChanges').submit(function (event) {
         pen.destroy();

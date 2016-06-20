@@ -31,7 +31,8 @@ namespace EdityMcEditface.NetCore.Controllers
         [HttpGet]
         public IActionResult Index(String file)
         {
-            fileFinder = new FileFinder(file, BackupFileSource);
+            fileFinder = new FileFinder(BackupFileSource);
+            fileFinder.useFile(file);
 
             switch (fileFinder.Extension)
             {
@@ -40,9 +41,9 @@ namespace EdityMcEditface.NetCore.Controllers
                     {
                         return this.PhysicalFile(Path.GetFullPath(fileFinder.SourceFile), "text/html");
                     }
-                    return Content(fileFinder.buildAsEditor(), new MediaTypeHeaderValue("text/html"));
+                    return buildAsEditor();
                 case "":
-                    return Content(fileFinder.buildAsPage(), new MediaTypeHeaderValue("text/html"));
+                    return buildAsPage();
                 default:
                     return returnFile(file);
             }
@@ -52,7 +53,8 @@ namespace EdityMcEditface.NetCore.Controllers
         public async Task<IActionResult> Index()
         {
             var file = this.Request.Path.ToString().Substring(1);
-            fileFinder = new FileFinder(file, BackupFileSource);
+            fileFinder = new FileFinder(BackupFileSource);
+            fileFinder.useFile(file);
 
             var savePath = Path.GetFullPath(fileFinder.SourceFile);
             String directory = Path.GetDirectoryName(savePath);
@@ -81,6 +83,49 @@ namespace EdityMcEditface.NetCore.Controllers
                 return PhysicalFile(fileFinder.findRealFile(file), contentType);
             }
             throw new FileNotFoundException($"Cannot find file type for '{file}'", file);
+        }
+
+        public IActionResult buildAsEditor()
+        {
+            fileFinder.pushTemplate(fileFinder.getEditorFile("edit"));
+            fileFinder.pushTemplate(fileFinder.getLayoutFile("default"));
+            fileFinder.pushTemplate(fileFinder.getEditorFile("editarea"));
+            return build();
+        }
+
+        public IActionResult buildAsPage()
+        {
+            fileFinder.pushTemplate(fileFinder.getLayoutFile("default"));
+            return build();
+        }
+
+        public IActionResult build()
+        {
+            try
+            {
+                return getConvertedDocument();
+            }
+            catch (FileNotFoundException)
+            {
+                //If the source file cannot be read offer to create the new file instead.
+                if (fileFinder.PathCanCreateFile)
+                {
+                    fileFinder.clearTemplates();
+                    fileFinder.pushTemplate(fileFinder.getEditorFile("new"));
+                    return getConvertedDocument();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public IActionResult getConvertedDocument()
+        {
+            DocumentRenderer dr = new DocumentRenderer(fileFinder.Environment);
+            var document = dr.getDocument(fileFinder.loadPageStack());
+            return Content(document.DocumentNode.OuterHtml, new MediaTypeHeaderValue("text/html"));
         }
     }
 }

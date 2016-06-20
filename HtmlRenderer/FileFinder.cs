@@ -26,12 +26,15 @@ namespace EdityMcEditface.HtmlRenderer
         private String extension;
         private bool isDirectory = false;
         private TemplateEnvironment environment;
+        private List<String> templates = new List<string>();
 
-        List<String> templates = new List<string>();
-
-        public FileFinder(String file, String backupFileSource)
+        public FileFinder(String backupFileSource)
         {
             this.BackupFileSource = backupFileSource;
+        }
+
+        public void useFile(String file)
+        {
             file = detectIndexFile(file);
 
             this.currentFile = file;
@@ -56,50 +59,19 @@ namespace EdityMcEditface.HtmlRenderer
 
                 isDirectory = Directory.Exists(sourceDir) && !File.Exists(sourceFile);
             }
-        }
 
-        public String buildAsEditor()
-        {
-            templates.Add(getEditorFile("edit"));
-            templates.Add(getLayoutFile("default"));
-            templates.Add(getEditorFile("editarea"));
-            return build();
-        }
-
-        public String buildAsPage()
-        {
-            templates.Add(getLayoutFile("default"));
-            return build();
-        }
-
-        public String build()
-        {
             EdityProject project = loadProject();
             environment = new TemplateEnvironment("/" + currentFileNoExtension, project);
+        }
 
-            try
-            {
-                using (var source = new StreamReader(File.OpenRead(sourceFile)))
-                {
-                    return getConvertedDocument(source, templates, environment);
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                //If the source file cannot be read offer to create the new file instead.
-                if (extension == "" && !File.Exists(sourceFile) && !Directory.Exists(sourceDir))
-                {
-                    String newLayout = getEditorFile("new");
-                    using (var source = new StringReader(""))
-                    {
-                        return getConvertedDocument(source, new String[] { newLayout }, environment);
-                    }
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        public void pushTemplate(String template)
+        {
+            this.templates.Add(template);
+        }
+
+        public void clearTemplates()
+        {
+            this.templates.Clear();
         }
 
         const string ProjectFilePath = "edity/edity.json";
@@ -136,6 +108,25 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        public TemplateEnvironment Environment
+        {
+            get
+            {
+                return environment;
+            }
+        }
+
+        /// <summary>
+        /// This will be true if the current path can point to a new html file.
+        /// </summary>
+        public bool PathCanCreateFile
+        {
+            get
+            {
+                return extension == "" && !File.Exists(sourceFile) && !Directory.Exists(sourceDir);
+            }
+        }
+
         private EdityProject loadProject()
         {
             String projectStr = "";
@@ -167,34 +158,41 @@ namespace EdityMcEditface.HtmlRenderer
             return project;
         }
 
-        //data-settings-form
-        public String getConvertedDocument(TextReader content, IEnumerable<String> templates, TemplateEnvironment environment)
+        /// <summary>
+        /// Load the page stack. The pages will be loaded and returned from innermost
+        /// to outermost.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<PageStackItem> loadPageStack()
         {
-            DocumentRenderer dr = new DocumentRenderer(environment);
-
-            foreach (var template in templates)
+            PageStackItem page;
+            using (var source = new StreamReader(File.OpenRead(sourceFile)))
             {
+                page = new PageStackItem()
+                {
+                    Content = source.ReadToEnd(),
+                    PageDefinition = getPageDefinition(sourceFile),
+                    PageScriptPath = getPageFile(sourceFile, sourceFile, "js"),
+                    PageCssPath = getPageFile(sourceFile, sourceFile, "css"),
+                };
+            }
+            yield return page;
+            for(int i = templates.Count - 1; i >= 0; --i)
+            {
+                var template = templates[i];
                 var realTemplate = findRealFile(template);
                 using (var layout = new StreamReader(System.IO.File.OpenRead(realTemplate)))
                 {
-                    dr.pushTemplate(new PageStackItem()
+                    page = new PageStackItem()
                     {
                         Content = layout.ReadToEnd(),
                         PageDefinition = getPageDefinition(realTemplate),
                         PageScriptPath = getPageFile(realTemplate, template, "js"),
                         PageCssPath = getPageFile(realTemplate, template, "css"),
-                    });
+                    };
                 }
+                yield return page;
             }
-            var document = dr.getDocument(new PageStackItem()
-            {
-                Content = content.ReadToEnd(),
-                PageDefinition = getPageDefinition(sourceFile),
-                PageScriptPath = getPageFile(sourceFile, sourceFile, "js"),
-                PageCssPath = getPageFile(sourceFile, sourceFile, "css"),
-            });
-
-            return document.DocumentNode.OuterHtml;
         }
 
         /// <summary>
@@ -240,14 +238,14 @@ namespace EdityMcEditface.HtmlRenderer
             return Path.Combine(BackupFileSource, file);
         }
 
-        private static string getEditorFile(String layoutName)
+        public string getEditorFile(String layoutName)
         {
             //returnFile
             String file = $"edity/editor/{layoutName}.html";
             return file;
         }
 
-        private static string getLayoutFile(String layoutName)
+        public string getLayoutFile(String layoutName)
         {
             //returnFile
             String file = $"edity/layouts/{layoutName}.html";

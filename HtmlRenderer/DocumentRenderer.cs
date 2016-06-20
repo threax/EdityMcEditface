@@ -12,7 +12,6 @@ namespace EdityMcEditface.HtmlRenderer
     public class DocumentRenderer
     {
         private TemplateEnvironment environment;
-        private Stack<PageStackItem> pageStack = new Stack<PageStackItem>();
         private List<ServerSideTransform> transforms = new List<ServerSideTransform>();
 
         public DocumentRenderer(TemplateEnvironment environment)
@@ -20,40 +19,42 @@ namespace EdityMcEditface.HtmlRenderer
             this.environment = environment;
         }
 
-        public void pushTemplate(PageStackItem layout)
-        {
-            pageStack.Push(layout);
-        }
-
         public void addTransform(ServerSideTransform transform)
         {
             this.transforms.Add(transform);
         }
 
-        public HtmlDocument getDocument(PageStackItem page)
+        /// <summary>
+        /// An enumerator over pages. The first item should be the innermost page.
+        /// </summary>
+        /// <param name="pageStack">The pages, the first item should be the innermost page.</param>
+        /// <returns></returns>
+        public HtmlDocument getDocument(IEnumerable<PageStackItem> pageStack)
         {
             HtmlDocument document = new HtmlDocument();
             //Replace main content first then main replace will get its variables
             //Not the best algo
-            List<PageStackItem> pageDefinitions = new List<PageStackItem>(pageStack.Count + 1);
-            pageDefinitions.Add(page);
-            String innerHtml = page.Content;
-            while(pageStack.Count > 0)
+            String innerHtml = null;
+            List<PageStackItem> pageDefinitions = new List<PageStackItem>(pageStack);
+            if (pageDefinitions.Count > 0)
             {
-                var template = pageStack.Pop();
-                var templateContent = template.Content;
-                if(templateContent.StartsWith("<!doctype", StringComparison.OrdinalIgnoreCase) && pageStack.Count > 0)
+                innerHtml = pageDefinitions[0].Content;
+            }
+            int last = pageDefinitions.Count - 1;
+            for(int i = 0; i < pageDefinitions.Count; ++i)
+            {
+                var templateContent = pageDefinitions[i].Content;
+                if (i != last && templateContent.StartsWith("<!doctype", StringComparison.OrdinalIgnoreCase))
                 {
                     //Not the last template with an html tag, remove it and only take the body
                     document.LoadHtml(templateContent);
                     var body = document.DocumentNode.Select("body").FirstOrDefault();
-                    if(body != null)
+                    if (body != null)
                     {
                         templateContent = body.InnerHtml;
                     }
                 }
                 innerHtml = templateContent.Replace("{mainContent}", innerHtml);
-                pageDefinitions.Add(template);
             }
 
             //Build variables up

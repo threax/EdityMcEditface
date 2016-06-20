@@ -32,8 +32,10 @@ namespace EdityMcEditface
         {
             services.AddTransient<FileFinder, FileFinder>(serviceProvider =>
             {
+                var projectFolder = Configuration["EditySettings:ProjectPath"];
                 var runningFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-                return new FileFinder(Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]));
+                runningFolder = Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]);
+                return new FileFinder(projectFolder, runningFolder);
             });
 
             // Add framework services.

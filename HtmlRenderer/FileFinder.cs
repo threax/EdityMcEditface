@@ -17,7 +17,8 @@ namespace EdityMcEditface.HtmlRenderer
         /// This is the location of an additional directory to try to serve files from,
         /// best used to serve the default files this app needs to run.
         /// </summary>
-        private String backupFileSource = null;
+        private String backupPath = null;
+        private String projectPath;
         private String projectFilePath;
         private String fileNoExtension;
         private String htmlFile;
@@ -27,9 +28,10 @@ namespace EdityMcEditface.HtmlRenderer
         private TemplateEnvironment environment;
         private List<String> templates = new List<string>();
 
-        public FileFinder(String backupFileSource, String projectFilePath = "edity/edity.json")
+        public FileFinder(String projectPath, String backupPath, String projectFilePath = "edity/edity.json")
         {
-            this.backupFileSource = backupFileSource;
+            this.projectPath = projectPath;
+            this.backupPath = backupPath;
             this.projectFilePath = projectFilePath;
         }
 
@@ -76,6 +78,11 @@ namespace EdityMcEditface.HtmlRenderer
         public void clearTemplates()
         {
             this.templates.Clear();
+        }
+
+        public String getFullRealPath(String path)
+        {
+            return Path.GetFullPath(Path.Combine(projectPath, path));
         }
 
         public string Extension
@@ -168,7 +175,7 @@ namespace EdityMcEditface.HtmlRenderer
         public IEnumerable<PageStackItem> loadPageStack()
         {
             PageStackItem page;
-            using (var source = new StreamReader(File.OpenRead(htmlFile)))
+            using (var source = new StreamReader(File.OpenRead(getFullRealPath(htmlFile))))
             {
                 page = new PageStackItem()
                 {
@@ -183,7 +190,7 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 var template = templates[i];
                 var realTemplate = findRealFile(template);
-                using (var layout = new StreamReader(System.IO.File.OpenRead(realTemplate)))
+                using (var layout = new StreamReader(File.OpenRead(realTemplate)))
                 {
                     page = new PageStackItem()
                     {
@@ -219,13 +226,14 @@ namespace EdityMcEditface.HtmlRenderer
         {
             usedBackup = false;
 
-            if (System.IO.File.Exists(file))
+            var realFile = getFullRealPath(file);
+            if (File.Exists(realFile))
             {
-                return Path.GetFullPath(file);
+                return realFile;
             }
 
             string backupFileLoc = getBackupPath(file);
-            if (System.IO.File.Exists(backupFileLoc))
+            if (File.Exists(backupFileLoc))
             {
                 usedBackup = true;
                 return Path.GetFullPath(backupFileLoc);
@@ -237,7 +245,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         private string getBackupPath(string file)
         {
-            return Path.Combine(backupFileSource, file);
+            return Path.Combine(backupPath, file);
         }
 
         public string getEditorFile(String layoutName)

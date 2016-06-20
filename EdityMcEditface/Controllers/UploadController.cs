@@ -23,12 +23,16 @@ namespace EdityMcEditface.Controllers
         [HttpGet("edity/list/{*file}")]
         public IActionResult ListFiles(String file)
         {
-            if ((Directory.Exists(fileFinder.DirectoryPath) && !System.IO.File.Exists(fileFinder.HtmlFile)))
+            fileFinder.useFile(file);
+
+            var fullDirectoryPath = fileFinder.getFullRealPath(fileFinder.DirectoryPath);
+            if ((Directory.Exists(fullDirectoryPath) 
+                && !System.IO.File.Exists(fileFinder.getFullRealPath(fileFinder.HtmlFile))))
             {
                 return Json(new
                 {
-                    directories = Directory.EnumerateDirectories(fileFinder.DirectoryPath, "*", SearchOption.TopDirectoryOnly).Where(f => !System.IO.File.Exists(f + ".html")),
-                    files = Directory.EnumerateFiles(fileFinder.DirectoryPath, "*", SearchOption.TopDirectoryOnly)
+                    directories = Directory.EnumerateDirectories(fullDirectoryPath, "*", SearchOption.TopDirectoryOnly).Where(f => !System.IO.File.Exists(f + ".html")),
+                    files = Directory.EnumerateFiles(fullDirectoryPath, "*", SearchOption.TopDirectoryOnly)
                 });
             }
             return StatusCode((int)HttpStatusCode.OK);

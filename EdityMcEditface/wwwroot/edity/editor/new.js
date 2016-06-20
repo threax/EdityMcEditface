@@ -1,7 +1,7 @@
 ﻿(function ($, h)
 {
     var templates = $('#TemplateList');
-    var data = h.rest.get('/edity/templates/', function (data)
+    var data = h.rest.get('/edity/list/edity/templates/', function (data)
     {
         //This should be sanitized, also check for server error
         //TODO: use a component

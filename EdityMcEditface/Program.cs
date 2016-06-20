@@ -12,9 +12,6 @@ namespace EdityMcEditface
     {
         public static void Main(string[] args)
         {
-            var runningFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-            HomeController.BackupFileSource = Path.Combine(runningFolder, "../../../wwwroot");
-
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())

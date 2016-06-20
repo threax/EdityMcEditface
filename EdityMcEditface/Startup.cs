@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using EdityMcEditface.NetCore.Controllers;
+using EdityMcEditface.HtmlRenderer;
+using System.IO;
 
 namespace EdityMcEditface
 {
@@ -28,6 +30,12 @@ namespace EdityMcEditface
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<FileFinder, FileFinder>(serviceProvider =>
+            {
+                var runningFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                return new FileFinder(Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]));
+            });
+
             // Add framework services.
             services.AddMvc();
         }

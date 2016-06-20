@@ -16,22 +16,16 @@ namespace EdityMcEditface.NetCore.Controllers
 {
     public class HomeController : Controller
     {
-        /// <summary>
-        /// This is the location of an additional directory to try to serve files from,
-        /// best used to serve the default files this app needs to run.
-        /// </summary>
-        public static String BackupFileSource = null;
         private FileFinder fileFinder;
 
-        public HomeController()
+        public HomeController(FileFinder fileFinder)
         {
-
+            this.fileFinder = fileFinder;
         }
 
         [HttpGet]
         public IActionResult Index(String file)
         {
-            fileFinder = new FileFinder(BackupFileSource);
             fileFinder.useFile(file);
 
             switch (fileFinder.Extension)
@@ -53,7 +47,6 @@ namespace EdityMcEditface.NetCore.Controllers
         public async Task<IActionResult> Index()
         {
             var file = this.Request.Path.ToString().Substring(1);
-            fileFinder = new FileFinder(BackupFileSource);
             fileFinder.useFile(file);
 
             var savePath = Path.GetFullPath(fileFinder.HtmlFile);

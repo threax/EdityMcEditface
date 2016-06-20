@@ -10,6 +10,7 @@ using System.Net;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Microsoft.Net.Http.Headers;
 
 namespace EdityMcEditface.NetCore.Controllers
 {
@@ -20,15 +21,7 @@ namespace EdityMcEditface.NetCore.Controllers
         /// best used to serve the default files this app needs to run.
         /// </summary>
         public static String BackupFileSource = null;
-
-        private static char[] seps = { '|' };
-
-        private String currentFile;
-        private String currentFileNoExtension;
-        private String sourceFile;
-        private String sourceDir;
-        private String extension;
-        private TemplateEnvironment environment;
+        private FileFinder fileFinder;
 
         public HomeController()
         {
@@ -38,188 +31,40 @@ namespace EdityMcEditface.NetCore.Controllers
         [HttpGet]
         public IActionResult Index(String file)
         {
-            try
+            fileFinder = new FileFinder(file, BackupFileSource);
+
+            switch (fileFinder.Extension)
             {
-                file = detectIndexFile(file);
-
-                this.currentFile = file;
-                extension = Path.GetExtension(file).ToLowerInvariant();
-
-                //Fix file name
-                currentFileNoExtension = file;
-                if (extension.Length != 0 && currentFileNoExtension.Length > extension.Length)
-                {
-                    currentFileNoExtension = currentFileNoExtension.Remove(currentFileNoExtension.Length - extension.Length);
-                }
-
-                sourceDir = currentFileNoExtension;
-                sourceFile = currentFileNoExtension + ".html";
-
-                if (string.IsNullOrEmpty(extension))
-                {
-                    if (String.IsNullOrEmpty(sourceDir))
+                case ".html":
+                    if (fileFinder.IsProjectFile)
                     {
-                        sourceDir = ".";
+                        return this.PhysicalFile(Path.GetFullPath(fileFinder.SourceFile), "text/html");
                     }
-
-                    if ((Directory.Exists(sourceDir) && !System.IO.File.Exists(sourceFile)))
-                    {
-                        return Json(new
-                        {
-                            directories = Directory.EnumerateDirectories(sourceDir, "*", SearchOption.TopDirectoryOnly).Where(f => !System.IO.File.Exists(f + ".html")),
-                            files = Directory.EnumerateFiles(sourceDir, "*", SearchOption.TopDirectoryOnly)
-                        });
-                    }
-                }
-
-                List<String> templates = new List<string>();
-                switch (extension)
-                {
-                    case ".html":
-                        if (sourceFile.StartsWith("edity/", StringComparison.OrdinalIgnoreCase))
-                        {
-                            return this.PhysicalFile(Path.GetFullPath(sourceFile), "text/html");
-                        }
-                        templates.Add(getEditorFile("edit"));
-                        templates.Add(getLayoutFile("default"));
-                        templates.Add(getEditorFile("editarea"));
-                        break;
-                    case "":
-                        templates.Add(getLayoutFile("default"));
-                        break;
-                    default:
-                        return returnFile(file);
-                }
-
-                EdityProject project = loadProject();
-                environment = new TemplateEnvironment("/" + currentFileNoExtension, project);
-
-                using (var source = new StreamReader(System.IO.File.OpenRead(sourceFile)))
-                {
-                    return parsedResponse(source, templates, environment);
-                }
+                    return Content(fileFinder.buildAsEditor(), new MediaTypeHeaderValue("text/html"));
+                case "":
+                    return Content(fileFinder.buildAsPage(), new MediaTypeHeaderValue("text/html"));
+                default:
+                    return returnFile(file);
             }
-            catch (FileNotFoundException)
-            {
-                //We can get here for a number of reasons, but if the html file does not exist offer to make it
-                if (extension == "" && 
-                    !System.IO.File.Exists(sourceFile) && 
-                    !Directory.Exists(sourceDir))
-                {
-                    try
-                    {
-                        String newLayout = getEditorFile("new");
-                        if (System.IO.File.Exists(newLayout))
-                        {
-                            using (var source = new StringReader(""))
-                            {
-                                return parsedResponse(source, new String[] { newLayout }, environment);
-                            }
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        return StatusCode((int)HttpStatusCode.InternalServerError);
-                    }
-                }
-                return StatusCode((int)HttpStatusCode.NotFound);
-            }
-        }
-
-        const string ProjectFilePath = "edity/edity.json";
-        private static EdityProject loadProject()
-        {
-            String projectStr = "";
-            bool usedBackup = false;
-            String file = findRealFile(ProjectFilePath, out usedBackup);
-            using (var reader = new StreamReader(System.IO.File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
-            {
-                projectStr = reader.ReadToEnd();
-            }
-
-            var project = JsonConvert.DeserializeObject<EdityProject>(projectStr);
-
-            if (!usedBackup)
-            {
-                //Also load the backup file and merge it in
-                //This does load twice if the backup loc is the project loc, but that won't be common
-                //and if so can check for it here.
-                file = getBackupPath(ProjectFilePath);
-                using (var reader = new StreamReader(System.IO.File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
-                {
-                    projectStr = reader.ReadToEnd();
-                }
-
-                var backupProject = JsonConvert.DeserializeObject<EdityProject>(projectStr);
-
-                project.merge(backupProject);
-            }
-
-            return project;
         }
 
         [HttpPost]
         public async Task<IActionResult> Index()
         {
-            try
-            {
-                var file = detectIndexFile(this.Request.Path.ToString().Substring(1));
-                if(file == "index")
-                {
-                    file += ".html";
-                }
-                var savePath = Path.GetFullPath(file);
-                String directory = Path.GetDirectoryName(savePath);
-                if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-                {
-                    Directory.CreateDirectory(directory);
-                }
-                using (Stream stream = System.IO.File.Open(savePath, FileMode.Create, FileAccess.Write))
-                {
-                    await this.Request.Form.Files.First().CopyToAsync(stream);
-                }
-                return StatusCode((int)HttpStatusCode.OK);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
-        }
+            var file = this.Request.Path.ToString().Substring(1);
+            fileFinder = new FileFinder(file, BackupFileSource);
 
-        //data-settings-form
-        public String getConvertedDocument(TextReader content, IEnumerable<String> templates, TemplateEnvironment environment)
-        {
-            DocumentRenderer dr = new DocumentRenderer(environment);
-
-            foreach (var template in templates)
+            var savePath = Path.GetFullPath(fileFinder.SourceFile);
+            String directory = Path.GetDirectoryName(savePath);
+            if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
-                var realTemplate = findRealFile(template);
-                using (var layout = new StreamReader(System.IO.File.OpenRead(realTemplate)))
-                {
-                    dr.pushTemplate(new PageStackItem()
-                    {
-                        Content = layout.ReadToEnd(),
-                        PageDefinition = getPageDefinition(realTemplate),
-                        PageScriptPath = getPageFile(realTemplate, template, "js"),
-                        PageCssPath = getPageFile(realTemplate, template, "css"),
-                    });
-                }
+                Directory.CreateDirectory(directory);
             }
-            var document = dr.getDocument(new PageStackItem()
+            using (Stream stream = System.IO.File.Open(savePath, FileMode.Create, FileAccess.Write))
             {
-                Content = content.ReadToEnd(),
-                PageDefinition = getPageDefinition(sourceFile),
-                PageScriptPath = getPageFile(sourceFile, sourceFile, "js"),
-                PageCssPath = getPageFile(sourceFile, sourceFile, "css"),
-            });
-            
-            return document.DocumentNode.OuterHtml;
-        }
-
-        public ActionResult parsedResponse(TextReader content, IEnumerable<String> templates, TemplateEnvironment environment)
-        {
-            String doc = getConvertedDocument(content, templates, environment);
-            return Content(doc, "text/html");
+                await this.Request.Form.Files.First().CopyToAsync(stream);
+            }
+            return StatusCode((int)HttpStatusCode.OK);
         }
 
         public IActionResult Error()
@@ -233,118 +78,9 @@ namespace EdityMcEditface.NetCore.Controllers
             String contentType;
             if (content.TryGetContentType(file, out contentType))
             {
-                return PhysicalFile(findRealFile(file), contentType);
+                return PhysicalFile(fileFinder.findRealFile(file), contentType);
             }
             throw new FileNotFoundException($"Cannot find file type for '{file}'", file);
-        }
-
-        /// <summary>
-        /// Find the full real file path if the file exists, if not returns the original
-        /// file name.
-        /// </summary>
-        /// <param name="file">The file to look for.</param>
-        /// <returns>The full path to the real file, searching all dirs.</returns>
-        private static String findRealFile(String file)
-        {
-            bool usedBackup;
-            return findRealFile(file, out usedBackup);
-        }
-
-        /// <summary>
-        /// Find the full real file path if the file exists, if not returns the original
-        /// </summary>
-        /// <param name="file">The file to look for.</param>
-        /// <param name="usedBackup">Will be set to true if the backup file was used.</param>
-        /// <returns></returns>
-        private static String findRealFile(String file, out bool usedBackup)
-        {
-            usedBackup = false;
-
-            if (System.IO.File.Exists(file))
-            {
-                return Path.GetFullPath(file);
-            }
-
-            string backupFileLoc = getBackupPath(file);
-            if (System.IO.File.Exists(backupFileLoc))
-            {
-                usedBackup = true;
-                return Path.GetFullPath(backupFileLoc);
-            }
-
-            //Not found, just return the file
-            return file;
-        }
-
-        private static string getBackupPath(string file)
-        {
-            return Path.Combine(BackupFileSource, file);
-        }
-
-        private static string getEditorFile(String layoutName)
-        {
-            //returnFile
-            String file = $"edity/editor/{layoutName}.html";
-            return file;
-        }
-
-        private static string getLayoutFile(String layoutName)
-        {
-            //returnFile
-            String file = $"edity/layouts/{layoutName}.html";
-            return file;
-        }
-
-        private static string detectIndexFile(string file)
-        {
-            if (file == null)
-            {
-                file = "index";
-            }
-            if (file.Equals(".html", StringComparison.OrdinalIgnoreCase))
-            {
-                file = "index.html";
-            }
-
-            return file;
-        }
-
-        private PageDefinition getPageDefinition(String file)
-        {
-            String settingsPath = Path.ChangeExtension(file, "json");
-            PageDefinition pageSettings;
-            if (System.IO.File.Exists(settingsPath))
-            {
-                using (var stream = new StreamReader(System.IO.File.Open(settingsPath, FileMode.Open, FileAccess.Read, FileShare.Read)))
-                {
-                    pageSettings = JsonConvert.DeserializeObject<PageDefinition>(stream.ReadToEnd());
-                }
-            }
-            else
-            {
-                pageSettings = new PageDefinition();
-            }
-
-            return pageSettings;
-        }
-
-        /// <summary>
-        /// Get the page file with the given extension that exists in the same folder as hostFile,
-        /// the linkFile will be returned with the correct path so you can easily stay in web
-        /// server instead of file system scope.
-        /// </summary>
-        /// <param name="hostFile">The file to check for a matching file, the extension will be replaced.</param>
-        /// <param name="linkFile">The file to use to link to the hostFile in the webserver context.</param>
-        /// <param name="extension">The extension of the file to look for.</param>
-        /// <returns>The matching linkFile name or null if it is not found.</returns>
-        private String getPageFile(String hostFile, String linkFile, String extension)
-        {
-            String realPath = Path.ChangeExtension(hostFile, extension);
-            if (System.IO.File.Exists(realPath))
-            {
-                return Path.ChangeExtension(linkFile, extension);
-            }
-            return null;
         }
     }
 }

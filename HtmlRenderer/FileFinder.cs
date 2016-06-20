@@ -112,6 +112,14 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        public String DirectoryPath
+        {
+            get
+            {
+                return directory;
+            }
+        }
+
         public bool IsProjectFile
         {
             get

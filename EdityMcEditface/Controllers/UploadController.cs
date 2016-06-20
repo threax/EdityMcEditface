@@ -20,7 +20,21 @@ namespace EdityMcEditface.Controllers
             this.fileFinder = fileFinder;
         }
 
-        [HttpPost]
+        [HttpGet("edity/list/{*file}")]
+        public IActionResult ListFiles(String file)
+        {
+            if ((Directory.Exists(fileFinder.DirectoryPath) && !System.IO.File.Exists(fileFinder.HtmlFile)))
+            {
+                return Json(new
+                {
+                    directories = Directory.EnumerateDirectories(fileFinder.DirectoryPath, "*", SearchOption.TopDirectoryOnly).Where(f => !System.IO.File.Exists(f + ".html")),
+                    files = Directory.EnumerateFiles(fileFinder.DirectoryPath, "*", SearchOption.TopDirectoryOnly)
+                });
+            }
+            return StatusCode((int)HttpStatusCode.OK);
+        }
+
+        [HttpPost("edity/upload/{*file}")]
         public async Task<IActionResult> Index(String file)
         {
             fileFinder.useFile(file);

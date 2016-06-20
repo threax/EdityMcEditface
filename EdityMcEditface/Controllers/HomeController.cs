@@ -39,7 +39,7 @@ namespace EdityMcEditface.NetCore.Controllers
                 case ".html":
                     if (fileFinder.IsProjectFile)
                     {
-                        return this.PhysicalFile(Path.GetFullPath(fileFinder.SourceFile), "text/html");
+                        return this.PhysicalFile(Path.GetFullPath(fileFinder.HtmlFile), "text/html");
                     }
                     return buildAsEditor();
                 case "":
@@ -56,7 +56,7 @@ namespace EdityMcEditface.NetCore.Controllers
             fileFinder = new FileFinder(BackupFileSource);
             fileFinder.useFile(file);
 
-            var savePath = Path.GetFullPath(fileFinder.SourceFile);
+            var savePath = Path.GetFullPath(fileFinder.HtmlFile);
             String directory = Path.GetDirectoryName(savePath);
             if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {

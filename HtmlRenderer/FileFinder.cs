@@ -17,51 +17,55 @@ namespace EdityMcEditface.HtmlRenderer
         /// This is the location of an additional directory to try to serve files from,
         /// best used to serve the default files this app needs to run.
         /// </summary>
-        private String BackupFileSource = null;
-
-        private String currentFile;
-        private String currentFileNoExtension;
-        private String sourceFile;
-        private String sourceDir;
+        private String backupFileSource = null;
+        private String projectFilePath;
+        private String fileNoExtension;
+        private String htmlFile;
+        private String directory;
         private String extension;
         private bool isDirectory = false;
         private TemplateEnvironment environment;
         private List<String> templates = new List<string>();
 
-        public FileFinder(String backupFileSource)
+        public FileFinder(String backupFileSource, String projectFilePath = "edity/edity.json")
         {
-            this.BackupFileSource = backupFileSource;
+            this.backupFileSource = backupFileSource;
+            this.projectFilePath = projectFilePath;
         }
 
+        /// <summary>
+        /// Use the specified file as the actual page. This must be called before
+        /// most other functions will do anything useful.
+        /// </summary>
+        /// <param name="file"></param>
         public void useFile(String file)
         {
             file = detectIndexFile(file);
 
-            this.currentFile = file;
             extension = Path.GetExtension(file).ToLowerInvariant();
 
             //Fix file name
-            currentFileNoExtension = file;
-            if (extension.Length != 0 && currentFileNoExtension.Length > extension.Length)
+            fileNoExtension = file;
+            if (extension.Length != 0 && fileNoExtension.Length > extension.Length)
             {
-                currentFileNoExtension = currentFileNoExtension.Remove(currentFileNoExtension.Length - extension.Length);
+                fileNoExtension = fileNoExtension.Remove(fileNoExtension.Length - extension.Length);
             }
 
-            sourceDir = currentFileNoExtension;
-            sourceFile = currentFileNoExtension + ".html";
+            directory = fileNoExtension;
+            htmlFile = fileNoExtension + ".html";
 
             if (string.IsNullOrEmpty(extension))
             {
-                if (String.IsNullOrEmpty(sourceDir))
+                if (String.IsNullOrEmpty(directory))
                 {
-                    sourceDir = ".";
+                    directory = ".";
                 }
 
-                isDirectory = Directory.Exists(sourceDir) && !File.Exists(sourceFile);
+                isDirectory = Directory.Exists(directory) && !File.Exists(htmlFile);
             }
 
             EdityProject project = loadProject();
-            environment = new TemplateEnvironment("/" + currentFileNoExtension, project);
+            environment = new TemplateEnvironment("/" + fileNoExtension, project);
         }
 
         public void pushTemplate(String template)
@@ -74,8 +78,6 @@ namespace EdityMcEditface.HtmlRenderer
             this.templates.Clear();
         }
 
-        const string ProjectFilePath = "edity/edity.json";
-
         public string Extension
         {
             get
@@ -84,19 +86,19 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
-        public string SourceFile
+        public string HtmlFile
         {
             get
             {
-                return sourceFile;
+                return htmlFile;
             }
         }
 
-        public String CurrentFileNoExtension
+        public String FileNoExtension
         {
             get
             {
-                return currentFileNoExtension;
+                return fileNoExtension;
             }
         }
 
@@ -104,7 +106,7 @@ namespace EdityMcEditface.HtmlRenderer
         {
             get
             {
-                return sourceFile.StartsWith("edity/", StringComparison.OrdinalIgnoreCase);
+                return htmlFile.StartsWith("edity/", StringComparison.OrdinalIgnoreCase);
             }
         }
 
@@ -123,7 +125,7 @@ namespace EdityMcEditface.HtmlRenderer
         {
             get
             {
-                return extension == "" && !File.Exists(sourceFile) && !Directory.Exists(sourceDir);
+                return extension == "" && !File.Exists(htmlFile) && !Directory.Exists(directory);
             }
         }
 
@@ -131,7 +133,7 @@ namespace EdityMcEditface.HtmlRenderer
         {
             String projectStr = "";
             bool usedBackup = false;
-            String file = findRealFile(ProjectFilePath, out usedBackup);
+            String file = findRealFile(projectFilePath, out usedBackup);
             using (var reader = new StreamReader(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
             {
                 projectStr = reader.ReadToEnd();
@@ -144,7 +146,7 @@ namespace EdityMcEditface.HtmlRenderer
                 //Also load the backup file and merge it in
                 //This does load twice if the backup loc is the project loc, but that won't be common
                 //and if so can check for it here.
-                file = getBackupPath(ProjectFilePath);
+                file = getBackupPath(projectFilePath);
                 using (var reader = new StreamReader(System.IO.File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
                 {
                     projectStr = reader.ReadToEnd();
@@ -166,14 +168,14 @@ namespace EdityMcEditface.HtmlRenderer
         public IEnumerable<PageStackItem> loadPageStack()
         {
             PageStackItem page;
-            using (var source = new StreamReader(File.OpenRead(sourceFile)))
+            using (var source = new StreamReader(File.OpenRead(htmlFile)))
             {
                 page = new PageStackItem()
                 {
                     Content = source.ReadToEnd(),
-                    PageDefinition = getPageDefinition(sourceFile),
-                    PageScriptPath = getPageFile(sourceFile, sourceFile, "js"),
-                    PageCssPath = getPageFile(sourceFile, sourceFile, "css"),
+                    PageDefinition = getPageDefinition(htmlFile),
+                    PageScriptPath = getPageFile(htmlFile, htmlFile, "js"),
+                    PageCssPath = getPageFile(htmlFile, htmlFile, "css"),
                 };
             }
             yield return page;
@@ -235,7 +237,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         private string getBackupPath(string file)
         {
-            return Path.Combine(BackupFileSource, file);
+            return Path.Combine(backupFileSource, file);
         }
 
         public string getEditorFile(String layoutName)

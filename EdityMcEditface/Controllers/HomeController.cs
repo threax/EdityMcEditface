@@ -104,6 +104,7 @@ namespace EdityMcEditface.NetCore.Controllers
                 if (fileFinder.PathCanCreateFile)
                 {
                     fileFinder.clearTemplates();
+                    fileFinder.SkipHtmlFile = true;
                     fileFinder.pushTemplate(fileFinder.getEditorFile("new"));
                     return getConvertedDocument();
                 }

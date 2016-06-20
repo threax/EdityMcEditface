@@ -136,6 +136,12 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        /// <summary>
+        /// Set this to true to skip the file defined by HtmlFile when building the page. This
+        /// is useful to load pages like a new page that does not have actual content yet.
+        /// </summary>
+        public bool SkipHtmlFile { get; set; } = false;
+
         private EdityProject loadProject()
         {
             String projectStr = "";
@@ -175,17 +181,20 @@ namespace EdityMcEditface.HtmlRenderer
         public IEnumerable<PageStackItem> loadPageStack()
         {
             PageStackItem page;
-            using (var source = new StreamReader(File.OpenRead(getFullRealPath(htmlFile))))
+            if (!SkipHtmlFile)
             {
-                page = new PageStackItem()
+                using (var source = new StreamReader(File.OpenRead(getFullRealPath(htmlFile))))
                 {
-                    Content = source.ReadToEnd(),
-                    PageDefinition = getPageDefinition(htmlFile),
-                    PageScriptPath = getPageFile(htmlFile, htmlFile, "js"),
-                    PageCssPath = getPageFile(htmlFile, htmlFile, "css"),
-                };
+                    page = new PageStackItem()
+                    {
+                        Content = source.ReadToEnd(),
+                        PageDefinition = getPageDefinition(htmlFile),
+                        PageScriptPath = getPageFile(htmlFile, htmlFile, "js"),
+                        PageCssPath = getPageFile(htmlFile, htmlFile, "css"),
+                    };
+                }
+                yield return page;
             }
-            yield return page;
             for(int i = templates.Count - 1; i >= 0; --i)
             {
                 var template = templates[i];

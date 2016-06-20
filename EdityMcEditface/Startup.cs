@@ -66,6 +66,15 @@ namespace EdityMcEditface
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                    name: "upload",
+                    template: "edity/upload/{*file}",
+                    defaults: new { controller = "Upload", action = "Index" }
+                );
+            });
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
                     name: "default",
                     template: "{*file}",
                     defaults: new { controller = "Home", action = "Index" }

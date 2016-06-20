@@ -13,6 +13,8 @@ namespace EdityMcEditface.HtmlRenderer
     /// </summary>
     public class FileFinder
     {
+        private static char[] PathTrimChars = { '\\', '/' };
+
         /// <summary>
         /// This is the location of an additional directory to try to serve files from,
         /// best used to serve the default files this app needs to run.
@@ -82,6 +84,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         public String getFullRealPath(String path)
         {
+            path = path.TrimStart(PathTrimChars);
             return Path.GetFullPath(Path.Combine(projectPath, path));
         }
 

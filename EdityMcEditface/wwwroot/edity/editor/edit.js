@@ -23,15 +23,17 @@
     $('#EditSource').click(function () {
         var penContent = pen.getContent();
         sourceText.val(penContent);
+        return false;
     });
 
     $('[data-edit-save]').click(function () {
         loading.fadeIn(200);
         var blob = new Blob([pen.getContent()], { type: "text/html" });
-        h.rest.upload(window.location.pathname, blob, function ()
+        h.rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function ()
         {
             loading.fadeOut(200);
         }, true);
+        return false;
     });
 
     $('#ApplySourceChanges').submit(function (event) {

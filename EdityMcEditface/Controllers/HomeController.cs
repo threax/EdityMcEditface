@@ -43,25 +43,6 @@ namespace EdityMcEditface.NetCore.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Index()
-        {
-            var file = this.Request.Path.ToString().Substring(1);
-            fileFinder.useFile(file);
-
-            var savePath = fileFinder.getFullRealPath(fileFinder.HtmlFile);
-            String directory = Path.GetDirectoryName(savePath);
-            if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-            using (Stream stream = System.IO.File.Open(savePath, FileMode.Create, FileAccess.Write))
-            {
-                await this.Request.Form.Files.First().CopyToAsync(stream);
-            }
-            return StatusCode((int)HttpStatusCode.OK);
-        }
-
         public IActionResult Error()
         {
             return View();

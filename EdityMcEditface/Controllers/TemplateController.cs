@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer;
+using EdityMcEditface.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,17 @@ namespace EdityMcEditface.Controllers
         public TemplateController(FileFinder fileFinder)
         {
             this.fileFinder = fileFinder;
+        }
+
+        [HttpGet("edity/templates")]
+        public IActionResult Index()
+        {
+            return Json(from q in Directory.EnumerateFiles(fileFinder.getFullRealPath("edity/templates"))
+                   select new Template()
+                   {
+                       Path = Path.ChangeExtension(fileFinder.getUrlFromSystemPath(q), null),
+                   });
+
         }
     }
 }

@@ -30,6 +30,6 @@
     }
   },
   "vars": {
-    "saveUrl": "edity/upload"
+    "uploadUrl": "edity/upload"
   }
 }

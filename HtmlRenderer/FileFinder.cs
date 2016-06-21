@@ -88,6 +88,25 @@ namespace EdityMcEditface.HtmlRenderer
             return Path.GetFullPath(Path.Combine(projectPath, path));
         }
 
+        public String getUrlFromSystemPath(String path)
+        {
+            var fullPath = Path.GetFullPath(path);
+            var fullProjectPath = Path.GetFullPath(projectPath);
+            if(fullPath.StartsWith(fullProjectPath))
+            {
+                return path.Substring(fullProjectPath.Length);
+            }
+            if (backupPath != null)
+            {
+                fullProjectPath = Path.GetFullPath(backupPath);
+                if (fullPath.StartsWith(fullProjectPath))
+                {
+                    return path.Substring(fullPath.Length - 1);
+                }
+            }
+            return path;
+        }
+
         public string Extension
         {
             get

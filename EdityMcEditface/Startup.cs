@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using EdityMcEditface.NetCore.Controllers;
 using EdityMcEditface.HtmlRenderer;
 using System.IO;
+using Newtonsoft.Json.Serialization;
 
 namespace EdityMcEditface
 {
@@ -39,7 +40,11 @@ namespace EdityMcEditface
             });
 
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(o =>
+                {
+                    o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

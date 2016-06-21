@@ -7,7 +7,6 @@
     {css}
 </head>
 <body>
-    <div class="container">
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -22,10 +21,11 @@
                 </div>
             </div>
         </nav>
-        <div id="TemplateList">
-
-        </div>
-    </div>
+        <ul class="row" data-template-list="{uploadUrl}">
+            <li data-htmlrest-component="new-template-preview" class="col-md-6" data-template="{|path}">
+                <a href="{|path}">{|path}</a>
+            </li>
+        </ul>
     {javascript}
 </body>
 </html>

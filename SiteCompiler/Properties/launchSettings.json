@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SiteCompiler": {
+      "commandName": "Project",
+      "commandLineArgs": "inDir=\"C:\\Development\\LightKb\\src\\MyCoursesSupport\\wwwroot\" outDir=\"C:\\Development\\LightKb\\src\\MyCoursesSupport\\compiled\" backupPath=\"C:\\Development\\EdityMcEditface\\EdityMcEditface\\wwwroot\""
+    }
+  }
+}

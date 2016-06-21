@@ -14,6 +14,15 @@ namespace EdityMcEditface.HtmlRenderer
     public class FileFinder
     {
         private static char[] PathTrimChars = { '\\', '/' };
+        /// <summary>
+        /// Trim leading / and \ from a string.
+        /// </summary>
+        /// <param name="input">The path to trim.</param>
+        /// <returns>The path without any leading / or \.</returns>
+        public static String TrimStartingPathChars(String input)
+        {
+            return input.TrimStart(PathTrimChars);
+        }
 
         /// <summary>
         /// This is the location of an additional directory to try to serve files from,
@@ -84,7 +93,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         public String getFullRealPath(String path)
         {
-            path = path.TrimStart(PathTrimChars);
+            path = TrimStartingPathChars(path);
             return Path.GetFullPath(Path.Combine(projectPath, path));
         }
 

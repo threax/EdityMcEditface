@@ -164,6 +164,26 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        public IEnumerable<String> LinkedContentFiles
+        {
+            get
+            {
+                var pages = loadPageStack();
+                List<LinkedContentEntry> links = new List<LinkedContentEntry>(environment.LinkedContent.buildResourceList(environment.findLinkedContent(pages.Select(p => p.PageDefinition))));
+                foreach (var link in links)
+                {
+                    foreach(var css in link.Css)
+                    {
+                        yield return css;
+                    }
+                    foreach(var js in link.Javascript)
+                    {
+                        yield return js.File;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// This will be true if the current path can point to a new html file.
         /// </summary>
@@ -293,6 +313,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         private string getBackupPath(string file)
         {
+            file = TrimStartingPathChars(file);
             return Path.Combine(backupPath, file);
         }
 

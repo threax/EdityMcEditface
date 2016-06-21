@@ -47,7 +47,7 @@ namespace SiteCompiler
             foreach (var file in Directory.EnumerateFiles(InDir, "*.html", SearchOption.AllDirectories))
             {
                 var relativeFile = FileFinder.TrimStartingPathChars(file.Substring(InDir.Length));
-                if (!file.StartsWith(edityDir, StringComparison.OrdinalIgnoreCase))
+                if (!relativeFile.StartsWith(edityDir, StringComparison.OrdinalIgnoreCase))
                 {
                     buildPage(Path.Combine(InDir, relativeFile), Path.Combine(OutDir, relativeFile));
                 }
@@ -73,7 +73,65 @@ namespace SiteCompiler
             {
                 writer.Write(document.DocumentNode.OuterHtml);
             }
+            copyDependencyFiles(fileFinder);
             Console.WriteLine($"{inFile} to {outFile}");
+        }
+
+        private static HashSet<String> copiedContentFiles = new HashSet<string>();
+
+        public static void copyDependencyFiles(FileFinder fileFinder)
+        {
+            foreach(var page in fileFinder.loadPageStack())
+            {
+                if (!String.IsNullOrEmpty(page.PageCssPath))
+                {
+                    copyFileIfNotExists(safePathCombine(InDir, page.PageCssPath), safePathCombine(OutDir, page.PageCssPath));
+                }
+                if (!String.IsNullOrEmpty(page.PageScriptPath))
+                {
+                    copyFileIfNotExists(safePathCombine(InDir, page.PageScriptPath), safePathCombine(OutDir, page.PageScriptPath));
+                }
+                foreach(var content in fileFinder.LinkedContentFiles)
+                {
+                    if (!copiedContentFiles.Contains(content) && isValidPhysicalFile(content))
+                    {
+                        copyFileIfNotExists(fileFinder.findRealFile(content), safePathCombine(OutDir, content));
+                    }
+                    copiedContentFiles.Add(content);
+                }
+            }
+        }
+
+        public static bool isValidPhysicalFile(String file)
+        {
+            try
+            {
+                Path.GetFullPath(file);
+            }
+            catch(NotSupportedException)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static String safePathCombine(String a, String b)
+        {
+            b = FileFinder.TrimStartingPathChars(b);
+            return Path.Combine(a, b);
+        }
+
+        public static void copyFileIfNotExists(String source, String dest)
+        {
+            if (!File.Exists(dest))
+            {
+                var destDir = Path.GetDirectoryName(dest);
+                if (!Directory.Exists(destDir))
+                {
+                    Directory.CreateDirectory(destDir);
+                }
+                File.Copy(source, dest);
+            }
         }
 
         public static IConfigurationRoot Configuration { get; private set; }

@@ -59,7 +59,7 @@ namespace EdityMcEditface.HtmlRenderer
             vars["javascript"] = linkedContent.renderJavascript(links, pages.Where(p => p.PageScriptPath != null).Select(p => new JavascriptEntry() { File = p.PageScriptPath }));
         }
 
-        private IEnumerable<String> findLinkedContent(IEnumerable<PageDefinition> pages)
+        public IEnumerable<String> findLinkedContent(IEnumerable<PageDefinition> pages)
         {
             foreach(var page in pages)
             {

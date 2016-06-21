@@ -14,11 +14,14 @@ namespace EdityMcEditface.HtmlRenderer
 
         public List<String> LinkedContent { get; set; } = new List<string>();
 
+        public List<String> AdditionalContent { get; set; } = new List<string>();
+
         public void merge(EdityProject backupProject)
         {
             mergeDictionarys(backupProject.ContentMap, ContentMap);
             mergeDictionarys(backupProject.Vars, Vars);
             mergeList(backupProject.LinkedContent, LinkedContent);
+            mergeList(backupProject.AdditionalContent, AdditionalContent);
         }
 
         private static void mergeDictionarys<TKey, TValue>(Dictionary<TKey, TValue> source, Dictionary<TKey, TValue> dest)

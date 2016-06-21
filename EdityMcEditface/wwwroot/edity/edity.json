@@ -31,5 +31,6 @@
   },
   "vars": {
     "uploadUrl": "edity/upload"
-  }
+  },
+  "additionalContent": [ "lib/bootstrap/dist/fonts" ]
 }

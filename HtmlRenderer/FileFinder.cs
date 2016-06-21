@@ -77,8 +77,8 @@ namespace EdityMcEditface.HtmlRenderer
                 isDirectory = Directory.Exists(directory) && !File.Exists(htmlFile);
             }
 
-            EdityProject project = loadProject();
-            environment = new TemplateEnvironment("/" + fileNoExtension, project);
+            Project = loadProject();
+            environment = new TemplateEnvironment("/" + fileNoExtension, Project);
         }
 
         public void pushTemplate(String template)
@@ -147,6 +147,8 @@ namespace EdityMcEditface.HtmlRenderer
                 return directory;
             }
         }
+
+        public EdityProject Project { get; private set; }
 
         public bool IsProjectFile
         {
@@ -311,7 +313,7 @@ namespace EdityMcEditface.HtmlRenderer
             return file;
         }
 
-        private string getBackupPath(string file)
+        public string getBackupPath(string file)
         {
             file = TrimStartingPathChars(file);
             return Path.Combine(backupPath, file);

@@ -53,8 +53,37 @@ namespace SiteCompiler
                 }
             }
 
+            FileFinder fileFinder = new FileFinder(InDir, BackupPath);
+            fileFinder.useFile("index");
+
+            foreach(var file in fileFinder.Project.AdditionalContent)
+            {
+                var realFile = fileFinder.findRealFile(file);
+                if (File.Exists(realFile))
+                {
+                    copyFileIfNotExists(realFile, safePathCombine(OutDir, file));
+                }
+                else
+                {
+                    //Copy all files from normal and backup location
+                    copyFolderContents(file, fileFinder.getFullRealPath(file));
+                    copyFolderContents(file, fileFinder.getBackupPath(file));
+                }
+            }
+
             Console.WriteLine($"All files written to {OutDir}");
             Console.ReadKey();
+        }
+
+        private static void copyFolderContents(string currentDir, string sourceDir)
+        {
+            if (Directory.Exists(sourceDir))
+            {
+                foreach (var dirFile in Directory.EnumerateFiles(sourceDir, "*", SearchOption.AllDirectories))
+                {
+                    copyFileIfNotExists(dirFile, Path.Combine(safePathCombine(OutDir, currentDir), Path.GetFileName(dirFile)));
+                }
+            }
         }
 
         public static void buildPage(String inFile, String outFile)

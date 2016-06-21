@@ -66,8 +66,8 @@ namespace SiteCompiler
                 else
                 {
                     //Copy all files from normal and backup location
-                    copyFolderContents(file, fileFinder.getFullRealPath(file));
-                    copyFolderContents(file, fileFinder.getBackupPath(file));
+                    copyFolderContents(fileFinder.getFullRealPath(file), file);
+                    copyFolderContents(fileFinder.getBackupPath(file), file);
                 }
             }
 
@@ -75,13 +75,14 @@ namespace SiteCompiler
             Console.ReadKey();
         }
 
-        private static void copyFolderContents(string currentDir, string sourceDir)
+        private static void copyFolderContents(string sourceDir, String additionalPath)
         {
             if (Directory.Exists(sourceDir))
             {
                 foreach (var dirFile in Directory.EnumerateFiles(sourceDir, "*", SearchOption.AllDirectories))
                 {
-                    copyFileIfNotExists(dirFile, Path.Combine(safePathCombine(OutDir, currentDir), Path.GetFileName(dirFile)));
+                    var relativePath = dirFile.Substring(sourceDir.Length);
+                    copyFileIfNotExists(dirFile, safePathCombine(OutDir, additionalPath, relativePath));
                 }
             }
         }
@@ -144,10 +145,13 @@ namespace SiteCompiler
             return true;
         }
 
-        public static String safePathCombine(String a, String b)
+        public static String safePathCombine(params string[] paths)
         {
-            b = FileFinder.TrimStartingPathChars(b);
-            return Path.Combine(a, b);
+            for(int i = 1; i < paths.Length; ++i)
+            {
+                paths[i] = FileFinder.TrimStartingPathChars(paths[i]);
+            }
+            return Path.Combine(paths);
         }
 
         public static void copyFileIfNotExists(String source, String dest)

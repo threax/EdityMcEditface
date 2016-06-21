@@ -244,14 +244,15 @@ namespace EdityMcEditface.HtmlRenderer
             PageStackItem page;
             if (!SkipHtmlFile)
             {
-                using (var source = new StreamReader(File.OpenRead(getFullRealPath(htmlFile))))
+                var realHtmlFile = getFullRealPath(htmlFile);
+                using (var source = new StreamReader(File.OpenRead(realHtmlFile)))
                 {
                     page = new PageStackItem()
                     {
                         Content = source.ReadToEnd(),
-                        PageDefinition = getPageDefinition(htmlFile),
-                        PageScriptPath = getPageFile(htmlFile, htmlFile, "js"),
-                        PageCssPath = getPageFile(htmlFile, htmlFile, "css"),
+                        PageDefinition = getPageDefinition(realHtmlFile),
+                        PageScriptPath = getPageFile(realHtmlFile, htmlFile, "js"),
+                        PageCssPath = getPageFile(realHtmlFile, htmlFile, "css"),
                     };
                 }
                 yield return page;
@@ -351,9 +352,9 @@ namespace EdityMcEditface.HtmlRenderer
         {
             String settingsPath = Path.ChangeExtension(file, "json");
             PageDefinition pageSettings;
-            if (System.IO.File.Exists(settingsPath))
+            if (File.Exists(settingsPath))
             {
-                using (var stream = new StreamReader(System.IO.File.Open(settingsPath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                using (var stream = new StreamReader(File.Open(settingsPath, FileMode.Open, FileAccess.Read, FileShare.Read)))
                 {
                     pageSettings = JsonConvert.DeserializeObject<PageDefinition>(stream.ReadToEnd());
                 }
@@ -378,7 +379,7 @@ namespace EdityMcEditface.HtmlRenderer
         private String getPageFile(String hostFile, String linkFile, String extension)
         {
             String realPath = Path.ChangeExtension(hostFile, extension);
-            if (System.IO.File.Exists(realPath))
+            if (File.Exists(realPath))
             {
                 return Path.ChangeExtension(linkFile, extension);
             }

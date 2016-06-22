@@ -44,7 +44,9 @@ namespace SiteCompiler
 
             Directory.CreateDirectory(outDir);
 
-            var htmlCompiler = new PrimaryHtmlCompiler(inDir, outDir, backupPath);
+            var htmlCompiler = new PrimaryHtmlCompiler(inDir, outDir, backupPath, "default");
+            var printableCompiler = new PrimaryHtmlCompiler(inDir, outDir, backupPath, "print");
+            printableCompiler.OutputExtension = ".print.html";
 
             foreach (var file in Directory.EnumerateFiles(inDir, "*.html", SearchOption.AllDirectories))
             {
@@ -52,10 +54,12 @@ namespace SiteCompiler
                 if (!relativeFile.StartsWith(edityDir, StringComparison.OrdinalIgnoreCase))
                 {
                     htmlCompiler.buildPage(relativeFile);
+                    printableCompiler.buildPage(relativeFile);
                 }
             }
 
             htmlCompiler.copyProjectContent();
+            printableCompiler.copyProjectContent();
 
             Console.WriteLine($"All files written to {outDir}");
             Console.ReadKey();

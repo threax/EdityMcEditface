@@ -32,5 +32,12 @@
   "vars": {
     "uploadUrl": "edity/upload"
   },
-  "additionalContent": [ "lib/bootstrap/dist/fonts" ]
+  "additionalContent": [ "lib/bootstrap/dist/fonts" ],
+  "compilers": [
+    {
+      "type": "Html",
+      "template": "default",
+      "extension": ".html"
+    }
+  ]
 }

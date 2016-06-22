@@ -25,6 +25,7 @@ namespace SchemaGenerator
 
             JSchemaGenerator generator = new JSchemaGenerator();
             generator.DefaultRequired = Newtonsoft.Json.Required.Default;
+            generator.GenerationProviders.Add(new StringEnumGenerationProvider());
 
             // change contract resolver so property names are camel case
             generator.ContractResolver = new CamelCasePropertyNamesContractResolver();

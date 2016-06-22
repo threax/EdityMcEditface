@@ -16,12 +16,22 @@ namespace EdityMcEditface.HtmlRenderer
 
         public List<String> AdditionalContent { get; set; } = new List<string>();
 
+        public List<CompilerDefinition> Compilers { get; set; } = new List<CompilerDefinition>();
+
+        /// <summary>
+        /// Merge two projects together. Does not fully copy the other project and will use objects
+        /// from inside it, don't keep making changes to the project merged into this one or the
+        /// changes will be in both projects.
+        /// </summary>
+        /// <param name="backupProject"></param>
         public void merge(EdityProject backupProject)
         {
             mergeDictionarys(backupProject.ContentMap, ContentMap);
             mergeDictionarys(backupProject.Vars, Vars);
-            mergeList(backupProject.LinkedContent, LinkedContent);
-            mergeList(backupProject.AdditionalContent, AdditionalContent);
+            mergeStringList(backupProject.LinkedContent, LinkedContent);
+            mergeStringList(backupProject.AdditionalContent, AdditionalContent);
+            mergeCompilerLists(backupProject.Compilers, Compilers);
+
         }
 
         private static void mergeDictionarys<TKey, TValue>(Dictionary<TKey, TValue> source, Dictionary<TKey, TValue> dest)
@@ -35,11 +45,22 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
-        private static void mergeList<T>(List<T> source, List<T> dest)
+        private static void mergeStringList(List<String> source, List<String> dest)
         {
             foreach(var item in source)
             {
                 if (!dest.Contains(item))
+                {
+                    dest.Add(item);
+                }
+            }
+        }
+
+        private static void mergeCompilerLists(List<CompilerDefinition> source, List<CompilerDefinition> dest)
+        {
+            foreach (var item in source)
+            {
+                if (!dest.Select(i => i.Extension == item.Extension).Any())
                 {
                     dest.Add(item);
                 }

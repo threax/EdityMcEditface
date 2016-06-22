@@ -60,6 +60,33 @@
     },
     "JavascriptEntry": {
       "$ref": "#/definitions/LinkedContentEntry/properties/js/items/0"
+    },
+    "CompilerDefinition": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Html",
+            "Pdf"
+          ]
+        },
+        "template": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "extension": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
     }
   },
   "type": "object",
@@ -107,6 +134,15 @@
           "string",
           "null"
         ]
+      }
+    },
+    "compilers": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/CompilerDefinition"
       }
     }
   }

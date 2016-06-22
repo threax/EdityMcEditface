@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace SiteCompiler
 {
-    public class PrimaryHtmlCompiler
+    public class HtmlCompiler : ContentCompiler
     {
         private String inDir;
         private String outDir;
         private String backupPath;
         private String defaultTemplate;
 
-        public PrimaryHtmlCompiler(String inDir, String outDir, String backupPath, String defaultTemplate)
+        public HtmlCompiler(String inDir, String outDir, String backupPath, String defaultTemplate)
         {
             this.inDir = inDir;
             this.outDir = outDir;

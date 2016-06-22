@@ -44,22 +44,27 @@ namespace SiteCompiler
 
             Directory.CreateDirectory(outDir);
 
-            var htmlCompiler = new PrimaryHtmlCompiler(inDir, outDir, backupPath, "default");
-            var printableCompiler = new PrimaryHtmlCompiler(inDir, outDir, backupPath, "print");
-            printableCompiler.OutputExtension = ".print.html";
+            var fileFinder = new FileFinder(inDir, backupPath);
+            fileFinder.useFile("index");
+
+            var compilers = ContentCompilerFactory.CreateCompilers(inDir, outDir, backupPath, fileFinder.Project.Compilers);
 
             foreach (var file in Directory.EnumerateFiles(inDir, "*.html", SearchOption.AllDirectories))
             {
                 var relativeFile = FileFinder.TrimStartingPathChars(file.Substring(inDir.Length));
                 if (!relativeFile.StartsWith(edityDir, StringComparison.OrdinalIgnoreCase))
                 {
-                    htmlCompiler.buildPage(relativeFile);
-                    printableCompiler.buildPage(relativeFile);
+                    foreach(var compiler in compilers)
+                    {
+                        compiler.buildPage(relativeFile);
+                    }
                 }
             }
 
-            htmlCompiler.copyProjectContent();
-            printableCompiler.copyProjectContent();
+            foreach (var compiler in compilers)
+            {
+                compiler.copyProjectContent();
+            }
 
             Console.WriteLine($"All files written to {outDir}");
             Console.ReadKey();

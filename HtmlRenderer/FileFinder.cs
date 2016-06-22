@@ -280,7 +280,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// file name.
         /// </summary>
         /// <param name="file">The file to look for.</param>
-        /// <returns>The full path to the real file, searching all dirs.</returns>
+        /// <returns>The real file path or null if the file does not exist in any search folders.</returns>
         public String findRealFile(String file)
         {
             bool usedBackup;
@@ -292,7 +292,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// </summary>
         /// <param name="file">The file to look for.</param>
         /// <param name="usedBackup">Will be set to true if the backup file was used.</param>
-        /// <returns></returns>
+        /// <returns>The real file path or null if the file does not exist in any search folders.</returns>
         public String findRealFile(String file, out bool usedBackup)
         {
             usedBackup = false;
@@ -310,8 +310,8 @@ namespace EdityMcEditface.HtmlRenderer
                 return Path.GetFullPath(backupFileLoc);
             }
 
-            //Not found, just return the file
-            return file;
+            //Not found, return null
+            return null;
         }
 
         public string getBackupPath(string file)

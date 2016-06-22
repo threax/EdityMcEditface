@@ -37,8 +37,14 @@ namespace EdityMcEditface.NetCore.Controllers
                     }
                     return buildAsEditor();
                 case "":
-                    return buildAsPage();
+                    return buildAsPage("default");
                 default:
+                    var cleanExtension = fileFinder.Extension.TrimStart('.');
+                    var layoutPath = fileFinder.findRealFile(fileFinder.getLayoutFile(cleanExtension));
+                    if (layoutPath != null)
+                    {
+                        return buildAsPage(cleanExtension);
+                    }
                     return returnFile(file);
             }
         }
@@ -67,9 +73,9 @@ namespace EdityMcEditface.NetCore.Controllers
             return build();
         }
 
-        public IActionResult buildAsPage()
+        public IActionResult buildAsPage(String template)
         {
-            fileFinder.pushTemplate(fileFinder.getLayoutFile("default"));
+            fileFinder.pushTemplate(fileFinder.getLayoutFile(template));
             return build();
         }
 

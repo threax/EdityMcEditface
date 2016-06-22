@@ -13,7 +13,6 @@ namespace EdityMcEditface.HtmlRenderer
         private LinkedContent linkedContent = new LinkedContent();
         private String docLink;
         private EdityProject project;
-        private List<LinkedContentEntry> pageContent = null;
         private PageDefinition pageDefinition = new PageDefinition();
 
         public TemplateEnvironment(String docLink, EdityProject project)

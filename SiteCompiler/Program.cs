@@ -45,7 +45,6 @@ namespace SiteCompiler
             Directory.CreateDirectory(outDir);
 
             var fileFinder = new FileFinder(inDir, backupPath);
-            fileFinder.useFile("index");
 
             var compilers = ContentCompilerFactory.CreateCompilers(inDir, outDir, backupPath, fileFinder.Project.Compilers);
 

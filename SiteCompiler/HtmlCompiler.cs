@@ -33,10 +33,14 @@ namespace SiteCompiler
             }
 
             FileFinder fileFinder = new FileFinder(inDir, backupPath);
-            fileFinder.useFile(relativeFile);
-            fileFinder.pushLayout(defaultTemplate);
-            DocumentRenderer dr = new DocumentRenderer(fileFinder.Environment);
-            var document = dr.getDocument(fileFinder.loadPageStack());
+            TargetFileInfo fileInfo = new TargetFileInfo(relativeFile);
+            TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
+            PageStack pageStack = new PageStack(environment, fileFinder);
+            pageStack.ContentFile = fileInfo.HtmlFile;
+            pageStack.pushLayout(defaultTemplate);
+
+            DocumentRenderer dr = new DocumentRenderer(environment);
+            var document = dr.getDocument(pageStack.Pages);
             var outDir = Path.GetDirectoryName(outFile);
             if (!Directory.Exists(outDir))
             {
@@ -46,14 +50,12 @@ namespace SiteCompiler
             {
                 writer.Write(document.DocumentNode.OuterHtml);
             }
-            fileFinder.copyDependencyFiles(outDir);
+            fileFinder.copyDependencyFiles(outDir, pageStack);
         }
 
         public void copyProjectContent()
         {
             FileFinder fileFinder = new FileFinder(inDir, backupPath);
-            fileFinder.useFile("index");
-
             fileFinder.copyProjectContent(outDir);
         }
 

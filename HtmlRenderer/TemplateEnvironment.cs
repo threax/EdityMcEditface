@@ -17,7 +17,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         public TemplateEnvironment(String docLink, EdityProject project)
         {
-            this.docLink = docLink;
+            this.docLink = "/" + docLink;
             this.project = project;
             linkedContent.mergeEntries(project.ContentMap);
         }

@@ -30,7 +30,7 @@ namespace EdityMcEditface.NetCore.Controllers
         public IActionResult Index(String file)
         {
             targetFileInfo = new TargetFileInfo(file);
-            templateEnvironment = new TemplateEnvironment("/" + targetFileInfo.FileNoExtension, fileFinder.Project);
+            templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder.Project);
             PageStack pageStack = new PageStack(templateEnvironment, fileFinder);
             pageStack.ContentFile = targetFileInfo.HtmlFile;
 

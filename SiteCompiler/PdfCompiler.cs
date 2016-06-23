@@ -26,31 +26,30 @@ namespace SiteCompiler
 
         public void buildPage(string relativeFile)
         {
-            relativeFile = Path.ChangeExtension(relativeFile, template);
-
-            FileFinder fileFinder = new FileFinder(inDir, backupPath);
-            fileFinder.useFile(relativeFile);
-
-            HtmlDocument document = new HtmlDocument();
-            using (var stream = fileFinder.readFile(relativeFile))
-            {
-                document.Load(stream);
-            }
-            var images = document.DocumentNode.Select("img[src]");
-            foreach(var image in images)
-            {
-                fixLink(image, "src");
-            }
-            var stylesheets = document.DocumentNode.Select("link[href]");
-            foreach(var style in stylesheets)
-            {
-                fixLink(style, "href");
-            }
-
-            using(var stream = fileFinder.writeFile(relativeFile))
-            {
-                document.Save(stream);
-            }
+            //relativeFile = Path.ChangeExtension(relativeFile, template);
+            //
+            //FileFinder fileFinder = new FileFinder(inDir, backupPath);
+            //
+            //HtmlDocument document = new HtmlDocument();
+            //using (var stream = fileFinder.readFile(relativeFile))
+            //{
+            //    document.Load(stream);
+            //}
+            //var images = document.DocumentNode.Select("img[src]");
+            //foreach(var image in images)
+            //{
+            //    fixLink(image, "src");
+            //}
+            //var stylesheets = document.DocumentNode.Select("link[href]");
+            //foreach(var style in stylesheets)
+            //{
+            //    fixLink(style, "href");
+            //}
+            //
+            //using(var stream = fileFinder.writeFile(relativeFile))
+            //{
+            //    document.Save(stream);
+            //}
 
             //ProcessStartInfo pi = new ProcessStartInfo()
             //{

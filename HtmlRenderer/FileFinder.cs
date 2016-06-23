@@ -541,7 +541,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// </summary>
         /// <param name="file">The file to look for.</param>
         /// <returns>The real file path or null if the file does not exist in any search folders.</returns>
-        public String findRealFile(String file)
+        private String findRealFile(String file)
         {
             bool usedBackup;
             return findRealFile(file, out usedBackup);

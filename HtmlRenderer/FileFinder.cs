@@ -83,7 +83,7 @@ namespace EdityMcEditface.HtmlRenderer
                 Directory.CreateDirectory(directory);
             }
 
-            return File.Open(findRealFile(file), FileMode.Create, FileAccess.Write);
+            return File.Open(savePath, FileMode.Create, FileAccess.Write);
         }
 
         /// <summary>
@@ -171,6 +171,10 @@ namespace EdityMcEditface.HtmlRenderer
                 path = getLayoutFile(path);
             }
             var realPath = findRealFile(path);
+            if(realPath == null)
+            {
+                throw new FileNotFoundException($"Cannot find page stack file {path}", path);
+            }
             using (var layout = new StreamReader(File.OpenRead(realPath)))
             {
                 return new PageStackItem()

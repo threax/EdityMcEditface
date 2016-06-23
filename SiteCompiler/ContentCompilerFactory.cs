@@ -24,6 +24,11 @@ namespace SiteCompiler
                     };
                 case CompilerTypes.Pdf:
                     return new PdfCompiler(inDir, outDir, backupPath, definition.Template);
+                case CompilerTypes.Json:
+                    return new JsonCompiler(inDir, outDir, backupPath, definition.Template)
+                    {
+                        OutputExtension = definition.Extension
+                    };
                 default:
                     throw new NotSupportedException($"Compiler type {definition.Type} not supported.");
             }

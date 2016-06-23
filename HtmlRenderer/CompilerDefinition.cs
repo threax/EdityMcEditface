@@ -9,6 +9,7 @@ namespace EdityMcEditface.HtmlRenderer
     {
         Html,
         Pdf,
+        Json,
     }
 
     public class CompilerDefinition

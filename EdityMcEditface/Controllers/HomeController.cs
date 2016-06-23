@@ -53,13 +53,13 @@ namespace EdityMcEditface.NetCore.Controllers
             return View();
         }
 
-        private PhysicalFileResult returnFile(String file)
+        private FileStreamResult returnFile(String file)
         {
             var content = new FileExtensionContentTypeProvider();
             String contentType;
             if (content.TryGetContentType(file, out contentType))
             {
-                return PhysicalFile(fileFinder.findRealFile(file), contentType);
+                return new FileStreamResult(fileFinder.readFile(file), contentType);
             }
             throw new FileNotFoundException($"Cannot find file type for '{file}'", file);
         }

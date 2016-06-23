@@ -110,25 +110,18 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         /// <summary>
-        /// Find the full real file path if the file exists or null if it does not.
-        /// file name.
-        /// </summary>
-        /// <param name="file">The file to look for.</param>
-        /// <returns>The real file path or null if the file does not exist in any search folders.</returns>
-        public String findRealFile(String file)
-        {
-            bool usedBackup;
-            return findRealFile(file, out usedBackup);
-        }
-
-        /// <summary>
         /// Open a stream to read a file given a path.
         /// </summary>
         /// <param name="file">The file to read.</param>
         /// <returns>A stream to the requested file.</returns>
         public Stream readFile(String file)
         {
-            return File.Open(findRealFile(file), FileMode.Open, FileAccess.Read);
+            var realFile = findRealFile(file);
+            if(realFile != null)
+            {
+                return File.Open(realFile, FileMode.Open, FileAccess.Read);
+            }
+            throw new FileNotFoundException($"Cannot find file to read {file}", file);
         }
 
         /// <summary>
@@ -139,7 +132,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns>A stream to the requested file.</returns>
         public Stream writeFile(String file)
         {
-            var savePath = getFullRealPath(file);
+            var savePath = getFullProjectPath(file);
             String directory = Path.GetDirectoryName(savePath);
             if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
@@ -156,7 +149,7 @@ namespace EdityMcEditface.HtmlRenderer
         {
             get
             {
-                return Directory.EnumerateFiles(getFullRealPath("edity/templates")).Select(t => new Template()
+                return Directory.EnumerateFiles(getFullProjectPath("edity/templates")).Select(t => new Template()
                 {
                     Path = Path.ChangeExtension(getUrlFromSystemPath(t), null)
                 });
@@ -179,7 +172,7 @@ namespace EdityMcEditface.HtmlRenderer
                 else
                 {
                     //Copy all files from normal and backup location
-                    copyFolderContents(getFullRealPath(file), outDir, file);
+                    copyFolderContents(getFullProjectPath(file), outDir, file);
                     copyFolderContents(getBackupPath(file), outDir, file);
                 }
             }
@@ -197,11 +190,11 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 if (!String.IsNullOrEmpty(page.PageCssPath))
                 {
-                    copyFileIfNotExists(getFullRealPath(page.PageCssPath), safePathCombine(outDir, page.PageCssPath));
+                    copyFileIfNotExists(getFullProjectPath(page.PageCssPath), safePathCombine(outDir, page.PageCssPath));
                 }
                 if (!String.IsNullOrEmpty(page.PageScriptPath))
                 {
-                    copyFileIfNotExists(getFullRealPath(page.PageScriptPath), safePathCombine(outDir, page.PageScriptPath));
+                    copyFileIfNotExists(getFullProjectPath(page.PageScriptPath), safePathCombine(outDir, page.PageScriptPath));
                 }
                 foreach (var content in LinkedContentFiles)
                 {
@@ -342,7 +335,7 @@ namespace EdityMcEditface.HtmlRenderer
             PageStackItem page;
             if (!SkipHtmlFile)
             {
-                var realHtmlFile = getFullRealPath(htmlFile);
+                var realHtmlFile = getFullProjectPath(htmlFile);
                 using (var source = new StreamReader(File.OpenRead(realHtmlFile)))
                 {
                     page = new PageStackItem()
@@ -383,7 +376,7 @@ namespace EdityMcEditface.HtmlRenderer
         {
             usedBackup = false;
 
-            var realFile = getFullRealPath(file);
+            var realFile = getFullProjectPath(file);
             if (File.Exists(realFile))
             {
                 return realFile;
@@ -531,10 +524,27 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
-        private String getFullRealPath(String path)
+        /// <summary>
+        /// Get the full path of path in the project directory.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private String getFullProjectPath(String path)
         {
             path = TrimStartingPathChars(path);
             return Path.GetFullPath(Path.Combine(projectPath, path));
+        }
+
+        /// <summary>
+        /// Find the full real file path if the file exists or null if it does not.
+        /// file name.
+        /// </summary>
+        /// <param name="file">The file to look for.</param>
+        /// <returns>The real file path or null if the file does not exist in any search folders.</returns>
+        public String findRealFile(String file)
+        {
+            bool usedBackup;
+            return findRealFile(file, out usedBackup);
         }
     }
 }

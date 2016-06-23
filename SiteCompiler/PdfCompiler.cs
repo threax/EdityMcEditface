@@ -75,7 +75,7 @@ namespace SiteCompiler
             ProcessStartInfo pi = new ProcessStartInfo()
             {
                 FileName = "C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe",
-                Arguments = $"{outTempFile} {pdfFile}",
+                Arguments = $"--images --disable-internal-links --enable-local-file-access {outTempFile} {pdfFile}",
             };
             var process = Process.Start(pi);
             process.WaitForExit();
@@ -95,7 +95,9 @@ namespace SiteCompiler
             {
                 case '\\':
                 case '/':
-                    node.SetAttributeValue(attribute, "file:///" + Path.Combine(outDir, val.TrimStart('\\', '/')));
+                    var path = Path.Combine(inDir, val.TrimStart('\\', '/'));
+                    var uri = new Uri(path);
+                    node.SetAttributeValue(attribute, uri.AbsoluteUri);
                     break;
             }
         }

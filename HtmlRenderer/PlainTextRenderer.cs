@@ -9,19 +9,17 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer
 {
-    public class HtmlDocumentRenderer
+    public class PlainTextRenderer
     {
         private TemplateEnvironment environment;
-        private List<ServerSideTransform> transforms = new List<ServerSideTransform>();
+        private char openingDelimiter;
+        private char closingDelimiter;
 
-        public HtmlDocumentRenderer(TemplateEnvironment environment)
+        public PlainTextRenderer(TemplateEnvironment environment, char openingDelimeter = '{', char closingDelimeter = '}')
         {
             this.environment = environment;
-        }
-
-        public void addTransform(ServerSideTransform transform)
-        {
-            this.transforms.Add(transform);
+            this.openingDelimiter = openingDelimeter;
+            this.closingDelimiter = closingDelimeter;
         }
 
         /// <summary>
@@ -29,7 +27,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// </summary>
         /// <param name="pageStack">The pages, the first item should be the innermost page.</param>
         /// <returns></returns>
-        public HtmlDocument getDocument(IEnumerable<PageStackItem> pageStack)
+        public String getDocument(IEnumerable<PageStackItem> pageStack)
         {
             HtmlDocument document = new HtmlDocument();
             //Replace main content first then main replace will get its variables
@@ -44,40 +42,13 @@ namespace EdityMcEditface.HtmlRenderer
             for(int i = 0; i < pageDefinitions.Count; ++i)
             {
                 var templateContent = pageDefinitions[i].Content;
-                if (i != last && templateContent.StartsWith("<!doctype", StringComparison.OrdinalIgnoreCase))
-                {
-                    //Not the last template with an html tag, remove it and only take the body
-                    document.LoadHtml(templateContent);
-                    var body = document.DocumentNode.Select("body").FirstOrDefault();
-                    if (body != null)
-                    {
-                        templateContent = body.InnerHtml;
-                    }
-                }
                 innerHtml = templateContent.Replace("{mainContent}", innerHtml);
             }
 
             //Build variables up
             environment.buildVariables(pageDefinitions);
 
-            String formattedText = TextFormatter.formatText(innerHtml, environment);
-
-            document.LoadHtml(formattedText);
-            //Run transforms
-            foreach (var transform in transforms)
-            {
-                transform.transform(document);
-            }
-
-            return document;
-        }
-
-        public ICollection<ServerSideTransform> Transforms
-        {
-            get
-            {
-                return transforms;
-            }
+            return TextFormatter.formatText(innerHtml, environment);
         }
     }
 }

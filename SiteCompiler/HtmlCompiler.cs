@@ -12,14 +12,14 @@ namespace SiteCompiler
         private String inDir;
         private String outDir;
         private String backupPath;
-        private String defaultTemplate;
+        private String layout;
 
-        public HtmlCompiler(String inDir, String outDir, String backupPath, String defaultTemplate)
+        public HtmlCompiler(String inDir, String outDir, String backupPath, String layout)
         {
             this.inDir = inDir;
             this.outDir = outDir;
             this.backupPath = backupPath;
-            this.defaultTemplate = defaultTemplate;
+            this.layout = layout;
         }
 
         public void buildPage(String relativeFile)
@@ -37,7 +37,7 @@ namespace SiteCompiler
             TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
             PageStack pageStack = new PageStack(environment, fileFinder);
             pageStack.ContentFile = fileInfo.HtmlFile;
-            pageStack.pushLayout(defaultTemplate);
+            pageStack.pushLayout(layout);
 
             DocumentRenderer dr = new DocumentRenderer(environment);
             var document = dr.getDocument(pageStack.Pages);

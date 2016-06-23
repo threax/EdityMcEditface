@@ -14,48 +14,73 @@ namespace SiteCompiler
         private String inDir;
         private String outDir;
         private String backupPath;
-        private String template;
+        private String layout;
 
-        public PdfCompiler(String inDir, String outDir, String backupPath, String template)
+        public PdfCompiler(String inDir, String outDir, String backupPath, String layout)
         {
             this.inDir = inDir;
             this.outDir = outDir;
             this.backupPath = backupPath;
-            this.template = template;
+            this.layout = layout;
         }
 
         public void buildPage(string relativeFile)
         {
-            //relativeFile = Path.ChangeExtension(relativeFile, template);
-            //
-            //FileFinder fileFinder = new FileFinder(inDir, backupPath);
-            //
-            //HtmlDocument document = new HtmlDocument();
-            //using (var stream = fileFinder.readFile(relativeFile))
-            //{
-            //    document.Load(stream);
-            //}
-            //var images = document.DocumentNode.Select("img[src]");
-            //foreach(var image in images)
-            //{
-            //    fixLink(image, "src");
-            //}
-            //var stylesheets = document.DocumentNode.Select("link[href]");
-            //foreach(var style in stylesheets)
-            //{
-            //    fixLink(style, "href");
-            //}
-            //
-            //using(var stream = fileFinder.writeFile(relativeFile))
-            //{
-            //    document.Save(stream);
-            //}
+            var inFile = Path.Combine(inDir, relativeFile);
+            var outBaseFile = Path.Combine(this.outDir, relativeFile);
+            outBaseFile = Path.ChangeExtension(outBaseFile, null);
+            var outTempFile = outBaseFile + "_temp.html";
 
-            //ProcessStartInfo pi = new ProcessStartInfo()
-            //{
-            //    Arguments = $"{inputFile} {}",
-            //};
-            //Process.Start(pi);
+            FileFinder fileFinder = new FileFinder(inDir, backupPath);
+            TargetFileInfo fileInfo = new TargetFileInfo(relativeFile);
+            TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
+            PageStack pageStack = new PageStack(environment, fileFinder);
+            pageStack.ContentFile = fileInfo.HtmlFile;
+            pageStack.pushLayout(layout);
+
+            DocumentRenderer dr = new DocumentRenderer(environment);
+            var document = dr.getDocument(pageStack.Pages);
+
+            //Repair file for pdf
+            var images = document.DocumentNode.Select("img[src]");
+            if (images != null)
+            {
+                foreach (var image in images)
+                {
+                    fixLink(image, "src");
+                }
+            }
+            var stylesheets = document.DocumentNode.Select("link[href]");
+            if (stylesheets != null)
+            {
+                foreach (var style in stylesheets)
+                {
+                    fixLink(style, "href");
+                }
+            }
+
+            //Write temp file
+            var outDir = Path.GetDirectoryName(outTempFile);
+            if (!Directory.Exists(outDir))
+            {
+                Directory.CreateDirectory(outDir);
+            }
+            using (var writer = new StreamWriter(File.Open(outTempFile, FileMode.Create, FileAccess.Write, FileShare.None)))
+            {
+                writer.Write(document.DocumentNode.OuterHtml);
+            }
+
+            var pdfFile = Path.ChangeExtension(outBaseFile, ".pdf");
+
+            ProcessStartInfo pi = new ProcessStartInfo()
+            {
+                FileName = "C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe",
+                Arguments = $"{outTempFile} {pdfFile}",
+            };
+            var process = Process.Start(pi);
+            process.WaitForExit();
+
+            File.Delete(outTempFile);
         }
 
         public void copyProjectContent()
@@ -70,7 +95,7 @@ namespace SiteCompiler
             {
                 case '\\':
                 case '/':
-                    node.SetAttributeValue(attribute, Path.Combine(outDir, val.TrimStart('\\', '/')));
+                    node.SetAttributeValue(attribute, "file:///" + Path.Combine(outDir, val.TrimStart('\\', '/')));
                     break;
             }
         }

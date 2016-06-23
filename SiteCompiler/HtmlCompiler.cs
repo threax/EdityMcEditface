@@ -34,7 +34,7 @@ namespace SiteCompiler
 
             FileFinder fileFinder = new FileFinder(inDir, backupPath);
             fileFinder.useFile(relativeFile);
-            fileFinder.pushLayout(fileFinder.getLayoutFile(defaultTemplate));
+            fileFinder.pushLayout(defaultTemplate);
             DocumentRenderer dr = new DocumentRenderer(fileFinder.Environment);
             var document = dr.getDocument(fileFinder.loadPageStack());
             var outDir = Path.GetDirectoryName(outFile);

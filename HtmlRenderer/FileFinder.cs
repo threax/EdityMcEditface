@@ -84,10 +84,10 @@ namespace EdityMcEditface.HtmlRenderer
         /// <summary>
         /// Add a layout to the finder.
         /// </summary>
-        /// <param name="template"></param>
-        public void pushLayout(String template)
+        /// <param name="layout"></param>
+        public void pushLayout(String layout)
         {
-            this.layouts.Add(template);
+            this.layouts.Add(getLayoutFile(layout));
         }
 
         /// <summary>
@@ -400,13 +400,13 @@ namespace EdityMcEditface.HtmlRenderer
             return null;
         }
 
-        public string getBackupPath(string file)
+        private string getBackupPath(string file)
         {
             file = TrimStartingPathChars(file);
             return Path.Combine(backupPath, file);
         }
 
-        public string getLayoutFile(String layoutName)
+        private string getLayoutFile(String layoutName)
         {
             //returnFile
             String file = $"edity/layouts/{layoutName}.html";

@@ -66,15 +66,15 @@ namespace EdityMcEditface.NetCore.Controllers
 
         public IActionResult buildAsEditor()
         {
-            fileFinder.pushLayout(fileFinder.getLayoutFile("edit"));
-            fileFinder.pushLayout(fileFinder.getLayoutFile("default"));
-            fileFinder.pushLayout(fileFinder.getLayoutFile("editarea"));
+            fileFinder.pushLayout("edit");
+            fileFinder.pushLayout("default");
+            fileFinder.pushLayout("editarea");
             return build();
         }
 
-        public IActionResult buildAsPage(String template)
+        public IActionResult buildAsPage(String layout)
         {
-            fileFinder.pushLayout(fileFinder.getLayoutFile(template));
+            fileFinder.pushLayout(layout);
             return build();
         }
 
@@ -91,7 +91,7 @@ namespace EdityMcEditface.NetCore.Controllers
                 {
                     fileFinder.clearLayout();
                     fileFinder.SkipHtmlFile = true;
-                    fileFinder.pushLayout(fileFinder.getLayoutFile("new"));
+                    fileFinder.pushLayout("new");
                     return getConvertedDocument();
                 }
                 else

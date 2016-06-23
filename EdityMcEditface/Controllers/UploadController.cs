@@ -41,8 +41,8 @@ namespace EdityMcEditface.Controllers
         [HttpPost("edity/upload/{*file}")]
         public async Task<IActionResult> Index(String file)
         {
-            fileFinder.useFile(file);
-            using (Stream stream = fileFinder.writeFile(fileFinder.HtmlFile))
+            TargetFileInfo fileInfo = new TargetFileInfo(file);
+            using (Stream stream = fileFinder.writeFile(fileInfo.HtmlFile))
             {
                 await this.Request.Form.Files.First().CopyToAsync(stream);
             }

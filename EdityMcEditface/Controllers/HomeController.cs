@@ -17,6 +17,9 @@ namespace EdityMcEditface.NetCore.Controllers
     public class HomeController : Controller
     {
         private FileFinder fileFinder;
+        private PageStack pageStack;
+        private TargetFileInfo targetFileInfo;
+        private TemplateEnvironment templateEnvironment;
 
         public HomeController(FileFinder fileFinder)
         {
@@ -26,23 +29,26 @@ namespace EdityMcEditface.NetCore.Controllers
         [HttpGet]
         public IActionResult Index(String file)
         {
-            fileFinder.useFile(file);
+            targetFileInfo = new TargetFileInfo(file);
+            templateEnvironment = new TemplateEnvironment("/" + targetFileInfo.FileNoExtension, fileFinder.Project);
+            PageStack pageStack = new PageStack(templateEnvironment, fileFinder);
+            pageStack.ContentFile = targetFileInfo.HtmlFile;
 
-            switch (fileFinder.Extension)
+            switch (targetFileInfo.Extension)
             {
                 case ".html":
-                    if (fileFinder.IsProjectFile)
+                    if (targetFileInfo.IsProjectFile)
                     {
-                        return new FileStreamResult(fileFinder.readFile(fileFinder.HtmlFile), "text/html");
+                        return new FileStreamResult(fileFinder.readFile(targetFileInfo.HtmlFile), "text/html");
                     }
-                    return buildAsEditor();
+                    return buildAsEditor(pageStack);
                 case "":
-                    return buildAsPage("default");
+                    return buildAsPage(pageStack, "default");
                 default:
-                    var cleanExtension = fileFinder.Extension.TrimStart('.');
+                    var cleanExtension = targetFileInfo.Extension.TrimStart('.');
                     if (fileFinder.doesLayoutExist(cleanExtension))
                     {
-                        return buildAsPage(cleanExtension);
+                        return buildAsPage(pageStack, cleanExtension);
                     }
                     return returnFile(file);
             }
@@ -64,35 +70,34 @@ namespace EdityMcEditface.NetCore.Controllers
             throw new FileNotFoundException($"Cannot find file type for '{file}'", file);
         }
 
-        public IActionResult buildAsEditor()
+        public IActionResult buildAsEditor(PageStack pageStack)
         {
-            fileFinder.pushLayout("edit");
-            fileFinder.pushLayout("default");
-            fileFinder.pushLayout("editarea");
-            return build();
+            pageStack.pushLayout("edit");
+            pageStack.pushLayout("default");
+            pageStack.pushLayout("editarea");
+            return build(pageStack);
         }
 
-        public IActionResult buildAsPage(String layout)
+        public IActionResult buildAsPage(PageStack pageStack, String layout)
         {
-            fileFinder.pushLayout(layout);
-            return build();
+            pageStack.pushLayout(layout);
+            return build(pageStack);
         }
 
-        public IActionResult build()
+        public IActionResult build(PageStack pageStack)
         {
             try
             {
-                return getConvertedDocument();
+                return getConvertedDocument(pageStack);
             }
             catch (FileNotFoundException)
             {
                 //If the source file cannot be read offer to create the new file instead.
-                if (fileFinder.PathCanCreateFile)
+                if (targetFileInfo.PathCanCreateFile)
                 {
-                    fileFinder.clearLayout();
-                    fileFinder.SkipHtmlFile = true;
-                    fileFinder.pushLayout("new");
-                    return getConvertedDocument();
+                    pageStack = new PageStack(templateEnvironment, fileFinder);
+                    pageStack.pushLayout("new");
+                    return getConvertedDocument(pageStack);
                 }
                 else
                 {
@@ -101,10 +106,10 @@ namespace EdityMcEditface.NetCore.Controllers
             }
         }
 
-        public IActionResult getConvertedDocument()
+        public IActionResult getConvertedDocument(PageStack pageStack)
         {
-            DocumentRenderer dr = new DocumentRenderer(fileFinder.Environment);
-            var document = dr.getDocument(fileFinder.loadPageStack());
+            DocumentRenderer dr = new DocumentRenderer(templateEnvironment);
+            var document = dr.getDocument(pageStack.Pages);
             return Content(document.DocumentNode.OuterHtml, new MediaTypeHeaderValue("text/html"));
         }
     }

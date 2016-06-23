@@ -224,22 +224,6 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
-        public String FileNoExtension
-        {
-            get
-            {
-                return fileNoExtension;
-            }
-        }
-
-        public String DirectoryPath
-        {
-            get
-            {
-                return directory;
-            }
-        }
-
         public EdityProject Project
         {
             get
@@ -261,26 +245,6 @@ namespace EdityMcEditface.HtmlRenderer
             get
             {
                 return environment.Value;
-            }
-        }
-
-        public IEnumerable<String> LinkedContentFiles
-        {
-            get
-            {
-                var pages = loadPageStack();
-                List<LinkedContentEntry> links = new List<LinkedContentEntry>(Environment.LinkedContent.buildResourceList(Environment.findLinkedContent(pages.Select(p => p.PageDefinition))));
-                foreach (var link in links)
-                {
-                    foreach(var css in link.Css)
-                    {
-                        yield return css;
-                    }
-                    foreach(var js in link.Javascript)
-                    {
-                        yield return js.File;
-                    }
-                }
             }
         }
 
@@ -557,6 +521,26 @@ namespace EdityMcEditface.HtmlRenderer
             }
 
             return project;
+        }
+
+        private IEnumerable<String> LinkedContentFiles
+        {
+            get
+            {
+                var pages = loadPageStack();
+                List<LinkedContentEntry> links = new List<LinkedContentEntry>(Environment.LinkedContent.buildResourceList(Environment.findLinkedContent(pages.Select(p => p.PageDefinition))));
+                foreach (var link in links)
+                {
+                    foreach (var css in link.Css)
+                    {
+                        yield return css;
+                    }
+                    foreach (var js in link.Javascript)
+                    {
+                        yield return js.File;
+                    }
+                }
+            }
         }
     }
 }

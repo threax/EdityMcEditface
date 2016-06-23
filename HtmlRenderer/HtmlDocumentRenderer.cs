@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer
 {
-    public class DocumentRenderer
+    public class HtmlDocumentRenderer
     {
         private TemplateEnvironment environment;
         private List<ServerSideTransform> transforms = new List<ServerSideTransform>();
 
-        public DocumentRenderer(TemplateEnvironment environment)
+        public HtmlDocumentRenderer(TemplateEnvironment environment)
         {
             this.environment = environment;
         }

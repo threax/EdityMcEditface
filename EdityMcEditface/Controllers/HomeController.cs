@@ -108,7 +108,7 @@ namespace EdityMcEditface.NetCore.Controllers
 
         public IActionResult getConvertedDocument(PageStack pageStack)
         {
-            DocumentRenderer dr = new DocumentRenderer(templateEnvironment);
+            HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);
             var document = dr.getDocument(pageStack.Pages);
             return Content(document.DocumentNode.OuterHtml, new MediaTypeHeaderValue("text/html"));
         }

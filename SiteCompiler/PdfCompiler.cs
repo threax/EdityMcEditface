@@ -32,8 +32,7 @@ namespace SiteCompiler
             fileFinder.useFile(relativeFile);
 
             HtmlDocument document = new HtmlDocument();
-            var inputFile = fileFinder.getFullRealPath(relativeFile);
-            using (var stream = File.Open(inputFile, FileMode.Open, FileAccess.Read))
+            using (var stream = fileFinder.readFile(relativeFile))
             {
                 document.Load(stream);
             }
@@ -48,7 +47,7 @@ namespace SiteCompiler
                 fixLink(style, "href");
             }
 
-            using(var stream = File.Open(inputFile, FileMode.Create, FileAccess.Write))
+            using(var stream = fileFinder.writeFile(relativeFile))
             {
                 document.Save(stream);
             }

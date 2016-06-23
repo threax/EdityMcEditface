@@ -33,15 +33,14 @@ namespace EdityMcEditface.NetCore.Controllers
                 case ".html":
                     if (fileFinder.IsProjectFile)
                     {
-                        return this.PhysicalFile(fileFinder.getFullRealPath(fileFinder.HtmlFile), "text/html");
+                        return new FileStreamResult(fileFinder.readFile(fileFinder.HtmlFile), "text/html");
                     }
                     return buildAsEditor();
                 case "":
                     return buildAsPage("default");
                 default:
                     var cleanExtension = fileFinder.Extension.TrimStart('.');
-                    var layoutPath = fileFinder.findRealFile(fileFinder.getLayoutFile(cleanExtension));
-                    if (layoutPath != null)
+                    if (fileFinder.doesLayoutExist(cleanExtension))
                     {
                         return buildAsPage(cleanExtension);
                     }
@@ -67,15 +66,15 @@ namespace EdityMcEditface.NetCore.Controllers
 
         public IActionResult buildAsEditor()
         {
-            fileFinder.pushTemplate(fileFinder.getLayoutFile("edit"));
-            fileFinder.pushTemplate(fileFinder.getLayoutFile("default"));
-            fileFinder.pushTemplate(fileFinder.getLayoutFile("editarea"));
+            fileFinder.pushLayout(fileFinder.getLayoutFile("edit"));
+            fileFinder.pushLayout(fileFinder.getLayoutFile("default"));
+            fileFinder.pushLayout(fileFinder.getLayoutFile("editarea"));
             return build();
         }
 
         public IActionResult buildAsPage(String template)
         {
-            fileFinder.pushTemplate(fileFinder.getLayoutFile(template));
+            fileFinder.pushLayout(fileFinder.getLayoutFile(template));
             return build();
         }
 
@@ -90,9 +89,9 @@ namespace EdityMcEditface.NetCore.Controllers
                 //If the source file cannot be read offer to create the new file instead.
                 if (fileFinder.PathCanCreateFile)
                 {
-                    fileFinder.clearTemplates();
+                    fileFinder.clearLayout();
                     fileFinder.SkipHtmlFile = true;
-                    fileFinder.pushTemplate(fileFinder.getLayoutFile("new"));
+                    fileFinder.pushLayout(fileFinder.getLayoutFile("new"));
                     return getConvertedDocument();
                 }
                 else

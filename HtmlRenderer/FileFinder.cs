@@ -37,7 +37,7 @@ namespace EdityMcEditface.HtmlRenderer
         private String extension;
         private bool isDirectory = false;
         private TemplateEnvironment environment;
-        private List<String> templates = new List<string>();
+        private List<String> layouts = new List<string>();
 
         public FileFinder(String projectPath, String backupPath, String projectFilePath = "edity/edity.json")
         {
@@ -81,39 +81,137 @@ namespace EdityMcEditface.HtmlRenderer
             environment = new TemplateEnvironment("/" + fileNoExtension, Project);
         }
 
-        public void pushTemplate(String template)
+        /// <summary>
+        /// Add a layout to the finder.
+        /// </summary>
+        /// <param name="template"></param>
+        public void pushLayout(String template)
         {
-            this.templates.Add(template);
+            this.layouts.Add(template);
         }
 
-        public void clearTemplates()
+        /// <summary>
+        /// Clear the layouts
+        /// </summary>
+        public void clearLayout()
         {
-            this.templates.Clear();
+            this.layouts.Clear();
         }
 
-        public String getFullRealPath(String path)
+        /// <summary>
+        /// Determine if a layout exists in the layouts folder.
+        /// </summary>
+        /// <param name="layoutName"></param>
+        /// <returns></returns>
+        public bool doesLayoutExist(String layoutName)
         {
-            path = TrimStartingPathChars(path);
-            return Path.GetFullPath(Path.Combine(projectPath, path));
+            var layoutPath = findRealFile(getLayoutFile(layoutName));
+            return layoutPath != null;
         }
 
-        public String getUrlFromSystemPath(String path)
+        /// <summary>
+        /// Find the full real file path if the file exists or null if it does not.
+        /// file name.
+        /// </summary>
+        /// <param name="file">The file to look for.</param>
+        /// <returns>The real file path or null if the file does not exist in any search folders.</returns>
+        public String findRealFile(String file)
         {
-            var fullPath = Path.GetFullPath(path);
-            var fullProjectPath = Path.GetFullPath(projectPath);
-            if(fullPath.StartsWith(fullProjectPath))
+            bool usedBackup;
+            return findRealFile(file, out usedBackup);
+        }
+
+        /// <summary>
+        /// Open a stream to read a file given a path.
+        /// </summary>
+        /// <param name="file">The file to read.</param>
+        /// <returns>A stream to the requested file.</returns>
+        public Stream readFile(String file)
+        {
+            return File.Open(findRealFile(file), FileMode.Open, FileAccess.Read);
+        }
+
+        /// <summary>
+        /// Open a stream to write to a file given a path.
+        /// Will create any directories needed to write the file.
+        /// </summary>
+        /// <param name="file">The file to write to.</param>
+        /// <returns>A stream to the requested file.</returns>
+        public Stream writeFile(String file)
+        {
+            var savePath = getFullRealPath(file);
+            String directory = Path.GetDirectoryName(savePath);
+            if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
-                return path.Substring(fullProjectPath.Length);
+                Directory.CreateDirectory(directory);
             }
-            if (backupPath != null)
+
+            return File.Open(findRealFile(file), FileMode.Create, FileAccess.Write);
+        }
+
+        /// <summary>
+        /// Find the templates in the current project directory.
+        /// </summary>
+        public IEnumerable<Template> Templates
+        {
+            get
             {
-                fullProjectPath = Path.GetFullPath(backupPath);
-                if (fullPath.StartsWith(fullProjectPath))
+                return Directory.EnumerateFiles(getFullRealPath("edity/templates")).Select(t => new Template()
                 {
-                    return path.Substring(fullPath.Length - 1);
+                    Path = Path.ChangeExtension(getUrlFromSystemPath(t), null)
+                });
+            }
+        }
+
+        /// <summary>
+        /// Copy the contetnt defined in the project to the outDir
+        /// </summary>
+        /// <param name="outDir"></param>
+        public void copyProjectContent(String outDir)
+        {
+            foreach (var file in Project.AdditionalContent)
+            {
+                var realFile = findRealFile(file);
+                if (File.Exists(realFile))
+                {
+                    copyFileIfNotExists(realFile, safePathCombine(outDir, file));
+                }
+                else
+                {
+                    //Copy all files from normal and backup location
+                    copyFolderContents(getFullRealPath(file), outDir, file);
+                    copyFolderContents(getBackupPath(file), outDir, file);
                 }
             }
-            return path;
+        }
+
+        /// <summary>
+        /// Copy the dependency files for the current page stack.
+        /// </summary>
+        /// <param name="fileFinder"></param>
+        public void copyDependencyFiles(String outDir)
+        {
+            HashSet<String> copiedContentFiles = new HashSet<string>();
+
+            foreach (var page in loadPageStack())
+            {
+                if (!String.IsNullOrEmpty(page.PageCssPath))
+                {
+                    copyFileIfNotExists(getFullRealPath(page.PageCssPath), safePathCombine(outDir, page.PageCssPath));
+                }
+                if (!String.IsNullOrEmpty(page.PageScriptPath))
+                {
+                    copyFileIfNotExists(getFullRealPath(page.PageScriptPath), safePathCombine(outDir, page.PageScriptPath));
+                }
+                foreach (var content in LinkedContentFiles)
+                {
+                    if (!copiedContentFiles.Contains(content) && isValidPhysicalFile(content))
+                    {
+                        copyFileIfNotExists(findRealFile(content), safePathCombine(outDir, content));
+                    }
+                    copiedContentFiles.Add(content);
+                }
+            }
         }
 
         public string Extension
@@ -257,18 +355,18 @@ namespace EdityMcEditface.HtmlRenderer
                 }
                 yield return page;
             }
-            for(int i = templates.Count - 1; i >= 0; --i)
+            for(int i = layouts.Count - 1; i >= 0; --i)
             {
-                var template = templates[i];
-                var realTemplate = findRealFile(template);
-                using (var layout = new StreamReader(File.OpenRead(realTemplate)))
+                var layoutPath = layouts[i];
+                var realLayoutPath = findRealFile(layoutPath);
+                using (var layout = new StreamReader(File.OpenRead(realLayoutPath)))
                 {
                     page = new PageStackItem()
                     {
                         Content = layout.ReadToEnd(),
-                        PageDefinition = getPageDefinition(realTemplate),
-                        PageScriptPath = getPageFile(realTemplate, template, "js"),
-                        PageCssPath = getPageFile(realTemplate, template, "css"),
+                        PageDefinition = getPageDefinition(realLayoutPath),
+                        PageScriptPath = getPageFile(realLayoutPath, layoutPath, "js"),
+                        PageCssPath = getPageFile(realLayoutPath, layoutPath, "css"),
                     };
                 }
                 yield return page;
@@ -276,24 +374,12 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         /// <summary>
-        /// Find the full real file path if the file exists, if not returns the original
-        /// file name.
-        /// </summary>
-        /// <param name="file">The file to look for.</param>
-        /// <returns>The real file path or null if the file does not exist in any search folders.</returns>
-        public String findRealFile(String file)
-        {
-            bool usedBackup;
-            return findRealFile(file, out usedBackup);
-        }
-
-        /// <summary>
-        /// Find the full real file path if the file exists, if not returns the original
+        /// Find the full real file path if the file exists or null if it does not.
         /// </summary>
         /// <param name="file">The file to look for.</param>
         /// <param name="usedBackup">Will be set to true if the backup file was used.</param>
         /// <returns>The real file path or null if the file does not exist in any search folders.</returns>
-        public String findRealFile(String file, out bool usedBackup)
+        private String findRealFile(String file, out bool usedBackup)
         {
             usedBackup = false;
 
@@ -377,6 +463,78 @@ namespace EdityMcEditface.HtmlRenderer
                 return Path.ChangeExtension(linkFile, extension);
             }
             return null;
+        }
+
+        private String getUrlFromSystemPath(String path)
+        {
+            var fullPath = Path.GetFullPath(path);
+            var fullProjectPath = Path.GetFullPath(projectPath);
+            if (fullPath.StartsWith(fullProjectPath))
+            {
+                return path.Substring(fullProjectPath.Length);
+            }
+            if (backupPath != null)
+            {
+                fullProjectPath = Path.GetFullPath(backupPath);
+                if (fullPath.StartsWith(fullProjectPath))
+                {
+                    return path.Substring(fullPath.Length - 1);
+                }
+            }
+            return path;
+        }
+
+        private bool isValidPhysicalFile(String file)
+        {
+            try
+            {
+                Path.GetFullPath(file);
+            }
+            catch (NotSupportedException)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private String safePathCombine(params string[] paths)
+        {
+            for (int i = 1; i < paths.Length; ++i)
+            {
+                paths[i] = FileFinder.TrimStartingPathChars(paths[i]);
+            }
+            return Path.Combine(paths);
+        }
+
+        private void copyFileIfNotExists(String source, String dest)
+        {
+            if (!File.Exists(dest))
+            {
+                var destDir = Path.GetDirectoryName(dest);
+                if (!Directory.Exists(destDir))
+                {
+                    Directory.CreateDirectory(destDir);
+                }
+                File.Copy(source, dest);
+            }
+        }
+
+        private void copyFolderContents(string sourceDir, String outDir, String additionalPath)
+        {
+            if (Directory.Exists(sourceDir))
+            {
+                foreach (var dirFile in Directory.EnumerateFiles(sourceDir, "*", SearchOption.AllDirectories))
+                {
+                    var relativePath = dirFile.Substring(sourceDir.Length);
+                    copyFileIfNotExists(dirFile, safePathCombine(outDir, additionalPath, relativePath));
+                }
+            }
+        }
+
+        private String getFullRealPath(String path)
+        {
+            path = TrimStartingPathChars(path);
+            return Path.GetFullPath(Path.Combine(projectPath, path));
         }
     }
 }

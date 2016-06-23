@@ -36,11 +36,15 @@ namespace EdityMcEditface.HtmlRenderer
         private String directory;
         private String extension;
         private bool isDirectory = false;
-        private TemplateEnvironment environment;
         private List<String> layouts = new List<string>();
+        private Lazy<EdityProject> project;
+        private Lazy<TemplateEnvironment> environment;
 
         public FileFinder(String projectPath, String backupPath, String projectFilePath = "edity/edity.json")
         {
+            project = new Lazy<EdityProject>(loadProject);
+            environment = new Lazy<TemplateEnvironment>(loadEnvironment);
+
             this.projectPath = projectPath;
             this.backupPath = backupPath;
             this.projectFilePath = projectFilePath;
@@ -76,9 +80,6 @@ namespace EdityMcEditface.HtmlRenderer
 
                 isDirectory = Directory.Exists(directory) && !File.Exists(htmlFile);
             }
-
-            Project = loadProject();
-            environment = new TemplateEnvironment("/" + fileNoExtension, Project);
         }
 
         /// <summary>
@@ -239,7 +240,13 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
-        public EdityProject Project { get; private set; }
+        public EdityProject Project
+        {
+            get
+            {
+                return project.Value;
+            }
+        }
 
         public bool IsProjectFile
         {
@@ -253,7 +260,7 @@ namespace EdityMcEditface.HtmlRenderer
         {
             get
             {
-                return environment;
+                return environment.Value;
             }
         }
 
@@ -262,7 +269,7 @@ namespace EdityMcEditface.HtmlRenderer
             get
             {
                 var pages = loadPageStack();
-                List<LinkedContentEntry> links = new List<LinkedContentEntry>(environment.LinkedContent.buildResourceList(environment.findLinkedContent(pages.Select(p => p.PageDefinition))));
+                List<LinkedContentEntry> links = new List<LinkedContentEntry>(Environment.LinkedContent.buildResourceList(Environment.findLinkedContent(pages.Select(p => p.PageDefinition))));
                 foreach (var link in links)
                 {
                     foreach(var css in link.Css)
@@ -293,37 +300,6 @@ namespace EdityMcEditface.HtmlRenderer
         /// is useful to load pages like a new page that does not have actual content yet.
         /// </summary>
         public bool SkipHtmlFile { get; set; } = false;
-
-        private EdityProject loadProject()
-        {
-            String projectStr = "";
-            bool usedBackup = false;
-            String file = findRealFile(projectFilePath, out usedBackup);
-            using (var reader = new StreamReader(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
-            {
-                projectStr = reader.ReadToEnd();
-            }
-
-            var project = JsonConvert.DeserializeObject<EdityProject>(projectStr);
-
-            if (!usedBackup)
-            {
-                //Also load the backup file and merge it in
-                //This does load twice if the backup loc is the project loc, but that won't be common
-                //and if so can check for it here.
-                file = getBackupPath(projectFilePath);
-                using (var reader = new StreamReader(System.IO.File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
-                {
-                    projectStr = reader.ReadToEnd();
-                }
-
-                var backupProject = JsonConvert.DeserializeObject<EdityProject>(projectStr);
-
-                project.merge(backupProject);
-            }
-
-            return project;
-        }
 
         /// <summary>
         /// Load the page stack. The pages will be loaded and returned from innermost
@@ -545,6 +521,42 @@ namespace EdityMcEditface.HtmlRenderer
         {
             bool usedBackup;
             return findRealFile(file, out usedBackup);
+        }
+
+        private TemplateEnvironment loadEnvironment()
+        {
+            return new TemplateEnvironment("/" + fileNoExtension, Project);
+        }
+
+        private EdityProject loadProject()
+        {
+            String projectStr = "";
+            bool usedBackup = false;
+            String file = findRealFile(projectFilePath, out usedBackup);
+            using (var reader = new StreamReader(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            {
+                projectStr = reader.ReadToEnd();
+            }
+
+            var project = JsonConvert.DeserializeObject<EdityProject>(projectStr);
+
+            if (!usedBackup)
+            {
+                //Also load the backup file and merge it in
+                //This does load twice if the backup loc is the project loc, but that won't be common
+                //and if so can check for it here.
+                file = getBackupPath(projectFilePath);
+                using (var reader = new StreamReader(System.IO.File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                {
+                    projectStr = reader.ReadToEnd();
+                }
+
+                var backupProject = JsonConvert.DeserializeObject<EdityProject>(projectStr);
+
+                project.merge(backupProject);
+            }
+
+            return project;
         }
     }
 }

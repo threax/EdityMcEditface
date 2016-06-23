@@ -22,6 +22,8 @@ namespace SiteCompiler
                     {
                         OutputExtension = definition.Extension
                     };
+                case CompilerTypes.Pdf:
+                    return new PdfCompiler(inDir, outDir, backupPath, definition.Template);
                 default:
                     throw new NotSupportedException($"Compiler type {definition.Type} not supported.");
             }

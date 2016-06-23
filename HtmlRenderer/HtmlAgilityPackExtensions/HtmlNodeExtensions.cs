@@ -18,6 +18,14 @@ namespace HtmlAgilityPack
                 case '.':
                     return node.SelectNodes($"//*[@class='{query.Substring(1)}']");
                 default:
+                    if (query.Contains('['))
+                    {
+                        query = query.Replace("[", "[@");
+                    }
+                    if (query.Contains('.'))
+                    {
+                        query = query.Replace(".", "[@class='") + "']";
+                    }
                     return node.SelectNodes("//" + query);
             }
         }

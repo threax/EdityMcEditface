@@ -320,13 +320,6 @@ namespace EdityMcEditface.HtmlRenderer
             return Path.Combine(backupPath, file);
         }
 
-        public string getEditorFile(String layoutName)
-        {
-            //returnFile
-            String file = $"edity/editor/{layoutName}.html";
-            return file;
-        }
-
         public string getLayoutFile(String layoutName)
         {
             //returnFile

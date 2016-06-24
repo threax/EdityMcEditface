@@ -44,13 +44,24 @@ namespace EdityMcEditface.HtmlRenderer
 
         public String ContentFile { get; set; }
 
+        /// <summary>
+        /// Set this func to a function that takes a string and returns a string to transform
+        /// the content file before it is used.
+        /// </summary>
+        public Func<String, String> ContentTransformer { get; set; }
+
         public IEnumerable<PageStackItem> Pages
         {
             get
             {
                 if (ContentFile != null)
                 {
-                    yield return fileFinder.loadPageStackContent(ContentFile);
+                    var content = fileFinder.loadPageStackContent(ContentFile);
+                    if (ContentTransformer != null)
+                    {
+                        content.Content = ContentTransformer(content.Content);
+                    }
+                    yield return content;
                 }
                 for (int i = layouts.Count - 1; i >= 0; --i)
                 {

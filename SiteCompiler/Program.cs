@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using EdityMcEditface.HtmlRenderer;
+using System.Diagnostics;
 
 namespace SiteCompiler
 {
@@ -42,6 +43,9 @@ namespace SiteCompiler
                 }
             }
 
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
             Directory.CreateDirectory(outDir);
 
             var fileFinder = new FileFinder(inDir, backupPath);
@@ -65,7 +69,9 @@ namespace SiteCompiler
                 compiler.copyProjectContent();
             }
 
-            Console.WriteLine($"All files written to {outDir}");
+            sw.Stop();
+
+            Console.WriteLine($"All files written to {outDir} in {sw.Elapsed.TotalSeconds} seconds");
             Console.ReadKey();
         }
 

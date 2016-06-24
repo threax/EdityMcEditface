@@ -1,8 +1,12 @@
 ﻿using EdityMcEditface.HtmlRenderer;
+using HtmlAgilityPack;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SiteCompiler
@@ -39,6 +43,19 @@ namespace SiteCompiler
             TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
             PageStack pageStack = new PageStack(environment, fileFinder);
             pageStack.ContentFile = fileInfo.HtmlFile;
+            pageStack.ContentTransformer = (content) =>
+            {
+                HtmlDocument htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(content);
+                var escaped = HtmlEntity.DeEntitize(htmlDoc.DocumentNode.InnerText);
+                escaped = escaped.SingleSpaceWhitespace();
+                escaped = JsonConvert.SerializeObject(escaped);
+                if(escaped.Length > 2)
+                {
+                    escaped = escaped.Substring(1, escaped.Length - 2);
+                }
+                return escaped;
+            };
             pageStack.pushLayout(layout);
 
             var dr = new PlainTextRenderer(environment, '<', '>');
@@ -48,7 +65,7 @@ namespace SiteCompiler
             {
                 Directory.CreateDirectory(outDir);
             }
-            using (var writer = new StreamWriter(File.Open(outFile, FileMode.Create, FileAccess.Write, FileShare.None)))
+            using (var writer = new StreamWriter(File.Open(outFile, FileMode.Create, FileAccess.Write, FileShare.None), Encoding.UTF8))
             {
                 writer.Write(document);
             }

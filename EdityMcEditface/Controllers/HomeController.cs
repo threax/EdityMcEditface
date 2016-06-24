@@ -45,10 +45,10 @@ namespace EdityMcEditface.NetCore.Controllers
                 case "":
                     return buildAsPage(pageStack, "default.html");
                 default:
-                    var cleanExtension = targetFileInfo.Extension.TrimStart('.');
+                    var cleanExtension = targetFileInfo.Extension.TrimStart('.') + ".html";
                     if (fileFinder.doesLayoutExist(cleanExtension))
                     {
-                        return buildAsPage(pageStack, cleanExtension + ".html");
+                        return buildAsPage(pageStack, cleanExtension);
                     }
                     return returnFile(file);
             }

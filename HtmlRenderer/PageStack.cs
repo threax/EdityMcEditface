@@ -50,11 +50,11 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 if (ContentFile != null)
                 {
-                    yield return fileFinder.loadPageStackItem(ContentFile, false);
+                    yield return fileFinder.loadPageStackContent(ContentFile);
                 }
                 for (int i = layouts.Count - 1; i >= 0; --i)
                 {
-                    yield return fileFinder.loadPageStackItem(layouts[i], true);
+                    yield return fileFinder.loadPageStackLayout(layouts[i]);
                 }
             }
         }

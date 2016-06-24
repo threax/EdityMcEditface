@@ -30,8 +30,8 @@ namespace EdityMcEditface.HtmlRenderer
         public String getDocument(IEnumerable<PageStackItem> pageStack)
         {
             String mainContentVar = $"{openingDelimiter}mainContent{closingDelimiter}";
-            String innerHtml = "";// = pageStack.First().Content;
-            foreach (var page in pageStack)//.Skip(1))
+            String innerHtml = "";
+            foreach (var page in pageStack)
             {
                 innerHtml = page.Content.Replace(mainContentVar, innerHtml);
             }

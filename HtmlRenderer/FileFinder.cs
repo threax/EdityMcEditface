@@ -160,16 +160,22 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         /// <summary>
-        /// Load the page stack. The pages will be loaded and returned from innermost
-        /// to outermost.
+        /// Load a page stack item as a layout, will attempt to locate the 
+        /// passed layout path automatically.
         /// </summary>
         /// <returns></returns>
-        public PageStackItem loadPageStackItem(String path, bool isLayout)
+        public PageStackItem loadPageStackLayout(String path)
         {
-            if (isLayout)
-            {
-                path = getLayoutFile(path);
-            }
+            return loadPageStackContent(getLayoutFile(path));
+        }
+
+        /// <summary>
+        /// Load a page stack item as content, this will not attempt to derive a file name
+        /// and will use what is passed in.
+        /// </summary>
+        /// <returns></returns>
+        public PageStackItem loadPageStackContent(String path)
+        {
             var realPath = findRealFile(path);
             if(realPath == null)
             {

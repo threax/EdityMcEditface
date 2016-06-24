@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,6 +48,16 @@ namespace EdityMcEditface.HtmlRenderer
                 }
             }
             return sb.ToString();
+        }
+
+        public static String JsonEscape(this String s)
+        {
+            s = JsonConvert.ToString(s);
+            if (s.Length > 2)
+            {
+                s = s.Substring(1, s.Length - 2);
+            }
+            return s;
         }
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -60,7 +61,7 @@ namespace EdityMcEditface.HtmlRenderer
             //Build variables up
             environment.buildVariables(pageDefinitions);
 
-            String formattedText = TextFormatter.formatText(innerHtml, environment);
+            String formattedText = TextFormatter.formatText(innerHtml, environment, WebUtility.HtmlEncode);
 
             document.LoadHtml(formattedText);
             //Run transforms

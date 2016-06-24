@@ -45,20 +45,16 @@ namespace SiteCompiler
             pageStack.ContentFile = fileInfo.HtmlFile;
             pageStack.ContentTransformer = (content) =>
             {
+                //This removes all html elements and formatting and cleans up the whitespace
                 HtmlDocument htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(content);
                 var escaped = HtmlEntity.DeEntitize(htmlDoc.DocumentNode.InnerText);
                 escaped = escaped.SingleSpaceWhitespace();
-                escaped = JsonConvert.SerializeObject(escaped);
-                if(escaped.Length > 2)
-                {
-                    escaped = escaped.Substring(1, escaped.Length - 2);
-                }
                 return escaped;
             };
             pageStack.pushLayout(layout);
 
-            var dr = new PlainTextRenderer(environment, '<', '>');
+            var dr = new PlainTextRenderer(environment, StringExtensions.JsonEscape, '<', '>');
             var document = dr.getDocument(pageStack.Pages);
             var outDir = Path.GetDirectoryName(outFile);
             if (!Directory.Exists(outDir))

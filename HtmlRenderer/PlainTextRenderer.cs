@@ -14,12 +14,14 @@ namespace EdityMcEditface.HtmlRenderer
         private TemplateEnvironment environment;
         private char openingDelimiter;
         private char closingDelimiter;
+        private Func<String, String> escapeFunc;
 
-        public PlainTextRenderer(TemplateEnvironment environment, char openingDelimeter = '{', char closingDelimeter = '}')
+        public PlainTextRenderer(TemplateEnvironment environment, Func<String, String> escapeFunc, char openingDelimeter = '{', char closingDelimeter = '}')
         {
             this.environment = environment;
             this.openingDelimiter = openingDelimeter;
             this.closingDelimiter = closingDelimeter;
+            this.escapeFunc = escapeFunc;
         }
 
         /// <summary>
@@ -37,7 +39,7 @@ namespace EdityMcEditface.HtmlRenderer
             }
             environment.buildVariables(pageStack);
 
-            return TextFormatter.formatText(innerHtml, environment, openingDelimiter, closingDelimiter);
+            return TextFormatter.formatText(innerHtml, environment, escapeFunc, openingDelimiter, closingDelimiter);
         }
     }
 }

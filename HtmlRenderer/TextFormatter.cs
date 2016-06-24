@@ -8,7 +8,7 @@ namespace EdityMcEditface.HtmlRenderer
 {
     public static class TextFormatter
     {
-        public static String formatText(String text, TemplateEnvironment environment, char openingDelimiter = '{', char closingDelimiter = '}')
+        public static String formatText(String text, TemplateEnvironment environment, Func<String, String> escapeFunc, char openingDelimiter = '{', char closingDelimiter = '}')
         {
             StringBuilder output = new StringBuilder(text.Length);
             var textStart = 0;
@@ -44,7 +44,7 @@ namespace EdityMcEditface.HtmlRenderer
                             output.Append(text.Substring(textStart, bracketStart - textStart));
                             if (environment.encodeOutput(variable))
                             {
-                                value = System.Net.WebUtility.HtmlEncode(value);
+                                value = escapeFunc(value);
                             }
                             output.Append(value);
                             textStart = i + 1;

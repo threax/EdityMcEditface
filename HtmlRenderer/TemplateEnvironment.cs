@@ -22,11 +22,6 @@ namespace EdityMcEditface.HtmlRenderer
             linkedContent.mergeEntries(project.ContentMap);
         }
 
-        public void buildVariables(PageStackItem page)
-        {
-            buildVariables(new PageStackItem[] { page });
-        }
-
         /// <summary>
         /// Build the page variables
         /// </summary>

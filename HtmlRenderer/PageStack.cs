@@ -18,7 +18,7 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         /// <summary>
-        /// Add a layout to the finder.
+        /// Add a layout to the finder. This should be just the file name of the layout, including extension.
         /// </summary>
         /// <param name="layout"></param>
         public void pushLayout(String layout)

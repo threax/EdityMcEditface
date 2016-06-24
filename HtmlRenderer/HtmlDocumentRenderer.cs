@@ -25,7 +25,7 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         /// <summary>
-        /// An enumerator over pages. The first item should be the innermost page.
+        /// Build the document for the given page stack.
         /// </summary>
         /// <param name="pageStack">The pages, the first item should be the innermost page.</param>
         /// <returns></returns>
@@ -41,7 +41,7 @@ namespace EdityMcEditface.HtmlRenderer
                 innerHtml = pageDefinitions[0].Content;
             }
             int last = pageDefinitions.Count - 1;
-            for(int i = 0; i < pageDefinitions.Count; ++i)
+            for(int i = 1; i < pageDefinitions.Count; ++i)
             {
                 var templateContent = pageDefinitions[i].Content;
                 if (i != last && templateContent.StartsWith("<!doctype", StringComparison.OrdinalIgnoreCase))

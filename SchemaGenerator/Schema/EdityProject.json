@@ -71,7 +71,8 @@
           "type": "string",
           "enum": [
             "Html",
-            "Pdf"
+            "Pdf",
+            "Json"
           ]
         },
         "template": {

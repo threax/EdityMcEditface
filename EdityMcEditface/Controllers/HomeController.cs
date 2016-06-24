@@ -43,12 +43,12 @@ namespace EdityMcEditface.NetCore.Controllers
                     }
                     return buildAsEditor(pageStack);
                 case "":
-                    return buildAsPage(pageStack, "default");
+                    return buildAsPage(pageStack, "default.html");
                 default:
                     var cleanExtension = targetFileInfo.Extension.TrimStart('.');
                     if (fileFinder.doesLayoutExist(cleanExtension))
                     {
-                        return buildAsPage(pageStack, cleanExtension);
+                        return buildAsPage(pageStack, cleanExtension + ".html");
                     }
                     return returnFile(file);
             }
@@ -72,9 +72,9 @@ namespace EdityMcEditface.NetCore.Controllers
 
         public IActionResult buildAsEditor(PageStack pageStack)
         {
-            pageStack.pushLayout("edit");
-            pageStack.pushLayout("default");
-            pageStack.pushLayout("editarea");
+            pageStack.pushLayout("edit.html");
+            pageStack.pushLayout("default.html");
+            pageStack.pushLayout("editarea.html");
             return build(pageStack);
         }
 
@@ -96,7 +96,7 @@ namespace EdityMcEditface.NetCore.Controllers
                 if (targetFileInfo.PathCanCreateFile)
                 {
                     pageStack = new PageStack(templateEnvironment, fileFinder);
-                    pageStack.pushLayout("new");
+                    pageStack.pushLayout("new.html");
                     return getConvertedDocument(pageStack);
                 }
                 else

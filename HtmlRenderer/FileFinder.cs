@@ -222,8 +222,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         private string getLayoutFile(String layoutName)
         {
-            //returnFile
-            String file = $"edity/layouts/{layoutName}.html";
+            String file = $"edity/layouts/{layoutName}";
             return file;
         }
 

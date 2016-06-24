@@ -41,7 +41,7 @@ namespace SiteCompiler
             pageStack.ContentFile = fileInfo.HtmlFile;
             pageStack.pushLayout(layout);
 
-            var dr = new PlainTextRenderer(environment, '(', ')');
+            var dr = new PlainTextRenderer(environment, '<', '>');
             var document = dr.getDocument(pageStack.Pages);
             var outDir = Path.GetDirectoryName(outFile);
             if (!Directory.Exists(outDir))

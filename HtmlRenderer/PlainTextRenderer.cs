@@ -23,32 +23,21 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         /// <summary>
-        /// An enumerator over pages. The first item should be the innermost page.
+        /// Build the document for the given page stack.
         /// </summary>
         /// <param name="pageStack">The pages, the first item should be the innermost page.</param>
         /// <returns></returns>
         public String getDocument(IEnumerable<PageStackItem> pageStack)
         {
-            HtmlDocument document = new HtmlDocument();
-            //Replace main content first then main replace will get its variables
-            //Not the best algo
-            String innerHtml = null;
-            List<PageStackItem> pageDefinitions = new List<PageStackItem>(pageStack);
-            if (pageDefinitions.Count > 0)
+            String mainContentVar = $"{openingDelimiter}mainContent{closingDelimiter}";
+            String innerHtml = "";// = pageStack.First().Content;
+            foreach (var page in pageStack)//.Skip(1))
             {
-                innerHtml = pageDefinitions[0].Content;
+                innerHtml = page.Content.Replace(mainContentVar, innerHtml);
             }
-            int last = pageDefinitions.Count - 1;
-            for(int i = 0; i < pageDefinitions.Count; ++i)
-            {
-                var templateContent = pageDefinitions[i].Content;
-                innerHtml = templateContent.Replace("{mainContent}", innerHtml);
-            }
+            environment.buildVariables(pageStack);
 
-            //Build variables up
-            environment.buildVariables(pageDefinitions);
-
-            return TextFormatter.formatText(innerHtml, environment);
+            return TextFormatter.formatText(innerHtml, environment, openingDelimiter, closingDelimiter);
         }
     }
 }

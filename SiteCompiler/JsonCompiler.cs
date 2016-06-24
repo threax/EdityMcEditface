@@ -50,7 +50,7 @@ namespace SiteCompiler
                 htmlDoc.LoadHtml(content);
                 var escaped = HtmlEntity.DeEntitize(htmlDoc.DocumentNode.InnerText);
                 escaped = escaped.SingleSpaceWhitespace();
-                return escaped;
+                return escaped.JsonEscape();
             };
             pageStack.pushLayout(layout);
 

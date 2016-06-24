@@ -25,7 +25,7 @@ namespace EdityMcEditface.HtmlRenderer
                 }
                 else if(text[i] == closingDelimiter)
                 {
-                    if (i + 1 == text.Length || text[i + 1] != '}')
+                    if (i + 1 == text.Length || text[i + 1] != closingDelimiter)
                     {
                         bracketEnd = i;
 

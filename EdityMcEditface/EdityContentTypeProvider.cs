@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface
 {
-    class CommonMarkContentTypeProvider : FileExtensionContentTypeProvider
+    class EdityContentTypeProvider : FileExtensionContentTypeProvider
     {
-        public CommonMarkContentTypeProvider()
+        public EdityContentTypeProvider()
         {
             Mappings.Remove(".html");
         }

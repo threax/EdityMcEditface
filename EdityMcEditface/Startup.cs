@@ -65,7 +65,7 @@ namespace EdityMcEditface
 
             app.UseStaticFiles(new StaticFileOptions()
             {
-                ContentTypeProvider = new CommonMarkContentTypeProvider()
+                ContentTypeProvider = new EdityContentTypeProvider()
             });
 
             app.UseMvc(routes =>

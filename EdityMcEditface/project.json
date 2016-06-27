@@ -1,9 +1,5 @@
 {
   "dependencies": {
-    "Microsoft.NETCore.App": {
-      "version": "1.0.0-rc2-3002702",
-      "type": "platform"
-    },
     "Microsoft.AspNetCore.Diagnostics": "1.0.0-rc2-final",
     "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0-rc2-final",
@@ -15,7 +11,8 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc2-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc2-final",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc2-final",
-    "HtmlRenderer": "1.0.0-*"
+    "HtmlRenderer": "1.0.0-*",
+    "LibGit2Sharp": "0.22.0"
   },
 
   "tools": {
@@ -30,13 +27,7 @@
   },
 
   "frameworks": {
-    "netcoreapp1.0": {
-      "imports": [
-        "dotnet5.6",
-        "dnxcore50",
-        "portable-net45+win8"
-      ]
-    }
+    "net452": { }
   },
 
   "buildOptions": {

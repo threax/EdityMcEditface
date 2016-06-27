@@ -95,6 +95,7 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 file = "index";
             }
+            file = file.TrimStart('\\', '/');
             if (file.Equals(".html", StringComparison.OrdinalIgnoreCase))
             {
                 file = "index.html";

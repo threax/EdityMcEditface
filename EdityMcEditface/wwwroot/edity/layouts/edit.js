@@ -44,6 +44,25 @@
         return false;
     });
 
+    $('#CommitButton').click(function () {
+        h.rest.get('api/Git/UncommittedChanges', function (data) {
+            var parent = $('.git-uncommitted-changes-list');
+            h.component.empty(parent);
+            h.component.repeat("git-uncommitted-change", parent, data);
+        });
+    });
+
+    $(".git-commit-form").submit(function (event) {
+        var data = h.form.serialize($(this));
+        h.rest.post('api/Git/Commit', data,
+        function (data) {
+            alert('Changes Committed');
+        }, function (data) {
+            alert('Error Committing');
+        });
+        return false;
+    });
+
     // toggle editor mode
     //document.querySelector('#mode').addEventListener('click', function ()
     //{

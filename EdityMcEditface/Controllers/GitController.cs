@@ -27,7 +27,7 @@ namespace GitService.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<UncommittedChange> UncomittedChanges()
+        public IEnumerable<UncommittedChange> UncommittedChanges()
         {
             var status = repo.RetrieveStatus();
             

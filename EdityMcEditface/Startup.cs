@@ -11,13 +11,21 @@ using EdityMcEditface.NetCore.Controllers;
 using EdityMcEditface.HtmlRenderer;
 using System.IO;
 using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Converters;
+using Swashbuckle.SwaggerGen.Generator;
+using LibGit2Sharp;
 
 namespace EdityMcEditface
 {
     public class Startup
     {
+        private String runningFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+        private IHostingEnvironment env;
+
         public Startup(IHostingEnvironment env)
         {
+            this.env = env;
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -39,12 +47,40 @@ namespace EdityMcEditface
                 return new FileFinder(projectFolder, runningFolder);
             });
 
+            services.AddTransient<Repository, Repository>(s =>
+            {
+                var projectFolder = Configuration["EditySettings:ProjectPath"];
+                return new Repository(projectFolder);
+            });
+
             // Add framework services.
             services.AddMvc()
                 .AddJsonOptions(o =>
                 {
                     o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    o.SerializerSettings.Converters.Add(new StringEnumConverter());
                 });
+
+            if (env.IsEnvironment("Development"))
+            {
+                services.AddSwaggerGen();
+                services.ConfigureSwaggerGen(options =>
+                {
+                    options.SingleApiVersion(new Info
+                    {
+                        Version = "v1",
+                        Title = "Edity McEdiface API",
+                        Description = "The API for Edity McEdiface",
+                        TermsOfService = "None"
+                    });
+                    string pathToDoc = Path.Combine(runningFolder, "EdityMcEditface.xml");
+                    if (File.Exists(pathToDoc))
+                    {
+                        options.IncludeXmlComments(pathToDoc);
+                    }
+                    options.DescribeAllEnumsAsStrings();
+                });
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +103,12 @@ namespace EdityMcEditface
             {
                 ContentTypeProvider = new EdityContentTypeProvider()
             });
+
+            if (env.IsEnvironment("Development"))
+            {
+                app.UseSwaggerGen();
+                app.UseSwaggerUi();
+            }
 
             app.UseMvc(routes =>
             {

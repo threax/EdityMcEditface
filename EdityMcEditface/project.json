@@ -12,7 +12,8 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc2-final",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc2-final",
     "HtmlRenderer": "1.0.0-*",
-    "LibGit2Sharp": "0.22.0"
+    "LibGit2Sharp": "0.22.0",
+    "Swashbuckle": "6.0.0-beta9"
   },
 
   "tools": {

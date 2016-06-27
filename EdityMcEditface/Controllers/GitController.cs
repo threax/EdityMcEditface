@@ -41,13 +41,30 @@ namespace GitService.Controllers
             });
         }
 
+        [HttpGet]
+        public IEnumerable<History> History()
+        {
+            var historyCommits = repo.Commits;
+            foreach (var logEntry in historyCommits)
+            {
+                yield return new History()
+                {
+                    Message = logEntry.Message,
+                    Name = logEntry.Author.Name,
+                    Email = logEntry.Author.Email,
+                    When = logEntry.Author.When,
+                    Sha = logEntry.Sha
+                };
+            }
+        }
+
         [HttpGet("{*file}")]
-        public IEnumerable<FileHistory> History(String file)
+        public IEnumerable<History> History(String file)
         {
             var historyCommits = repo.Commits.QueryBy(file);
             foreach (var logEntry in historyCommits)
             {
-                yield return new FileHistory()
+                yield return new History()
                 {
                     Message = logEntry.Commit.Message,
                     Name = logEntry.Commit.Author.Name,

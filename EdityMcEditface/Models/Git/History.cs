@@ -6,7 +6,7 @@ using LibGit2Sharp;
 
 namespace EdityMcEditface.Models.Git
 {
-    public class FileHistory
+    public class History
     {
         public string Message { get; internal set; }
         public string Sha { get; internal set; }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using LibGit2Sharp;
 using Microsoft.AspNetCore.StaticFiles;
 using System.IO;
+using EdityMcEditface.Models.Git;
 
 namespace GitService.Controllers
 {
@@ -26,23 +27,33 @@ namespace GitService.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<StatusEntry> UncomittedChanges()
+        public IEnumerable<UncommittedChange> UncomittedChanges()
         {
             var status = repo.RetrieveStatus();
-            return status.Where(s => s.State != FileStatus.Ignored);
+            
+            return status.Where(s => s.State != FileStatus.Ignored).Select(s => 
+            {
+                return new UncommittedChange()
+                {
+                    State = s.State,
+                    FilePath = s.FilePath
+                };
+            });
         }
 
         [HttpGet("{*file}")]
-        public IEnumerable<Object> History(String file)
+        public IEnumerable<FileHistory> History(String file)
         {
             var historyCommits = repo.Commits.QueryBy(file);
             foreach (var logEntry in historyCommits)
             {
-                yield return new
+                yield return new FileHistory()
                 {
-                    message = logEntry.Commit.Message,
-                    author = logEntry.Commit.Author,
-                    sha = logEntry.Commit.Sha
+                    Message = logEntry.Commit.Message,
+                    Name = logEntry.Commit.Author.Name,
+                    Email = logEntry.Commit.Author.Email,
+                    When = logEntry.Commit.Author.When,
+                    Sha = logEntry.Commit.Sha
                 };
             }
         }
@@ -62,6 +73,19 @@ namespace GitService.Controllers
             else
             {
                 throw new NotSupportedException($"Files with extension {Path.GetExtension(file)} not supported.");
+            }
+        }
+
+        [HttpPost]
+        public void Commit([FromBody]NewCommit newCommit)
+        {
+            var status = repo.RetrieveStatus();
+
+            if (status.IsDirty)
+            {
+                repo.Stage("*");
+                var signature = new Signature("Andrew Piper", "piper.andrew@spcollege.edu", DateTime.Now);
+                repo.Commit(newCommit.Message, signature, signature);
             }
         }
     }

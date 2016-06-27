@@ -166,31 +166,29 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns></returns>
         public PageStackItem loadPageStackLayout(String path)
         {
-            return loadPageStackContent(getLayoutFile(path));
+            path = getLayoutFile(path);
+            var realPath = findRealFile(path);
+            if (realPath == null)
+            {
+                throw new FileNotFoundException($"Cannot find page stack file {path}", path);
+            }
+            return loadPageStackFile(path, realPath);
         }
 
         /// <summary>
         /// Load a page stack item as content, this will not attempt to derive a file name
-        /// and will use what is passed in.
+        /// and will use what is passed in. It will also only load content from the main project
+        /// folder, not the backup location.
         /// </summary>
         /// <returns></returns>
         public PageStackItem loadPageStackContent(String path)
         {
-            var realPath = findRealFile(path);
-            if(realPath == null)
+            var realPath = getFullProjectPath(path);
+            if (realPath == null)
             {
                 throw new FileNotFoundException($"Cannot find page stack file {path}", path);
             }
-            using (var layout = new StreamReader(File.OpenRead(realPath)))
-            {
-                return new PageStackItem()
-                {
-                    Content = layout.ReadToEnd(),
-                    PageDefinition = getPageDefinition(realPath),
-                    PageScriptPath = getPageFile(realPath, path, "js"),
-                    PageCssPath = getPageFile(realPath, path, "css"),
-                };
-            }
+            return loadPageStackFile(path, realPath);
         }
 
         /// <summary>
@@ -388,6 +386,20 @@ namespace EdityMcEditface.HtmlRenderer
             }
 
             return project;
+        }
+
+        private PageStackItem loadPageStackFile(string path, string realPath)
+        {
+            using (var layout = new StreamReader(File.OpenRead(realPath)))
+            {
+                return new PageStackItem()
+                {
+                    Content = layout.ReadToEnd(),
+                    PageDefinition = getPageDefinition(realPath),
+                    PageScriptPath = getPageFile(realPath, path, "js"),
+                    PageCssPath = getPageFile(realPath, path, "css"),
+                };
+            }
         }
     }
 }

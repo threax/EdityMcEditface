@@ -53,6 +53,8 @@ namespace EdityMcEditface.HtmlRenderer
                     if (body != null)
                     {
                         templateContent = body.InnerHtml;
+                        templateContent = templateContent.Replace("{javascript}", "");
+                        templateContent = templateContent.Replace("{css}", "");
                     }
                 }
                 innerHtml = templateContent.Replace("{mainContent}", innerHtml);

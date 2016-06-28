@@ -10,7 +10,7 @@ using EdityMcEditface.Models.Git;
 
 namespace GitService.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("edity/[controller]/[action]")]
     public class GitController : Controller
     {
         private Repository repo;

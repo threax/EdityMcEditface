@@ -14,6 +14,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using Swashbuckle.SwaggerGen.Generator;
 using LibGit2Sharp;
+using EdityMcEditface.Models.Compiler;
 
 namespace EdityMcEditface
 {
@@ -42,15 +43,24 @@ namespace EdityMcEditface
             services.AddTransient<FileFinder, FileFinder>(serviceProvider =>
             {
                 var projectFolder = Configuration["EditySettings:ProjectPath"];
-                var runningFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-                runningFolder = Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]);
-                return new FileFinder(projectFolder, runningFolder);
+                var backupPath = Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]);
+                return new FileFinder(projectFolder, backupPath);
             });
 
             services.AddTransient<Repository, Repository>(s =>
             {
                 var projectFolder = Configuration["EditySettings:ProjectPath"];
                 return new Repository(projectFolder);
+            });
+
+            services.AddTransient<CompilerSettings, CompilerSettings>(s =>
+            {
+                return new CompilerSettings()
+                {
+                    InDir = Configuration["EditySettings:ProjectPath"],
+                    BackupPath = Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]),
+                    OutDir = Configuration["EditySettings:OutputPath"]
+                };
             });
 
             // Add framework services.

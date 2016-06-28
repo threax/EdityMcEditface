@@ -45,7 +45,7 @@
     });
 
     $('#CommitButton').click(function () {
-        h.rest.get('api/Git/UncommittedChanges', function (data) {
+        h.rest.get('edity/Git/UncommittedChanges', function (data) {
             var parent = $('.git-uncommitted-changes-list');
             h.component.empty(parent);
             h.component.repeat("git-uncommitted-change", parent, data);
@@ -54,9 +54,9 @@
 
     $(".git-commit-form").submit(function (event) {
         var data = h.form.serialize($(this));
-        h.rest.post('api/Git/Commit', data,
+        h.rest.post('edity/Git/Commit', data,
         function (data) {
-            $('#sourceModal').modal('hide');
+            $('#commitModal').modal('hide');
         }, function (data) {
             alert('Error Committing');
         });

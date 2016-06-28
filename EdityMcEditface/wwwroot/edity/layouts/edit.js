@@ -23,7 +23,6 @@
     $('#EditSource').click(function () {
         var penContent = pen.getContent();
         sourceText.val(penContent);
-        return false;
     });
 
     $('[data-edit-save]').click(function () {

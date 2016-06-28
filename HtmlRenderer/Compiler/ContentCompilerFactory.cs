@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SiteCompiler
+namespace EdityMcEditface.HtmlRenderer.Compiler
 {
     public static class ContentCompilerFactory
     {

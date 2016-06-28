@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.HtmlRenderer
+namespace EdityMcEditface.HtmlRenderer.Compiler
 {
     public enum CompilerTypes
     {

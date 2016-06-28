@@ -56,7 +56,7 @@
         var data = h.form.serialize($(this));
         h.rest.post('api/Git/Commit', data,
         function (data) {
-            alert('Changes Committed');
+            $('#sourceModal').modal('hide');
         }, function (data) {
             alert('Error Committing');
         });

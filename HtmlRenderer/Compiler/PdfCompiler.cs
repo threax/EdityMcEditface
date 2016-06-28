@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SiteCompiler
+namespace EdityMcEditface.HtmlRenderer.Compiler
 {
     public class PdfCompiler : ContentCompiler
     {

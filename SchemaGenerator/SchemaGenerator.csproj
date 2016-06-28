@@ -51,7 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\HtmlRenderer\CompilerDefinition.cs">
+    <Compile Include="..\HtmlRenderer\Compiler\CompilerDefinition.cs">
       <Link>CompilerDefinition.cs</Link>
     </Compile>
     <Compile Include="..\HtmlRenderer\EdityProject.cs">

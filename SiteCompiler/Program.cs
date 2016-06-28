@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using EdityMcEditface.HtmlRenderer;
 using System.Diagnostics;
+using EdityMcEditface.HtmlRenderer.Compiler;
 
 namespace SiteCompiler
 {

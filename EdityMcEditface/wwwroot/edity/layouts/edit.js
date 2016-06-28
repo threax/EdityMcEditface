@@ -63,6 +63,53 @@
         return false;
     });
 
+    function CompilerMessages() {
+        var startMessage = $('[data-compile-message-startup]');
+        var successMessage = $('[data-compile-message-success]');
+        var failMessage = $('[data-compile-message-fail]');
+        var compilingMessage = $('[data-compile-compiling]');
+        var self = this;
+
+        this.hideAll = function () {
+            startMessage.hide();
+            successMessage.hide();
+            failMessage.hide();
+            compilingMessage.hide();
+        }
+
+        this.starting = function(){
+            self.hideAll();
+            startMessage.show();
+        }
+
+        this.compiling = function () {
+            self.hideAll();
+            compilingMessage.show();
+        }
+
+        this.succeeded = function () {
+            self.hideAll();
+            successMessage.show();
+        }
+
+        this.failed = function () {
+            self.hideAll();
+            failMessage.show();
+        }
+    };
+
+    var compilerOutputMessage = new CompilerMessages();
+
+    $('#CompileModalButton').click(function () {
+        compilerOutputMessage.starting();
+    });
+
+    $('#CompileButton').click(function () {
+        compilerOutputMessage.compiling();
+        h.rest.post('/edity/Compile', {}, compilerOutputMessage.succeeded, compilerOutputMessage.failed);
+        return false;
+    });
+
     // toggle editor mode
     //document.querySelector('#mode').addEventListener('click', function ()
     //{

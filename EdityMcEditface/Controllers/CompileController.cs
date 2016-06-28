@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.Controllers
 {
-    [Route("edity/[controller]/[action]")]
+    [Route("edity/[controller]")]
     public class CompileController : Controller
     {
         private CompilerSettings settings;
@@ -22,7 +22,7 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost]
-        public async Task<CompilerResult> Post()
+        public async Task<CompilerResult> Index()
         {
             return await Task.Run<CompilerResult>(() =>
             {

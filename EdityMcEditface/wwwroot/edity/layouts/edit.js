@@ -103,9 +103,19 @@
         compilerOutputMessage.starting();
     });
 
-    $('#CompileButton').click(function () {
+    var compileButton = $('#CompileButton');
+
+    compileButton.click(function () {
+        compileButton.prop('disabled', true);
         compilerOutputMessage.compiling();
-        h.rest.post('/edity/Compile', {}, compilerOutputMessage.succeeded, compilerOutputMessage.failed);
+        h.rest.post('/edity/Compile', {},
+        function () {
+            compileButton.prop('disabled', false);
+            compilerOutputMessage.succeeded();
+        }, function(){
+            compileButton.prop('disabled', false);
+            compilerOutputMessage.failed();
+        });
         return false;
     });
 

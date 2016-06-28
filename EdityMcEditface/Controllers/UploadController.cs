@@ -20,23 +20,20 @@ namespace EdityMcEditface.Controllers
             this.fileFinder = fileFinder;
         }
 
-        //[HttpGet("edity/list/{*file}")]
-        //public IActionResult ListFiles(String file)
-        //{
-        //    fileFinder.useFile(file);
-        //    
-        //    var fullDirectoryPath = fileFinder.getFullRealPath(fileFinder.DirectoryPath);
-        //    if ((Directory.Exists(fullDirectoryPath) 
-        //        && !System.IO.File.Exists(fileFinder.getFullRealPath(fileFinder.HtmlFile))))
-        //    {
-        //        return Json(new
-        //        {
-        //            directories = Directory.EnumerateDirectories(fullDirectoryPath, "*", SearchOption.TopDirectoryOnly).Where(f => !System.IO.File.Exists(f + ".html")),
-        //            files = Directory.EnumerateFiles(fullDirectoryPath, "*", SearchOption.TopDirectoryOnly)
-        //        });
-        //    }
-        //    return StatusCode((int)HttpStatusCode.OK);
-        //}
+        [HttpGet("edity/list/{*file}")]
+        public IActionResult ListFiles(String file)
+        {
+            if(file == null)
+            {
+                file = "";
+            }
+
+            return Json(new
+            {
+                directories = fileFinder.enumerateDirectories(file),
+                files = fileFinder.enumerateFiles(file)
+            });
+        }
 
         [HttpPost("edity/upload/{*file}")]
         public async Task<IActionResult> Index(String file)

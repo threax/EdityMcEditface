@@ -37,8 +37,8 @@ namespace EdityMcEditface.HtmlRenderer
         {
             project = new Lazy<EdityProject>(loadProject);
 
-            this.projectPath = projectPath;
-            this.backupPath = backupPath;
+            this.projectPath = Path.GetFullPath(projectPath);
+            this.backupPath = Path.GetFullPath(backupPath);
             this.projectFilePath = projectFilePath;
         }
 
@@ -151,6 +151,20 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        public IEnumerable<String> enumerateFiles(String path)
+        {
+            var fullPath = getFullProjectPath(path);
+            var fullPathLength = fullPath.Length;
+            return Directory.EnumerateFiles(fullPath).Select(s => s.Substring(fullPathLength));
+        }
+
+        public IEnumerable<String> enumerateDirectories(String path)
+        {
+            var fullPath = getFullProjectPath(path);
+            var fullPathLength = fullPath.Length;
+            return Directory.EnumerateDirectories(fullPath).Select(s => s.Substring(fullPathLength));
+        }
+
         public EdityProject Project
         {
             get
@@ -211,17 +225,11 @@ namespace EdityMcEditface.HtmlRenderer
             if (File.Exists(backupFileLoc))
             {
                 usedBackup = true;
-                return Path.GetFullPath(backupFileLoc);
+                return backupFileLoc;
             }
 
             //Not found, return null
             return null;
-        }
-
-        private string getBackupPath(string file)
-        {
-            file = TrimStartingPathChars(file);
-            return Path.Combine(backupPath, file);
         }
 
         private string getLayoutFile(String layoutName)
@@ -335,14 +343,41 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         /// <summary>
-        /// Get the full path of path in the project directory.
+        /// Get the full path of path in the project directory. Will throw a NotSupportedException if the path is not in the project folder.
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
         private String getFullProjectPath(String path)
         {
             path = TrimStartingPathChars(path);
-            return Path.GetFullPath(Path.Combine(projectPath, path));
+            var fullPath = Path.GetFullPath(Path.Combine(projectPath, path));
+            if (fullPath.StartsWith(projectPath + Path.DirectorySeparatorChar))
+            {
+                return fullPath;
+            }
+            else
+            {
+                throw new NotSupportedException($"Cannot load file from directory outside of {projectPath}");
+            }
+        }
+
+        /// <summary>
+        /// Get the backup file path. Will throw a NotSupportedException if the path is not in the backup folder.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        private string getBackupPath(string file)
+        {
+            file = TrimStartingPathChars(file);
+            var fullPath = Path.GetFullPath(Path.Combine(backupPath, file));
+            if (fullPath.StartsWith(backupPath + Path.DirectorySeparatorChar))
+            {
+                return fullPath;
+            }
+            else
+            {
+                throw new NotSupportedException($"Cannot load file from directory outside of {backupPath}");
+            }
         }
 
         /// <summary>

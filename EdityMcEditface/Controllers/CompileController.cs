@@ -22,41 +22,49 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost]
-        public void Post()
+        public async Task<CompilerResult> Post()
         {
-            //Handle output folder
-            if (Directory.Exists(settings.OutDir))
+            return await Task.Run<CompilerResult>(() =>
             {
-                Directory.Delete(settings.OutDir, true);
-            }
-
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            Directory.CreateDirectory(settings.OutDir);
-
-            var fileFinder = new FileFinder(settings.InDir, settings.BackupPath);
-
-            var compilers = ContentCompilerFactory.CreateCompilers(settings.InDir, settings.OutDir, settings.BackupPath, fileFinder.Project.Compilers);
-
-            foreach (var file in Directory.EnumerateFiles(settings.InDir, "*.html", SearchOption.AllDirectories))
-            {
-                var relativeFile = FileFinder.TrimStartingPathChars(file.Substring(settings.InDir.Length));
-                if (!relativeFile.StartsWith(settings.EdityDir, StringComparison.OrdinalIgnoreCase))
+                //Handle output folder
+                if (Directory.Exists(settings.OutDir))
                 {
-                    foreach (var compiler in compilers)
+                    Directory.Delete(settings.OutDir, true);
+                }
+
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
+                Directory.CreateDirectory(settings.OutDir);
+
+                var fileFinder = new FileFinder(settings.InDir, settings.BackupPath);
+
+                var compilers = ContentCompilerFactory.CreateCompilers(settings.InDir, settings.OutDir, settings.BackupPath, fileFinder.Project.Compilers);
+
+                foreach (var file in Directory.EnumerateFiles(settings.InDir, "*.html", SearchOption.AllDirectories))
+                {
+                    var relativeFile = FileFinder.TrimStartingPathChars(file.Substring(settings.InDir.Length));
+                    if (!relativeFile.StartsWith(settings.EdityDir, StringComparison.OrdinalIgnoreCase))
                     {
-                        compiler.buildPage(relativeFile);
+                        foreach (var compiler in compilers)
+                        {
+                            compiler.buildPage(relativeFile);
+                        }
                     }
                 }
-            }
 
-            foreach (var compiler in compilers)
-            {
-                compiler.copyProjectContent();
-            }
+                foreach (var compiler in compilers)
+                {
+                    compiler.copyProjectContent();
+                }
 
-            sw.Stop();
+                sw.Stop();
+
+                return new CompilerResult()
+                {
+                    ElapsedSeconds = sw.Elapsed.TotalSeconds
+                };
+            });
         }
     }
 }

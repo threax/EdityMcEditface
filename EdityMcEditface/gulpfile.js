@@ -1,4 +1,4 @@
-﻿/// <binding Clean='clean' />
+﻿/// <binding BeforeBuild='copynodelibs, copybowerlibs' Clean='clean' />
 "use strict";
 
 var gulp = require("gulp"),
@@ -51,4 +51,31 @@ gulp.task("dobrowserify", function () {
         .bundle()
         .pipe(source("Sample.cmp.js"))
         .pipe(gulp.dest(webroot));
+});
+
+gulp.task("moretests", function () {
+    return browserify("./GulpLibs/jquery/jquery.js")
+        .bundle()
+        .pipe(source("lib/jquery/jquery.js"))
+        .pipe(gulp.dest(webroot));
+});
+
+var nodeLibs = [
+    "./node_modules/jquery/dist/**/*",
+    "./node_modules/bootstrap/dist/**/*",
+    "./node_modules/htmlrest/src/**/*",
+];
+
+gulp.task("copynodelibs", function () {
+    return gulp.src(nodeLibs, { base: './node_modules' })
+        .pipe(gulp.dest(webroot + "lib"));
+});
+
+var bowerLibs = [
+    "./bower_components/pen/src/**/*"
+];
+
+gulp.task("copybowerlibs", function () {
+    return gulp.src(bowerLibs, { base: './bower_components' })
+        .pipe(gulp.dest(webroot + "lib"));
 });

@@ -46,20 +46,6 @@ gulp.task("min:css", function () {
 
 gulp.task("min", ["min:js", "min:css"]);
 
-gulp.task("dobrowserify", function () {
-    return browserify(webroot + "Sample.js")
-        .bundle()
-        .pipe(source("Sample.cmp.js"))
-        .pipe(gulp.dest(webroot));
-});
-
-gulp.task("moretests", function () {
-    return browserify("./GulpLibs/jquery/jquery.js")
-        .bundle()
-        .pipe(source("lib/jquery/jquery.js"))
-        .pipe(gulp.dest(webroot));
-});
-
 var nodeLibs = [
     "./node_modules/jquery/dist/**/*",
     "./node_modules/bootstrap/dist/**/*",

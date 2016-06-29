@@ -1,7 +1,7 @@
 ﻿using EdityMcEditface.HtmlRenderer;
 using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Schema.Generation;
 using Newtonsoft.Json.Serialization;
+using NJsonSchema;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,25 +23,23 @@ namespace SchemaGenerator
             }
             Directory.SetCurrentDirectory(dir);
 
-            JSchemaGenerator generator = new JSchemaGenerator();
-            generator.DefaultRequired = Newtonsoft.Json.Required.Default;
-            generator.GenerationProviders.Add(new StringEnumGenerationProvider());
-
-            // change contract resolver so property names are camel case
-            generator.ContractResolver = new CamelCasePropertyNamesContractResolver();
-
-            writeSchema<PageDefinition>(generator);
-            writeSchema<LinkedContentEntry>(generator);
-            writeSchema<EdityProject>(generator);
+            writeSchema<PageDefinition>();
+            writeSchema<LinkedContentEntry>();
+            writeSchema<EdityProject>();
         }
 
-        static void writeSchema<T>(JSchemaGenerator generator)
+        static void writeSchema<T>()
         {
             Type t = typeof(T);
-            JSchema schema = generator.Generate(t);
-            using(var writer = new StreamWriter(File.Open(t.Name + ".json", FileMode.Create, FileAccess.Write, FileShare.None)))
+
+            var schema = JsonSchema4.FromType<T>(new NJsonSchema.Generation.JsonSchemaGeneratorSettings()
             {
-                writer.Write(schema.ToString());
+                DefaultEnumHandling = EnumHandling.String
+            });
+            var schemaData = schema.ToJson();
+            using (var writer = new StreamWriter(File.Open(t.Name + ".json", FileMode.Create, FileAccess.Write, FileShare.None)))
+            {
+                writer.Write(schemaData.ToString());
             }
         }
     }

@@ -27,6 +27,11 @@
         { "file": "/lib/htmlrest/src/components.js" }
       ],
       "dependencies": [ "jquery" ]
+    },
+    "json-editor": {
+      "js": [
+        { "file": "/lib/json-editor/dist/jsoneditor.js" }
+      ]
     }
   },
   "vars": {

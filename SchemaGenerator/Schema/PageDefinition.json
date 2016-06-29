@@ -1,28 +1,25 @@
 {
+  "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
+  "x-typeName": "PageDefinition",
+  "additionalProperties": false,
   "properties": {
-    "vars": {
+    "Vars": {
       "type": [
-        "object",
-        "null"
+        "null",
+        "object"
       ],
       "additionalProperties": {
-        "type": [
-          "string",
-          "null"
-        ]
+        "type": "string"
       }
     },
-    "linkedContent": {
+    "LinkedContent": {
       "type": [
         "array",
         "null"
       ],
       "items": {
-        "type": [
-          "string",
-          "null"
-        ]
+        "type": "string"
       }
     }
   }

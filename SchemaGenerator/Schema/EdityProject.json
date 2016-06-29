@@ -1,150 +1,109 @@
 {
-  "definitions": {
-    "LinkedContentEntry": {
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "x-typeName": "EdityProject",
+  "additionalProperties": false,
+  "properties": {
+    "ContentMap": {
       "type": [
-        "object",
-        "null"
+        "null",
+        "object"
       ],
-      "properties": {
-        "css": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
+      "additionalProperties": {
+        "type": "object",
+        "x-typeName": "LinkedContentEntry",
+        "additionalProperties": false,
+        "properties": {
+          "HasMin": {
+            "type": "boolean"
+          },
+          "Dependencies": {
             "type": [
-              "string",
-              "null"
-            ]
-          }
-        },
-        "js": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
-            "type": [
-              "object",
+              "array",
               "null"
             ],
-            "properties": {
-              "file": {
-                "type": "string"
-              },
-              "async": {
-                "type": "boolean"
-              }
-            },
-            "required": [
-              "file"
-            ]
-          }
-        },
-        "hasMin": {
-          "type": "boolean"
-        },
-        "dependencies": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "items": {
+              "type": "string"
+            }
           }
         }
       }
     },
-    "JavascriptEntry": {
-      "$ref": "#/definitions/LinkedContentEntry/properties/js/items/0"
-    },
-    "CompilerDefinition": {
+    "Vars": {
       "type": [
-        "object",
+        "null",
+        "object"
+      ],
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "LinkedContent": {
+      "type": [
+        "array",
         "null"
       ],
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [
-            "Html",
-            "Pdf",
-            "Json"
-          ]
-        },
-        "template": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "extension": {
-          "type": [
-            "string",
-            "null"
-          ]
+      "items": {
+        "type": "string"
+      }
+    },
+    "AdditionalContent": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "Compilers": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "x-typeName": "CompilerDefinition",
+        "additionalProperties": false,
+        "properties": {
+          "Type": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/CompilerTypes"
+              }
+            ]
+          },
+          "Template": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "Extension": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
         }
       }
     }
   },
-  "type": "object",
-  "properties": {
-    "contentMap": {
-      "type": [
-        "object",
-        "null"
+  "definitions": {
+    "CompilerTypes": {
+      "type": "string",
+      "x-typeName": "CompilerTypes",
+      "x-enumNames": [
+        "Html",
+        "Pdf",
+        "Json"
       ],
-      "additionalProperties": {
-        "$ref": "#/definitions/LinkedContentEntry"
-      }
-    },
-    "vars": {
-      "type": [
-        "object",
-        "null"
+      "enum": [
+        "Html",
+        "Pdf",
+        "Json"
       ],
-      "additionalProperties": {
-        "type": [
-          "string",
-          "null"
-        ]
-      }
-    },
-    "linkedContent": {
-      "type": [
-        "array",
-        "null"
-      ],
-      "items": {
-        "type": [
-          "string",
-          "null"
-        ]
-      }
-    },
-    "additionalContent": {
-      "type": [
-        "array",
-        "null"
-      ],
-      "items": {
-        "type": [
-          "string",
-          "null"
-        ]
-      }
-    },
-    "compilers": {
-      "type": [
-        "array",
-        "null"
-      ],
-      "items": {
-        "$ref": "#/definitions/CompilerDefinition"
-      }
+      "description": ""
     }
   }
 }

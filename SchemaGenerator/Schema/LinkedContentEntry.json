@@ -1,59 +1,19 @@
 {
-  "definitions": {
-    "JavascriptEntry": {
-      "type": [
-        "object",
-        "null"
-      ],
-      "properties": {
-        "file": {
-          "type": "string"
-        },
-        "async": {
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "file"
-      ]
-    }
-  },
+  "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
+  "x-typeName": "LinkedContentEntry",
+  "additionalProperties": false,
   "properties": {
-    "css": {
-      "type": [
-        "array",
-        "null"
-      ],
-      "items": {
-        "type": [
-          "string",
-          "null"
-        ]
-      }
-    },
-    "js": {
-      "type": [
-        "array",
-        "null"
-      ],
-      "items": {
-        "$ref": "#/definitions/JavascriptEntry"
-      }
-    },
-    "hasMin": {
+    "HasMin": {
       "type": "boolean"
     },
-    "dependencies": {
+    "Dependencies": {
       "type": [
         "array",
         "null"
       ],
       "items": {
-        "type": [
-          "string",
-          "null"
-        ]
+        "type": "string"
       }
     }
   }

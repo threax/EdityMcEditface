@@ -5,9 +5,7 @@ var gulp = require("gulp"),
     rimraf = require("rimraf"),
     concat = require("gulp-concat"),
     cssmin = require("gulp-cssmin"),
-    uglify = require("gulp-uglify"),
-    browserify = require("browserify"),
-    source = require('vinyl-source-stream');
+    uglify = require("gulp-uglify");
 
 var webroot = "./wwwroot/";
 
@@ -50,6 +48,7 @@ var nodeLibs = [
     "./node_modules/jquery/dist/**/*",
     "./node_modules/bootstrap/dist/**/*",
     "./node_modules/htmlrest/src/**/*",
+    "./node_modules/json-editor/dist/**/*",
 ];
 
 gulp.task("copynodelibs", function () {

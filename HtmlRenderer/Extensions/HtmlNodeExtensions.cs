@@ -7,16 +7,20 @@ namespace HtmlAgilityPack
 {
     public static class HtmlNodeExtensions
     {
-        public static HtmlNodeCollection Select(this HtmlNode node, String query)
+        public static IEnumerable<HtmlNode> Select(this HtmlNode node, String query)
         {
+            IEnumerable<HtmlNode> result;
             switch (query[0])
             {
                 case '[':
-                    return node.SelectNodes($"//*[@{query.Substring(1)}");
+                    result = node.SelectNodes($"//*[@{query.Substring(1)}");
+                    break;
                 case '#':
-                    return node.SelectNodes($"//*[@id='{query.Substring(1)}']");
+                    result = node.SelectNodes($"//*[@id='{query.Substring(1)}']");
+                    break;
                 case '.':
-                    return node.SelectNodes($"//*[@class='{query.Substring(1)}']");
+                    result = node.SelectNodes($"//*[@class='{query.Substring(1)}']");
+                    break;
                 default:
                     if (query.Contains('['))
                     {
@@ -26,8 +30,14 @@ namespace HtmlAgilityPack
                     {
                         query = query.Replace(".", "[@class='") + "']";
                     }
-                    return node.SelectNodes("//" + query);
+                    result = node.SelectNodes("//" + query);
+                    break;
             }
+            if(result == null)
+            {
+                result = new HtmlNode[0];
+            }
+            return result;
         }
     }
 }

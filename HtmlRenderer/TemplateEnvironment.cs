@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer
 {
-    public class TemplateEnvironment
+    public class TemplateEnvironment : ValueProvider
     {
         private Dictionary<String, String> vars = new Dictionary<string, string>();
         private HashSet<String> usedVars = new HashSet<string>();
@@ -76,7 +76,7 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
-        public String getVariable(String key, String defaultVal)
+        public String getValue(String key, String defaultVal)
         {
             usedVars.Add(key);
             String value;
@@ -93,7 +93,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool encodeOutput(String key)
+        public bool shouldEncodeOutput(String key)
         {
             //ONLY the css and javascript tags should be written insecurly
             return key != "css" && key != "javascript";

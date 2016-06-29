@@ -54,11 +54,11 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="settingsModalLabel">{docLink} Settings</h4>
                     </div>
-                    <form action="/ide/api/upload/{docLink}.json" method="post">
+                    <form action="{uploadUrl}/{docLink}.json" method="post">
                         <div class="modal-body" data-settings-form>
-                            <div class="form-group">
-                                <label for="{name}">{prettyName}</label>
-                                <input type="text" name="{name}" class="form-control" />
+                            <div class="form-group" data-settings-form-control>
+                                <label for="{|name}">{|prettyName}</label>
+                                <input type="text" name="{|name}" value="{|value}" class="form-control" />
                             </div>
                         </div>
                         <div class="modal-footer">

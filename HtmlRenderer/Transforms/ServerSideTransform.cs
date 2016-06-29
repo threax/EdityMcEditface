@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Edity.McEditface.HtmlRenderer
+namespace EdityMcEditface.HtmlRenderer.Transforms
 {
     public interface ServerSideTransform
     {
-        String transform(HtmlDocument document);
+        void transform(HtmlDocument document, TemplateEnvironment environment, List<PageStackItem> pageDefinitions);
     }
 }

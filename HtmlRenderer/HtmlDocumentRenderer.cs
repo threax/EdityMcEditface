@@ -1,4 +1,4 @@
-﻿using Edity.McEditface.HtmlRenderer;
+﻿using EdityMcEditface.HtmlRenderer.Transforms;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -69,7 +69,7 @@ namespace EdityMcEditface.HtmlRenderer
             //Run transforms
             foreach (var transform in transforms)
             {
-                transform.transform(document);
+                transform.transform(document, environment, pageDefinitions);
             }
 
             return document;

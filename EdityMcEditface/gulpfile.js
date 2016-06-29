@@ -5,7 +5,9 @@ var gulp = require("gulp"),
     rimraf = require("rimraf"),
     concat = require("gulp-concat"),
     cssmin = require("gulp-cssmin"),
-    uglify = require("gulp-uglify");
+    uglify = require("gulp-uglify"),
+    browserify = require("browserify"),
+    source = require('vinyl-source-stream');
 
 var webroot = "./wwwroot/";
 
@@ -43,3 +45,10 @@ gulp.task("min:css", function () {
 });
 
 gulp.task("min", ["min:js", "min:css"]);
+
+gulp.task("dobrowserify", function () {
+    return browserify(webroot + "Sample.js")
+        .bundle()
+        .pipe(source("Sample.cmp.js"))
+        .pipe(gulp.dest(webroot));
+});

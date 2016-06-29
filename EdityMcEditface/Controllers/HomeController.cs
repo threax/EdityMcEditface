@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Microsoft.Net.Http.Headers;
+using EdityMcEditface.HtmlRenderer.Transforms;
 
 namespace EdityMcEditface.NetCore.Controllers
 {
@@ -72,23 +73,26 @@ namespace EdityMcEditface.NetCore.Controllers
 
         public IActionResult buildAsEditor(PageStack pageStack)
         {
+            HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);
+            dr.addTransform(new CreateSettingsForm());
             pageStack.pushLayout("edit.html");
             pageStack.pushLayout("default.html");
             pageStack.pushLayout("editarea.html");
-            return build(pageStack);
+            return build(pageStack, dr);
         }
 
         public IActionResult buildAsPage(PageStack pageStack, String layout)
         {
+            HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);
             pageStack.pushLayout(layout);
-            return build(pageStack);
+            return build(pageStack, dr);
         }
 
-        public IActionResult build(PageStack pageStack)
+        public IActionResult build(PageStack pageStack, HtmlDocumentRenderer dr)
         {
             try
             {
-                return getConvertedDocument(pageStack);
+                return getConvertedDocument(pageStack, dr);
             }
             catch (FileNotFoundException)
             {
@@ -97,7 +101,7 @@ namespace EdityMcEditface.NetCore.Controllers
                 {
                     pageStack = new PageStack(templateEnvironment, fileFinder);
                     pageStack.pushLayout("new.html");
-                    return getConvertedDocument(pageStack);
+                    return getConvertedDocument(pageStack, dr);
                 }
                 else
                 {
@@ -106,9 +110,8 @@ namespace EdityMcEditface.NetCore.Controllers
             }
         }
 
-        public IActionResult getConvertedDocument(PageStack pageStack)
+        public IActionResult getConvertedDocument(PageStack pageStack, HtmlDocumentRenderer dr)
         {
-            HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);
             var document = dr.getDocument(pageStack.Pages);
             return Content(document.DocumentNode.OuterHtml, new MediaTypeHeaderValue("text/html"));
         }

@@ -7,6 +7,15 @@
     "gulp-concat": "2.5.2",
     "gulp-cssmin": "0.1.7",
     "gulp-uglify": "1.2.0",
-    "rimraf": "2.2.8"
+    "rimraf": "2.2.8",
+    "browserify": "^13.0.1",
+    "vinyl-source-stream": "~1.1.0"
+  },
+  "dependencies": {
+    "tcomb-form": "~0.9.7",
+    "react": "~15.1.0",
+    "bootstrap": "~3.3.6",
+    "jquery": "~3.0.0",
+    "htmlrest": "https://github.com/threax/htmlrest.git"
   }
 }

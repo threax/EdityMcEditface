@@ -4,10 +4,10 @@
   "x-typeName": "LinkedContentEntry",
   "additionalProperties": false,
   "properties": {
-    "HasMin": {
+    "hasMin": {
       "type": "boolean"
     },
-    "Dependencies": {
+    "dependencies": {
       "type": [
         "array",
         "null"

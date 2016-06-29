@@ -4,7 +4,7 @@
   "x-typeName": "PageDefinition",
   "additionalProperties": false,
   "properties": {
-    "Vars": {
+    "vars": {
       "type": [
         "null",
         "object"
@@ -13,7 +13,7 @@
         "type": "string"
       }
     },
-    "LinkedContent": {
+    "linkedContent": {
       "type": [
         "array",
         "null"

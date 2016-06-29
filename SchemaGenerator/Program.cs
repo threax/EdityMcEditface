@@ -34,7 +34,8 @@ namespace SchemaGenerator
 
             var schema = JsonSchema4.FromType<T>(new NJsonSchema.Generation.JsonSchemaGeneratorSettings()
             {
-                DefaultEnumHandling = EnumHandling.String
+                DefaultEnumHandling = EnumHandling.String,
+                DefaultPropertyNameHandling = PropertyNameHandling.CamelCase
             });
             var schemaData = schema.ToJson();
             using (var writer = new StreamWriter(File.Open(t.Name + ".json", FileMode.Create, FileAccess.Write, FileShare.None)))

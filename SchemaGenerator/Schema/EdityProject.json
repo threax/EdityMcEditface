@@ -4,7 +4,7 @@
   "x-typeName": "EdityProject",
   "additionalProperties": false,
   "properties": {
-    "ContentMap": {
+    "contentMap": {
       "type": [
         "null",
         "object"
@@ -14,10 +14,10 @@
         "x-typeName": "LinkedContentEntry",
         "additionalProperties": false,
         "properties": {
-          "HasMin": {
+          "hasMin": {
             "type": "boolean"
           },
-          "Dependencies": {
+          "dependencies": {
             "type": [
               "array",
               "null"
@@ -29,7 +29,7 @@
         }
       }
     },
-    "Vars": {
+    "vars": {
       "type": [
         "null",
         "object"
@@ -38,7 +38,7 @@
         "type": "string"
       }
     },
-    "LinkedContent": {
+    "linkedContent": {
       "type": [
         "array",
         "null"
@@ -47,7 +47,7 @@
         "type": "string"
       }
     },
-    "AdditionalContent": {
+    "additionalContent": {
       "type": [
         "array",
         "null"
@@ -56,7 +56,7 @@
         "type": "string"
       }
     },
-    "Compilers": {
+    "compilers": {
       "type": [
         "array",
         "null"
@@ -66,20 +66,20 @@
         "x-typeName": "CompilerDefinition",
         "additionalProperties": false,
         "properties": {
-          "Type": {
+          "type": {
             "oneOf": [
               {
                 "$ref": "#/definitions/CompilerTypes"
               }
             ]
           },
-          "Template": {
+          "template": {
             "type": [
               "null",
               "string"
             ]
           },
-          "Extension": {
+          "extension": {
             "type": [
               "null",
               "string"

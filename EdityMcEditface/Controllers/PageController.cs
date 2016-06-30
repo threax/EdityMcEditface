@@ -27,7 +27,7 @@ namespace EdityMcEditface.Controllers
         public PageSettings Settings(String file)
         {
             TargetFileInfo targetFile = new TargetFileInfo(file);
-            var definition = fileFinder.getPageDefinition(targetFile);
+            var definition = fileFinder.getProjectPageDefinition(targetFile);
             String title;
             if(!definition.Vars.TryGetValue("title", out title))
             {
@@ -44,7 +44,7 @@ namespace EdityMcEditface.Controllers
         public void Settings(String file, [FromBody]PageSettings settings)
         {
             TargetFileInfo targetFile = new TargetFileInfo(file);
-            var definition = fileFinder.getPageDefinition(targetFile);
+            var definition = fileFinder.getProjectPageDefinition(targetFile);
             definition.Vars["title"] = settings.Title;
             fileFinder.savePageDefinition(definition, targetFile);
         }

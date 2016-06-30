@@ -240,17 +240,18 @@ namespace EdityMcEditface.HtmlRenderer
 
         private String getPageDefinitionFile(String file)
         {
-            var jsonFile = Path.ChangeExtension(file, "json");
-            if (!Path.IsPathRooted(jsonFile))
-            {
-                jsonFile = findRealFile(jsonFile);
-            }
-            return jsonFile;
+            return Path.ChangeExtension(file, "json");
         }
 
-        public PageDefinition getPageDefinition(TargetFileInfo fileInfo)
+        /// <summary>
+        /// Load a page definition. This only looks in the project folder for the definition, not the
+        /// backup location.
+        /// </summary>
+        /// <param name="fileInfo">The file info to use to find the PageDefinition file.</param>
+        /// <returns>The PageDefinition for the page. Will be a default instance if the file does not exist.</returns>
+        public PageDefinition getProjectPageDefinition(TargetFileInfo fileInfo)
         {
-            return getPageDefinition(fileInfo.HtmlFile);
+            return getPageDefinition(getFullProjectPath(fileInfo.HtmlFile));
         }
 
         private PageDefinition getPageDefinition(String file)

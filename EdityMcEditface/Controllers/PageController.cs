@@ -40,7 +40,7 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost("{*file}")]
-        [AutoValidate()]
+        [AutoValidate("Cannot update page settings.")]
         public void Settings(String file, [FromBody]PageSettings settings)
         {
             TargetFileInfo targetFile = new TargetFileInfo(file);

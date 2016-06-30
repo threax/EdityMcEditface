@@ -67,7 +67,7 @@ namespace EdityMcEditface
             // Add framework services.
             services.AddMvc(o =>
             {
-                o.Filters.Add(new ExceptionToJsonFilterAttribute());
+                o.Filters.Add(new ExceptionToJsonFilterAttribute(env.IsEnvironment("Development")));
             })
             .AddJsonOptions(o =>
             {

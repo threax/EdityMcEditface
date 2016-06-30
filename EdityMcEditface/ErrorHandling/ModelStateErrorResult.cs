@@ -12,14 +12,14 @@ namespace EdityMcEditface.ErrorHandling
     /// typed error class that gets serialized to json. It contains an overall error message
     /// and specific error messages for each field.
     /// </summary>
-    public class ErrorResult
+    public class ModelStateErrorResult
     {
         /// <summary>
         /// Constructor, takes the model state and an overall error message.
         /// </summary>
         /// <param name="modelState">The model state.</param>
         /// <param name="message">An error message that applies to the entire result.</param>
-        public ErrorResult(ModelStateDictionary modelState, String message)
+        public ModelStateErrorResult(ModelStateDictionary modelState, String message)
         {
             this.Message = message;
             this.Errors = new Dictionary<String, String>(modelState.ErrorCount);

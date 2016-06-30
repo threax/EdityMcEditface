@@ -196,15 +196,15 @@ namespace EdityMcEditface.HtmlRenderer
         public IEnumerable<String> enumerateFiles(String path)
         {
             var fullPath = getFullProjectPath(path);
-            var fullPathLength = fullPath.Length;
-            return Directory.EnumerateFiles(fullPath).Select(s => s.Substring(fullPathLength));
+            var removeLength = projectPath.Length;
+            return Directory.EnumerateFiles(fullPath).Select(s => s.Substring(removeLength));
         }
 
         public IEnumerable<String> enumerateDirectories(String path)
         {
             var fullPath = getFullProjectPath(path);
-            var fullPathLength = fullPath.Length;
-            return Directory.EnumerateDirectories(fullPath).Select(s => s.Substring(fullPathLength));
+            var removeLength = projectPath.Length;
+            return Directory.EnumerateDirectories(fullPath).Select(s => s.Substring(removeLength));
         }
 
         public EdityProject Project
@@ -418,7 +418,7 @@ namespace EdityMcEditface.HtmlRenderer
         {
             path = TrimStartingPathChars(path);
             var fullPath = Path.GetFullPath(Path.Combine(projectPath, path));
-            if (fullPath.StartsWith(projectPath + Path.DirectorySeparatorChar))
+            if (fullPath.StartsWith(projectPath + Path.DirectorySeparatorChar) || fullPath == projectPath)
             {
                 return fullPath;
             }

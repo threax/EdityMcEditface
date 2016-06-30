@@ -135,6 +135,53 @@
         settingsLifecycle.populateData();
     });
 
+    //--------------- File Browser ----------------
+
+    function FileBrowser(settings) {
+        var listFilesUrl = settings.listFilesUrl;
+
+        var directoryList = $(settings.directoryListQuery);
+        var directoryComponent = settings.directoryComponent;
+
+        var fileList = $(settings.fileListQuery);
+        var fileComponent = settings.fileComponent;
+
+        var loadingLifecycle = new h.lifecycle.ajaxLoad({
+            loadingDisplayQuery: '#FileBrowserLoading',
+            mainDisplayQuery: '#FileBrowserDisplay',
+            loadingFailDisplayQuery: '#FileBrowserLoadFailed'
+        });
+
+        this.loadFiles = function (path) {
+            loadingLifecycle.loading();
+            h.rest.get(listFilesUrl + path, getFilesSuccess, getFilesFail);
+        }
+
+        function getFilesSuccess(data) {
+            loadingLifecycle.succeeded();
+            h.component.repeat(directoryComponent, directoryList, data.directories);
+            h.component.repeat(fileComponent, fileList, data.files);
+        }
+
+        function getFilesFail(data) {
+            loadingLifecycle.failed();
+        }
+    };
+
+    var fileBrowser = new FileBrowser({
+        listFilesUrl: "/edity/list",
+        fileListQuery: ".filebrowser-file-list",
+        fileComponent: "filebrowser-files",
+        directoryListQuery: ".filebrowser-directory-list",
+        directoryComponent: "filebrowser-directories",
+    })
+
+    $('#MediaModalButton').click(function () {
+        fileBrowser.loadFiles("/images");
+    });
+
+    //--------------- End File Browser ----------------
+
     //var settingsForm = $('#SettingsForm');
     //var settingsUrl = settingsForm.attr('action');
     //

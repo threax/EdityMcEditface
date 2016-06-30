@@ -15,3 +15,4 @@
 /// <reference path="lib/htmlrest/src/storage.js" />
 /// <reference path="lib/htmlrest/src/table.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />
+/// <reference path="lib/htmlrestdev/lifecycle.js" />

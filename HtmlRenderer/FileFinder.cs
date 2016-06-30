@@ -275,10 +275,9 @@ namespace EdityMcEditface.HtmlRenderer
         public void savePageDefinition(PageDefinition definition, TargetFileInfo fileInfo)
         {
             var outputFile = getPageDefinitionFile(fileInfo.HtmlFile);
-            var serialized = JsonConvert.SerializeObject(definition);
             using (var outStream = new StreamWriter(writeFile(outputFile)))
             {
-                outStream.Write(serialized);
+                JsonWriter.Serialize(definition, outStream);
             }
         }
 

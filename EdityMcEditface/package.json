@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "bootstrap": "~3.3.6",
-    "htmlrest": "https://github.com/threax/htmlrest.git",
     "jquery": "~2.2.0",
-    "json-editor": "~0.7.26"
+    "json-editor": "~0.7.26",
+    "htmlrest": "https://github.com/threax/htmlrest.git"
   }
 }

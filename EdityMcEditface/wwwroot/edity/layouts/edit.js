@@ -137,6 +137,9 @@
         var data = h.form.serialize(settingsForm);
         h.rest.post(settingsUrl, data, function () {
             $('#settingsModal').modal('hide');
+        }, 
+        function (data) {
+            alert(data.message);
         });
         return false;
     });

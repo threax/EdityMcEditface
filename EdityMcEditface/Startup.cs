@@ -15,6 +15,7 @@ using Newtonsoft.Json.Converters;
 using Swashbuckle.SwaggerGen.Generator;
 using LibGit2Sharp;
 using EdityMcEditface.Models.Compiler;
+using EdityMcEditface.ErrorHandling;
 
 namespace EdityMcEditface
 {
@@ -64,12 +65,15 @@ namespace EdityMcEditface
             });
 
             // Add framework services.
-            services.AddMvc()
-                .AddJsonOptions(o =>
-                {
-                    o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    o.SerializerSettings.Converters.Add(new StringEnumConverter());
-                });
+            services.AddMvc(o =>
+            {
+                o.Filters.Add(new ApiExceptionFilterAttribute());
+            })
+            .AddJsonOptions(o =>
+            {
+                o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                o.SerializerSettings.Converters.Add(new StringEnumConverter());
+            });
 
             if (env.IsEnvironment("Development"))
             {

@@ -238,9 +238,24 @@ namespace EdityMcEditface.HtmlRenderer
             return file;
         }
 
-        private PageDefinition getPageDefinition(String file)
+        private String getPageDefinitionFile(String file)
         {
-            String settingsPath = Path.ChangeExtension(file, "json");
+            var jsonFile = Path.ChangeExtension(file, "json");
+            if (!Path.IsPathRooted(jsonFile))
+            {
+                jsonFile = findRealFile(jsonFile);
+            }
+            return jsonFile;
+        }
+
+        public PageDefinition getPageDefinition(TargetFileInfo fileInfo)
+        {
+            return getPageDefinition(fileInfo.HtmlFile);
+        }
+
+        private PageDefinition getPageDefinition(String file)
+        { 
+            String settingsPath = getPageDefinitionFile(file);
             PageDefinition pageSettings;
             if (File.Exists(settingsPath))
             {
@@ -255,6 +270,16 @@ namespace EdityMcEditface.HtmlRenderer
             }
 
             return pageSettings;
+        }
+
+        public void savePageDefinition(PageDefinition definition, TargetFileInfo fileInfo)
+        {
+            var outputFile = getPageDefinitionFile(fileInfo.HtmlFile);
+            var serialized = JsonConvert.SerializeObject(definition);
+            using (var outStream = new StreamWriter(writeFile(outputFile)))
+            {
+                outStream.Write(serialized);
+            }
         }
 
         /// <summary>

@@ -138,6 +138,9 @@
     //--------------- File Browser ----------------
 
     function FileBrowser(settings) {
+        var parentFolders = [];
+        var currentFolder = undefined;
+
         var listFilesUrl = settings.listFilesUrl;
 
         var directoryList = $(settings.directoryListQuery);
@@ -146,21 +149,50 @@
         var fileList = $(settings.fileListQuery);
         var fileComponent = settings.fileComponent;
 
+        var upButton = $(settings.upButtonQuery);
+        upButton.click(function () {
+            currentFolder = parentFolders.pop();
+            loadCurrentFolder();
+        });
+
         var loadingLifecycle = new h.lifecycle.ajaxLoad({
             loadingDisplayQuery: '#FileBrowserLoading',
             mainDisplayQuery: '#FileBrowserDisplay',
             loadingFailDisplayQuery: '#FileBrowserLoadFailed'
         });
 
+        var self = this;
+
         this.loadFiles = function (path) {
+            if (currentFolder !== undefined) {
+                parentFolders.push(currentFolder);
+            }
+            currentFolder = path;
+            loadCurrentFolder();
+        }
+
+        function loadCurrentFolder() {
             loadingLifecycle.loading();
-            h.rest.get(listFilesUrl + path, getFilesSuccess, getFilesFail);
+            h.rest.get(listFilesUrl + currentFolder, getFilesSuccess, getFilesFail);
         }
 
         function getFilesSuccess(data) {
             loadingLifecycle.succeeded();
-            h.component.repeat(directoryComponent, directoryList, data.directories);
+            h.component.empty(directoryList);
+            h.component.empty(fileList);
+            h.component.repeat(directoryComponent, directoryList, data.directories, function (created, data) {
+                created.click(function () {
+                    self.loadFiles(data);
+                    return false;
+                });
+            });
             h.component.repeat(fileComponent, fileList, data.files);
+            if (parentFolders.length === 0) {
+                upButton.hide();
+            }
+            else {
+                upButton.show();
+            }
         }
 
         function getFilesFail(data) {
@@ -174,6 +206,7 @@
         fileComponent: "filebrowser-files",
         directoryListQuery: ".filebrowser-directory-list",
         directoryComponent: "filebrowser-directories",
+        upButtonQuery: "#FileBrowserUpDirectoryButton"
     })
 
     $('#MediaModalButton').click(function () {

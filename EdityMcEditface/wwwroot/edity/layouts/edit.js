@@ -175,6 +175,10 @@
             return currentFolder;
         }
 
+        this.refresh = function(){
+            loadCurrentFolder();
+        }
+
         function loadCurrentFolder() {
             loadingLifecycle.loading();
             h.rest.get(listFilesUrl + currentFolder, getFilesSuccess, getFilesFail);
@@ -223,7 +227,7 @@
         filename = filename.replace(/^.*?([^\\\/]*)$/, '$1');
         h.rest.upload('edity/upload' + fileBrowser.getCurrentDirectory() + '/' + filename, formData,
         function (data) {
-            alert("File Uploaded");
+            fileBrowser.refresh();
         },
         function (data) {
             alert("File Upload Failed");

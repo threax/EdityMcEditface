@@ -8,6 +8,7 @@ namespace EdityMcEditface.HtmlRenderer
 {
     public class TargetFileInfo
     {
+        private String originalFileName;
         private String extension;
         private String fileNoExtension;
         private String htmlFile;
@@ -22,6 +23,7 @@ namespace EdityMcEditface.HtmlRenderer
         public TargetFileInfo(String file)
         {
             file = detectIndexFile(file);
+            originalFileName = file;
 
             extension = Path.GetExtension(file).ToLowerInvariant();
 
@@ -75,6 +77,14 @@ namespace EdityMcEditface.HtmlRenderer
             get
             {
                 return fileNoExtension;
+            }
+        }
+
+        public String OriginalFileName
+        {
+            get
+            {
+                return originalFileName;
             }
         }
 

@@ -43,6 +43,48 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         /// <summary>
+        /// Erase a file in the project. Does not erase files in the backup location.
+        /// </summary>
+        /// <param name="file"></param>
+        public void eraseProjectFile(string file)
+        {
+            var fullPath = getFullProjectPath(file);
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
+        }
+
+        /// <summary>
+        /// Erase a page in the project. Does not erase files in the backup location.
+        /// Will erase all linked files, the .html, .json, .css and .js files.
+        /// </summary>
+        /// <param name="file"></param>
+        public void erasePage(string file)
+        {
+            var fullPath = getFullProjectPath(file);
+            if (File.Exists(fullPath))
+            {
+                var jsFile = getPageFile(fullPath, fullPath, ".js");
+                if(jsFile != null)
+                {
+                    File.Delete(jsFile);
+                }
+                var cssFile = getPageFile(fullPath, fullPath, ".css");
+                if (cssFile != null)
+                {
+                    File.Delete(cssFile);
+                }
+                var settingsFile = getPageDefinitionFile(fullPath);
+                if (File.Exists(settingsFile))
+                {
+                    File.Delete(settingsFile);
+                }
+                File.Delete(fullPath);
+            }
+        }
+
+        /// <summary>
         /// Determine if a layout exists in the layouts folder.
         /// </summary>
         /// <param name="layoutName"></param>

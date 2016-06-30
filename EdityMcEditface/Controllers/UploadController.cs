@@ -39,9 +39,24 @@ namespace EdityMcEditface.Controllers
         public async Task<IActionResult> Index(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
-            using (Stream stream = fileFinder.writeFile(fileInfo.HtmlFile))
+            using (Stream stream = fileFinder.writeFile(fileInfo.OriginalFileName))
             {
                 await this.Request.Form.Files.First().CopyToAsync(stream);
+            }
+            return StatusCode((int)HttpStatusCode.OK);
+        }
+
+        [HttpDelete("edity/upload/{*file}")]
+        public IActionResult Delete(String file)
+        {
+            TargetFileInfo fileInfo = new TargetFileInfo(file);
+            if (fileInfo.Extension == ".html")
+            {
+                fileFinder.erasePage(fileInfo.HtmlFile);
+            }
+            else
+            {
+                fileFinder.eraseProjectFile(fileInfo.OriginalFileName);
             }
             return StatusCode((int)HttpStatusCode.OK);
         }

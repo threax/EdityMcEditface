@@ -12,7 +12,7 @@ namespace EdityMcEditface.ErrorHandling
     /// typed error class that gets serialized to json. It contains an overall error message
     /// and specific error messages for each field.
     /// </summary>
-    public class ModelStateErrorResult
+    public class ModelStateErrorResult : ErrorResult
     {
         /// <summary>
         /// Constructor, takes the model state and an overall error message.
@@ -20,8 +20,8 @@ namespace EdityMcEditface.ErrorHandling
         /// <param name="modelState">The model state.</param>
         /// <param name="message">An error message that applies to the entire result.</param>
         public ModelStateErrorResult(ModelStateDictionary modelState, String message)
+            :base(message)
         {
-            this.Message = message;
             this.Errors = new Dictionary<String, String>(modelState.ErrorCount);
             foreach (var item in modelState)
             {
@@ -36,11 +36,6 @@ namespace EdityMcEditface.ErrorHandling
                 }
             }
         }
-
-        /// <summary>
-        /// The overall error message
-        /// </summary>
-        public String Message { get; set; }
 
         /// <summary>
         /// The collection of field specific error messages from the model state.

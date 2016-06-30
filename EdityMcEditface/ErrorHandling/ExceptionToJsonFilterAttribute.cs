@@ -57,14 +57,17 @@ namespace EdityMcEditface.ErrorHandling
             //Other exception types become Internal Server Error (500) and are detailed or not depending on settings.
             if (detailedInternalServerError)
             {
-                context.Result = new JsonResult(context.Exception)
+                context.Result = new JsonResult(new ExceptionErrorResult(context.Exception))
                 {
                     StatusCode = (int)HttpStatusCode.InternalServerError
                 };
             }
             else
             {
-                context.Result = new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                context.Result = new JsonResult(new ErrorResult("Internal Server Error"))
+                {
+                    StatusCode = (int)HttpStatusCode.InternalServerError
+                };
             }
         }
     }

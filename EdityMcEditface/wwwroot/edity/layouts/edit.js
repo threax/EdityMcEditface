@@ -28,8 +28,7 @@
     $('[data-edit-save]').click(function () {
         loading.fadeIn(200);
         var blob = new Blob([pen.getContent()], { type: "text/html" });
-        h.rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function ()
-        {
+        h.rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function () {
             loading.fadeOut(200);
         }, true);
         return false;
@@ -77,7 +76,7 @@
             compilingMessage.hide();
         }
 
-        this.starting = function(){
+        this.starting = function () {
             self.hideAll();
             startMessage.show();
         }
@@ -113,7 +112,7 @@
         function () {
             compileButton.prop('disabled', false);
             compilerOutputMessage.succeeded();
-        }, function(){
+        }, function () {
             compileButton.prop('disabled', false);
             compilerOutputMessage.failed();
         });
@@ -121,28 +120,38 @@
     });
     //End Compiler
 
-    var settingsForm = $('#SettingsForm');
-    var settingsUrl = settingsForm.attr('action');
+    var settingsLifecycle = new h.form.ajaxLifecycle({
+        formQuery: '#SettingsForm',
+        loadingDisplayQuery: '#SettingsLoading',
+        mainDisplayQuery: '#SettingsForm'
+    });
 
     $('#SettingsButton').click(function () {
-        h.rest.get(settingsUrl, function (data) {
-            h.form.populate(settingsForm, data);
-        },
-        function () {
-            alert('Could not contact server to load settings');
-        });
+        settingsLifecycle.populateData();
     });
 
-    settingsForm.submit(function () {
-        var data = h.form.serialize(settingsForm);
-        h.rest.post(settingsUrl, data, function () {
-            $('#settingsModal').modal('hide');
-        }, 
-        function (data) {
-            alert(data.message);
-        });
-        return false;
-    });
+    //var settingsForm = $('#SettingsForm');
+    //var settingsUrl = settingsForm.attr('action');
+    //
+    //$('#SettingsButton').click(function () {
+    //    h.rest.get(settingsUrl, function (data) {
+    //        h.form.populate(settingsForm, data);
+    //    },
+    //    function () {
+    //        alert('Could not contact server to load settings');
+    //    });
+    //});
+    //
+    //settingsForm.submit(function () {
+    //    var data = h.form.serialize(settingsForm);
+    //    h.rest.post(settingsUrl, data, function () {
+    //        $('#settingsModal').modal('hide');
+    //    },
+    //    function (data) {
+    //        alert(data.message);
+    //    });
+    //    return false;
+    //});
 
     // toggle editor mode
     //document.querySelector('#mode').addEventListener('click', function ()

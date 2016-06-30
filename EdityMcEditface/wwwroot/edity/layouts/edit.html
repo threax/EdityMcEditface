@@ -54,6 +54,18 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="settingsModalLabel">{docLink} Settings</h4>
                     </div>
+                    <div class="modal-body" id="SettingsLoading">
+                        <div class="center">
+                            <div class="load-linebar center-block">
+                                <div class="rect1"></div>
+                                <div class="rect2"></div>
+                                <div class="rect3"></div>
+                                <div class="rect4"></div>
+                                <div class="rect5"></div>
+                            </div>
+                            <p>Working...</p>
+                        </div>
+                    </div>
                     <form id="SettingsForm" action="{pageSettingsUrl}{docLink}" method="post">
                         <div class="modal-body">
                             <div class="form-group">

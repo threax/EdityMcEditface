@@ -171,6 +171,10 @@
             loadCurrentFolder();
         }
 
+        this.getCurrentDirectory = function(){
+            return currentFolder;
+        }
+
         function loadCurrentFolder() {
             loadingLifecycle.loading();
             h.rest.get(listFilesUrl + currentFolder, getFilesSuccess, getFilesFail);
@@ -211,6 +215,20 @@
 
     $('#MediaModalButton').click(function () {
         fileBrowser.loadFiles("/images");
+    });
+
+    $('#AddMediaForm').submit(function () {
+        var formData = new FormData(this);
+        var filename = $("#FileUploadPicker").val();
+        filename = filename.replace(/^.*?([^\\\/]*)$/, '$1');
+        h.rest.upload('edity/upload' + fileBrowser.getCurrentDirectory() + '/' + filename, formData,
+        function (data) {
+            alert("File Uploaded");
+        },
+        function (data) {
+            alert("File Upload Failed");
+        });
+        return false;
     });
 
     //--------------- End File Browser ----------------

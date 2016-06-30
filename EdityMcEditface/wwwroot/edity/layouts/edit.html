@@ -204,8 +204,13 @@
                             </ol>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button id="AddMediaButton" type="button" class="btn btn-primary">Add</button>
+                            <form class="form-inline" id="AddMediaForm">
+                                <div class="form-group">
+                                    <label for="file">Choose File</label>
+                                    <input id="FileUploadPicker" name="file" type="file" class="form-control"/>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </form>
                         </div>
                     </div>
                     <div id="FileBrowserLoadFailed">

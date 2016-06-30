@@ -8,6 +8,9 @@
   },
 
   "frameworks": {
-    "net452": { }
+    "net452": {
+      "frameworkAssemblies": { "System.ComponentModel.DataAnnotations": "4.0.0.0" }
+
+    }
   }
 }

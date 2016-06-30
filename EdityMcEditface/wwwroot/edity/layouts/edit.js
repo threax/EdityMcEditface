@@ -62,6 +62,7 @@
         return false;
     });
 
+    //Compiler
     function CompilerMessages() {
         var startMessage = $('[data-compile-message-startup]');
         var successMessage = $('[data-compile-message-success]');
@@ -115,6 +116,27 @@
         }, function(){
             compileButton.prop('disabled', false);
             compilerOutputMessage.failed();
+        });
+        return false;
+    });
+    //End Compiler
+
+    var settingsForm = $('#SettingsForm');
+    var settingsUrl = settingsForm.attr('action');
+
+    $('#SettingsButton').click(function () {
+        h.rest.get(settingsUrl, function (data) {
+            h.form.populate(settingsForm, data);
+        },
+        function () {
+            alert('Could not contact server to load settings');
+        });
+    });
+
+    settingsForm.submit(function () {
+        var data = h.form.serialize(settingsForm);
+        h.rest.post(settingsUrl, data, function () {
+            $('#settingsModal').modal('hide');
         });
         return false;
     });

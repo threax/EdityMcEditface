@@ -35,7 +35,8 @@
     }
   },
   "vars": {
-    "uploadUrl": "edity/upload"
+    "uploadUrl": "edity/upload",
+    "pageSettingsUrl": "edity/page/settings"
   },
   "additionalContent": [ "lib/bootstrap/dist/fonts" ],
   "compilers": [

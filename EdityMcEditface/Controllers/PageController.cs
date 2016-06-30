@@ -31,7 +31,7 @@ namespace EdityMcEditface.Controllers
             String title;
             if(!definition.Vars.TryGetValue("title", out title))
             {
-                title = "Untitiled";
+                title = "Untitled";
             }
             return new PageSettings()
             {

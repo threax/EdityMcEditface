@@ -1,4 +1,5 @@
-﻿using EdityMcEditface.HtmlRenderer;
+﻿using EdityMcEditface.ErrorHandling;
+using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.Models.Page;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -39,13 +40,9 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost("{*file}")]
+        [AutoValidate()]
         public void Settings(String file, [FromBody]PageSettings settings)
         {
-            if (!ModelState.IsValid)
-            {
-                throw new ValidationException();
-            }
-
             TargetFileInfo targetFile = new TargetFileInfo(file);
             var definition = fileFinder.getPageDefinition(targetFile);
             definition.Vars["title"] = settings.Title;

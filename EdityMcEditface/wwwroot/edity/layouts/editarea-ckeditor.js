@@ -2,7 +2,7 @@
     var loading = $(".load-linebar");
 
     // config
-    //var editor = document.getElementById('editArea');
+    var editor = document.getElementById('editArea');
 
     CKEDITOR.editorConfig = function (config) {
         // Define changes to default configuration here.
@@ -38,23 +38,16 @@
         config.removeDialogTabs = 'image:advanced;link:advanced';
     };
 
-    CKEDITOR.replace('editArea');
-
-    // create editor
-    //var pen = window.pen = new Pen(options);
-
-    //pen.focus();
-
     var sourceText = $('#source');
 
     $('#EditSource').click(function () {
-        var penContent = 'The content';//pen.getContent();
-        sourceText.val(penContent);
+        var content = editor.innerHTML;
+        sourceText.val(content);
     });
 
     $('[data-edit-save]').click(function () {
         loading.fadeIn(200);
-        var content = 'The content';//pen.getContent();
+        var content = editor.innerHTML;
         var blob = new Blob([content], { type: "text/html" });
         h.rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function () {
             loading.fadeOut(200);

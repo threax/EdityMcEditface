@@ -25,7 +25,8 @@
         config.removeButtons = 'Underline,Subscript,Superscript,Scayt,Maximize,Source,About';
 
         config.allowedContent = true;
-        config.extraPlugins = 'colorbutton,youtube';
+        config.extraPlugins = 'colorbutton,youtube,uploadimage';
+        config.imageUploadUrl = '/edity/upload/pageasset/' + window.location.pathname;
     };
 
     var sourceText = $('#source');

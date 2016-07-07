@@ -67,6 +67,13 @@ gulp.task("copylibs", function () {
                "./node_modules/ckeditor/plugins/link/**/*",
                "./node_modules/ckeditor/plugins/table/**/*",
                "./node_modules/ckeditor/plugins/pastefromword/**/*",
+               "./node_modules/ckeditor/plugins/uploadwidget/**/*",
+               "./node_modules/ckeditor/plugins/uploadimage/**/*",
+               "./node_modules/ckeditor/plugins/notificationaggregator/**/*",
+               "./node_modules/ckeditor/plugins/filetools/**/*",
+               "./node_modules/ckeditor/plugins/widget/**/*",
+               "./node_modules/ckeditor/plugins/lineutils/**/*",
+               "./node_modules/ckeditor/plugins/notification/**/*",
                "./node_modules/ckeditor/plugins/image/**/*"],
         baseName: './node_modules',
         dest: libDir

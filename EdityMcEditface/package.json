@@ -12,7 +12,8 @@
   "dependencies": {
     "bootstrap": "~3.3.6",
     "ckeditor": "~4.5.9",
-    "htmlrest": "https://github.com/threax/htmlrest.git",
-    "jquery": "~2.2.0"
+    "ckeditor-youtube-plugin": "^2.1.1",
+    "jquery": "~2.2.0",
+    "htmlrest": "https://github.com/threax/htmlrest.git"
   }
 }

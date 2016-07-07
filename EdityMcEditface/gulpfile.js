@@ -44,29 +44,44 @@ gulp.task("min:css", function () {
 
 gulp.task("min", ["min:js", "min:css"]);
 
-var nodeLibs = [
-    "./node_modules/jquery/dist/**/*",
-    "./node_modules/bootstrap/dist/**/*",
-    "./node_modules/htmlrest/src/**/*",
-    "./node_modules/ckeditor/ckeditor.js",
-    "./node_modules/ckeditor/styles.js",
-    "./node_modules/ckeditor/contents.css",
-    "./node_modules/ckeditor/skins/moono/**/*",
-    "./node_modules/ckeditor/lang/en.js",
-    "./node_modules/ckeditor/plugins/*.png",
-    "./node_modules/ckeditor/plugins/magicline/**/*",
-];
+gulp.task("copylibs", function () {
+    var libDir = webroot + "lib";
 
-gulp.task("copynodelibs", function () {
-    return gulp.src(nodeLibs, { base: './node_modules' })
-        .pipe(gulp.dest(webroot + "lib"));
+    copyFiles({
+        libs: ["./node_modules/jquery/dist/**/*",
+               "./node_modules/bootstrap/dist/**/*",
+               "./node_modules/htmlrest/src/**/*",
+               "./node_modules/ckeditor/ckeditor.js",
+               "./node_modules/ckeditor/styles.js",
+               "./node_modules/ckeditor/contents.css",
+               "./node_modules/ckeditor/skins/moono/**/*",
+               "./node_modules/ckeditor/lang/en.js",
+               "./node_modules/ckeditor/plugins/*.png",
+               "./node_modules/ckeditor/plugins/magicline/**/*",
+               "./node_modules/ckeditor/plugins/colorbutton/**/*",
+               "./node_modules/ckeditor/plugins/panelbutton/**/*",
+               "./node_modules/ckeditor/plugins/floatpanel/**/*",
+               "./node_modules/ckeditor/plugins/dialog/**/*",
+               "./node_modules/ckeditor/plugins/image/**/*"],
+        baseName: './node_modules',
+        dest: libDir
+    });
+
+    copyFiles({
+        libs: ["./bower_components/pen/src/**/*"],
+        baseName: './bower_components',
+        dest: libDir
+    });
+
+    copyFiles({
+        libs: ["./node_modules/ckeditor-youtube-plugin/youtube/**/*"],
+        baseName: './node_modules/ckeditor-youtube-plugin',
+        dest: libDir + "/ckeditor/plugins"
+    });
+
 });
 
-var bowerLibs = [
-    "./bower_components/pen/src/**/*"
-];
-
-gulp.task("copybowerlibs", function () {
-    return gulp.src(bowerLibs, { base: './bower_components' })
-        .pipe(gulp.dest(webroot + "lib"));
-});
+function copyFiles(settings) {
+    gulp.src(settings.libs, { base: settings.baseName })
+        .pipe(gulp.dest(settings.dest));
+}

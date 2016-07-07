@@ -25,6 +25,7 @@
         config.removeButtons = 'Underline,Subscript,Superscript,Scayt,Maximize,Source,About';
 
         config.allowedContent = true;
+        config.extraPlugins = 'colorbutton,youtube';
     };
 
     var sourceText = $('#source');

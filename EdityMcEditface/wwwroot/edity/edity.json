@@ -29,7 +29,7 @@
         { "file": "/lib/htmlrest/src/table.js" },
         { "file": "/lib/htmlrest/src/form.js" },
         { "file": "/lib/htmlrest/src/components.js" },
-        { "file": "/lib/htmlrestdev/lifecycle.js" }
+        { "file": "/lib/htmlrest/src/lifecycle.js" }
       ],
       "dependencies": [ "jquery" ]
     }

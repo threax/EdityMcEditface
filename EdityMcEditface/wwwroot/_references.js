@@ -14,5 +14,6 @@
 /// <reference path="lib/htmlrest/src/rest.js" />
 /// <reference path="lib/htmlrest/src/storage.js" />
 /// <reference path="lib/htmlrest/src/table.js" />
+/// <reference path="lib/htmlrest/src/lifecycle.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />
-/// <reference path="lib/htmlrestdev/lifecycle.js" />
+/// <reference path="lib/ckeditor/ckeditor.js" />

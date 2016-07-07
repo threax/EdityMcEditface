@@ -52,7 +52,6 @@ gulp.task("copylibs", function () {
                "./node_modules/bootstrap/dist/**/*",
                "./node_modules/htmlrest/src/**/*",
                "./node_modules/ckeditor/ckeditor.js",
-               "./node_modules/ckeditor/styles.js",
                "./node_modules/ckeditor/contents.css",
                "./node_modules/ckeditor/skins/moono/**/*",
                "./node_modules/ckeditor/lang/en.js",
@@ -89,6 +88,12 @@ gulp.task("copylibs", function () {
         libs: ["./node_modules/ckeditor-youtube-plugin/youtube/**/*"],
         baseName: './node_modules/ckeditor-youtube-plugin',
         dest: libDir + "/ckeditor/plugins"
+    });
+
+    copyFiles({
+        libs: ["./custom_components/ckeditor/**/*"],
+        baseName: './custom_components',
+        dest: libDir
     });
 
 });

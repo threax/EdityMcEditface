@@ -51,9 +51,10 @@ var nodeLibs = [
     "./node_modules/ckeditor/ckeditor.js",
     "./node_modules/ckeditor/styles.js",
     "./node_modules/ckeditor/contents.css",
-    "./node_modules/ckeditor/skins/**/*",
-    "./node_modules/ckeditor/lang/**/*",
-    "./node_modules/ckeditor/plugins/**/*",
+    "./node_modules/ckeditor/skins/moono/**/*",
+    "./node_modules/ckeditor/lang/en.js",
+    "./node_modules/ckeditor/plugins/*.png",
+    "./node_modules/ckeditor/plugins/magicline/**/*",
 ];
 
 gulp.task("copynodelibs", function () {

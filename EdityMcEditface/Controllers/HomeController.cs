@@ -77,7 +77,7 @@ namespace EdityMcEditface.NetCore.Controllers
             dr.addTransform(new CreateSettingsForm());
             pageStack.pushLayout("edit.html");
             pageStack.pushLayout("default.html");
-            pageStack.pushLayout("editarea.html");
+            pageStack.pushLayout("editarea-ckeditor.html");
             return build(pageStack, dr);
         }
 

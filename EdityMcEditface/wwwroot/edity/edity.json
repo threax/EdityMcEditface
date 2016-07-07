@@ -13,16 +13,9 @@
       "css": [ "/lib/pen/src/pen.css" ],
       "js": [ { "file": "/lib/pen/src/pen.js" } ]
     },
-    "editPen": {
-      "js": [ { "file": "/edity/layouts/editPen.js" } ],
-      "dependencies": [ "pen" ]
-    },
     "ckeditor": {
-      "js": [ { "file": "/lib/ckeditor/ckeditor.js" } ]
-    },
-    "editCkEditor": {
-      "js": [ { "file": "/edity/layouts/editCkEditor.js" } ],
-      "dependencies": [ "ckeditor" ]
+      "js": [ { "file": "/lib/ckeditor/ckeditor.js" } ],
+      "dependencies": [ "jquery" ]
     },
     "edityLoading": {
       "css": [ "/edity/css/loading.min.css" ]

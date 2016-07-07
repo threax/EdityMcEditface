@@ -62,6 +62,11 @@ gulp.task("copylibs", function () {
                "./node_modules/ckeditor/plugins/panelbutton/**/*",
                "./node_modules/ckeditor/plugins/floatpanel/**/*",
                "./node_modules/ckeditor/plugins/dialog/**/*",
+               "./node_modules/ckeditor/plugins/specialchar/**/*",
+               "./node_modules/ckeditor/plugins/clipboard/**/*",
+               "./node_modules/ckeditor/plugins/link/**/*",
+               "./node_modules/ckeditor/plugins/table/**/*",
+               "./node_modules/ckeditor/plugins/pastefromword/**/*",
                "./node_modules/ckeditor/plugins/image/**/*"],
         baseName: './node_modules',
         dest: libDir

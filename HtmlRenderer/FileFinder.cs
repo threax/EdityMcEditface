@@ -228,6 +228,10 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 throw new FileNotFoundException($"Cannot find page stack file {path}", path);
             }
+            if (path[0] != '\\' && path[0] != '/')
+            {
+                path = '/' + path;
+            }
             return loadPageStackFile(path, realPath);
         }
 
@@ -243,6 +247,10 @@ namespace EdityMcEditface.HtmlRenderer
             if (realPath == null)
             {
                 throw new FileNotFoundException($"Cannot find page stack file {path}", path);
+            }
+            if (path[0] != '\\' && path[0] != '/')
+            {
+                path = '/' + path;
             }
             return loadPageStackFile(path, realPath);
         }

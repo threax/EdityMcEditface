@@ -49,6 +49,7 @@ var nodeLibs = [
     "./node_modules/bootstrap/dist/**/*",
     "./node_modules/htmlrest/src/**/*",
     "./node_modules/json-editor/dist/**/*",
+    "./node_modules/ckeditor/ckeditor.js"
 ];
 
 gulp.task("copynodelibs", function () {

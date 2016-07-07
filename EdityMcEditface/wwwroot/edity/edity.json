@@ -13,6 +13,13 @@
       "css": [ "/lib/pen/src/pen.css" ],
       "js": [ { "file": "/lib/pen/src/pen.js" } ]
     },
+    "editPen": {
+      "js": [ { "file": "/edity/layouts/editPen.js" } ],
+      "dependencies": [ "pen" ]
+    },
+    "ckeditor": {
+      "js": [ { "file": "/lib/ckeditor/ckeditor.js" } ]
+    },
     "edityLoading": {
       "css": [ "/edity/css/loading.min.css" ]
     },

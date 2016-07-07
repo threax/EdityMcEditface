@@ -1,5 +1,5 @@
 ﻿{
-  "linkedContent": [ "bootstrap", "editPen", "htmlrest", "edityLoading", "json-editor" ],
+  "linkedContent": [ "bootstrap", "editPen", "htmlrest", "edityLoading" ],
   "vars": {
     "title": "edit"
   }

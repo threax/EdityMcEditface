@@ -20,6 +20,10 @@
     "ckeditor": {
       "js": [ { "file": "/lib/ckeditor/ckeditor.js" } ]
     },
+    "editCkEditor": {
+      "js": [ { "file": "/edity/layouts/editCkEditor.js" } ],
+      "dependencies": [ "ckeditor" ]
+    },
     "edityLoading": {
       "css": [ "/edity/css/loading.min.css" ]
     },
@@ -35,11 +39,6 @@
         { "file": "/lib/htmlrestdev/lifecycle.js" }
       ],
       "dependencies": [ "jquery" ]
-    },
-    "json-editor": {
-      "js": [
-        { "file": "/lib/json-editor/dist/jsoneditor.js" }
-      ]
     }
   },
   "vars": {

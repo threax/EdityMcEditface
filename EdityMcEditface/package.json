@@ -11,9 +11,8 @@
   },
   "dependencies": {
     "bootstrap": "~3.3.6",
-    "jquery": "~2.2.0",
-    "json-editor": "~0.7.26",
+    "ckeditor": "~4.5.9",
     "htmlrest": "https://github.com/threax/htmlrest.git",
-    "ckeditor": "~4.5.9"
+    "jquery": "~2.2.0"
   }
 }

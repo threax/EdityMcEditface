@@ -48,8 +48,12 @@ var nodeLibs = [
     "./node_modules/jquery/dist/**/*",
     "./node_modules/bootstrap/dist/**/*",
     "./node_modules/htmlrest/src/**/*",
-    "./node_modules/json-editor/dist/**/*",
-    "./node_modules/ckeditor/ckeditor.js"
+    "./node_modules/ckeditor/ckeditor.js",
+    "./node_modules/ckeditor/styles.js",
+    "./node_modules/ckeditor/contents.css",
+    "./node_modules/ckeditor/skins/**/*",
+    "./node_modules/ckeditor/lang/**/*",
+    "./node_modules/ckeditor/plugins/**/*",
 ];
 
 gulp.task("copynodelibs", function () {

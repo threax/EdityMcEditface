@@ -1,4 +1,6 @@
 ﻿(function ($, h) {
+    var loading = $(".load-linebar");
+
     // config
     var options = {
         editor: document.getElementById('editArea'),

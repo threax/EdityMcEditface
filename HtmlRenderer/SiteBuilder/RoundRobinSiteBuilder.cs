@@ -15,9 +15,11 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         private DirectOutputSiteBuilder directOutput;
         private String baseOutputFolder;
         private String outputFullPath;
+        private RoundRobinDeployer deployer;
 
-        public RoundRobinSiteBuilder(SiteBuilderSettings settings)
+        public RoundRobinSiteBuilder(SiteBuilderSettings settings, RoundRobinDeployer deployer)
         {
+            this.deployer = deployer;
             baseOutputFolder = settings.OutDir;
             outputFullPath = Path.GetFullPath(Path.Combine(baseOutputFolder, Guid.NewGuid().ToString()));
             settings.OutDir = outputFullPath;
@@ -29,15 +31,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         {
             await directOutput.BuildSite();
 
-            //Swap virtual directories
-            //This method might need admin access
-            var process = Process.Start(new ProcessStartInfo()
-            {
-                FileName = "appcmd",
-                Arguments = $"set vdir /vdir.name:{settings.CompiledVirtualFolder} /physicalPath:{settings.OutDir}"
-            });
-
-            process.WaitForExit();
+            deployer.Deploy(settings.OutDir);
 
             //Delete old virtual directories
             foreach(var dir in Directory.EnumerateDirectories(baseOutputFolder))

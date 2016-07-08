@@ -16,5 +16,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         public String EdityDir { get; set; } = "edity";
     
         public String CompiledVirtualFolder { get; set; }
+
+        public string SiteName { get; set; }
     }
 }

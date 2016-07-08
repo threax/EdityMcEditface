@@ -60,7 +60,9 @@ namespace EdityMcEditface
                 case "RoundRobin":
                     services.AddTransient<SiteBuilder, RoundRobinSiteBuilder>(s =>
                     {
-                        return new RoundRobinSiteBuilder(createSiteBuilderSettings());
+                        var settings = createSiteBuilderSettings();
+                        //return new RoundRobinSiteBuilder(settings, new AppCmdRoundRobinDeployer(settings.CompiledVirtualFolder));
+                        return new RoundRobinSiteBuilder(settings, new ServerManagerRoundRobinDeployer(settings.SiteName, settings.CompiledVirtualFolder));
                     });
                     break;
                 default:
@@ -148,7 +150,8 @@ namespace EdityMcEditface
                 InDir = Configuration["EditySettings:ProjectPath"],
                 BackupPath = Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]),
                 OutDir = Configuration["EditySettings:OutputPath"],
-                CompiledVirtualFolder = Configuration["EditySettings:CompiledVirtualFolder"]
+                CompiledVirtualFolder = Configuration["EditySettings:CompiledVirtualFolder"],
+                SiteName = Configuration["EditySettings:SiteName"]
             };
         }
     }

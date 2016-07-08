@@ -13,7 +13,8 @@
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc2-final",
     "HtmlRenderer": "1.0.0-*",
     "LibGit2Sharp": "0.22.0",
-    "Swashbuckle": "6.0.0-beta9"
+    "Swashbuckle": "6.0.0-beta9",
+    "Microsoft.Web.Administration": "7.0.0"
   },
 
   "tools": {

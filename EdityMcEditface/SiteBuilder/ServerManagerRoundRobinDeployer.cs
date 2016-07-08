@@ -20,7 +20,7 @@ namespace EdityMcEditface
         public bool Deploy(String outputFolder)
         {
             //This works, but have to be admin
-            using (ServerManager serverManager = new ServerManager("C:\\Users\\AndrewPiper\\Documents\\IISExpress\\config\\applicationhost.config"))
+            using (ServerManager serverManager = String.IsNullOrWhiteSpace(AppHostConfigPath) ? new ServerManager() : new ServerManager(AppHostConfigPath))
             {
                 var site = serverManager.Sites[siteName];
                 if (site != null)
@@ -40,5 +40,7 @@ namespace EdityMcEditface
             }
             return false;
         }
+
+        public String AppHostConfigPath { get; set; }
     }
 }

@@ -62,7 +62,10 @@ namespace EdityMcEditface
                     {
                         var settings = createSiteBuilderSettings();
                         //return new RoundRobinSiteBuilder(settings, new AppCmdRoundRobinDeployer(settings.CompiledVirtualFolder));
-                        return new RoundRobinSiteBuilder(settings, new ServerManagerRoundRobinDeployer(settings.SiteName, settings.CompiledVirtualFolder));
+                        return new RoundRobinSiteBuilder(settings, new ServerManagerRoundRobinDeployer(settings.SiteName, settings.CompiledVirtualFolder)
+                        {
+                            AppHostConfigPath = Configuration["EditySettings:AppHostConfigPath"]
+                        });
                     });
                     break;
                 default:

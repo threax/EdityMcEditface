@@ -44,14 +44,14 @@ namespace EdityMcEditface
         {
             services.AddTransient<FileFinder, FileFinder>(serviceProvider =>
             {
-                var projectFolder = Configuration["EditySettings:ProjectPath"];
+                var projectFolder = getUserProjectFolder("piper.andrew");
                 var backupPath = Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]);
                 return new FileFinder(projectFolder, backupPath);
             });
 
             services.AddTransient<Repository, Repository>(s =>
             {
-                var projectFolder = Configuration["EditySettings:ProjectPath"];
+                var projectFolder = getUserProjectFolder("piper.andrew");
                 return new Repository(projectFolder);
             });
 
@@ -150,12 +150,22 @@ namespace EdityMcEditface
         {
             return new SiteBuilderSettings()
             {
-                InDir = Configuration["EditySettings:ProjectPath"],
+                InDir = getPublishProjectFolder(),
                 BackupPath = Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]),
                 OutDir = Configuration["EditySettings:OutputPath"],
                 CompiledVirtualFolder = Configuration["EditySettings:CompiledVirtualFolder"],
                 SiteName = Configuration["EditySettings:SiteName"]
             };
+        }
+
+        private String getPublishProjectFolder()
+        {
+            return Path.Combine(Configuration["EditySettings:ProjectPath"], "Published");
+        }
+
+        private String getUserProjectFolder(String userName)
+        {
+            return Path.Combine(Configuration["EditySettings:ProjectPath"], "UserRepos", userName);
         }
     }
 }

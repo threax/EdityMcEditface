@@ -34,7 +34,8 @@
 
   "buildOptions": {
     "emitEntryPoint": true,
-    "preserveCompilationContext": true
+    "preserveCompilationContext": true,
+    "copyToOutput": [ "NativeBinaries\\amd64\\git2-785d8c4.dll", "NativeBinaries\\x86\\git2-785d8c4.dll" ]
   },
 
   "runtimeOptions": {
@@ -51,7 +52,7 @@
   },
 
   "scripts": {
-    "prepublish": [ "npm install", "bower install", "gulp clean", "gulp min" ],
+    "prepublish": [ "npm install", "bower install", "gulp clean", "gulp min", "gulp copylibs" ],
     "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
   }
 }

@@ -55,15 +55,21 @@ namespace EdityMcEditface
                 return new Repository(projectFolder);
             });
 
-            services.AddTransient<SiteBuilder, DirectOutputSiteBuilder>(s =>
+            switch (Configuration["EditySettings:Compiler"])
             {
-                return new DirectOutputSiteBuilder(new HtmlRenderer.SiteBuilder.CompilerSettings()
-                {
-                    InDir = Configuration["EditySettings:ProjectPath"],
-                    BackupPath = Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]),
-                    OutDir = Configuration["EditySettings:OutputPath"]
-                });
-            });
+                case "RoundRobin":
+                    services.AddTransient<SiteBuilder, RoundRobinSiteBuilder>(s =>
+                    {
+                        return new RoundRobinSiteBuilder(createSiteBuilderSettings());
+                    });
+                    break;
+                default:
+                    services.AddTransient<SiteBuilder, DirectOutputSiteBuilder>(s =>
+                    {
+                        return new DirectOutputSiteBuilder(createSiteBuilderSettings());
+                    });
+                    break;
+            }
 
             // Add framework services.
             services.AddMvc(o =>
@@ -133,6 +139,17 @@ namespace EdityMcEditface
                     defaults: new { controller = "Home", action = "Index" }
                 );
             });
+        }
+
+        private SiteBuilderSettings createSiteBuilderSettings()
+        {
+            return new SiteBuilderSettings()
+            {
+                InDir = Configuration["EditySettings:ProjectPath"],
+                BackupPath = Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]),
+                OutDir = Configuration["EditySettings:OutputPath"],
+                CompiledVirtualFolder = Configuration["EditySettings:CompiledVirtualFolder"]
+            };
         }
     }
 }

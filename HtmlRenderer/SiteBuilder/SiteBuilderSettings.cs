@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 {
-    public class CompilerSettings
+    public class SiteBuilderSettings
     {
         public String InDir { get; set; }
 
@@ -14,5 +14,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         public String OutDir { get; set; }
 
         public String EdityDir { get; set; } = "edity";
+    
+        public String CompiledVirtualFolder { get; set; }
     }
 }

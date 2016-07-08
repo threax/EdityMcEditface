@@ -9,9 +9,9 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 {
     public class DirectOutputSiteBuilder : SiteBuilder
     {
-        private CompilerSettings settings;
+        private SiteBuilderSettings settings;
 
-        public DirectOutputSiteBuilder(CompilerSettings settings)
+        public DirectOutputSiteBuilder(SiteBuilderSettings settings)
         {
             this.settings = settings;
         }

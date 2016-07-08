@@ -22,10 +22,10 @@
             { name: 'about', groups: ['about'] }
         ];
 
-        config.removeButtons = 'Underline,Subscript,Superscript,Scayt,Maximize,Source,About';
+        config.removeButtons = 'Underline,Subscript,Superscript,Scayt,Maximize,Source,About,Add alert box';
 
         config.allowedContent = true;
-        config.extraPlugins = 'colorbutton,youtube,uploadimage';
+        config.extraPlugins = 'colorbutton,youtube,uploadimage,widgetbootstrap';
         config.imageUploadUrl = '/edity/upload/pageasset/' + window.location.pathname;
     };
 

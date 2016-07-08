@@ -1,5 +1,6 @@
 ﻿using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.HtmlRenderer.Compiler;
+using EdityMcEditface.HtmlRenderer.SiteBuilder;
 using EdityMcEditface.Models.Compiler;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,57 +15,25 @@ namespace EdityMcEditface.Controllers
     [Route("edity/[controller]")]
     public class CompileController : Controller
     {
-        private CompilerSettings settings;
+        private SiteBuilder builder;
 
-        public CompileController(CompilerSettings settings)
+        public CompileController(SiteBuilder builder)
         {
-            this.settings = settings;
+            this.builder = builder;
         }
 
         [HttpPost]
         public async Task<CompilerResult> Index()
         {
-            return await Task.Run<CompilerResult>(() =>
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            await builder.BuildSite();
+
+            return new CompilerResult()
             {
-                //Handle output folder
-                if (Directory.Exists(settings.OutDir))
-                {
-                    Directory.Delete(settings.OutDir, true);
-                }
-
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-
-                Directory.CreateDirectory(settings.OutDir);
-
-                var fileFinder = new FileFinder(settings.InDir, settings.BackupPath);
-
-                var compilers = ContentCompilerFactory.CreateCompilers(settings.InDir, settings.OutDir, settings.BackupPath, fileFinder.Project.Compilers);
-
-                foreach (var file in Directory.EnumerateFiles(settings.InDir, "*.html", SearchOption.AllDirectories))
-                {
-                    var relativeFile = FileFinder.TrimStartingPathChars(file.Substring(settings.InDir.Length));
-                    if (!relativeFile.StartsWith(settings.EdityDir, StringComparison.OrdinalIgnoreCase))
-                    {
-                        foreach (var compiler in compilers)
-                        {
-                            compiler.buildPage(relativeFile);
-                        }
-                    }
-                }
-
-                foreach (var compiler in compilers)
-                {
-                    compiler.copyProjectContent();
-                }
-
-                sw.Stop();
-
-                return new CompilerResult()
-                {
-                    ElapsedSeconds = sw.Elapsed.TotalSeconds
-                };
-            });
+                ElapsedSeconds = sw.Elapsed.TotalSeconds
+            };
         }
     }
 }

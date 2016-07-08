@@ -16,6 +16,7 @@ using Swashbuckle.SwaggerGen.Generator;
 using LibGit2Sharp;
 using EdityMcEditface.Models.Compiler;
 using EdityMcEditface.ErrorHandling;
+using EdityMcEditface.HtmlRenderer.SiteBuilder;
 
 namespace EdityMcEditface
 {
@@ -54,14 +55,14 @@ namespace EdityMcEditface
                 return new Repository(projectFolder);
             });
 
-            services.AddTransient<CompilerSettings, CompilerSettings>(s =>
+            services.AddTransient<SiteBuilder, DirectOutputSiteBuilder>(s =>
             {
-                return new CompilerSettings()
+                return new DirectOutputSiteBuilder(new HtmlRenderer.SiteBuilder.CompilerSettings()
                 {
                     InDir = Configuration["EditySettings:ProjectPath"],
                     BackupPath = Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]),
                     OutDir = Configuration["EditySettings:OutputPath"]
-                };
+                });
             });
 
             // Add framework services.

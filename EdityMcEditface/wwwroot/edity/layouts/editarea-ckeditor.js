@@ -26,7 +26,7 @@
 
         config.allowedContent = true;
         config.extraPlugins = 'colorbutton,youtube,uploadimage,widgetbootstrap';
-        config.imageUploadUrl = '/edity/upload/pageasset/' + window.location.pathname;
+        config.imageUploadUrl = '/edity/Page/Asset/' + window.location.pathname;
     };
 
     var sourceText = $('#source');
@@ -42,7 +42,11 @@
         var blob = new Blob([content], { type: "text/html" });
         h.rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function () {
             loading.fadeOut(200);
-        }, true);
+        },
+        function () {
+            loading.fadeOut(200);
+            alert("Error saving page. Please try again later.");
+        });
         return false;
     });
 

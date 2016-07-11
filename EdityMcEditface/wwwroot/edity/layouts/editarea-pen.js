@@ -30,7 +30,7 @@
         var blob = new Blob([pen.getContent()], { type: "text/html" });
         h.rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function () {
             loading.fadeOut(200);
-        }, true);
+        });
         return false;
     });
 

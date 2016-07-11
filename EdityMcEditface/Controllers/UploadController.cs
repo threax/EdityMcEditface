@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace EdityMcEditface.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = Roles.UploadAnything)]
     public class UploadController : Controller
     {
         private FileFinder fileFinder;
@@ -48,40 +48,6 @@ namespace EdityMcEditface.Controllers
                 await this.Request.Form.Files.First().CopyToAsync(stream);
             }
             return StatusCode((int)HttpStatusCode.OK);
-        }
-
-        [HttpPost("edity/upload/pageasset/{*pageUrl}")]
-        public async Task<ImageUploadResponse> UploadPageAsset(String pageUrl)
-        {
-            ImageUploadResponse imageResponse = new ImageUploadResponse();
-
-            try
-            {
-                TargetFileInfo fileInfo = new TargetFileInfo(pageUrl);
-                var autoFileFolder = Path.Combine("AutoUploadedImages", fileInfo.FileNoExtension);
-                var file = this.Request.Form.Files.First();
-                var autoFileFile = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                var autoPath = Path.Combine(autoFileFolder, autoFileFile);
-                using (Stream stream = fileFinder.writeFile(autoPath))
-                {
-                    await file.CopyToAsync(stream);
-                }
-
-                imageResponse.Uploaded = 1;
-                imageResponse.FileName = autoFileFile;
-                if(autoPath[0] != '\\' && autoPath[0] != '/')
-                {
-                    autoPath = '/' + autoPath;
-                }
-                imageResponse.Url = autoPath;
-            }
-            catch(Exception ex)
-            {
-                imageResponse.Message = ex.Message;
-                imageResponse.Uploaded = 0;
-            }
-
-            return imageResponse;
         }
 
         [HttpDelete("edity/upload/{*file}")]

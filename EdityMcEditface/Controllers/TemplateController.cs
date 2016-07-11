@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = Roles.EditPages)]
     public class TemplateController : Controller
     {
         private FileFinder fileFinder;

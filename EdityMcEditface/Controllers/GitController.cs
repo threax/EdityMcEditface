@@ -9,10 +9,10 @@ using System.IO;
 using EdityMcEditface.Models.Git;
 using Microsoft.AspNetCore.Authorization;
 
-namespace GitService.Controllers
+namespace EdityMcEditface.Controllers
 {
     [Route("edity/[controller]/[action]")]
-    [Authorize]
+    [Authorize(Roles = Roles.EditPages)]
     public class GitController : Controller
     {
         private Repository repo;

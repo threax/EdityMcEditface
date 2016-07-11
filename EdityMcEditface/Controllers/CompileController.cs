@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace EdityMcEditface.Controllers
 {
     [Route("edity/[controller]")]
-    [Authorize]
+    [Authorize(Roles=Roles.Compile)]
     public class CompileController : Controller
     {
         private SiteBuilder builder;

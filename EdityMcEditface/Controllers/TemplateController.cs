@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.Controllers
 {
+    [Authorize]
     public class TemplateController : Controller
     {
         private FileFinder fileFinder;

@@ -1,6 +1,7 @@
 ﻿using EdityMcEditface.ErrorHandling;
 using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.Models.Page;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 namespace EdityMcEditface.Controllers
 {
     [Route("edity/[controller]/[action]")]
+    [Authorize]
     public class PageController : Controller
     {
         private FileFinder fileFinder;

@@ -12,9 +12,11 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Microsoft.Net.Http.Headers;
 using EdityMcEditface.HtmlRenderer.Transforms;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EdityMcEditface.NetCore.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private FileFinder fileFinder;
@@ -71,7 +73,7 @@ namespace EdityMcEditface.NetCore.Controllers
             throw new FileNotFoundException($"Cannot find file type for '{file}'", file);
         }
 
-        public IActionResult buildAsEditor(PageStack pageStack)
+        private IActionResult buildAsEditor(PageStack pageStack)
         {
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);
             dr.addTransform(new CreateSettingsForm());
@@ -81,14 +83,14 @@ namespace EdityMcEditface.NetCore.Controllers
             return build(pageStack, dr);
         }
 
-        public IActionResult buildAsPage(PageStack pageStack, String layout)
+        private IActionResult buildAsPage(PageStack pageStack, String layout)
         {
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);
             pageStack.pushLayout(layout);
             return build(pageStack, dr);
         }
 
-        public IActionResult build(PageStack pageStack, HtmlDocumentRenderer dr)
+        private IActionResult build(PageStack pageStack, HtmlDocumentRenderer dr)
         {
             try
             {
@@ -110,7 +112,7 @@ namespace EdityMcEditface.NetCore.Controllers
             }
         }
 
-        public IActionResult getConvertedDocument(PageStack pageStack, HtmlDocumentRenderer dr)
+        private IActionResult getConvertedDocument(PageStack pageStack, HtmlDocumentRenderer dr)
         {
             var document = dr.getDocument(pageStack.Pages);
             return Content(document.DocumentNode.OuterHtml, new MediaTypeHeaderValue("text/html"));

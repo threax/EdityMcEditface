@@ -7,10 +7,12 @@ using LibGit2Sharp;
 using Microsoft.AspNetCore.StaticFiles;
 using System.IO;
 using EdityMcEditface.Models.Git;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GitService.Controllers
 {
     [Route("edity/[controller]/[action]")]
+    [Authorize]
     public class GitController : Controller
     {
         private Repository repo;

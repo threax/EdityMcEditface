@@ -8,11 +8,13 @@ using System.IO;
 using System.Net;
 using Microsoft.AspNetCore.StaticFiles;
 using EdityMcEditface.Models.CKEditor;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EdityMcEditface.Controllers
 {
+    [Authorize]
     public class UploadController : Controller
     {
         private FileFinder fileFinder;

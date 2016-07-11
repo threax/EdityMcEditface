@@ -17,6 +17,8 @@ using LibGit2Sharp;
 using EdityMcEditface.Models.Compiler;
 using EdityMcEditface.ErrorHandling;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using Microsoft.AspNetCore.Http;
+using EdityMcEditface.Models.Auth;
 
 namespace EdityMcEditface
 {
@@ -54,6 +56,8 @@ namespace EdityMcEditface
                 var projectFolder = getUserProjectFolder("piper.andrew");
                 return new Repository(projectFolder);
             });
+
+            services.AddTransient<AuthChecker, AuthChecker>();
 
             switch (Configuration["EditySettings:Compiler"])
             {
@@ -135,6 +139,15 @@ namespace EdityMcEditface
                 app.UseSwaggerGen();
                 app.UseSwaggerUi();
             }
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions()
+            {
+                AuthenticationScheme = Config.CookieAuthenticationSchemeName,
+                LoginPath = new PathString("/edity/Auth/LogIn/"),
+                AccessDeniedPath = new PathString("/edity/Auth/AccessDenied/"),
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true
+            });
 
             app.UseMvc(routes =>
             {

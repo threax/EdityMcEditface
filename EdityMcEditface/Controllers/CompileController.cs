@@ -2,6 +2,7 @@
 using EdityMcEditface.HtmlRenderer.Compiler;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
 using EdityMcEditface.Models.Compiler;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 namespace EdityMcEditface.Controllers
 {
     [Route("edity/[controller]")]
+    [Authorize]
     public class CompileController : Controller
     {
         private SiteBuilder builder;

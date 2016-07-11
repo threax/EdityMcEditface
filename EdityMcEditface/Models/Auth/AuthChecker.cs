@@ -28,7 +28,12 @@ namespace EdityMcEditface.Models.Auth
         {
             get
             {
-                var identity = new ClaimsIdentity(new AuthIdentity("OnlyUser", "SingleUserAuthentication"));
+                var claims = new[] {
+                    new Claim(ClaimTypes.Role, Roles.EditPages),
+                    new Claim(ClaimTypes.Role, Roles.Compile),
+                    new Claim(ClaimTypes.Role, Roles.UploadAnything),
+                };
+                var identity = new ClaimsIdentity(new AuthIdentity("Anon", "AnonAuthentication"), claims);
                 return new ClaimsPrincipal(identity);
             }
         }

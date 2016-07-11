@@ -46,5 +46,6 @@
       "template": "default.html",
       "extension": ".html"
     }
-  ]
+  ],
+  "editPageStack": [ "edit.html", "{pageLayout}", "editarea-ckeditor.html" ]
 }

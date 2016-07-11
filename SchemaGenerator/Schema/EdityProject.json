@@ -87,6 +87,15 @@
           }
         }
       }
+    },
+    "editPageStack": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
     }
   },
   "definitions": {

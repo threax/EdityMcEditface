@@ -78,18 +78,13 @@ namespace EdityMcEditface.NetCore.Controllers
         {
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);
             dr.addTransform(new CreateSettingsForm());
-            foreach(var editStackItem in fileFinder.Project.EditPageStack)
+            pageStack.pushLayout("edit.html");
+            pageStack.pushLayout("default.html");
+            foreach (var editStackItem in fileFinder.Project.EditPlugins)
             {
-                switch (editStackItem)
-                {
-                    case "{pageLayout}":
-                        pageStack.pushLayout("default.html");
-                        break;
-                    default:
-                        pageStack.pushLayout(editStackItem);
-                        break;
-                }
+                pageStack.pushLayout(editStackItem);
             }
+            pageStack.pushLayout("editarea-ckeditor.html");
 
             return build(pageStack, dr);
         }

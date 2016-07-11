@@ -19,7 +19,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         public List<CompilerDefinition> Compilers { get; set; } = new List<CompilerDefinition>();
 
-        public List<String> EditPageStack { get; set; } = new List<String>();
+        public List<String> EditPlugins { get; set; } = new List<String>();
 
         /// <summary>
         /// Merge two projects together. Does not fully copy the other project and will use objects
@@ -33,13 +33,8 @@ namespace EdityMcEditface.HtmlRenderer
             mergeDictionarys(backupProject.Vars, Vars);
             mergeStringList(backupProject.LinkedContent, LinkedContent);
             mergeStringList(backupProject.AdditionalContent, AdditionalContent);
+            mergeStringList(backupProject.EditPlugins, EditPlugins);
             mergeCompilerLists(backupProject.Compilers, Compilers);
-
-            //Take the edit page stack as all or nothing
-            if(EditPageStack.Count == 0)
-            {
-                EditPageStack = backupProject.EditPageStack;
-            }
 
         }
 

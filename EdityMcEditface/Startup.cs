@@ -19,6 +19,7 @@ using EdityMcEditface.ErrorHandling;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
 using Microsoft.AspNetCore.Http;
 using EdityMcEditface.Models.Auth;
+using EdityMcEditface.Models.Page;
 
 namespace EdityMcEditface
 {
@@ -44,16 +45,28 @@ namespace EdityMcEditface
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<FileFinder, FileFinder>(serviceProvider =>
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddScoped<AuthUserInfo>();
+
+            services.AddTransient<ProjectFinder, ProjectFinder>(s =>
             {
-                var projectFolder = getUserProjectFolder("piper.andrew");
-                var backupPath = Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]);
-                return new FileFinder(projectFolder, backupPath);
+                return new ProjectFinder(Configuration["EditySettings:ProjectPath"], Configuration["EditySettings:BackupFilePath"]);
+            });
+
+            services.AddTransient<FileFinder, FileFinder>(s =>
+            {
+                var userInfo = s.GetRequiredService<AuthUserInfo>();
+                var projectFinder = s.GetRequiredService<ProjectFinder>();
+                var projectFolder = projectFinder.GetUserProjectPath(userInfo.User);
+                return new FileFinder(projectFolder, projectFinder.BackupPath);
             });
 
             services.AddTransient<Repository, Repository>(s =>
             {
-                var projectFolder = getUserProjectFolder("piper.andrew");
+                var userInfo = s.GetRequiredService<AuthUserInfo>();
+                var projectFinder = s.GetRequiredService<ProjectFinder>();
+                var projectFolder = projectFinder.GetUserProjectPath(userInfo.User);
                 return new Repository(projectFolder);
             });
 
@@ -64,7 +77,7 @@ namespace EdityMcEditface
                 case "RoundRobin":
                     services.AddTransient<SiteBuilder, RoundRobinSiteBuilder>(s =>
                     {
-                        var settings = createSiteBuilderSettings();
+                        var settings = createSiteBuilderSettings(s);
                         //return new RoundRobinSiteBuilder(settings, new AppCmdRoundRobinDeployer(settings.CompiledVirtualFolder));
                         return new RoundRobinSiteBuilder(settings, new ServerManagerRoundRobinDeployer(settings.SiteName, settings.CompiledVirtualFolder)
                         {
@@ -75,7 +88,7 @@ namespace EdityMcEditface
                 default:
                     services.AddTransient<SiteBuilder, DirectOutputSiteBuilder>(s =>
                     {
-                        return new DirectOutputSiteBuilder(createSiteBuilderSettings());
+                        return new DirectOutputSiteBuilder(createSiteBuilderSettings(s));
                     });
                     break;
             }
@@ -159,26 +172,18 @@ namespace EdityMcEditface
             });
         }
 
-        private SiteBuilderSettings createSiteBuilderSettings()
+        private SiteBuilderSettings createSiteBuilderSettings(IServiceProvider s)
         {
+            var projectFinder = s.GetRequiredService<ProjectFinder>();
+
             return new SiteBuilderSettings()
             {
-                InDir = getPublishProjectFolder(),
-                BackupPath = Path.Combine(runningFolder, Configuration["EditySettings:BackupFilePath"]),
+                InDir = projectFinder.PublishedProjectPath,
+                BackupPath = projectFinder.BackupPath,
                 OutDir = Configuration["EditySettings:OutputPath"],
                 CompiledVirtualFolder = Configuration["EditySettings:CompiledVirtualFolder"],
                 SiteName = Configuration["EditySettings:SiteName"]
             };
-        }
-
-        private String getPublishProjectFolder()
-        {
-            return Path.Combine(Configuration["EditySettings:ProjectPath"], "Published");
-        }
-
-        private String getUserProjectFolder(String userName)
-        {
-            return Path.Combine(Configuration["EditySettings:ProjectPath"], "UserRepos", userName);
         }
     }
 }

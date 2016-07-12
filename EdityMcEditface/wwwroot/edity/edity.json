@@ -29,7 +29,6 @@
         { "file": "/lib/htmlrest/src/output.js" },
         { "file": "/lib/htmlrest/src/rest.js" },
         { "file": "/lib/htmlrest/src/storage.js" },
-        { "file": "/lib/htmlrest/src/table.js" },
         { "file": "/lib/htmlrest/src/form.js" },
         { "file": "/lib/htmlrest/src/components.js" },
         { "file": "/lib/htmlrest/src/lifecycle.js" }

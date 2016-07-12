@@ -31,11 +31,6 @@
 
     var sourceText = $('#source');
 
-    $('#EditSource').click(function () {
-        var content = editor.innerHTML;
-        sourceText.val(content);
-    });
-
     $('#ApplySourceChanges').submit(function (event) {
         $('#sourceModal').modal('hide');
         return false;
@@ -68,6 +63,16 @@
         name: "PreviewButton",
         created: function (component) {
             
+        }
+    });
+
+    buttonCreation.push({
+        name: "EditSourceNavItem",
+        created: function (button) {
+            button.addEventListener('click', function (evt) {
+                var content = editor.innerHTML;
+                sourceText.val(content);
+            });
         }
     });
 })(jQuery, htmlrest);

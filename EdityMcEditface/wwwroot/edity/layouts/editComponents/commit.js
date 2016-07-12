@@ -1,11 +1,5 @@
 ﻿(function ($, h) {
-    $('#CommitButton').click(function () {
-        h.rest.get('edity/Git/UncommittedChanges', function (data) {
-            var parent = $('.git-uncommitted-changes-list');
-            h.component.empty(parent);
-            h.component.repeat("git-uncommitted-change", parent, data);
-        });
-    });
+    //$('#CommitButton').click();
 
     //--------------- File Browser ----------------
 
@@ -19,4 +13,17 @@
         });
         return false;
     });
+
+    var buttonCreation = h.storage.getInInstance("edit-nav-menu-items", []);
+    buttonCreation.push({
+        name: "CommitNavItem",
+        created: function(button){
+            button.addEventListener('click', function () {
+                h.rest.get('edity/Git/UncommittedChanges', function (data) {
+                    var parent = $('.git-uncommitted-changes-list');
+                    h.component.empty(parent);
+                    h.component.repeat("git-uncommitted-change", parent, data);
+                });
+            });
+        }});
 })(jQuery, htmlrest);

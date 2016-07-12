@@ -51,9 +51,9 @@
             h.component.empty(directoryList);
             h.component.empty(fileList);
             h.component.repeat(directoryComponent, directoryList, data.directories, function (created, data) {
-                created.click(function () {
+                created.addEventListener('click', function (evt) {
                     self.loadFiles(data);
-                    return false;
+                    evt.preventDefault();
                 });
             });
             h.component.repeat(fileComponent, fileList, data.files);
@@ -77,10 +77,6 @@
         directoryListQuery: ".filebrowser-directory-list",
         directoryComponent: "filebrowser-directories",
         upButtonQuery: "#FileBrowserUpDirectoryButton"
-    })
-
-    $('#MediaModalButton').click(function () {
-        fileBrowser.loadFiles("/images");
     });
 
     $('#AddMediaForm').submit(function () {
@@ -95,5 +91,15 @@
             alert("File Upload Failed");
         });
         return false;
+    });
+
+    var buttonCreation = h.storage.getInInstance("edit-nav-menu-items", []);
+    buttonCreation.push({
+        name: "MediaNavItem",
+        created: function (button) {
+            button.addEventListener('click', function () {
+                fileBrowser.loadFiles("/images");
+            });
+        }
     });
 })(jQuery, htmlrest);

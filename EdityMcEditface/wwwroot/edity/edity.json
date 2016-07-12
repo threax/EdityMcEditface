@@ -33,7 +33,7 @@
         { "file": "/lib/htmlrest/src/components.js" },
         { "file": "/lib/htmlrest/src/lifecycle.js" }
       ],
-      "dependencies": [ "jquery" ]
+      "dependencies": [ "jquery", "sizzle" ]
     }
   },
   "vars": {

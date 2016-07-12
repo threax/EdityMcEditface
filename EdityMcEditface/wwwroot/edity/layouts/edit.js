@@ -7,5 +7,9 @@
         navMenu.appendChild(item);
         item.style.display = "";
     });
-    
+
+    var navItems = h.storage.getInInstance("edit-nav-menu-items", []);
+    navItems.forEach(function (item) {
+        h.createComponent(item.name, null, navMenu, item.created);
+    });
 })(Sizzle, htmlrest);

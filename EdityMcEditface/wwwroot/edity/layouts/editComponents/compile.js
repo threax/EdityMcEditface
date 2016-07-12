@@ -36,10 +36,6 @@
 
     var compilerOutputMessage = new CompilerMessages();
 
-    $('#CompileModalButton').click(function () {
-        compilerOutputMessage.starting();
-    });
-
     var compileButton = $('#CompileButton');
 
     compileButton.click(function () {
@@ -55,4 +51,13 @@
         });
         return false;
     });
+
+    var buttonCreation = h.storage.getInInstance("edit-nav-menu-items", []);
+    buttonCreation.push({
+        name: "CompileNavItem",
+        created: function (button) {
+            button.addEventListener('click', function () {
+                compilerOutputMessage.starting();
+            });
+        }});
 })(jQuery, htmlrest);

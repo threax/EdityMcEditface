@@ -6,11 +6,17 @@
         populateFailDisplayQuery: '#SettingsLoadFailed'
     });
 
-    $('#SettingsButton').click(function () {
+    $('#LoadSettingsAgainButton').click(function () {
         settingsLifecycle.populateData();
     });
 
-    $('#LoadSettingsAgainButton').click(function () {
-        settingsLifecycle.populateData();
+    var buttonCreation = h.storage.getInInstance("edit-nav-menu-items", []);
+    buttonCreation.push({
+        name: "SettingsNavItem",
+        created: function (button) {
+            button.addEventListener('click', function () {
+                settingsLifecycle.populateData();
+            });
+        }
     });
 })(jQuery, htmlrest);

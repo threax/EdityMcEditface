@@ -1,0 +1,37 @@
+﻿<!-- compile Modal -->
+<div class="modal fade" id="compileModal" tabindex="-1" role="dialog" aria-labelledby="compileModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="compileModalLabel">Publish</h4>
+            </div>
+            <div class="modal-body">
+                <p data-compile-message-startup>
+                    Press Publish to compile this website.
+                </p>
+                <p data-compile-message-success>
+                    Website has been compiled and published.
+                </p>
+                <p data-compile-message-fail>
+                    An error occured while compiling the website.
+                </p>
+                <div class="center" data-compile-compiling>
+                    <div class="load-linebar center-block">
+                        <div class="rect1"></div>
+                        <div class="rect2"></div>
+                        <div class="rect3"></div>
+                        <div class="rect4"></div>
+                        <div class="rect5"></div>
+                    </div>
+                    <p>Compiling</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="CompileButton" type="button" class="btn btn-primary">Publish</button>
+            </div>
+        </div>
+    </div>
+</div>
+{mainContent}

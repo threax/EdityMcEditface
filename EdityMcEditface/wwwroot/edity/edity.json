@@ -47,5 +47,5 @@
       "extension": ".html"
     }
   ],
-  "editComponents": [ ]
+  "editComponents": [ "editComponents/commit.html", "editComponents/settings.html", "editComponents/compile.html", "editComponents/source.html", "editComponents/media.html" ]
 }

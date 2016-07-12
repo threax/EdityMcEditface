@@ -1,0 +1,28 @@
+﻿<!-- commit Modal -->
+<div class="modal fade" id="commitModal" tabindex="-1" role="dialog" aria-labelledby="commitModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form class="git-commit-form">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="commitModalLabel">Commit</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Changed Files</label>
+                    <ol class="git-uncommitted-changes-list">
+                        <li data-htmlrest-component="git-uncommitted-change">{|filePath}</li>
+                    </ol>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea class="form-control" rows="3" name="message"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Commit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{mainContent}

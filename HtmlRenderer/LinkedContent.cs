@@ -99,7 +99,7 @@ namespace EdityMcEditface.HtmlRenderer
             String currentFormat;
             foreach (var entry in entries)
             {
-                foreach (var js in entry.Javascript)
+                foreach (var js in entry.Js)
                 {
                     currentFormat = getTag(js);
                     sb.AppendFormat(currentFormat, js.File);

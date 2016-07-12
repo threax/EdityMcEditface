@@ -15,6 +15,37 @@
       "items": {
         "type": "string"
       }
+    },
+    "css": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "js": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "x-typeName": "JavascriptEntry",
+        "additionalProperties": false,
+        "properties": {
+          "file": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "async": {
+            "type": "boolean"
+          }
+        }
+      }
     }
   }
 }

@@ -80,7 +80,7 @@ namespace EdityMcEditface.NetCore.Controllers
             dr.addTransform(new CreateSettingsForm());
             pageStack.pushLayout("edit.html");
             pageStack.pushLayout("default.html");
-            foreach (var editStackItem in fileFinder.Project.EditPlugins)
+            foreach (var editStackItem in fileFinder.Project.EditComponents)
             {
                 pageStack.pushLayout(editStackItem);
             }

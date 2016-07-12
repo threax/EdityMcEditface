@@ -83,7 +83,7 @@ namespace EdityMcEditface.HtmlRenderer
                     {
                         yield return css;
                     }
-                    foreach (var js in link.Javascript)
+                    foreach (var js in link.Js)
                     {
                         yield return js.File;
                     }

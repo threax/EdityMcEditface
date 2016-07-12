@@ -36,25 +36,38 @@
         sourceText.val(content);
     });
 
-    $('[data-edit-save]').click(function () {
-        loading.fadeIn(200);
-        var content = editor.innerHTML;
-        var blob = new Blob([content], { type: "text/html" });
-        h.rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function () {
-            loading.fadeOut(200);
-        },
-        function () {
-            loading.fadeOut(200);
-            alert("Error saving page. Please try again later.");
-        });
+    $('#ApplySourceChanges').submit(function (event) {
+        $('#sourceModal').modal('hide');
         return false;
     });
 
-    $('#ApplySourceChanges').submit(function (event) {
-        //pen.destroy();
-        //pen.setContent(sourceText.val());
-        //pen.rebuild();
-        $('#sourceModal').modal('hide');
-        return false;
+    var buttonCreation = h.storage.getInInstance("edit-nav-menu-items", []);
+    buttonCreation.push({
+        name: "SaveButton",
+        created: function (component) {
+            var button = $(component).find("[data-edit-save]")[0];
+
+            button.addEventListener('click', function (evt) {
+                evt.preventDefault();
+
+                loading.fadeIn(200);
+                var content = editor.innerHTML;
+                var blob = new Blob([content], { type: "text/html" });
+                h.rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function () {
+                    loading.fadeOut(200);
+                },
+                function () {
+                    loading.fadeOut(200);
+                    alert("Error saving page. Please try again later.");
+                });
+            });
+        }
+    });
+
+    buttonCreation.push({
+        name: "PreviewButton",
+        created: function (component) {
+            
+        }
     });
 })(jQuery, htmlrest);

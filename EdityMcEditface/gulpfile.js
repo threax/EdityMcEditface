@@ -51,6 +51,7 @@ gulp.task("copylibs", function () {
         libs: ["./node_modules/jquery/dist/**/*",
                "./node_modules/bootstrap/dist/**/*",
                "./node_modules/htmlrest/src/**/*",
+               "./node_modules/sizzle/dist/**/*",
                "./node_modules/ckeditor/ckeditor.js",
                "./node_modules/ckeditor/contents.css",
                "./node_modules/ckeditor/skins/moono/**/*",

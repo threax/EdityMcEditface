@@ -14,6 +14,7 @@
     "ckeditor": "~4.5.9",
     "ckeditor-youtube-plugin": "^2.1.1",
     "jquery": "~2.2.0",
-    "htmlrest": "https://github.com/threax/htmlrest.git"
+    "htmlrest": "https://github.com/threax/htmlrest.git",
+    "sizzle": "~2.3.0"
   }
 }

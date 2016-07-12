@@ -1,6 +1,4 @@
 ﻿(function ($, h) {
-    var loading = $(".load-linebar");
-
     // config
     var editor = document.getElementById('editArea');
 
@@ -40,7 +38,11 @@
     buttonCreation.push({
         name: "SaveButton",
         created: function (component) {
-            var button = $(component).find("[data-edit-save]")[0];
+            var jqComponent = $(component);
+            var button = jqComponent.find("[data-edit-save]")[0];
+
+            var loading = jqComponent.find("#SaveLoadbar");
+            loading.hide();
 
             button.addEventListener('click', function (evt) {
                 evt.preventDefault();

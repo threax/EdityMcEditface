@@ -50,7 +50,6 @@ gulp.task("copylibs", function () {
     copyFiles({
         libs: ["./node_modules/jquery/dist/**/*",
                "./node_modules/bootstrap/dist/**/*",
-               "./node_modules/htmlrest/src/**/*",
                "./node_modules/sizzle/dist/**/*",
                "./node_modules/ckeditor/ckeditor.js",
                "./node_modules/ckeditor/contents.css",
@@ -92,7 +91,8 @@ gulp.task("copylibs", function () {
     });
 
     copyFiles({
-        libs: ["./custom_components/ckeditor/**/*"],
+        libs: ["./custom_components/ckeditor/**/*",
+        "./custom_components/htmlrest/src/**/*", ],
         baseName: './custom_components',
         dest: libDir
     });

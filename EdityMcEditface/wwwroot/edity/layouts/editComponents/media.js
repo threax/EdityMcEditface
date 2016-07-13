@@ -51,9 +51,13 @@
             h.component.empty(directoryList);
             h.component.empty(fileList);
             h.component.repeat(directoryComponent, directoryList, data.directories, function (created, data) {
-                created.addEventListener('click', function (evt) {
-                    self.loadFiles(data);
-                    evt.preventDefault();
+                h.component.bind(created, {
+                    DirectoryButton: {
+                        click: function (evt) {
+                            self.loadFiles(data);
+                            evt.preventDefault();
+                        }
+                    }
                 });
             });
             h.component.repeat(fileComponent, fileList, data.files);

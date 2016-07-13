@@ -97,8 +97,12 @@
     buttonCreation.push({
         name: "MediaNavItem",
         created: function (button) {
-            button.addEventListener('click', function () {
-                fileBrowser.loadFiles("/images");
+            h.component.bind(button, {
+                MediaModalButton: {
+                    click: function(){
+                        fileBrowser.loadFiles("/images");
+                    }
+                }
             });
         }
     });

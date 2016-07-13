@@ -14,8 +14,12 @@
     buttonCreation.push({
         name: "SettingsNavItem",
         created: function (button) {
-            button.addEventListener('click', function () {
-                settingsLifecycle.populateData();
+            h.component.bind(button, {
+                SettingsButton: {
+                    click: function(){
+                        settingsLifecycle.populateData();
+                    }
+                }
             });
         }
     });

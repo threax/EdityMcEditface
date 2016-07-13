@@ -39,41 +39,45 @@
         name: "SaveButton",
         created: function (component) {
             var jqComponent = $(component);
-            var button = jqComponent.find("[data-edit-save]")[0];
 
             var loading = jqComponent.find("#SaveLoadbar");
             loading.hide();
 
-            button.addEventListener('click', function (evt) {
-                evt.preventDefault();
+            h.component.bind(component, {
+                SaveButton: {
+                    click: function (evt) {
+                        evt.preventDefault();
 
-                loading.fadeIn(200);
-                var content = editor.innerHTML;
-                var blob = new Blob([content], { type: "text/html" });
-                h.rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function () {
-                    loading.fadeOut(200);
-                },
-                function () {
-                    loading.fadeOut(200);
-                    alert("Error saving page. Please try again later.");
-                });
+                        loading.fadeIn(200);
+                        var content = editor.innerHTML;
+                        var blob = new Blob([content], { type: "text/html" });
+                        h.rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function () {
+                            loading.fadeOut(200);
+                        },
+                        function () {
+                            loading.fadeOut(200);
+                            alert("Error saving page. Please try again later.");
+                        });
+                    }
+                }
             });
         }
     });
 
     buttonCreation.push({
-        name: "PreviewButton",
-        created: function (component) {
-            
-        }
+        name: "PreviewButton"
     });
 
     buttonCreation.push({
         name: "EditSourceNavItem",
         created: function (button) {
-            button.addEventListener('click', function (evt) {
-                var content = editor.innerHTML;
-                sourceText.val(content);
+            h.component.bind(button, {
+                EditSource: {
+                    click: function () {
+                        var content = editor.innerHTML;
+                        sourceText.val(content);
+                    }
+                }
             });
         }
     });

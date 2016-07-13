@@ -56,8 +56,12 @@
     buttonCreation.push({
         name: "CompileNavItem",
         created: function (button) {
-            button.addEventListener('click', function () {
-                compilerOutputMessage.starting();
+            h.component.bind(button, {
+                CompileModalButton: {
+                    click: function () {
+                        compilerOutputMessage.starting();
+                    }
+                }
             });
         }});
 })(jQuery, htmlrest);

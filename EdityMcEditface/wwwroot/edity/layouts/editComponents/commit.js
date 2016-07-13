@@ -18,7 +18,7 @@
     buttonCreation.push({
         name: "CommitNavItem",
         created: function (button) {
-            h.component.bind(button, {
+            button.bind({
                 CommitButton: {
                     click: function () {
                         h.rest.get('edity/Git/UncommittedChanges', function (data) {

@@ -56,7 +56,7 @@
     buttonCreation.push({
         name: "CompileNavItem",
         created: function (button) {
-            h.component.bind(button, {
+            button.bind({
                 CompileModalButton: {
                     click: function () {
                         compilerOutputMessage.starting();

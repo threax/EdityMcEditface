@@ -6,15 +6,11 @@
         populateFailDisplayQuery: '#SettingsLoadFailed'
     });
 
-    $('#LoadSettingsAgainButton').click(function () {
-        settingsLifecycle.populateData();
-    });
-
     var buttonCreation = h.storage.getInInstance("edit-nav-menu-items", []);
     buttonCreation.push({
         name: "SettingsNavItem",
         created: function (button) {
-            h.component.bind(button, {
+            button.bind({
                 SettingsButton: {
                     click: function(){
                         settingsLifecycle.populateData();

@@ -51,7 +51,7 @@
             h.component.empty(directoryList);
             h.component.empty(fileList);
             h.component.repeat(directoryComponent, directoryList, data.directories, function (created, data) {
-                h.component.bind(created, {
+                created.bind({
                     DirectoryButton: {
                         click: function (evt) {
                             self.loadFiles(data);
@@ -101,7 +101,7 @@
     buttonCreation.push({
         name: "MediaNavItem",
         created: function (button) {
-            h.component.bind(button, {
+            button.bind({
                 MediaModalButton: {
                     click: function(){
                         fileBrowser.loadFiles("/images");

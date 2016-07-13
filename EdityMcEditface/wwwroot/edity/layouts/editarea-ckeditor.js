@@ -40,10 +40,10 @@
         created: function (component) {
             var jqComponent = $(component);
 
-            var loading = jqComponent.find("#SaveLoadbar");
+            var loading = $(component.first("SaveLoadbar"));
             loading.hide();
 
-            h.component.bind(component, {
+            component.bind({
                 SaveButton: {
                     click: function (evt) {
                         evt.preventDefault();
@@ -71,7 +71,7 @@
     buttonCreation.push({
         name: "EditSourceNavItem",
         created: function (button) {
-            h.component.bind(button, {
+            button.bind({
                 EditSource: {
                     click: function () {
                         var content = editor.innerHTML;

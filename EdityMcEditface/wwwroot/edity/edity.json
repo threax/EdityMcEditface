@@ -32,7 +32,8 @@
         { "file": "/lib/htmlrest/src/storage.js" },
         { "file": "/lib/htmlrest/src/form.js" },
         { "file": "/lib/htmlrest/src/components.js" },
-        { "file": "/lib/htmlrest/src/lifecycle.js" }
+        { "file": "/lib/htmlrest/src/lifecycle.js" },
+        { "file": "/lib/htmlrest/src/events.js" }
       ],
       "dependencies": [ "jquery", "sizzle" ]
     }

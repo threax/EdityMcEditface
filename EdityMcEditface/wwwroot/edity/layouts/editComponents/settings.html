@@ -8,7 +8,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="settingsModalLabel">{docLink} Settings</h4>
             </div>
-            <div class="modal-body" id="SettingsLoading">
+            <div class="modal-body" data-htmlrest-binding="load">
                 <div class="center">
                     <div class="load-linebar center-block">
                         <div class="rect1"></div>
@@ -20,7 +20,7 @@
                     <p>Working...</p>
                 </div>
             </div>
-            <form id="SettingsForm" action="{pageSettingsUrl}{docLink}" method="post">
+            <form data-htmlrest-binding="form" action="{pageSettingsUrl}{docLink}" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title</label>
@@ -33,7 +33,7 @@
                     <button class="btn btn-danger">Delete Page</button>
                 </div>
             </form>
-            <div id="SettingsLoadFailed">
+            <div data-htmlrest-binding="fail">
                 <div class="modal-body">
                     <p>Could not load page settings</p>
                 </div>

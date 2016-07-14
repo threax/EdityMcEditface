@@ -1,6 +1,5 @@
 ﻿(function ($, h) {
     var settingsBindings = new h.component.BindingCollection('#settingsModal');
-
     var settingsLifecycle = new h.form.ajaxLifecycle(settingsBindings);
 
     var buttonCreation = h.storage.getInInstance("edit-nav-menu-items", []);

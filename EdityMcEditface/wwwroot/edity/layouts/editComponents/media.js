@@ -1,27 +1,77 @@
-﻿(function ($, h) {
-    function FileBrowser(settings) {
+﻿(function (h) {
+    /**
+     * @constructor
+     */
+    function FileBrowserSettings() {
+        var self = this;
+
+        this.listFilesUrl = "/edity/list",
+        this.fileComponent = "filebrowser-files",
+        this.directoryComponent = "filebrowser-directories",
+
+        this.fileList = "fileList",
+        this.directoryList = "directoryList",
+        this.upButton = "upDirectory"
+
+        this.mainDisplay = "main";
+        this.failDisplay = "fail";
+        this.loadDisplay = "load";
+        
+        this.getFileList = function (bindings) {
+            if (htmlrest.isString(self.fileList)) {
+                return bindings.first(self.fileList);
+            }
+            return self.fileList;
+        }
+
+        this.getDirectoryList = function (bindings) {
+            if (htmlrest.isString(self.directoryList)) {
+                return bindings.first(self.directoryList);
+            }
+            return self.directoryList;
+        }
+
+        this.getUpButton = function (bindings) {
+            if (htmlrest.isString(self.upButton)) {
+                return bindings.first(self.upButton);
+            }
+            return self.upButton;
+        }
+    }
+
+    /**
+     * Create a file browser
+     * @param {htmlrest.component.BindingCollection} bindings
+     * @param {htmlrest.component.FileBrowserSettings} [settings]
+     */
+    function FileBrowser(bindings, settings) {
+        if (settings === undefined) {
+            settings = new FileBrowserSettings();
+        }
+
         var parentFolders = [];
         var currentFolder = undefined;
 
         var listFilesUrl = settings.listFilesUrl;
 
-        var directoryList = $(settings.directoryListQuery);
+        var directoryList = settings.getDirectoryList(bindings);
         var directoryComponent = settings.directoryComponent;
 
-        var fileList = $(settings.fileListQuery);
+        var fileList = settings.getFileList(bindings);
         var fileComponent = settings.fileComponent;
 
-        var upButton = $(settings.upButtonQuery);
-        upButton.click(function () {
+        var upButton = settings.getUpButton(bindings);
+        upButton.addEventListener('click', function () {
             currentFolder = parentFolders.pop();
             loadCurrentFolder();
         });
 
-        var loadingLifecycle = new h.lifecycle.ajaxLoad({
-            loadingDisplayQuery: '#FileBrowserLoading',
-            mainDisplayQuery: '#FileBrowserDisplay',
-            loadingFailDisplayQuery: '#FileBrowserLoadFailed'
-        });
+        var loadDisplayFailSettings = new h.lifecycle.LoadDisplayFailSettings();
+        loadDisplayFailSettings.mainDisplay = settings.mainDisplay;
+        loadDisplayFailSettings.failDisplay = settings.failDisplay;
+        loadDisplayFailSettings.loadDisplay = settings.loadDisplay;
+
+        var loadingLifecycle = new h.lifecycle.LoadDisplayFail(bindings, loadDisplayFailSettings);
 
         var self = this;
 
@@ -62,10 +112,10 @@
             });
             h.component.repeat(fileComponent, fileList, data.files);
             if (parentFolders.length === 0) {
-                upButton.hide();
+                upButton.style.display = "none";
             }
             else {
-                upButton.show();
+                upButton.style.display = "";
             }
         }
 
@@ -74,27 +124,28 @@
         }
     };
 
-    var fileBrowser = new FileBrowser({
-        listFilesUrl: "/edity/list",
-        fileListQuery: ".filebrowser-file-list",
-        fileComponent: "filebrowser-files",
-        directoryListQuery: ".filebrowser-directory-list",
-        directoryComponent: "filebrowser-directories",
-        upButtonQuery: "#FileBrowserUpDirectoryButton"
-    });
+    var bindings = new htmlrest.component.BindingCollection("#mediaModal");
 
-    $('#AddMediaForm').submit(function () {
-        var formData = new FormData(this);
-        var filename = $("#FileUploadPicker").val();
-        filename = filename.replace(/^.*?([^\\\/]*)$/, '$1');
-        h.rest.upload('edity/upload' + fileBrowser.getCurrentDirectory() + '/' + filename, formData,
-        function (data) {
-            fileBrowser.refresh();
-        },
-        function (data) {
-            alert("File Upload Failed");
-        });
-        return false;
+    var fileBrowser = new FileBrowser(bindings);
+    var fileUploadPicker = bindings.first("FileUploadPicker");
+
+    bindings.bind({
+        AddMediaForm: {
+            submit: function (evt) {
+                evt.preventDefault();
+
+                var formData = new FormData(this);
+                var filename = fileUploadPicker.value;
+                filename = filename.replace(/^.*?([^\\\/]*)$/, '$1');
+                h.rest.upload('edity/upload' + fileBrowser.getCurrentDirectory() + '/' + filename, formData,
+                function (data) {
+                    fileBrowser.refresh();
+                },
+                function (data) {
+                    alert("File Upload Failed");
+                });
+            }
+        }
     });
 
     var buttonCreation = h.storage.getInInstance("edit-nav-menu-items", []);
@@ -110,4 +161,4 @@
             });
         }
     });
-})(jQuery, htmlrest);
+})(htmlrest);

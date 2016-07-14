@@ -8,7 +8,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="mediaModalLabel">Media</h4>
             </div>
-            <div class="modal-body" id="FileBrowserLoading">
+            <div class="modal-body" data-htmlrest-binding="load">
                 <div class="center">
                     <div class="load-linebar center-block">
                         <div class="rect1"></div>
@@ -20,27 +20,27 @@
                     <p>Working...</p>
                 </div>
             </div>
-            <div id="FileBrowserDisplay">
+            <div data-htmlrest-binding="main">
                 <div class="modal-body">
-                    <button id="FileBrowserUpDirectoryButton" type="button" class="btn btn-default">Up</button>
-                    <ol class="filebrowser-directory-list">
+                    <button data-htmlrest-binding="upDirectory" type="button" class="btn btn-default">Up</button>
+                    <ol class="filebrowser-directory-list" data-htmlrest-binding="directoryList">
                         <li data-htmlrest-binding="DirectoryButton" data-htmlrest-component="filebrowser-directories">{|this}</li>
                     </ol>
-                    <ol class="filebrowser-file-list">
+                    <ol class="filebrowser-file-list" data-htmlrest-binding="fileList">
                         <li data-htmlrest-component="filebrowser-files"><a href="{|this}" target="_blank">{|this}</a></li>
                     </ol>
                 </div>
                 <div class="modal-footer">
-                    <form class="form-inline" id="AddMediaForm">
+                    <form class="form-inline" data-htmlrest-binding="AddMediaForm">
                         <div class="form-group">
                             <label for="file">Choose File</label>
-                            <input id="FileUploadPicker" name="file" type="file" class="form-control" />
+                            <input data-htmlrest-binding="FileUploadPicker" name="file" type="file" class="form-control" />
                         </div>
                         <button type="submit" class="btn btn-primary">Add</button>
                     </form>
                 </div>
             </div>
-            <div id="FileBrowserLoadFailed">
+            <div data-htmlrest-binding="fail">
                 <div class="modal-body">
                     <p>Could not connect to server to load files.</p>
                 </div>

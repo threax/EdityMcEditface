@@ -17,6 +17,7 @@
     },
     "EdityMcEditface": {
       "commandName": "Project",
+      "workingDirectory": "C:\\Development\\htmlrest",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/.html",
       "environmentVariables": {

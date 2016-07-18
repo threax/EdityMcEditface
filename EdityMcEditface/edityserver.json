@@ -1,0 +1,9 @@
+﻿{
+  "Compiler": "RoundRobin",
+  "ProjectPath": "C:\\Development\\EdityTestDir\\repos\\mycourses-support",
+  "OutputPath": "C:\\Development\\EdityTestDir\\compiled\\mycourses-support",
+  "CompiledVirtualFolder": "MyCoursesSupportStatic/",
+  "SiteName": "MyCoursesSupportStatic",
+  "AppHostConfigPath": null,
+  "ProjectMode": "OneRepoPerUser"
+}

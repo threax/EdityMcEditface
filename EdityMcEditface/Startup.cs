@@ -32,15 +32,63 @@ namespace EdityMcEditface
         {
             this.env = env;
 
+            String siteRootPath = runningFolder;
+            if (env.IsEnvironment("Development"))
+            {
+                if (!Directory.Exists(Path.Combine(siteRootPath, "wwwroot")))
+                {
+                    //Probably running inside the output folder, go up the appropriate number of directories
+                    siteRootPath = Path.GetFullPath(Path.Combine(runningFolder, "../../../../"));
+                    if (!Directory.Exists(Path.Combine(siteRootPath, "wwwroot")))
+                    {
+                        throw new Exception("Cannot find site root folder containing a backup wwwroot folder");
+                    }
+                }
+            }
+
             var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
+                .SetBasePath(siteRootPath)
+                .AddInMemoryCollection(new Dictionary<String, String>
+                {
+                    { "EditySettings:ReadFromCurrentDirectory", "false" }
+                })
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            String editySettingsRoot = siteRootPath;
+            bool readSettingsFromCurrent;
+            if (!bool.TryParse(Configuration["EditySettings:ReadFromCurrentDirectory"], out readSettingsFromCurrent))
+            {
+                readSettingsFromCurrent = false;
+            }
+            if (readSettingsFromCurrent)
+            {
+                editySettingsRoot = Path.Combine(Directory.GetCurrentDirectory(), "edity");
+            }
+
+            builder = new ConfigurationBuilder()
+            .SetBasePath(editySettingsRoot)
+            .AddInMemoryCollection(new Dictionary<String, String>
+            {
+                    { "ProjectMode", "SingleRepo" },
+                    { "Compiler", "Direct" },
+                    { "OutputPath", Path.Combine(Directory.GetCurrentDirectory(), "Compiled") },
+                    { "CompiledVirtualFolder", "" },
+                    { "SiteName", "" },
+                    { "ProjectPath", Directory.GetCurrentDirectory() },
+                    { "BackupFilePath", Path.Combine(siteRootPath, "wwwroot") }
+            })
+            .AddJsonFile("edityserver.json", optional: true, reloadOnChange: true)
+            .AddJsonFile($"edityserver.{env.EnvironmentName}.json", optional: true);
+
+            EdityServerConfiguration = builder.Build();
         }
 
         public IConfigurationRoot Configuration { get; }
+
+        public IConfigurationRoot EdityServerConfiguration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -49,19 +97,19 @@ namespace EdityMcEditface
 
             services.AddScoped<AuthUserInfo>();
 
-            switch (Configuration["EditySettings:ProjectMode"])
+            switch (EdityServerConfiguration["ProjectMode"])
             {
                 case "SingleRepo":
+                default:
                     services.AddTransient<ProjectFinder, OneRepo>(s =>
                     {
-                        return new OneRepo(Configuration["EditySettings:ProjectPath"], Configuration["EditySettings:BackupFilePath"]);
+                        return new OneRepo(EdityServerConfiguration["ProjectPath"], EdityServerConfiguration["BackupFilePath"]);
                     });
                     break;
                 case "OneRepoPerUser":
-                default:
                     services.AddTransient<ProjectFinder, OneRepoPerUser>(s =>
                     {
-                        return new OneRepoPerUser(Configuration["EditySettings:ProjectPath"], Configuration["EditySettings:BackupFilePath"]);
+                        return new OneRepoPerUser(EdityServerConfiguration["ProjectPath"], EdityServerConfiguration["BackupFilePath"]);
                     });
                     break;
             }
@@ -84,7 +132,7 @@ namespace EdityMcEditface
 
             services.AddTransient<AuthChecker, AuthChecker>();
 
-            switch (Configuration["EditySettings:Compiler"])
+            switch (EdityServerConfiguration["Compiler"])
             {
                 case "RoundRobin":
                     services.AddTransient<SiteBuilder, RoundRobinSiteBuilder>(s =>
@@ -93,10 +141,11 @@ namespace EdityMcEditface
                         //return new RoundRobinSiteBuilder(settings, new AppCmdRoundRobinDeployer(settings.CompiledVirtualFolder));
                         return new RoundRobinSiteBuilder(settings, new ServerManagerRoundRobinDeployer(settings.SiteName, settings.CompiledVirtualFolder)
                         {
-                            AppHostConfigPath = Configuration["EditySettings:AppHostConfigPath"]
+                            AppHostConfigPath = EdityServerConfiguration["AppHostConfigPath"]
                         });
                     });
                     break;
+                case "Direct":
                 default:
                     services.AddTransient<SiteBuilder, DirectOutputSiteBuilder>(s =>
                     {
@@ -167,7 +216,7 @@ namespace EdityMcEditface
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {
-                AuthenticationScheme = Config.CookieAuthenticationSchemeName,
+                AuthenticationScheme = AuthenticationConfig.CookieAuthenticationSchemeName,
                 LoginPath = new PathString("/edity/Auth/LogIn/"),
                 AccessDeniedPath = new PathString("/edity/Auth/AccessDenied/"),
                 AutomaticAuthenticate = true,
@@ -192,9 +241,9 @@ namespace EdityMcEditface
             {
                 InDir = projectFinder.PublishedProjectPath,
                 BackupPath = projectFinder.BackupPath,
-                OutDir = Configuration["EditySettings:OutputPath"],
-                CompiledVirtualFolder = Configuration["EditySettings:CompiledVirtualFolder"],
-                SiteName = Configuration["EditySettings:SiteName"]
+                OutDir = EdityServerConfiguration["OutputPath"],
+                CompiledVirtualFolder = EdityServerConfiguration["CompiledVirtualFolder"],
+                SiteName = EdityServerConfiguration["SiteName"]
             };
         }
     }

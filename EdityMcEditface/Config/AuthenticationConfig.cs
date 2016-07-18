@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface
 {
-    public static class Config
+    public static class AuthenticationConfig
     {
         public const String CookieAuthenticationSchemeName = "EdityAuthenticationScheme";
     }

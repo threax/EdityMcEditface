@@ -20,7 +20,7 @@ namespace EdityMcEditface.Models.Auth
         {
             get
             {
-                return Config.CookieAuthenticationSchemeName;
+                return AuthenticationConfig.CookieAuthenticationSchemeName;
             }
         }
 

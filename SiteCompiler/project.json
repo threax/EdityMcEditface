@@ -6,9 +6,8 @@
 
   "dependencies": {
     "HtmlRenderer": "1.0.0-*",
-    "Microsoft.Extensions.Configuration.CommandLine": "1.0.0-rc2-final",
-    "Newtonsoft.Json": "8.0.3",
-    "System.Runtime.Serialization.Primitives": "4.0.10-*"
+    "Microsoft.Extensions.Configuration.CommandLine": "1.0.0",
+    "Newtonsoft.Json": "9.0.1"
   },
 
   "frameworks": {

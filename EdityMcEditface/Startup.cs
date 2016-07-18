@@ -20,6 +20,7 @@ using EdityMcEditface.HtmlRenderer.SiteBuilder;
 using Microsoft.AspNetCore.Http;
 using EdityMcEditface.Models.Auth;
 using EdityMcEditface.Models.Page;
+using Swashbuckle.Swagger.Model;
 
 namespace EdityMcEditface
 {
@@ -209,7 +210,7 @@ namespace EdityMcEditface
 
             if (env.IsEnvironment("Development"))
             {
-                app.UseSwaggerGen();
+                app.UseSwagger();
                 app.UseSwaggerUi();
             }
 

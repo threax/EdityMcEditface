@@ -65,7 +65,7 @@ namespace EdityMcEditface
             }
             if (readSettingsFromCurrent)
             {
-                editySettingsRoot = Path.Combine(Directory.GetCurrentDirectory(), "edity");
+                editySettingsRoot = Path.Combine(Directory.GetCurrentDirectory());
             }
 
             builder = new ConfigurationBuilder()
@@ -138,7 +138,6 @@ namespace EdityMcEditface
                     services.AddTransient<SiteBuilder, RoundRobinSiteBuilder>(s =>
                     {
                         var settings = createSiteBuilderSettings(s);
-                        //return new RoundRobinSiteBuilder(settings, new AppCmdRoundRobinDeployer(settings.CompiledVirtualFolder));
                         return new RoundRobinSiteBuilder(settings, new ServerManagerRoundRobinDeployer(settings.SiteName, settings.CompiledVirtualFolder)
                         {
                             AppHostConfigPath = EdityServerConfiguration["AppHostConfigPath"]

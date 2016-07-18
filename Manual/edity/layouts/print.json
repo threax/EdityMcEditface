@@ -1,0 +1,4 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/threax/EdityMcEditface/master/SchemaGenerator/Schema/PageDefinition.json",
+  "linkedContent": [ "bootstrap" ]
+}

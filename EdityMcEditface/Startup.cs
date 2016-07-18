@@ -49,10 +49,22 @@ namespace EdityMcEditface
 
             services.AddScoped<AuthUserInfo>();
 
-            services.AddTransient<ProjectFinder, ProjectFinder>(s =>
+            switch (Configuration["EditySettings:ProjectMode"])
             {
-                return new ProjectFinder(Configuration["EditySettings:ProjectPath"], Configuration["EditySettings:BackupFilePath"]);
-            });
+                case "SingleRepo":
+                    services.AddTransient<ProjectFinder, OneRepo>(s =>
+                    {
+                        return new OneRepo(Configuration["EditySettings:ProjectPath"], Configuration["EditySettings:BackupFilePath"]);
+                    });
+                    break;
+                case "OneRepoPerUser":
+                default:
+                    services.AddTransient<ProjectFinder, OneRepoPerUser>(s =>
+                    {
+                        return new OneRepoPerUser(Configuration["EditySettings:ProjectPath"], Configuration["EditySettings:BackupFilePath"]);
+                    });
+                    break;
+            }
 
             services.AddTransient<FileFinder, FileFinder>(s =>
             {

@@ -10,29 +10,12 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.Models.Page
 {
-    public class ProjectFinder
+    public interface ProjectFinder
     {
-        String projectFolder;
+        String GetUserProjectPath(String user);
 
-        public ProjectFinder(String projectFolder, String backupPath)
-        {
-            this.projectFolder = projectFolder;
-            this.BackupPath = backupPath;
-        }
+        String PublishedProjectPath { get; }
 
-        public String GetUserProjectPath(String user)
-        {
-            return Path.Combine(projectFolder, "UserRepos", user);
-        }
-
-        public String PublishedProjectPath
-        {
-            get
-            {
-                return Path.Combine(projectFolder, "Published");
-            }
-        }
-
-        public String BackupPath { get; private set; }
+        String BackupPath { get; }
     }
 }

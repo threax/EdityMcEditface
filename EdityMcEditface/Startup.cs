@@ -59,12 +59,7 @@ namespace EdityMcEditface
             Configuration = builder.Build();
 
             String editySettingsRoot = siteRootPath;
-            bool readSettingsFromCurrent;
-            if (!bool.TryParse(Configuration["EditySettings:ReadFromCurrentDirectory"], out readSettingsFromCurrent))
-            {
-                readSettingsFromCurrent = false;
-            }
-            if (readSettingsFromCurrent)
+            if (Configuration.getVal("EditySettings:ReadFromCurrentDirectory"))
             {
                 editySettingsRoot = Path.Combine(Directory.GetCurrentDirectory());
             }

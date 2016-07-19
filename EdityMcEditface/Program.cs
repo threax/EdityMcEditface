@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using EdityMcEditface.NetCore.Controllers;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
+using System.Threading;
+using System.Net.Sockets;
+using System.Net;
 
 namespace EdityMcEditface
 {
@@ -14,6 +18,7 @@ namespace EdityMcEditface
         public static void Main(string[] args)
         {
             var config = new ConfigurationBuilder()
+                .AddCommandLine(args)
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("hosting.json", optional: true)
                 .Build();
@@ -23,10 +28,33 @@ namespace EdityMcEditface
                 .UseConfiguration(config)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
+                .UseStartup<Startup>();
 
-            host.Run();
+            var browseUrl = config["browse"];
+            if (!String.IsNullOrEmpty(browseUrl))
+            {
+                String hostUrl = "http://localhost:" + FreeTcpPort();
+                host.UseUrls(hostUrl);
+                var uri = new Uri(new Uri(hostUrl), browseUrl);
+                ThreadPool.QueueUserWorkItem((a) =>
+                {
+                    Thread.Sleep(200);
+                    Process.Start(uri.ToString());
+                });
+            }
+
+            host.Build().Run();
+        }
+
+        //This has race conditions, but only used when the browser is being opened from the command line
+        //which should basically always work in practice, dont call this for any other reason
+        static int FreeTcpPort()
+        {
+            TcpListener l = new TcpListener(IPAddress.Loopback, 0);
+            l.Start();
+            int port = ((IPEndPoint)l.LocalEndpoint).Port;
+            l.Stop();
+            return port;
         }
     }
 }

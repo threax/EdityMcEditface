@@ -17,16 +17,21 @@ namespace EdityMcEditface
     {
         public static void Main(string[] args)
         {
+
+#if LOCAL_RUN_ENABLED
             var commandLineConfig = new ConfigurationBuilder()
                 .AddCommandLine(args)
                 .Build();
+#endif
 
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseConfiguration(commandLineConfig)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>();
+
+#if LOCAL_RUN_ENABLED
+            host.UseConfiguration(commandLineConfig);
 
             var browseUrl = commandLineConfig["browse"];
             if (!String.IsNullOrEmpty(browseUrl))
@@ -40,10 +45,12 @@ namespace EdityMcEditface
                     Process.Start(uri.ToString());
                 });
             }
+#endif
 
             host.Build().Run();
         }
 
+#if LOCAL_RUN_ENABLED
         //This has race conditions, but only used when the browser is being opened from the command line
         //which should basically always work in practice, dont call this for any other reason
         static int FreeTcpPort()
@@ -54,5 +61,6 @@ namespace EdityMcEditface
             l.Stop();
             return port;
         }
+#endif
     }
 }

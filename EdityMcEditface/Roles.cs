@@ -10,5 +10,6 @@ namespace EdityMcEditface
         public const String EditPages = "EditPages";
         public const String UploadAnything = "UploadAnything";
         public const String Compile = "Compile";
+        public const String Shutdown = "Shutdown";
     }
 }

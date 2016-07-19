@@ -17,20 +17,18 @@ namespace EdityMcEditface
     {
         public static void Main(string[] args)
         {
-            var config = new ConfigurationBuilder()
+            var commandLineConfig = new ConfigurationBuilder()
                 .AddCommandLine(args)
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("hosting.json", optional: true)
                 .Build();
 
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseConfiguration(config)
+                .UseConfiguration(commandLineConfig)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>();
 
-            var browseUrl = config["browse"];
+            var browseUrl = commandLineConfig["browse"];
             if (!String.IsNullOrEmpty(browseUrl))
             {
                 String hostUrl = "http://localhost:" + FreeTcpPort();

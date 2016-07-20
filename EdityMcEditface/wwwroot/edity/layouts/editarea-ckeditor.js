@@ -1,4 +1,9 @@
-﻿(function ($, h) {
+﻿"use strict";
+
+jsns.run(function (using) {
+    var storage = using("htmlrest.storage");
+    var rest = using("htmlrest.rest");
+
     // config
     var editor = document.getElementById('editArea');
 
@@ -34,7 +39,7 @@
         return false;
     });
 
-    var buttonCreation = h.storage.getInInstance("edit-nav-menu-items", []);
+    var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
     buttonCreation.push({
         name: "SaveButton",
         created: function (component) {
@@ -51,7 +56,7 @@
                         loading.fadeIn(200);
                         var content = editor.innerHTML;
                         var blob = new Blob([content], { type: "text/html" });
-                        h.rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function () {
+                        rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function () {
                             loading.fadeOut(200);
                         },
                         function () {
@@ -81,4 +86,4 @@
             });
         }
     });
-})(jQuery, htmlrest);
+});

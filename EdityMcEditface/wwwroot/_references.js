@@ -1,4 +1,4 @@
-﻿/// <autosync enabled="true" />
+﻿/// <autosync enabled="false" />
 /// <reference path="../bower_components/pen/src/pen.js" />
 /// <reference path="../custom_components/ckeditor/config.js" />
 /// <reference path="../custom_components/ckeditor/plugins/widgetbootstrap/dialogs/widgetbootstrapAlert.js" />

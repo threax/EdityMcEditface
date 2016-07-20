@@ -1,4 +1,9 @@
-﻿(function ($, h) {
+﻿"use strict";
+
+jsns.run(function (using) {
+    var storage = using("htmlrest.storage");
+    var rest = using("htmlrest.rest");
+
     function CompilerMessages() {
         var startMessage = $('[data-compile-message-startup]');
         var successMessage = $('[data-compile-message-success]');
@@ -41,7 +46,7 @@
     compileButton.click(function () {
         compileButton.prop('disabled', true);
         compilerOutputMessage.compiling();
-        h.rest.post('/edity/Compile', {},
+        rest.post('/edity/Compile', {},
         function () {
             compileButton.prop('disabled', false);
             compilerOutputMessage.succeeded();
@@ -52,7 +57,7 @@
         return false;
     });
 
-    var buttonCreation = h.storage.getInInstance("edit-nav-menu-items", []);
+    var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
     buttonCreation.push({
         name: "CompileNavItem",
         created: function (button) {
@@ -64,4 +69,4 @@
                 }
             });
         }});
-})(jQuery, htmlrest);
+});

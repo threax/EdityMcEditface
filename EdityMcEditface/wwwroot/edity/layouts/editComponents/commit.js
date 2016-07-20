@@ -1,11 +1,14 @@
-﻿(function ($, h) {
-    //$('#CommitButton').click();
+﻿"use strict";
 
-    //--------------- File Browser ----------------
+jsns.run(function (using) {
+    var form = using("htmlrest.form");
+    var storage = using("htmlrest.storage");
+    var component = using("htmlrest.components");
+    var rest = using("htmlrest.rest");
 
     $(".git-commit-form").submit(function (event) {
-        var data = h.form.serialize($(this));
-        h.rest.post('edity/Git/Commit', data,
+        var data = form.serialize($(this));
+        rest.post('edity/Git/Commit', data,
         function (data) {
             $('#commitModal').modal('hide');
         }, function (data) {
@@ -14,20 +17,20 @@
         return false;
     });
 
-    var buttonCreation = h.storage.getInInstance("edit-nav-menu-items", []);
+    var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
     buttonCreation.push({
         name: "CommitNavItem",
         created: function (button) {
             button.bind({
                 CommitButton: {
                     click: function () {
-                        h.rest.get('edity/Git/UncommittedChanges', function (data) {
+                        rest.get('edity/Git/UncommittedChanges', function (data) {
                             var parent = $('.git-uncommitted-changes-list');
-                            h.component.empty(parent);
-                            h.component.repeat("git-uncommitted-change", parent, data);
+                            component.empty(parent);
+                            component.repeat("git-uncommitted-change", parent, data);
                         });
                     }
                 }
             });
         }});
-})(jQuery, htmlrest);
+});

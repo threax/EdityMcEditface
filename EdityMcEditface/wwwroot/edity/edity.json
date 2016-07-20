@@ -25,15 +25,22 @@
     },
     "htmlrest": {
       "js": [
-        { "file": "/lib/htmlrest/src/polyfill.js" },
+        { "file": "/lib/htmlrest/src/jsns.js" },
+        { "file": "/lib/htmlrest/src/bindingcollection.js" },
+        { "file": "/lib/htmlrest/src/components.js" },
+        { "file": "/lib/htmlrest/src/domquery.js" },
+        { "file": "/lib/htmlrest/src/escape.js" },
+        { "file": "/lib/htmlrest/src/events.js" },
+        { "file": "/lib/htmlrest/src/form.js" },
+        { "file": "/lib/htmlrest/src/formlifecycle.js" },
+        { "file": "/lib/htmlrest/src/loaddisplayfail.js" },
+        { "file": "/lib/htmlrest/src/noanimation.js" },
         { "file": "/lib/htmlrest/src/output.js" },
-        { "file": "/lib/htmlrest/src/animate.js" },
         { "file": "/lib/htmlrest/src/rest.js" },
         { "file": "/lib/htmlrest/src/storage.js" },
-        { "file": "/lib/htmlrest/src/form.js" },
-        { "file": "/lib/htmlrest/src/components.js" },
-        { "file": "/lib/htmlrest/src/lifecycle.js" },
-        { "file": "/lib/htmlrest/src/events.js" }
+        { "file": "/lib/htmlrest/src/textstream.js" },
+        { "file": "/lib/htmlrest/src/typeidentifiers.js" },
+        { "file": "/lib/htmlrest/src/componentgatherer.js" }
       ],
       "dependencies": [ "jquery", "sizzle" ]
     }

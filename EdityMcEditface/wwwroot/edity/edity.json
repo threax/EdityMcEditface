@@ -42,7 +42,7 @@
         { "file": "/lib/htmlrest/src/typeidentifiers.js" },
         { "file": "/lib/htmlrest/src/componentgatherer.js" }
       ],
-      "dependencies": [ "jquery", "sizzle" ]
+      "dependencies": [ "sizzle" ]
     }
   },
   "vars": {

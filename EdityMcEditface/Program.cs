@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using EdityMcEditface.NetCore.Controllers;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
+using System.Threading;
+using System.Net.Sockets;
+using System.Net;
 
 namespace EdityMcEditface
 {
@@ -13,20 +17,50 @@ namespace EdityMcEditface
     {
         public static void Main(string[] args)
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("hosting.json", optional: true)
+
+#if LOCAL_RUN_ENABLED
+            var commandLineConfig = new ConfigurationBuilder()
+                .AddCommandLine(args)
                 .Build();
+#endif
 
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseConfiguration(config)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
+                .UseStartup<Startup>();
 
-            host.Run();
+#if LOCAL_RUN_ENABLED
+            host.UseConfiguration(commandLineConfig);
+
+            var browseUrl = commandLineConfig["browse"];
+            if (!String.IsNullOrEmpty(browseUrl))
+            {
+                String hostUrl = "http://localhost:" + FreeTcpPort();
+                host.UseUrls(hostUrl);
+                var uri = new Uri(new Uri(hostUrl), browseUrl);
+                ThreadPool.QueueUserWorkItem((a) =>
+                {
+                    Thread.Sleep(200);
+                    Process.Start(uri.ToString());
+                });
+            }
+#endif
+
+            host.Build().Run();
         }
+
+#if LOCAL_RUN_ENABLED
+        //This has race conditions, but only used when the browser is being opened from the command line
+        //which should basically always work in practice, dont call this for any other reason
+        static int FreeTcpPort()
+        {
+            TcpListener l = new TcpListener(IPAddress.Loopback, 0);
+            l.Start();
+            int port = ((IPEndPoint)l.LocalEndpoint).Port;
+            l.Stop();
+            return port;
+        }
+#endif
     }
 }

@@ -13,7 +13,6 @@
     "bootstrap": "~3.3.6",
     "ckeditor": "~4.5.9",
     "ckeditor-youtube-plugin": "^2.1.1",
-    "jquery": "~2.2.0",
-    "sizzle": "~2.3.0"
+    "jquery": "~2.2.0"
   }
 }

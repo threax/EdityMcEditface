@@ -4,9 +4,6 @@
     "jquery": {
       "js": [ { "file": "/lib/jquery/dist/jquery.js" } ]
     },
-    "sizzle": {
-      "js": [ { "file": "/lib/sizzle/dist/sizzle.js" } ]
-    },
     "bootstrap": {
       "css": [ "/lib/bootstrap/dist/css/bootstrap.css", "/lib/bootstrap/dist/css/bootstrap-theme.css" ],
       "js": [ { "file": "/lib/bootstrap/dist/js/bootstrap.js" } ],
@@ -41,8 +38,7 @@
         { "file": "/lib/htmlrest/src/textstream.js" },
         { "file": "/lib/htmlrest/src/typeidentifiers.js" },
         { "file": "/lib/htmlrest/src/componentgatherer.js" }
-      ],
-      "dependencies": [ "sizzle" ]
+      ]
     }
   },
   "vars": {

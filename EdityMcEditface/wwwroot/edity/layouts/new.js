@@ -1,21 +1,24 @@
-﻿(function ($, h)
-{
-    var templates = $('[data-template-list]');
-    h.rest.get('edity/templates', function (data)
-    {
+﻿"use strict";
+
+jsns.run(function (using) {
+    var rest = using("htmlrest.rest");
+    var component = using("htmlrest.components");
+    var domQuery = using("htmlrest.domquery");
+
+    rest.get('edity/templates', function (data) {
         //This should be sanitized, also check for server error
         //TODO: use a component
-        h.component.repeat("new-template-preview", templates, data, function (element, data) {
+        var templateList = domQuery.first('[data-template-list]');
+        component.repeat("new-template-preview", templateList, data, function (element, data) {
             element.bind({
                 Create: {
                     click: function (evt) {
                         evt.preventDefault();
 
-                        var sender = $(this);
-                        h.rest.get(sender.attr('data-template') + ".html", function (templateData) {
+                        rest.get(this.getAttribute('data-template') + ".html", function (templateData) {
                             //Make a blob
                             var blob = new Blob([templateData], { type: "text/html" });
-                            h.rest.upload(templates.attr('data-template-list') + window.location.pathname + ".html", blob, function () {
+                            rest.upload(templateList.getAttribute('data-template-list') + window.location.pathname + ".html", blob, function () {
                                 window.location.href = window.location.href + ".html";
                             });
                         });
@@ -24,4 +27,4 @@
             });
         });
     });
-})(jQuery, htmlrest)
+});

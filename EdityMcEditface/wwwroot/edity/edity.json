@@ -20,7 +20,7 @@
     "edityLoading": {
       "css": [ "/edity/css/loading.min.css" ]
     },
-    "htmlrest": {
+    "htmlrest-dev": {
       "js": [
         { "file": "/lib/htmlrest/src/jsns.js" },
         { "file": "/lib/htmlrest/src/bindingcollection.js" },
@@ -38,6 +38,11 @@
         { "file": "/lib/htmlrest/src/textstream.js" },
         { "file": "/lib/htmlrest/src/typeidentifiers.js" },
         { "file": "/lib/htmlrest/src/componentgatherer.js" }
+      ]
+    },
+    "htmlrest": {
+      "js": [
+        { "file": "/lib/htmlrest/htmlrest.min.js" }
       ]
     }
   },

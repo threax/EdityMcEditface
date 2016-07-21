@@ -5,7 +5,8 @@ var gulp = require("gulp"),
     rimraf = require("rimraf"),
     concat = require("gulp-concat"),
     cssmin = require("gulp-cssmin"),
-    uglify = require("gulp-uglify");
+    uglify = require("gulp-uglify"),
+    rename = require("gulp-rename");
 
 var webroot = "./wwwroot/";
 
@@ -45,7 +46,7 @@ gulp.task("min:css", function () {
 gulp.task("min", ["min:js", "min:css"]);
 
 gulp.task("copylibs", function () {
-    var libDir = webroot + "lib";
+    var libDir = webroot + "lib/";
 
     copyFiles({
         libs: ["./node_modules/jquery/dist/**/*",
@@ -78,15 +79,9 @@ gulp.task("copylibs", function () {
     });
 
     copyFiles({
-        libs: ["./bower_components/pen/src/**/*"],
-        baseName: './bower_components',
-        dest: libDir
-    });
-
-    copyFiles({
         libs: ["./node_modules/ckeditor-youtube-plugin/youtube/**/*"],
         baseName: './node_modules/ckeditor-youtube-plugin',
-        dest: libDir + "/ckeditor/plugins"
+        dest: libDir + "ckeditor/plugins/"
     });
 
     copyFiles({
@@ -96,9 +91,35 @@ gulp.task("copylibs", function () {
         dest: libDir
     });
 
+    //Minify htmlrest, need to specify the load order for componentgatherer,
+    //so all modules it uses (since it runs) must be defined in the minified
+    //file before that one. We also need jsns at the front.
+    minifyJs({
+        libs: ["./custom_components/htmlrest/src/jsns.js",
+               "./custom_components/htmlrest/src/typeidentifiers.js",
+               "./custom_components/htmlrest/src/domquery.js",
+               "./custom_components/htmlrest/src/bindingcollection.js",
+               "./custom_components/htmlrest/src/escape.js",
+               "./custom_components/htmlrest/src/textstream.js",
+               "./custom_components/htmlrest/src/components.js",
+               "./custom_components/htmlrest/src/componentgatherer.js",
+               "./custom_components/htmlrest/src/**/*.js", ],
+        output: "htmlrest",
+        dest: libDir + "htmlrest/"
+    })
+
 });
 
 function copyFiles(settings) {
     gulp.src(settings.libs, { base: settings.baseName })
         .pipe(gulp.dest(settings.dest));
 }
+
+function minifyJs(settings) {  
+    return gulp.src(settings.libs)
+        .pipe(concat(settings.output + '.js'))
+        .pipe(gulp.dest(settings.dest))
+        .pipe(rename(settings.output + '.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest(settings.dest));
+};

@@ -17,6 +17,7 @@
     },
     "EdityMcEditface": {
       "commandName": "Project",
+      "workingDirectory": "C:\\Development\\EdityTestDir\\repos\\mycourses-support",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/.html",
       "environmentVariables": {

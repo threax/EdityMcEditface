@@ -10,19 +10,17 @@ jsns.run(function (using) {
         //TODO: use a component
         var templateList = domQuery.first('[data-template-list]');
         component.repeat("new-template-preview", templateList, data, function (element, data) {
-            element.bind({
-                Create: {
-                    click: function (evt) {
-                        evt.preventDefault();
+            element.setListener({
+                create: function (evt) {
+                    evt.preventDefault();
 
-                        rest.get(this.getAttribute('data-template') + ".html", function (templateData) {
-                            //Make a blob
-                            var blob = new Blob([templateData], { type: "text/html" });
-                            rest.upload(templateList.getAttribute('data-template-list') + window.location.pathname + ".html", blob, function () {
-                                window.location.href = window.location.href + ".html";
-                            });
+                    rest.get(this.getAttribute('data-template') + ".html", function (templateData) {
+                        //Make a blob
+                        var blob = new Blob([templateData], { type: "text/html" });
+                        rest.upload(templateList.getAttribute('data-template-list') + window.location.pathname + ".html", blob, function () {
+                            window.location.href = window.location.href + ".html";
                         });
-                    }
+                    });
                 }
             });
         });

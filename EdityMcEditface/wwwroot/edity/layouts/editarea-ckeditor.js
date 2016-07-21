@@ -48,22 +48,20 @@ jsns.run(function (using) {
             var loading = $(component.first("SaveLoadbar"));
             loading.hide();
 
-            component.bind({
-                SaveButton: {
-                    click: function (evt) {
-                        evt.preventDefault();
+            component.setListener({
+                save: function (evt) {
+                    evt.preventDefault();
 
-                        loading.fadeIn(200);
-                        var content = editor.innerHTML;
-                        var blob = new Blob([content], { type: "text/html" });
-                        rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function () {
-                            loading.fadeOut(200);
-                        },
-                        function () {
-                            loading.fadeOut(200);
-                            alert("Error saving page. Please try again later.");
-                        });
-                    }
+                    loading.fadeIn(200);
+                    var content = editor.innerHTML;
+                    var blob = new Blob([content], { type: "text/html" });
+                    rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function () {
+                        loading.fadeOut(200);
+                    },
+                    function () {
+                        loading.fadeOut(200);
+                        alert("Error saving page. Please try again later.");
+                    });
                 }
             });
         }
@@ -76,12 +74,10 @@ jsns.run(function (using) {
     buttonCreation.push({
         name: "EditSourceNavItem",
         created: function (button) {
-            button.bind({
-                EditSource: {
-                    click: function () {
-                        var content = editor.innerHTML;
-                        sourceText.val(content);
-                    }
+            button.setListener({
+                edit: function () {
+                    var content = editor.innerHTML;
+                    sourceText.val(content);
                 }
             });
         }

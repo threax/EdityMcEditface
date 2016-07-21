@@ -12,11 +12,9 @@ jsns.run(function (using) {
     buttonCreation.push({
         name: "SettingsNavItem",
         created: function (button) {
-            button.bind({
-                SettingsButton: {
-                    click: function(){
-                        settingsLifecycle.populateData();
-                    }
+            button.setListener({
+                open: function(){
+                    settingsLifecycle.populateData();
                 }
             });
         }

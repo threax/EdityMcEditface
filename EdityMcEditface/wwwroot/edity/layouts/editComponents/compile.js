@@ -61,11 +61,9 @@ jsns.run(function (using) {
     buttonCreation.push({
         name: "CompileNavItem",
         created: function (button) {
-            button.bind({
-                CompileModalButton: {
-                    click: function () {
-                        compilerOutputMessage.starting();
-                    }
+            button.setListener({
+                compile: function () {
+                    compilerOutputMessage.starting();
                 }
             });
         }});

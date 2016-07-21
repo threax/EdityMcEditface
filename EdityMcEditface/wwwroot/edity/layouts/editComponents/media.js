@@ -71,9 +71,12 @@ jsns.run(function (using) {
         var fileComponent = settings.fileComponent;
 
         var upButton = settings.getUpButton(bindings);
-        upButton.addEventListener('click', function () {
-            currentFolder = parentFolders.pop();
-            loadCurrentFolder();
+
+        bindings.setListener({
+            upDirectory: function () {
+                currentFolder = parentFolders.pop();
+                loadCurrentFolder();
+            }
         });
 
         var loadDisplayFailSettings = new LoadDisplayFailSettings();
@@ -111,12 +114,10 @@ jsns.run(function (using) {
             component.empty(directoryList);
             component.empty(fileList);
             component.repeat(directoryComponent, directoryList, data.directories, function (created, data) {
-                created.bind({
-                    DirectoryButton: {
-                        click: function (evt) {
-                            self.loadFiles(data);
-                            evt.preventDefault();
-                        }
+                created.setListener({
+                    changeDirectory: function (evt) {
+                        self.loadFiles(data);
+                        evt.preventDefault();
                     }
                 });
             });
@@ -139,9 +140,8 @@ jsns.run(function (using) {
     var fileBrowser = new FileBrowser(bindings);
     var fileUploadPicker = bindings.first("FileUploadPicker");
 
-    bindings.bind({
-        AddMediaForm: {
-            submit: function (evt) {
+    bindings.setListener({
+            upload: function (evt) {
                 evt.preventDefault();
 
                 var formData = new FormData(this);
@@ -155,18 +155,15 @@ jsns.run(function (using) {
                     alert("File Upload Failed");
                 });
             }
-        }
     });
 
     var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
     buttonCreation.push({
         name: "MediaNavItem",
         created: function (button) {
-            button.bind({
-                MediaModalButton: {
-                    click: function () {
-                        fileBrowser.loadFiles("/images");
-                    }
+            button.setListener({
+                loadMedia: function () {
+                    fileBrowser.loadFiles("/images");
                 }
             });
         }

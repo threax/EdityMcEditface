@@ -1,5 +1,5 @@
 ﻿<template id="MediaNavItem">
-    <li><a data-htmlrest-binding="MediaModalButton" data-toggle="modal" data-target="#mediaModal">Media</a></li>
+    <li><a data-htmlrest-binding="MediaModalButton" data-toggle="modal" data-target="#mediaModal" data-hr-on-click="loadMedia">Media</a></li>
 </template>
 <div class="modal fade" id="mediaModal" tabindex="-1" role="dialog" aria-labelledby="mediaModalLabel">
     <div class="modal-dialog" role="document">
@@ -22,16 +22,16 @@
             </div>
             <div data-htmlrest-binding="main">
                 <div class="modal-body">
-                    <button data-htmlrest-binding="upDirectory" type="button" class="btn btn-default">Up</button>
+                    <button data-htmlrest-binding="upDirectory" type="button" class="btn btn-default" data-hr-on-click="upDirectory">Up</button>
                     <ol class="filebrowser-directory-list" data-htmlrest-binding="directoryList">
-                        <li data-htmlrest-binding="DirectoryButton" data-htmlrest-component="filebrowser-directories">{|this}</li>
+                        <li data-htmlrest-binding="DirectoryButton" data-htmlrest-component="filebrowser-directories" data-hr-on-click="changeDirectory">{|this}</li>
                     </ol>
                     <ol class="filebrowser-file-list" data-htmlrest-binding="fileList">
                         <li data-htmlrest-component="filebrowser-files"><a href="{|this}" target="_blank">{|this}</a></li>
                     </ol>
                 </div>
                 <div class="modal-footer">
-                    <form class="form-inline" data-htmlrest-binding="AddMediaForm">
+                    <form class="form-inline" data-htmlrest-binding="AddMediaForm" data-hr-on-submit="upload">
                         <div class="form-group">
                             <label for="file">Choose File</label>
                             <input data-htmlrest-binding="FileUploadPicker" name="file" type="file" class="form-control" />

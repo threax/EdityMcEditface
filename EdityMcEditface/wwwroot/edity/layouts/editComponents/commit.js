@@ -25,7 +25,7 @@ jsns.run(function (using) {
                 CommitButton: {
                     click: function () {
                         rest.get('edity/Git/UncommittedChanges', function (data) {
-                            var parent = $('.git-uncommitted-changes-list');
+                            var parent = $('.git-uncommitted-changes-list')[0];
                             component.empty(parent);
                             component.repeat("git-uncommitted-change", parent, data);
                         });

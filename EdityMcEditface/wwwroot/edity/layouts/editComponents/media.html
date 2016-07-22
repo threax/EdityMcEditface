@@ -1,5 +1,5 @@
 ﻿<template id="MediaNavItem">
-    <li><a data-toggle="modal" data-target="#mediaModal" data-hr-on-click="loadMedia">Media</a></li>
+    <li><a data-toggle="modal" data-target="#mediaModal" data-hr-on-click="loadMedia" data-hr-model="browse" data-hr-model-src="{mediaBrowseDir}">Media</a></li>
 </template>
 <div class="modal fade" id="mediaModal" tabindex="-1" role="dialog" aria-labelledby="mediaModalLabel">
     <div class="modal-dialog" role="document">
@@ -7,6 +7,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="mediaModalLabel">Media</h4>
+                <button data-hr-toggle="upDir" data-hr-style-off="display:none;" type="button" class="btn btn-default" data-hr-on-click="upDirectory">Up</button>
             </div>
             <div class="modal-body" data-hr-toggle="load" data-hr-style-off="display:none;">
                 <div class="center">
@@ -22,16 +23,15 @@
             </div>
             <div data-hr-toggle="main" data-hr-style-off="display:none;">
                 <div class="modal-body">
-                    <button data-hr-toggle="upDir" data-hr-style-off="display:none;" type="button" class="btn btn-default" data-hr-on-click="upDirectory">Up</button>
                     <ol class="filebrowser-directory-list" data-hr-model="directories" data-hr-model-component="filebrowser-directories" data-hr-model-src="/edity/list">
-                        <li data-hr-component="filebrowser-directories" data-hr-on-click="changeDirectory">{|this}</li>
+                        <li data-hr-component="filebrowser-directories" data-hr-on-click="changeDirectory">{|name}</li>
                     </ol>
                     <ol class="filebrowser-file-list" data-hr-model="files" data-hr-model-component="filebrowser-files">
-                        <li data-hr-component="filebrowser-files"><a href="{|this}" target="_blank">{|this}</a></li>
+                        <li data-hr-component="filebrowser-files"><a href="{|link}" target="_blank">{|name}</a></li>
                     </ol>
                 </div>
                 <div class="modal-footer">
-                    <form class="form-inline" data-hr-on-submit="upload" data-hr-model="upload">
+                    <form class="form-inline" data-hr-on-submit="upload" data-hr-model="upload" data-hr-model-src="edity/upload">
                         <div class="form-group">
                             <label for="file">Choose File</label>
                             <input name="file" type="file" class="form-control" />

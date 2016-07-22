@@ -51,7 +51,8 @@
   "vars": {
     "uploadUrl": "edity/upload",
     "pageSettingsUrl": "edity/page/settings",
-    "savePageUrl": "edity/Page"
+    "savePageUrl": "edity/Page",
+    "mediaBrowseDir": "/"
   },
   "additionalContent": [ "lib/bootstrap/dist/fonts" ],
   "compilers": [

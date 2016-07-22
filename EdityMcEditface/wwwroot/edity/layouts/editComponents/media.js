@@ -6,6 +6,10 @@ jsns.run(function (using) {
     var BindingCollection = using("htmlrest.bindingcollection");
     var toggles = using("htmlrest.toggles");
 
+    function getFileName(path) {
+        return path.replace(/^.*?([^\\\/]*)$/, '$1');
+    }
+
     /**
      * Create a file browser
      * @param {BindingCollection} bindings
@@ -57,17 +61,39 @@ jsns.run(function (using) {
         }
 
         function getFilesSuccess(data) {
+            var i = 0;
             toggleGroup.show(main);
-            directoryModel.setData(data.directories, function (created, data) {
-                created.setListener({
-                    changeDirectory: function (evt) {
-                        evt.preventDefault();
-                        self.loadFiles(data);
+            directoryModel.setData(function () {
+                if (i < data.directories.length) {
+                    var dir = data.directories[i++];
+                    return {
+                        name: getFileName(dir),
+                        link: dir
                     }
+                }
+                return null;
+            },
+                function (created, data) {
+                    var link = data.link;
+                    created.setListener({
+                        changeDirectory: function (evt) {
+                            evt.preventDefault();
+                            self.loadFiles(link);
+                        }
+                    });
                 });
-            });
 
-            fileModel.setData(data.files);
+            i = 0;
+            fileModel.setData(function () {
+                if (i < data.files.length) {
+                    var file = data.files[i++];
+                    return {
+                        name: getFileName(file),
+                        link: file
+                    }
+                }
+                return null;
+            });
 
             if (parentFolders.length === 0) {
                 upDir.off();
@@ -93,8 +119,8 @@ jsns.run(function (using) {
 
             var formData = new FormData(this);
             var filename = uploadModel.getData()["file"];
-            filename = filename.replace(/^.*?([^\\\/]*)$/, '$1');
-            rest.upload('edity/upload' + fileBrowser.getCurrentDirectory() + '/' + filename, formData,
+            filename = getFileName(filename);
+            rest.upload(uploadModel.getSrc() + fileBrowser.getCurrentDirectory() + '/' + filename, formData,
             function (data) {
                 fileBrowser.refresh();
             },
@@ -110,7 +136,8 @@ jsns.run(function (using) {
         created: function (button) {
             button.setListener({
                 loadMedia: function () {
-                    fileBrowser.loadFiles("/images");
+                    var model = button.getModel('browse');
+                    fileBrowser.loadFiles(model.getSrc());
                 }
             });
         }

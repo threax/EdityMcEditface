@@ -1,76 +1,25 @@
 ﻿"use strict";
 
 jsns.run(function (using) {
-    var LoadDisplayFailSettings = using("htmlrest.loaddisplayfail.settings");
-    var LoadDisplayFail = using("htmlrest.loaddisplayfail");
     var rest = using("htmlrest.rest");
     var storage = using("htmlrest.storage");
-    var component = using("htmlrest.components");
     var BindingCollection = using("htmlrest.bindingcollection");
-    var type = using("htmlrest.typeidentifiers");
-
-    /**
-     * @constructor
-     */
-    function FileBrowserSettings() {
-        var self = this;
-
-        this.listFilesUrl = "/edity/list",
-        this.fileComponent = "filebrowser-files",
-        this.directoryComponent = "filebrowser-directories",
-
-        this.fileList = "fileList",
-        this.directoryList = "directoryList",
-        this.upButton = "upDirectory"
-
-        this.mainDisplay = "main";
-        this.failDisplay = "fail";
-        this.loadDisplay = "load";
-
-        this.getFileList = function (bindings) {
-            if (type.isString(self.fileList)) {
-                return bindings.first(self.fileList);
-            }
-            return self.fileList;
-        }
-
-        this.getDirectoryList = function (bindings) {
-            if (type.isString(self.directoryList)) {
-                return bindings.first(self.directoryList);
-            }
-            return self.directoryList;
-        }
-
-        this.getUpButton = function (bindings) {
-            if (type.isString(self.upButton)) {
-                return bindings.first(self.upButton);
-            }
-            return self.upButton;
-        }
-    }
+    var toggles = using("htmlrest.toggles");
 
     /**
      * Create a file browser
      * @param {BindingCollection} bindings
      * @param {FileBrowserSettings} [settings]
      */
-    function FileBrowser(bindings, settings) {
-        if (settings === undefined) {
-            settings = new FileBrowserSettings();
-        }
-
+    function FileBrowser(bindings) {
         var parentFolders = [];
         var currentFolder = undefined;
 
-        var listFilesUrl = settings.listFilesUrl;
+        var directoryModel = bindings.getModel('directories');
+        var fileModel = bindings.getModel('files');
+        var listFilesUrl = directoryModel.getSrc();
 
-        var directoryList = settings.getDirectoryList(bindings);
-        var directoryComponent = settings.directoryComponent;
-
-        var fileList = settings.getFileList(bindings);
-        var fileComponent = settings.fileComponent;
-
-        var upButton = settings.getUpButton(bindings);
+        var upDir = bindings.getToggle('upDir');
 
         bindings.setListener({
             upDirectory: function () {
@@ -79,12 +28,10 @@ jsns.run(function (using) {
             }
         });
 
-        var loadDisplayFailSettings = new LoadDisplayFailSettings();
-        loadDisplayFailSettings.mainDisplay = settings.mainDisplay;
-        loadDisplayFailSettings.failDisplay = settings.failDisplay;
-        loadDisplayFailSettings.loadDisplay = settings.loadDisplay;
-
-        var loadingLifecycle = new LoadDisplayFail(bindings, loadDisplayFailSettings);
+        var load = bindings.getToggle('load');
+        var main = bindings.getToggle('main');
+        var fail = bindings.getToggle('fail');
+        var toggleGroup = new toggles.group(load, main, fail);
 
         var self = this;
 
@@ -105,56 +52,56 @@ jsns.run(function (using) {
         }
 
         function loadCurrentFolder() {
-            loadingLifecycle.loading();
+            toggleGroup.show(load);
             rest.get(listFilesUrl + currentFolder, getFilesSuccess, getFilesFail);
         }
 
         function getFilesSuccess(data) {
-            loadingLifecycle.succeeded();
-            component.empty(directoryList);
-            component.empty(fileList);
-            component.repeat(directoryComponent, directoryList, data.directories, function (created, data) {
+            toggleGroup.show(main);
+            directoryModel.setData(data.directories, function (created, data) {
                 created.setListener({
                     changeDirectory: function (evt) {
-                        self.loadFiles(data);
                         evt.preventDefault();
+                        self.loadFiles(data);
                     }
                 });
             });
-            component.repeat(fileComponent, fileList, data.files);
+
+            fileModel.setData(data.files);
+
             if (parentFolders.length === 0) {
-                upButton.style.display = "none";
+                upDir.off();
             }
             else {
-                upButton.style.display = "";
+                upDir.on();
             }
         }
 
         function getFilesFail(data) {
-            loadingLifecycle.failed();
+            toggleGroup.show(fail);
         }
     };
 
     var bindings = new BindingCollection("#mediaModal");
 
     var fileBrowser = new FileBrowser(bindings);
-    var fileUploadPicker = bindings.first("FileUploadPicker");
+    var uploadModel = bindings.getModel('upload');
 
     bindings.setListener({
-            upload: function (evt) {
-                evt.preventDefault();
+        upload: function (evt) {
+            evt.preventDefault();
 
-                var formData = new FormData(this);
-                var filename = fileUploadPicker.value;
-                filename = filename.replace(/^.*?([^\\\/]*)$/, '$1');
-                rest.upload('edity/upload' + fileBrowser.getCurrentDirectory() + '/' + filename, formData,
-                function (data) {
-                    fileBrowser.refresh();
-                },
-                function (data) {
-                    alert("File Upload Failed");
-                });
-            }
+            var formData = new FormData(this);
+            var filename = uploadModel.getData()["file"];
+            filename = filename.replace(/^.*?([^\\\/]*)$/, '$1');
+            rest.upload('edity/upload' + fileBrowser.getCurrentDirectory() + '/' + filename, formData,
+            function (data) {
+                fileBrowser.refresh();
+            },
+            function (data) {
+                alert("File Upload Failed");
+            });
+        }
     });
 
     var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);

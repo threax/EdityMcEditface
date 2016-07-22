@@ -33,8 +33,6 @@ jsns.run(function (using) {
         config.imageUploadUrl = '/edity/Page/Asset/' + window.location.pathname;
     };
 
-    var sourceText = $('#source');
-
     var modal = new BindingCollection('#sourceModal');
     modal.setListener({
         apply: function (evt) {
@@ -42,6 +40,8 @@ jsns.run(function (using) {
             $('#sourceModal').modal('hide');
         }
     });
+
+    var sourceModel = modal.getModel('source');
 
     var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
     buttonCreation.push({
@@ -78,8 +78,9 @@ jsns.run(function (using) {
         created: function (button) {
             button.setListener({
                 edit: function () {
-                    var content = editor.innerHTML;
-                    sourceText.val(content);
+                    sourceModel.setData({
+                        source: editor.innerHTML
+                    });
                 }
             });
         }

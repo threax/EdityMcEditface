@@ -21,9 +21,9 @@
                 </div>
             </div>
         </nav>
-        <ul class="row" data-template-list="{uploadUrl}">
+        <ul class="row" id="templates" data-hr-model="templates" data-hr-model-src="{uploadUrl}" data-hr-model-component="new-template-preview">
             <li data-htmlrest-component="new-template-preview" class="col-md-6">
-                <a href="{|path}" data-htmlrest-binding="Create" data-template="{|path}" data-hr-on-click="create">{|path}</a>
+                <a href="#" data-template="{|path}" data-hr-on-click="create">{|path}</a>
             </li>
         </ul>
     {javascript}

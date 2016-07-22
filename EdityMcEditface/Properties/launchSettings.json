@@ -19,7 +19,7 @@
       "commandName": "Project",
       "workingDirectory": "C:\\Development\\EdityTestDir\\repos\\mycourses-support",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5000/gimmenew",
+      "launchUrl": "http://localhost:5000/.html",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -8,6 +8,6 @@ jsns.run(function (using) {
 
     var navItems = storage.getInInstance("edit-nav-menu-items", []);
     navItems.forEach(function (item) {
-        component.single(item.name, null, navMenu, item.created);
+        component.single(item.name, navMenu, null, item.created);
     });
 });

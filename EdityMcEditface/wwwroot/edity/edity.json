@@ -33,8 +33,6 @@
         { "file": "/lib/htmlrest/src/events.js" },
         { "file": "/lib/htmlrest/src/form.js" },
         { "file": "/lib/htmlrest/src/formlifecycle.js" },
-        { "file": "/lib/htmlrest/src/loaddisplayfail.js" },
-        { "file": "/lib/htmlrest/src/noanimation.js" },
         { "file": "/lib/htmlrest/src/rest.js" },
         { "file": "/lib/htmlrest/src/storage.js" },
         { "file": "/lib/htmlrest/src/textstream.js" },

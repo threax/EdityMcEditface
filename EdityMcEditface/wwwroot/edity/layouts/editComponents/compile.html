@@ -10,16 +10,16 @@
                 <h4 class="modal-title" id="compileModalLabel">Publish</h4>
             </div>
             <div class="modal-body">
-                <p data-compile-message-startup>
+                <p data-hr-toggle="start" data-hr-style-off="display:none;">
                     Press Publish to compile this website.
                 </p>
-                <p data-compile-message-success>
+                <p data-hr-toggle="success" data-hr-style-off="display:none;">
                     Website has been compiled and published.
                 </p>
-                <p data-compile-message-fail>
+                <p data-hr-toggle="fail" data-hr-style-off="display:none;">
                     An error occured while compiling the website.
                 </p>
-                <div class="center" data-compile-compiling>
+                <div class="center" data-hr-toggle="compiling" data-hr-style-off="display:none;">
                     <div class="load-linebar center-block">
                         <div class="rect1"></div>
                         <div class="rect2"></div>
@@ -32,7 +32,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button id="CompileButton" type="button" class="btn btn-primary">Publish</button>
+                <button type="button" class="btn btn-primary" data-hr-on-click="runCompiler" data-hr-toggle="publish" data-hr-style-off="display:none;">Publish</button>
             </div>
         </div>
     </div>

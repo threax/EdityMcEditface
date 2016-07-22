@@ -20,7 +20,10 @@
     "edityLoading": {
       "css": [ "/edity/css/loading.min.css" ]
     },
-    "htmlrest-dev": {
+    "transitions": {
+      "css": [ "/edity/css/fade.min.css" ]
+    },
+    "htmlrest": {
       "js": [
         { "file": "/lib/htmlrest/src/jsns.js" },
         { "file": "/lib/htmlrest/src/bindingcollection.js" },
@@ -32,15 +35,15 @@
         { "file": "/lib/htmlrest/src/formlifecycle.js" },
         { "file": "/lib/htmlrest/src/loaddisplayfail.js" },
         { "file": "/lib/htmlrest/src/noanimation.js" },
-        { "file": "/lib/htmlrest/src/output.js" },
         { "file": "/lib/htmlrest/src/rest.js" },
         { "file": "/lib/htmlrest/src/storage.js" },
         { "file": "/lib/htmlrest/src/textstream.js" },
         { "file": "/lib/htmlrest/src/typeidentifiers.js" },
+        { "file": "/lib/htmlrest/src/toggles.js" },
         { "file": "/lib/htmlrest/src/componentgatherer.js" }
       ]
     },
-    "htmlrest": {
+    "htmlrest-prod": {
       "js": [
         { "file": "/lib/htmlrest/htmlrest.min.js" }
       ]

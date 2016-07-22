@@ -1,5 +1,5 @@
 ﻿{
-  "linkedContent": [ "sizzle", "bootstrap", "htmlrest", "edityLoading" ],
+  "linkedContent": [ "transitions", "bootstrap", "htmlrest", "edityLoading" ],
   "vars": {
     "title": "edit"
   }

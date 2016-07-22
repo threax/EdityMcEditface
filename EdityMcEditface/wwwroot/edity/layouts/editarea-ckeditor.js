@@ -43,23 +43,21 @@ jsns.run(function (using) {
     buttonCreation.push({
         name: "SaveButton",
         created: function (component) {
-            var jqComponent = $(component);
-
-            var loading = $(component.first("SaveLoadbar"));
-            loading.hide();
+            var load = component.getToggle("load");
+            load.off();
 
             component.setListener({
                 save: function (evt) {
                     evt.preventDefault();
 
-                    loading.fadeIn(200);
+                    load.on();
                     var content = editor.innerHTML;
                     var blob = new Blob([content], { type: "text/html" });
-                    rest.upload($(this).attr('href') + '/' + window.location.pathname, blob, function () {
-                        loading.fadeOut(200);
+                    rest.upload(this.getAttribute('href') + '/' + window.location.pathname, blob, function () {
+                        load.off();
                     },
                     function () {
-                        loading.fadeOut(200);
+                        load.off();
                         alert("Error saving page. Please try again later.");
                     });
                 }

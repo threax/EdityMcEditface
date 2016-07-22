@@ -5,16 +5,22 @@ jsns.run(function (using) {
     var storage = using("htmlrest.storage");
     var component = using("htmlrest.components");
     var rest = using("htmlrest.rest");
+    var BindingCollection = using("htmlrest.bindingcollection");
 
-    $(".git-commit-form").submit(function (event) {
-        var data = form.serialize($(this));
-        rest.post('edity/Git/Commit', data,
-        function (data) {
-            $('#commitModal').modal('hide');
-        }, function (data) {
-            alert('Error Committing');
-        });
-        return false;
+    var commitDialog = new BindingCollection('#commitModal');
+    var commitModel = commitDialog.getModel('commit');
+    commitDialog.setListener({
+        commit: function (evt) {
+            evt.preventDefault();
+            var data = commitModel.getData();
+            rest.post(commitModel.getSrc(), data,
+                function (resultData) {
+                    $('#commitModal').modal('hide'); //Still jquery because of bootstrap
+                },
+                function (resultData) {
+                    alert('Error Committing');
+                });
+        }
     });
 
     var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
@@ -23,10 +29,12 @@ jsns.run(function (using) {
         created: function (button) {
             button.setListener({
                 commit: function () {
-                    rest.get('edity/Git/UncommittedChanges', function (data) {
-                        var parent = $('.git-uncommitted-changes-list')[0];
-                        component.empty(parent);
-                        component.repeat("git-uncommitted-change", parent, data);
+                    var changedFiles = commitDialog.getModel('changedFiles');
+                    rest.get(changedFiles.getSrc(), function (data) {
+                        changedFiles.setData(data);
+                    },
+                    function (data) {
+                        alert('Cannot get uncommitted changes. Please try again later.');
                     });
                 }
             });

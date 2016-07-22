@@ -3,8 +3,9 @@
 jsns.run(function (using) {
     var storage = using("htmlrest.storage");
     var component = using("htmlrest.components");
+    var domQuery = using("htmlrest.domquery");
 
-    var navMenu = $('[data-editor-navmenu]')[0];
+    var navMenu = domQuery.first('[data-editor-navmenu]');
 
     var navItems = storage.getInInstance("edit-nav-menu-items", []);
     navItems.forEach(function (item) {

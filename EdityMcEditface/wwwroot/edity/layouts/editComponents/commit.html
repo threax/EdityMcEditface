@@ -5,14 +5,14 @@
 <div class="modal fade" id="commitModal" tabindex="-1" role="dialog" aria-labelledby="commitModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form class="git-commit-form">
+            <form data-hr-on-submit="commit" data-hr-model="commit" data-hr-model-src="/edity/Git/Commit">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="commitModalLabel">Commit</h4>
                 </div>
                 <div class="modal-body">
                     <label>Changed Files</label>
-                    <ol class="git-uncommitted-changes-list">
+                    <ol data-hr-model="changedFiles" data-hr-model-component="git-uncommitted-change" data-hr-model-src="/edity/Git/UncommittedChanges">
                         <li data-htmlrest-component="git-uncommitted-change">{|filePath}</li>
                     </ol>
                     <div class="form-group">

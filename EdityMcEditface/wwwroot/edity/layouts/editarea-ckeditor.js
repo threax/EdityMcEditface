@@ -3,6 +3,7 @@
 jsns.run(function (using) {
     var storage = using("htmlrest.storage");
     var rest = using("htmlrest.rest");
+    var BindingCollection = using("htmlrest.bindingcollection");
 
     // config
     var editor = document.getElementById('editArea');
@@ -34,9 +35,12 @@ jsns.run(function (using) {
 
     var sourceText = $('#source');
 
-    $('#ApplySourceChanges').submit(function (event) {
-        $('#sourceModal').modal('hide');
-        return false;
+    var modal = new BindingCollection('#sourceModal');
+    modal.setListener({
+        apply: function (evt) {
+            evt.preventDefault();
+            $('#sourceModal').modal('hide');
+        }
     });
 
     var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);

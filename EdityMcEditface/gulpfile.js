@@ -103,6 +103,7 @@ gulp.task("copylibs", function () {
                "./custom_components/htmlrest/src/textstream.js",
                "./custom_components/htmlrest/src/components.js",
                "./custom_components/htmlrest/src/toggles.js",
+               "./custom_components/htmlrest/src/models.js",
                "./custom_components/htmlrest/src/componentgatherer.js",
                "./custom_components/htmlrest/src/**/*.js", ],
         output: "htmlrest",

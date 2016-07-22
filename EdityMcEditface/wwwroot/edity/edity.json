@@ -38,6 +38,7 @@
         { "file": "/lib/htmlrest/src/textstream.js" },
         { "file": "/lib/htmlrest/src/typeidentifiers.js" },
         { "file": "/lib/htmlrest/src/toggles.js" },
+        { "file": "/lib/htmlrest/src/iter.js" },
         { "file": "/lib/htmlrest/src/models.js" },
         { "file": "/lib/htmlrest/src/componentgatherer.js" }
       ]

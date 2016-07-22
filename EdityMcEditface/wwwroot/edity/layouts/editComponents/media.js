@@ -5,6 +5,7 @@ jsns.run(function (using) {
     var storage = using("htmlrest.storage");
     var BindingCollection = using("htmlrest.bindingcollection");
     var toggles = using("htmlrest.toggles");
+    var iter = using("htmlrest.iter");
 
     function getFileName(path) {
         return path.replace(/^.*?([^\\\/]*)$/, '$1');
@@ -61,18 +62,9 @@ jsns.run(function (using) {
         }
 
         function getFilesSuccess(data) {
-            var i = 0;
             toggleGroup.show(main);
-            directoryModel.setData(function () {
-                if (i < data.directories.length) {
-                    var dir = data.directories[i++];
-                    return {
-                        name: getFileName(dir),
-                        link: dir
-                    }
-                }
-                return null;
-            },
+
+            directoryModel.setData(iter(data.directories, function (dir) { return { name: getFileName(dir), link: dir } }),
                 function (created, data) {
                     var link = data.link;
                     created.setListener({
@@ -83,17 +75,7 @@ jsns.run(function (using) {
                     });
                 });
 
-            i = 0;
-            fileModel.setData(function () {
-                if (i < data.files.length) {
-                    var file = data.files[i++];
-                    return {
-                        name: getFileName(file),
-                        link: file
-                    }
-                }
-                return null;
-            });
+            fileModel.setData(iter(data.files, function (file) { return { name: getFileName(file), link: file } }));
 
             if (parentFolders.length === 0) {
                 upDir.off();

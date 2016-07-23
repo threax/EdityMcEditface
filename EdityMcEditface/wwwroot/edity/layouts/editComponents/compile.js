@@ -12,7 +12,7 @@ jsns.run(function (using) {
     var success = bindings.getToggle("success");
     var fail = bindings.getToggle("fail");
     var compiling = bindings.getToggle("compiling");
-    var toggleGroup = new toggles.group(start, success, fail, compiling);
+    var toggleGroup = new toggles.Group(start, success, fail, compiling);
 
     var publishToggle = bindings.getToggle('publish');
 

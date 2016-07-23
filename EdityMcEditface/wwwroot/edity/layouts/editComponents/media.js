@@ -35,7 +35,7 @@ jsns.run(function (using) {
         var load = bindings.getToggle('load');
         var main = bindings.getToggle('main');
         var fail = bindings.getToggle('fail');
-        var toggleGroup = new toggles.group(load, main, fail);
+        var toggleGroup = new toggles.Group(load, main, fail);
 
         var self = this;
 

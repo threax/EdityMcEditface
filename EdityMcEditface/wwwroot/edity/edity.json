@@ -1,17 +1,9 @@
 ﻿{
   "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
   "contentMap": {
-    "jquery": {
-      
-    },
     "bootstrap": {
       "css": [ "/lib/bootstrap/dist/css/bootstrap.css", "/lib/bootstrap/dist/css/bootstrap-theme.css" ],
-      "js": [ { "file": "/lib/bootstrap.native/dist/bootstrap-native.min.js" } ],
-      "dependencies": [ "jquery" ]
-    },
-    "pen": {
-      "css": [ "/lib/pen/src/pen.css" ],
-      "js": [ { "file": "/lib/pen/src/pen.js" } ]
+      "js": [ { "file": "/lib/bootstrap.native/dist/bootstrap-native.min.js" } ]
     },
     "ckeditor": {
       "js": [ { "file": "/lib/ckeditor/ckeditor.js" } ],

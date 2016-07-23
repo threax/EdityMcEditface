@@ -23,12 +23,15 @@ jsns.run(function (using) {
         }
     });
 
+    var dialog = commitDialog.getToggle('dialog');
+
     var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
     buttonCreation.push({
         name: "CommitNavItem",
         created: function (button) {
             button.setListener({
                 commit: function () {
+                    dialog.on();
                     var changedFiles = commitDialog.getModel('changedFiles');
                     rest.get(changedFiles.getSrc(), function (data) {
                         changedFiles.setData(data);

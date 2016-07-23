@@ -93,6 +93,7 @@ jsns.run(function (using) {
 
     var fileBrowser = new FileBrowser(bindings);
     var uploadModel = bindings.getModel('upload');
+    var dialog = bindings.getToggle('dialog');
 
     bindings.setListener({
         upload: function (evt) {
@@ -119,6 +120,7 @@ jsns.run(function (using) {
                 loadMedia: function () {
                     var model = button.getModel('browse');
                     fileBrowser.loadFiles(model.getSrc());
+                    dialog.on();
                 }
             });
         }

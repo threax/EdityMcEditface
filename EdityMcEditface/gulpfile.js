@@ -51,6 +51,7 @@ gulp.task("copylibs", function () {
     copyFiles({
         libs: ["./node_modules/jquery/dist/**/*",
                "./node_modules/bootstrap/dist/**/*",
+               "./node_modules/bootstrap.native/dist/**/*",
                "./node_modules/ckeditor/ckeditor.js",
                "./node_modules/ckeditor/contents.css",
                "./node_modules/ckeditor/skins/moono/**/*",
@@ -86,8 +87,6 @@ gulp.task("copylibs", function () {
 
     copyFiles({
         libs: ["./custom_components/ckeditor/**/*",
-        "./custom_components/htmlrest/src/**/*",
-        "./custom_components/htmlrest/plugin/**/*",
         "!**/*.intellisense.js"],
         baseName: './custom_components',
         dest: libDir
@@ -106,6 +105,7 @@ gulp.task("copylibs", function () {
                "./custom_components/htmlrest/src/components.js",
                "./custom_components/htmlrest/src/toggles.js",
                "./custom_components/htmlrest/src/models.js",
+               "./custom_components/htmlrest/src/form.js",
                "./custom_components/htmlrest/src/componentgatherer.js",
                "./custom_components/htmlrest/src/**/*.js",
                "./custom_components/htmlrest/plugin/**/*",

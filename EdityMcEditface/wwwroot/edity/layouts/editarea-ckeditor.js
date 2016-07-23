@@ -43,6 +43,8 @@ jsns.run(function (using) {
 
     var sourceModel = modal.getModel('source');
 
+    var editSourceDialog = modal.getToggle('dialog');
+
     var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
     buttonCreation.push({
         name: "SaveButton",
@@ -78,6 +80,7 @@ jsns.run(function (using) {
         created: function (button) {
             button.setListener({
                 edit: function () {
+                    editSourceDialog.on();
                     sourceModel.setData({
                         source: editor.innerHTML
                     });

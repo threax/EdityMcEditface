@@ -9,6 +9,7 @@ jsns.run(function (using) {
 
     var bindings = new BindingCollection('#settingsModal');
     var formLifecycle = new FormLifecycle(bindings);
+    var dialog = bindings.getToggle('dialog');
 
     var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
     buttonCreation.push({
@@ -17,6 +18,7 @@ jsns.run(function (using) {
             button.setListener({
                 open: function () {
                     formLifecycle.populate();
+                    dialog.on();
                 }
             });
         }

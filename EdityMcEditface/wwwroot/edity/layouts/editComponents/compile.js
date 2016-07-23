@@ -16,6 +16,8 @@ jsns.run(function (using) {
 
     var publishToggle = bindings.getToggle('publish');
 
+    var dialogToggle = bindings.getToggle('dialog');
+
     bindings.setListener({
         runCompiler: function (evt) {
             evt.preventDefault();
@@ -32,22 +34,6 @@ jsns.run(function (using) {
         }
     });
 
-    //var compileButton = $('#CompileButton');
-
-    //compileButton.click(function () {
-    //    compileButton.prop('disabled', true);
-    //    compilerOutputMessage.compiling();
-    //    rest.post('/edity/Compile', {},
-    //    function () {
-    //        compileButton.prop('disabled', false);
-    //        compilerOutputMessage.succeeded();
-    //    }, function () {
-    //        compileButton.prop('disabled', false);
-    //        compilerOutputMessage.failed();
-    //    });
-    //    return false;
-    //});
-
     var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
     buttonCreation.push({
         name: "CompileNavItem",
@@ -55,6 +41,7 @@ jsns.run(function (using) {
             button.setListener({
                 compile: function () {
                     toggleGroup.show(start);
+                    dialogToggle.on();
                 }
             });
         }});

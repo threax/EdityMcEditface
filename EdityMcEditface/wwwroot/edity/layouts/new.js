@@ -4,7 +4,7 @@ jsns.run(function (using) {
     var rest = using("htmlrest.rest");
     var component = using("htmlrest.components");
     var domQuery = using("htmlrest.domquery");
-    var BindingCollection = using("htmlrest.bindingcollection");
+    var BindingCollection = using("htmlrest.bindingcollection").BindingCollection;
 
     var templateBindings = new BindingCollection('#templates');
 

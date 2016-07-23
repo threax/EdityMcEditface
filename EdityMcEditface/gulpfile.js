@@ -73,7 +73,7 @@ gulp.task("copylibs", function () {
                "./node_modules/ckeditor/plugins/widget/**/*",
                "./node_modules/ckeditor/plugins/lineutils/**/*",
                "./node_modules/ckeditor/plugins/notification/**/*",
-               "./node_modules/ckeditor/plugins/image/**/*"],
+               "./node_modules/ckeditor/plugins/image/**/*",],
         baseName: './node_modules',
         dest: libDir
     });
@@ -86,7 +86,8 @@ gulp.task("copylibs", function () {
 
     copyFiles({
         libs: ["./custom_components/ckeditor/**/*",
-        "./custom_components/htmlrest/src/**/*", ],
+        "./custom_components/htmlrest/src/**/*",
+        "!**/*.intellisense.js"],
         baseName: './custom_components',
         dest: libDir
     });
@@ -105,7 +106,8 @@ gulp.task("copylibs", function () {
                "./custom_components/htmlrest/src/toggles.js",
                "./custom_components/htmlrest/src/models.js",
                "./custom_components/htmlrest/src/componentgatherer.js",
-               "./custom_components/htmlrest/src/**/*.js", ],
+               "./custom_components/htmlrest/src/**/*.js",
+               "!**/*.intellisense.js"],
         output: "htmlrest",
         dest: libDir + "htmlrest/"
     })

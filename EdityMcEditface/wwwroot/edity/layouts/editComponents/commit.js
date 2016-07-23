@@ -5,7 +5,7 @@ jsns.run(function (using) {
     var storage = using("htmlrest.storage");
     var component = using("htmlrest.components");
     var rest = using("htmlrest.rest");
-    var BindingCollection = using("htmlrest.bindingcollection");
+    var BindingCollection = using("htmlrest.bindingcollection").BindingCollection;
 
     var commitDialog = new BindingCollection('#commitModal');
     var commitModel = commitDialog.getModel('commit');

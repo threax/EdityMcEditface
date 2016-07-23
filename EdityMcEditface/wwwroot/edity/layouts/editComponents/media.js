@@ -1,11 +1,10 @@
 ﻿"use strict";
-
 jsns.run(function (using) {
     var rest = using("htmlrest.rest");
     var storage = using("htmlrest.storage");
-    var BindingCollection = using("htmlrest.bindingcollection");
+    var BindingCollection = using("htmlrest.bindingcollection").BindingCollection;
     var toggles = using("htmlrest.toggles");
-    var iter = using("htmlrest.iter");
+    var iter = using("htmlrest.iter").iter;
 
     function getFileName(path) {
         return path.replace(/^.*?([^\\\/]*)$/, '$1');

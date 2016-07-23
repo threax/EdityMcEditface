@@ -3,7 +3,7 @@
 jsns.run(function (using) {
     var storage = using("htmlrest.storage");
     var rest = using("htmlrest.rest");
-    var BindingCollection = using("htmlrest.bindingcollection");
+    var BindingCollection = using("htmlrest.bindingcollection").BindingCollection;
     var toggles = using("htmlrest.toggles");
 
     var bindings = new BindingCollection("#compileModal");

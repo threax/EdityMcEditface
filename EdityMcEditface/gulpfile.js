@@ -112,8 +112,7 @@ gulp.task("copylibs", function () {
                "!**/*.intellisense.js"],
         output: "htmlrest",
         dest: libDir + "htmlrest/"
-    })
-
+    });
 });
 
 function copyFiles(settings) {

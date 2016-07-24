@@ -1,10 +1,12 @@
 ﻿"use strict";
 
 jsns.run(function (using) {
-    var storage = using("htmlrest.storage");
-    var rest = using("htmlrest.rest");
-    var BindingCollection = using("htmlrest.bindingcollection").BindingCollection;
-    var toggles = using("htmlrest.toggles");
+    using("htmlrest.storage");
+    using("htmlrest.rest");
+    using("htmlrest.bindingcollection");
+    using("htmlrest.toggles");
+},
+function(exports, module, storage, rest, BindingCollection, toggles) {
 
     var bindings = new BindingCollection("#compileModal");
 

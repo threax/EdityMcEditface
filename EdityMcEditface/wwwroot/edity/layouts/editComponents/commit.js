@@ -1,12 +1,13 @@
 ﻿"use strict";
 
 jsns.run(function (using) {
-    var form = using("htmlrest.form");
-    var storage = using("htmlrest.storage");
-    var component = using("htmlrest.components");
-    var rest = using("htmlrest.rest");
-    var BindingCollection = using("htmlrest.bindingcollection").BindingCollection;
-
+    using("htmlrest.form");
+    using("htmlrest.storage");
+    using("htmlrest.components");
+    using("htmlrest.rest");
+    using("htmlrest.bindingcollection");
+},
+function (exports, module, form, storage, component, rest, BindingCollection) {
     var commitDialog = new BindingCollection('#commitModal');
     var commitModel = commitDialog.getModel('commit');
     commitDialog.setListener({

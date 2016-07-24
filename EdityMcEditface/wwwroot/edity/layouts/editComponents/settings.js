@@ -1,11 +1,13 @@
 ﻿"use strict";
 
 jsns.run(function (using) {
-    var BindingCollection = using("htmlrest.bindingcollection").BindingCollection;
-    var FormLifecycle = using("htmlrest.formlifecycle").FormLifecycle;
-    var storage = using("htmlrest.storage");
-    var toggles = using("htmlrest.toggles");
-    var rest = using("htmlrest.rest");
+    using("htmlrest.bindingcollection");
+    using("htmlrest.formlifecycle");
+    using("htmlrest.storage");
+    using("htmlrest.toggles");
+    using("htmlrest.rest");
+},
+function(exports, module, BindingCollection, FormLifecycle, storage, toggles, rest) {
 
     var bindings = new BindingCollection('#settingsModal');
     var formLifecycle = new FormLifecycle(bindings);

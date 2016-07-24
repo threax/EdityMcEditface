@@ -97,16 +97,6 @@ gulp.task("copylibs", function () {
     //file before that one. We also need jsns at the front.
     minifyJs({
         libs: ["./custom_components/htmlrest/src/jsns.js",
-               "./custom_components/htmlrest/src/typeidentifiers.js",
-               "./custom_components/htmlrest/src/domquery.js",
-               "./custom_components/htmlrest/src/bindingcollection.js",
-               "./custom_components/htmlrest/src/escape.js",
-               "./custom_components/htmlrest/src/textstream.js",
-               "./custom_components/htmlrest/src/components.js",
-               "./custom_components/htmlrest/src/toggles.js",
-               "./custom_components/htmlrest/src/models.js",
-               "./custom_components/htmlrest/src/form.js",
-               "./custom_components/htmlrest/src/componentgatherer.js",
                "./custom_components/htmlrest/src/**/*.js",
                "./custom_components/htmlrest/plugin/**/*",
                "!**/*.intellisense.js"],

@@ -1,12 +1,12 @@
 ﻿"use strict";
 
-jsns.run(function (using) {
-    using("htmlrest.bindingcollection");
-    using("htmlrest.formlifecycle");
-    using("htmlrest.storage");
-    using("htmlrest.toggles");
-    using("htmlrest.rest");
-},
+jsns.run([
+    "htmlrest.bindingcollection",
+    "htmlrest.formlifecycle",
+    "htmlrest.storage",
+    "htmlrest.toggles",
+    "htmlrest.rest"
+],
 function(exports, module, BindingCollection, FormLifecycle, storage, toggles, rest) {
 
     var bindings = new BindingCollection('#settingsModal');

@@ -1,10 +1,10 @@
 ﻿"use strict";
 
-jsns.run(function (using) {
-    using("htmlrest.storage");
-    using("htmlrest.rest");
-    using("htmlrest.bindingcollection");
-},
+jsns.run([
+    "htmlrest.storage",
+    "htmlrest.rest",
+    "htmlrest.bindingcollection"
+],
 function(exports, module, storage, rest, BindingCollection) {
 
     // config

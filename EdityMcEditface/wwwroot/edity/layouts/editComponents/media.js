@@ -1,11 +1,11 @@
 ﻿"use strict";
-jsns.run(function (using) {
-    using("htmlrest.rest");
-    using("htmlrest.storage");
-    using("htmlrest.bindingcollection");
-    using("htmlrest.toggles");
-    using("htmlrest.iter");
-},
+jsns.run([
+    "htmlrest.rest",
+    "htmlrest.storage",
+    "htmlrest.bindingcollection",
+    "htmlrest.toggles",
+    "htmlrest.iter"
+],
 function(exports, module, rest, storage, BindingCollection, toggles, iter) {
 
     function getFileName(path) {

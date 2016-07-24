@@ -1,11 +1,11 @@
 ﻿"use strict";
 
-jsns.run(function (using) {
-    using("htmlrest.rest");
-    using("htmlrest.components");
-    using("htmlrest.domquery");
-    using("htmlrest.bindingcollection");
-},
+jsns.run([
+    "htmlrest.rest",
+    "htmlrest.components",
+    "htmlrest.domquery",
+    "htmlrest.bindingcollection"
+],
 function(exports, module, rest, component, domQuery, BindingCollection){
 
     var templateBindings = new BindingCollection('#templates');

@@ -1,10 +1,10 @@
 ﻿"use strict";
 
-jsns.run(function (using) {
-    using("htmlrest.storage");
-    using("htmlrest.components");
-    using("htmlrest.domquery");
-},
+jsns.run([
+    "htmlrest.storage",
+    "htmlrest.components",
+    "htmlrest.domquery"
+],
 function(exports, module, storage, component, domQuery) {
 
     var navMenu = domQuery.first('[data-editor-navmenu]');

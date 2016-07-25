@@ -6,7 +6,8 @@ var gulp = require("gulp"),
     concat = require("gulp-concat"),
     cssmin = require("gulp-cssmin"),
     uglify = require("gulp-uglify"),
-    rename = require("gulp-rename");
+    rename = require("gulp-rename"),
+    sourcemaps = require("gulp-sourcemaps");
 
 var webroot = "./wwwroot/";
 
@@ -112,9 +113,10 @@ function copyFiles(settings) {
 
 function minifyJs(settings) {  
     return gulp.src(settings.libs)
+        .pipe(sourcemaps.init())
         .pipe(concat(settings.output + '.js'))
-        .pipe(gulp.dest(settings.dest))
-        .pipe(rename(settings.output + '.min.js'))
         .pipe(uglify())
+        .pipe(rename(settings.output + '.min.js'))
+        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "C:/Development/EdityMcEditface/EdityMcEditface/custom_components/htmlrest/src/" }))
         .pipe(gulp.dest(settings.dest));
 };

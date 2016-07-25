@@ -34,3 +34,6 @@
   top: 7px;
   right: 10px;
 }
+.startHidden {
+  display: none;
+}

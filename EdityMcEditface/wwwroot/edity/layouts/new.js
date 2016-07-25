@@ -31,7 +31,7 @@ function (exports, module, rest, component, domQuery, controller) {
 
     function NewController(bindings) {
         var templatesModel = bindings.getModel('templates');
-        var config = templatesModel.getConfig();
+        var config = bindings.getConfig();
         rest.get(templatesModel.getSrc(),
             function (data) {
                 templatesModel.setData(data, controller.createOnCallback(TemplateItemController, config));

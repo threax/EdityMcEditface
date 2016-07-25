@@ -10,7 +10,7 @@ function(exports, module, rest, component, domQuery, BindingCollection){
 
     var templateBindings = new BindingCollection('#templates');
 
-    rest.get('edity/templates', function (data) {
+    rest.get('/edity/templates', function (data) {
         var templatesModel = templateBindings.getModel('templates');
         templatesModel.setData(data, function (created, rowData) {
             created.setListener({

@@ -1,28 +1,29 @@
 ﻿"use strict";
 
 jsns.run([
-    "htmlrest.bindingcollection",
+    "htmlrest.controller",
     "htmlrest.formlifecycle",
-    "htmlrest.storage",
-    "htmlrest.toggles",
-    "htmlrest.rest"
+    "htmlrest.storage"
 ],
-function(exports, module, BindingCollection, FormLifecycle, storage, toggles, rest) {
+function (exports, module, controller, FormLifecycle, storage) {
 
-    var bindings = new BindingCollection('#settingsModal');
-    var formLifecycle = new FormLifecycle(bindings);
-    var dialog = bindings.getToggle('dialog');
+    function PageSettingsController(bindings) {
+        var formLifecycle = new FormLifecycle(bindings);
+        var dialog = bindings.getToggle('dialog');
 
-    var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
-    buttonCreation.push({
-        name: "SettingsNavItem",
-        created: function (button) {
-            button.setListener({
-                open: function () {
-                    formLifecycle.populate();
-                    dialog.on();
-                }
-            });
-        }
-    });
+        var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
+        buttonCreation.push({
+            name: "SettingsNavItem",
+            created: function (button) {
+                button.setListener({
+                    open: function () {
+                        formLifecycle.populate();
+                        dialog.on();
+                    }
+                });
+            }
+        });
+    }
+
+    controller.create('pageSettings', PageSettingsController);
 });

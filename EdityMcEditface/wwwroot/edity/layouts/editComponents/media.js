@@ -4,9 +4,10 @@ jsns.run([
     "htmlrest.storage",
     "htmlrest.bindingcollection",
     "htmlrest.toggles",
-    "htmlrest.iter"
+    "htmlrest.iter",
+    "htmlrest.controller"
 ],
-function(exports, module, rest, storage, BindingCollection, toggles, iter) {
+function(exports, module, rest, storage, BindingCollection, toggles, iter, controller) {
 
     function getFileName(path) {
         return path.replace(/^.*?([^\\\/]*)$/, '$1');
@@ -91,14 +92,12 @@ function(exports, module, rest, storage, BindingCollection, toggles, iter) {
         }
     };
 
-    var bindings = new BindingCollection("#mediaModal");
+    function MediaController(bindings) {
+        var fileBrowser = new FileBrowser(bindings);
+        var uploadModel = bindings.getModel('upload');
+        var dialog = bindings.getToggle('dialog');
 
-    var fileBrowser = new FileBrowser(bindings);
-    var uploadModel = bindings.getModel('upload');
-    var dialog = bindings.getToggle('dialog');
-
-    bindings.setListener({
-        upload: function (evt) {
+        function upload(evt) {
             evt.preventDefault();
 
             var formData = new FormData(this);
@@ -112,19 +111,23 @@ function(exports, module, rest, storage, BindingCollection, toggles, iter) {
                 alert("File Upload Failed");
             });
         }
-    });
+        this.upload = upload;
 
-    var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
-    buttonCreation.push({
-        name: "MediaNavItem",
-        created: function (button) {
-            button.setListener({
-                loadMedia: function () {
-                    var model = button.getModel('browse');
-                    fileBrowser.loadFiles(model.getSrc());
-                    dialog.on();
-                }
-            });
-        }
-    });
+        //Create a button for each instantiated controller
+        var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
+        buttonCreation.push({
+            name: "MediaNavItem",
+            created: function (button) {
+                button.setListener({
+                    loadMedia: function () {
+                        var model = button.getModel('browse');
+                        fileBrowser.loadFiles(model.getSrc());
+                        dialog.on();
+                    }
+                });
+            }
+        });
+    }
+
+    controller.create("media", MediaController);
 });

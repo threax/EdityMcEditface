@@ -3,9 +3,9 @@
 jsns.run([
     "htmlrest.storage",
     "htmlrest.rest",
-    "htmlrest.bindingcollection"
+    "htmlrest.controller"
 ],
-function(exports, module, storage, rest, BindingCollection) {
+function (exports, module, storage, rest, controller) {
 
     // config
     var editor = document.getElementById('editArea');
@@ -35,59 +35,64 @@ function(exports, module, storage, rest, BindingCollection) {
         config.imageUploadUrl = '/edity/Page/Asset/' + window.location.pathname;
     };
 
-    var modal = new BindingCollection('#sourceModal');
-    modal.setListener({
-        apply: function (evt) {
+    function SaveController(component) {
+        var load = component.getToggle("load");
+        load.off();
+
+        function save(evt) {
+            var saveModel = component.getModel("save");
+
             evt.preventDefault();
-            $('#sourceModal').modal('hide');
+
+            load.on();
+            var content = editor.innerHTML;
+            var blob = new Blob([content], { type: "text/html" });
+            rest.upload(saveModel.getSrc() + '/' + window.location.pathname, blob, function () {
+                load.off();
+            },
+            function () {
+                load.off();
+                alert("Error saving page. Please try again later.");
+            });
         }
-    });
-
-    var sourceModel = modal.getModel('source');
-
-    var editSourceDialog = modal.getToggle('dialog');
+        this.save = save;
+    }
 
     var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
     buttonCreation.push({
         name: "SaveButton",
-        created: function (component) {
-            var load = component.getToggle("load");
-            load.off();
-
-            component.setListener({
-                save: function (evt) {
-                    evt.preventDefault();
-
-                    load.on();
-                    var content = editor.innerHTML;
-                    var blob = new Blob([content], { type: "text/html" });
-                    rest.upload(this.getAttribute('href') + '/' + window.location.pathname, blob, function () {
-                        load.off();
-                    },
-                    function () {
-                        load.off();
-                        alert("Error saving page. Please try again later.");
-                    });
-                }
-            });
-        }
+        created: controller.createOnCallback(SaveController)
     });
 
     buttonCreation.push({
         name: "PreviewButton"
     });
 
-    buttonCreation.push({
-        name: "EditSourceNavItem",
-        created: function (button) {
-            button.setListener({
-                edit: function () {
-                    editSourceDialog.on();
-                    sourceModel.setData({
-                        source: editor.innerHTML
-                    });
-                }
-            });
+    function EditSourceController(bindings) {
+        var sourceModel = bindings.getModel('source');
+        var editSourceDialog = bindings.getToggle('dialog');
+
+        function apply(evt) {
+            evt.preventDefault();
+            editSourceDialog.off();
+            editor.innerHTML = sourceModel.getData().source;
         }
-    });
+        this.apply = apply;
+
+        buttonCreation.push({
+            name: "EditSourceNavItem",
+            created: function (button) {
+                button.setListener({
+                    edit: function () {
+                        editSourceDialog.on();
+                        sourceModel.setData({
+                            source: editor.innerHTML
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    controller.create("editSource", EditSourceController);
 });

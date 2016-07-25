@@ -17,6 +17,7 @@
     },
     "EdityMcEditface": {
       "commandName": "Project",
+      "commandLineArgs": "--config=\"C:\\Development\\EdityTestDir\\repos\\mycourses-support\\edityserver.json\"",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/.html",
       "environmentVariables": {

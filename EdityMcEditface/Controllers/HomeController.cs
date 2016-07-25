@@ -102,20 +102,37 @@ namespace EdityMcEditface.NetCore.Controllers
             {
                 return getConvertedDocument(pageStack, dr);
             }
-            catch (FileNotFoundException)
+            catch (DirectoryNotFoundException)
             {
                 //If the source file cannot be read offer to create the new file instead.
                 if (targetFileInfo.PathCanCreateFile)
                 {
-                    pageStack = new PageStack(templateEnvironment, fileFinder);
-                    pageStack.pushLayout("new.html");
-                    return getConvertedDocument(pageStack, dr);
+                    return showNewPage(dr);
                 }
                 else
                 {
                     throw;
                 }
             }
+            catch (FileNotFoundException)
+            {
+                //If the source file cannot be read offer to create the new file instead.
+                if (targetFileInfo.PathCanCreateFile)
+                {
+                    return showNewPage(dr);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        private IActionResult showNewPage(HtmlDocumentRenderer dr)
+        {
+            pageStack = new PageStack(templateEnvironment, fileFinder);
+            pageStack.pushLayout("new.html");
+            return getConvertedDocument(pageStack, dr);
         }
 
         private IActionResult getConvertedDocument(PageStack pageStack, HtmlDocumentRenderer dr)

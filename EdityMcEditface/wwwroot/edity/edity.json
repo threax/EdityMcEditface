@@ -24,7 +24,8 @@
     "uploadUrl": "edity/upload",
     "pageSettingsUrl": "edity/page/settings",
     "savePageUrl": "edity/Page",
-    "mediaBrowseDir": "/"
+    "mediaBrowseDir": "/",
+    "pageTemplateUrl": "/edity/templates"
   },
   "additionalContent": [ "lib/bootstrap/dist/fonts" ],
   "compilers": [

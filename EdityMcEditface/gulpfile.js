@@ -98,6 +98,7 @@ gulp.task("copylibs", function () {
     //file before that one. We also need jsns at the front.
     minifyJs({
         libs: ["./custom_components/htmlrest/src/jsns.js",
+               "./custom_components/htmlrest/src/polyfill.js",
                "./custom_components/htmlrest/src/**/*.js",
                "./custom_components/htmlrest/plugin/**/*",
                "!**/*.intellisense.js"],

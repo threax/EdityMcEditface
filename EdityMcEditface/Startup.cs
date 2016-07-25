@@ -26,6 +26,9 @@ namespace EdityMcEditface
 {
     public class Startup
     {
+        public static String EditySettingsRoot { get; set; }
+        public static String EditySettingsFile { get; set; } = "edityserver.json";
+
         private String runningFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         private IHostingEnvironment env;
 
@@ -58,14 +61,17 @@ namespace EdityMcEditface
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
 
-            String editySettingsRoot = siteRootPath;
-            if (Configuration.getVal("EditySettings:ReadFromCurrentDirectory"))
+            if(EditySettingsRoot == null)
             {
-                editySettingsRoot = Path.Combine(Directory.GetCurrentDirectory());
+                EditySettingsRoot = siteRootPath;
+                if (Configuration.getVal("EditySettings:ReadFromCurrentDirectory", false))
+                {
+                    EditySettingsRoot = Path.Combine(Directory.GetCurrentDirectory());
+                }
             }
 
             builder = new ConfigurationBuilder()
-            .SetBasePath(editySettingsRoot)
+            .SetBasePath(EditySettingsRoot)
             .AddInMemoryCollection(new Dictionary<String, String>
             {
                     { "ProjectMode", "SingleRepo" },
@@ -76,8 +82,8 @@ namespace EdityMcEditface
                     { "ProjectPath", Directory.GetCurrentDirectory() },
                     { "BackupFilePath", Path.Combine(siteRootPath, "wwwroot") }
             })
-            .AddJsonFile("edityserver.json", optional: true, reloadOnChange: true)
-            .AddJsonFile($"edityserver.{env.EnvironmentName}.json", optional: true);
+            .AddJsonFile(EditySettingsFile, optional: true, reloadOnChange: true)
+            .AddJsonFile($"{EditySettingsFile}.{env.EnvironmentName}.json", optional: true);
 
             EdityServerConfiguration = builder.Build();
         }

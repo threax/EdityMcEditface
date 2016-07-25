@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define LOCAL_RUN_ENABLED
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -44,6 +46,13 @@ namespace EdityMcEditface
                     Thread.Sleep(200);
                     Process.Start(uri.ToString());
                 });
+            }
+
+            var configPath = commandLineConfig["config"];
+            if (!String.IsNullOrEmpty(configPath))
+            {
+                Startup.EditySettingsFile = Path.GetFileName(configPath);
+                Startup.EditySettingsRoot = Path.GetDirectoryName(configPath);
             }
 #endif
 

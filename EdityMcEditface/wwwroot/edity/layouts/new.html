@@ -21,10 +21,12 @@
             </div>
         </div>
     </nav>
-    <ul class="row" id="templates" data-hr-model="templates" data-hr-model-src="{pageTemplateUrl}" data-hr-model-component="new-template-preview" data-hr-config-createPath="{uploadUrl}" data-hr-controller="new">
-        <li data-hr-component="new-template-preview" class="col-md-6">
-            <a href="#" data-hr-on-click="create" data-hr-model="create">{|path}</a>
-        </li>
+    <ul class="row" id="templates" data-hr-model="templates" data-hr-model-src="{pageTemplateUrl}" data-hr-config-createPath="{uploadUrl}" data-hr-controller="new">
+        <template>
+            <li class="col-md-6">
+                <a href="#" data-hr-on-click="create" data-hr-model="create">{|path}</a>
+            </li>
+        </template>
     </ul>
     {javascript}
 </body>

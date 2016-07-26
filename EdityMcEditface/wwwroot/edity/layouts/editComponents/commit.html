@@ -12,8 +12,10 @@
                 </div>
                 <div class="modal-body">
                     <label>Changed Files</label>
-                    <ol data-hr-model="changedFiles" data-hr-model-component="git-uncommitted-change" data-hr-model-src="/edity/Git/UncommittedChanges">
-                        <li data-hr-component="git-uncommitted-change">{|filePath}</li>
+                    <ol data-hr-model="changedFiles" data-hr-model-src="/edity/Git/UncommittedChanges">
+                        <template>
+                            <li>{|filePath}</li>
+                        </template>
                     </ol>
                     <div class="form-group">
                         <label for="message">Message</label>

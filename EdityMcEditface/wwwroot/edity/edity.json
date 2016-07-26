@@ -17,8 +17,9 @@
     },
     "htmlrest": {
       "js": [
-        { "file": "/lib/htmlrest/htmlrest.min.js" }
-      ]
+        { "file": "/lib/htmlrest/htmlrest.js" }
+      ],
+      "hasMin": true
     }
   },
   "vars": {

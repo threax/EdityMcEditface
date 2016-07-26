@@ -93,18 +93,23 @@ gulp.task("copylibs", function () {
         dest: libDir
     });
 
-    //Minify htmlrest, need to specify the load order for componentgatherer,
-    //so all modules it uses (since it runs) must be defined in the minified
-    //file before that one. We also need jsns at the front.
-    minifyJs({
+    //Minify htmlrest, need to specify the load order for jsns to be first
+    var htmlrestCompile = {
         libs: ["./custom_components/htmlrest/src/jsns.js",
                "./custom_components/htmlrest/src/polyfill.js",
                "./custom_components/htmlrest/src/**/*.js",
                "./custom_components/htmlrest/plugin/**/*",
                "!**/*.intellisense.js"],
         output: "htmlrest",
-        dest: libDir + "htmlrest/"
-    });
+        //dest: libDir + "htmlrest/",
+        dest: "./custom_components/htmlrest",
+        base: './custom_components/htmlrest',
+        //sourceRoot: "lib/htmlrest/src"
+        //sourceRoot: "C:/Development/EdityMcEditface/EdityMcEditface/custom_components/htmlrest/src/"
+    };
+
+    minifyJs(htmlrestCompile);
+    concatJs(htmlrestCompile);
 });
 
 function copyFiles(settings) {
@@ -113,11 +118,19 @@ function copyFiles(settings) {
 }
 
 function minifyJs(settings) {  
-    return gulp.src(settings.libs)
+    return gulp.src(settings.libs, { base: settings.base })
         .pipe(sourcemaps.init())
         .pipe(concat(settings.output + '.js'))
         .pipe(uglify())
         .pipe(rename(settings.output + '.min.js'))
-        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "C:/Development/EdityMcEditface/EdityMcEditface/custom_components/htmlrest/src/" }))
+        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: settings.sourceRoot }))
+        .pipe(gulp.dest(settings.dest));
+};
+
+function concatJs(settings) {
+    return gulp.src(settings.libs, { base: settings.base })
+        .pipe(sourcemaps.init())
+        .pipe(concat(settings.output + '.js'))
+        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: settings.sourceRoot }))
         .pipe(gulp.dest(settings.dest));
 };

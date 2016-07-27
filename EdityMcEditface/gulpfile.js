@@ -101,11 +101,9 @@ gulp.task("copylibs", function () {
                "./custom_components/htmlrest/plugin/**/*",
                "!**/*.intellisense.js"],
         output: "htmlrest",
-        //dest: libDir + "htmlrest/",
         dest: "./custom_components/htmlrest",
-        base: './custom_components/htmlrest',
-        //sourceRoot: "lib/htmlrest/src"
-        //sourceRoot: "C:/Development/EdityMcEditface/EdityMcEditface/custom_components/htmlrest/src/"
+        //base: './custom_components/htmlrest',
+        sourceRoot: "C:/Development/EdityMcEditface/EdityMcEditface/custom_components/htmlrest/src/"
     };
 
     minifyJs(htmlrestCompile);

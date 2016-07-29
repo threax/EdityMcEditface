@@ -99,6 +99,8 @@ gulp.task("copylibs", function () {
                "./custom_components/htmlrest/src/polyfill.js",
                "./custom_components/htmlrest/src/**/*.js",
                "./custom_components/htmlrest/plugin/**/*",
+               "./custom_components/htmlrest/widgets/**/*",
+               "./custom_components/htmlrest/data/**/*",
                "!**/*.intellisense.js"],
         output: "htmlrest",
         dest: "./custom_components/htmlrest",

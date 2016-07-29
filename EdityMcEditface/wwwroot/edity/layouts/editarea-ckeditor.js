@@ -3,9 +3,10 @@
 jsns.run([
     "htmlrest.storage",
     "htmlrest.rest",
-    "htmlrest.controller"
+    "htmlrest.controller",
+    "htmlrest.widgets.navmenu"
 ],
-function (exports, module, storage, rest, controller) {
+function (exports, module, storage, rest, controller, navmenu) {
 
     // config
     var editor = document.getElementById('editArea');
@@ -58,15 +59,9 @@ function (exports, module, storage, rest, controller) {
         this.save = save;
     }
 
-    var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
-    buttonCreation.push({
-        name: "SaveButton",
-        created: controller.createOnCallback(SaveController)
-    });
-
-    buttonCreation.push({
-        name: "PreviewButton"
-    });
+    var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
+    editMenu.add("SaveButton", SaveController);
+    editMenu.add("PreviewButton");
 
     function EditSourceController(bindings) {
         var sourceModel = bindings.getModel('source');
@@ -79,19 +74,17 @@ function (exports, module, storage, rest, controller) {
         }
         this.apply = apply;
 
-        buttonCreation.push({
-            name: "EditSourceNavItem",
-            created: function (button) {
-                button.setListener({
-                    edit: function () {
-                        editSourceDialog.on();
-                        sourceModel.setData({
-                            source: editor.innerHTML
-                        });
-                    }
+        function NavItemController() {
+            function edit() {
+                editSourceDialog.on();
+                sourceModel.setData({
+                    source: editor.innerHTML
                 });
             }
-        });
+            this.edit = edit;
+        }
+
+        editMenu.add("EditSourceNavItem", NavItemController);
     }
 
     controller.create("editSource", EditSourceController);

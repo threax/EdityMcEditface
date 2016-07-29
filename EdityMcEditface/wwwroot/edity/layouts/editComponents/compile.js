@@ -4,9 +4,10 @@ jsns.run([
     "htmlrest.storage",
     "htmlrest.rest",
     "htmlrest.controller",
-    "htmlrest.toggles"
+    "htmlrest.toggles",
+    "htmlrest.widgets.navmenu"
 ],
-function (exports, module, storage, rest, controller, toggles) {
+function (exports, module, storage, rest, controller, toggles, navmenu) {
 
     function CompileController(bindings) {
         var start = bindings.getToggle("start");
@@ -35,18 +36,16 @@ function (exports, module, storage, rest, controller, toggles) {
             }
         });
 
-        var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
-        buttonCreation.push({
-            name: "CompileNavItem",
-            created: function (button) {
-                button.setListener({
-                    compile: function () {
-                        toggleGroup.show(start);
-                        dialogToggle.on();
-                    }
-                });
+        function NavButtonController(created) {
+            function compile() {
+                toggleGroup.show(start);
+                dialogToggle.on();
             }
-        });
+            this.compile = compile;
+        }
+
+        var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
+        editMenu.add("CompileNavItem", NavButtonController);
     }
 
     controller.create('compile', CompileController);

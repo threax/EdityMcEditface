@@ -3,9 +3,10 @@
 jsns.run([
     "htmlrest.storage",
     "htmlrest.rest",
-    "htmlrest.controller"
+    "htmlrest.controller",
+    "htmlrest.widgets.navmenu"
 ],
-function (exports, module, storage, rest, controller) {
+function (exports, module, storage, rest, controller, navmenu) {
     function CommitController(commitDialog) {
         var commitModel = commitDialog.getModel('commit');
 
@@ -24,24 +25,22 @@ function (exports, module, storage, rest, controller) {
 
         var dialog = commitDialog.getToggle('dialog');
 
-        var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
-        buttonCreation.push({
-            name: "CommitNavItem",
-            created: function (button) {
-                button.setListener({
-                    commit: function () {
-                        dialog.on();
-                        var changedFiles = commitDialog.getModel('changedFiles');
-                        rest.get(changedFiles.getSrc(), function (data) {
-                            changedFiles.setData(data);
-                        },
-                        function (data) {
-                            alert('Cannot get uncommitted changes. Please try again later.');
-                        });
-                    }
+        function NavButtonController(created) {
+            function commit() {
+                dialog.on();
+                var changedFiles = commitDialog.getModel('changedFiles');
+                rest.get(changedFiles.getSrc(), function (data) {
+                    changedFiles.setData(data);
+                },
+                function (data) {
+                    alert('Cannot get uncommitted changes. Please try again later.');
                 });
             }
-        });
+            this.commit = commit;
+        }
+
+        var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
+        editMenu.add("CommitNavItem", NavButtonController);
     }
 
     controller.create("commit", CommitController);

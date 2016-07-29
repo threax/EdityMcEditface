@@ -3,26 +3,25 @@
 jsns.run([
     "htmlrest.controller",
     "htmlrest.formlifecycle",
-    "htmlrest.storage"
+    "htmlrest.storage",
+    "htmlrest.widgets.navmenu"
 ],
-function (exports, module, controller, FormLifecycle, storage) {
+function (exports, module, controller, FormLifecycle, storage, navmenu) {
 
     function PageSettingsController(bindings) {
         var formLifecycle = new FormLifecycle(bindings);
         var dialog = bindings.getToggle('dialog');
 
-        var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
-        buttonCreation.push({
-            name: "SettingsNavItem",
-            created: function (button) {
-                button.setListener({
-                    open: function () {
-                        formLifecycle.populate();
-                        dialog.on();
-                    }
-                });
+        function NavButtonController(button) {
+            function open() {
+                formLifecycle.populate();
+                dialog.on();
             }
-        });
+            this.open = open;
+        }
+
+        var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
+        editMenu.add("SettingsNavItem", NavButtonController);
     }
 
     controller.create('pageSettings', PageSettingsController);

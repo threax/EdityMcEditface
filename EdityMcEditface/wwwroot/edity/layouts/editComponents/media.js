@@ -5,9 +5,10 @@ jsns.run([
     "htmlrest.bindingcollection",
     "htmlrest.toggles",
     "htmlrest.iter",
-    "htmlrest.controller"
+    "htmlrest.controller",
+    "htmlrest.widgets.navmenu"
 ],
-function(exports, module, rest, storage, BindingCollection, toggles, iter, controller) {
+function (exports, module, rest, storage, BindingCollection, toggles, iter, controller, navmenu) {
 
     function getFileName(path) {
         return path.replace(/^.*?([^\\\/]*)$/, '$1');
@@ -113,20 +114,17 @@ function(exports, module, rest, storage, BindingCollection, toggles, iter, contr
         }
         this.upload = upload;
 
-        //Create a button for each instantiated controller
-        var buttonCreation = storage.getInInstance("edit-nav-menu-items", []);
-        buttonCreation.push({
-            name: "MediaNavItem",
-            created: function (button) {
-                button.setListener({
-                    loadMedia: function () {
-                        var model = button.getModel('browse');
-                        fileBrowser.loadFiles(model.getSrc());
-                        dialog.on();
-                    }
-                });
+        function NavButtonController(button) {
+            function loadMedia() {
+                var model = button.getModel('browse');
+                fileBrowser.loadFiles(model.getSrc());
+                dialog.on();
             }
-        });
+            this.loadMedia = loadMedia;
+        }
+
+        var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
+        editMenu.add("MediaNavItem", NavButtonController);
     }
 
     controller.create("media", MediaController);

@@ -1,0 +1,7 @@
+﻿.treemenu-folder > .treemenu-editor{
+    display:none;
+}
+
+.treemenu-folder:hover > .treemenu-editor{
+    display:block;
+}

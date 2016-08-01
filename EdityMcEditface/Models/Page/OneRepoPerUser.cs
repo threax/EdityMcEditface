@@ -25,7 +25,7 @@ namespace EdityMcEditface.Models.Page
         {
             get
             {
-                return Path.Combine(projectFolder, "Published");
+                return Path.Combine(projectFolder, "Publish");
             }
         }
 

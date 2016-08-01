@@ -87,8 +87,10 @@ gulp.task("copylibs", function () {
     });
 
     copyFiles({
-        libs: ["./custom_components/ckeditor/**/*",
-        "!**/*.intellisense.js"],
+        libs: [
+            "./custom_components/ckeditor/**/*",
+            "./custom_components/edity/**/*",
+            "!**/*.intellisense.js"],
         baseName: './custom_components',
         dest: libDir
     });

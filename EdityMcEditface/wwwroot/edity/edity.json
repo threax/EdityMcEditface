@@ -24,10 +24,13 @@
     "TreeMenu": {
       "js": [
         {
-          "file": "/js/TreeMenu.js",
+          "file": "/lib/edity/widgets/TreeMenu.js",
           "async": true
         }
       ]
+    },
+    "TreeMenuEditor": {
+      "css": [ "/lib/edity/widgets/TreeMenuEditor.css" ]
     }
   },
   "vars": {

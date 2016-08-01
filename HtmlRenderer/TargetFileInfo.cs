@@ -102,7 +102,7 @@ namespace EdityMcEditface.HtmlRenderer
                 {
                     file = "";
                 }
-                return Path.Combine(path, file);
+                return  Path.Combine("/", path, file);
             }
         }
 
@@ -124,7 +124,11 @@ namespace EdityMcEditface.HtmlRenderer
                 file = "index";
             }
             file = file.TrimStart('\\', '/');
-            if (file.Equals(".html", StringComparison.OrdinalIgnoreCase))
+            if(file == "")
+            {
+                file = "index";
+            }
+            else if (file.Equals(".html", StringComparison.OrdinalIgnoreCase))
             {
                 file = "index.html";
             }

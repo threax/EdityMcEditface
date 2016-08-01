@@ -56,15 +56,16 @@ namespace EdityMcEditface.Controllers
         public async Task<IActionResult> Index(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
-            if (fileInfo.Extension != ".html")
+            var outputFile = fileInfo.OriginalFileName;
+            if (fileInfo.Extension == "")
             {
-                throw new ValidationException("File must be an html file.");
+                outputFile = fileInfo.HtmlFile;
             }
             if (fileInfo.IsProjectFile)
             {
                 throw new ValidationException("Cannot update project files with the save function.");
             }
-            using (Stream stream = fileFinder.writeFile(fileInfo.OriginalFileName))
+            using (Stream stream = fileFinder.writeFile(outputFile))
             {
                 await this.Request.Form.Files.First().CopyToAsync(stream);
             }

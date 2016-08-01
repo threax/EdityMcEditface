@@ -20,6 +20,14 @@
         { "file": "/lib/htmlrest/htmlrest.js" }
       ],
       "hasMin": true
+    },
+    "TreeMenu": {
+      "js": [
+        {
+          "file": "/js/TreeMenu.js",
+          "async": true
+        }
+      ]
     }
   },
   "vars": {

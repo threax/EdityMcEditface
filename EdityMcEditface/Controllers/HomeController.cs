@@ -45,7 +45,36 @@ namespace EdityMcEditface.NetCore.Controllers
                     {
                         return new FileStreamResult(fileFinder.readFile(targetFileInfo.HtmlFile), "text/html");
                     }
+                    return Redirect(targetFileInfo.NoHtmlRedirect);
+                case "":
                     return buildAsEditor(pageStack);
+                default:
+                    var cleanExtension = targetFileInfo.Extension.TrimStart('.') + ".html";
+                    if (fileFinder.doesLayoutExist(cleanExtension))
+                    {
+                        return buildAsPage(pageStack, cleanExtension);
+                    }
+                    return returnFile(file);
+            }
+        }
+
+        [Route("edity/preview/{*file}")]
+        [HttpGet]
+        public IActionResult Preview(String file)
+        {
+            targetFileInfo = new TargetFileInfo(file);
+            templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder.Project);
+            PageStack pageStack = new PageStack(templateEnvironment, fileFinder);
+            pageStack.ContentFile = targetFileInfo.HtmlFile;
+
+            switch (targetFileInfo.Extension)
+            {
+                case ".html":
+                    if (targetFileInfo.IsProjectFile)
+                    {
+                        return new FileStreamResult(fileFinder.readFile(targetFileInfo.HtmlFile), "text/html");
+                    }
+                    return Redirect(targetFileInfo.NoHtmlRedirect);
                 case "":
                     return buildAsPage(pageStack, "default.html");
                 default:

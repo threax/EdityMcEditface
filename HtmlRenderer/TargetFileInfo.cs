@@ -88,6 +88,24 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        public String NoHtmlRedirect
+        {
+            get
+            {
+                var path = Path.GetDirectoryName(originalFileName);
+                var file = Path.GetFileNameWithoutExtension(originalFileName);
+                if (String.IsNullOrEmpty(path))
+                {
+                    path = "/";
+                }
+                if ("index".Equals(file, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    file = "";
+                }
+                return Path.Combine(path, file);
+            }
+        }
+
         /// <summary>
         /// This will be true if the current path can point to a new html file.
         /// </summary>

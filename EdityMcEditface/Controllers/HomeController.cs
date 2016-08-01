@@ -107,6 +107,7 @@ namespace EdityMcEditface.NetCore.Controllers
         {
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);
             dr.addTransform(new CreateSettingsForm());
+            dr.addTransform(new CreateTreeMenuEditor());
             pageStack.pushLayout("edit.html");
             pageStack.pushLayout("default.html");
             foreach (var editStackItem in fileFinder.Project.EditComponents)

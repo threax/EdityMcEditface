@@ -1,7 +1,10 @@
-﻿.treemenu-folder > .treemenu-editor{
+﻿.treemenu-editor-folder > .treemenu-editor,
+.treemenu-editor-link > .treemenu-editor{
     display:none;
+    float:right;
 }
 
-.treemenu-folder:hover > .treemenu-editor{
+.treemenu-editor-folder:hover > .treemenu-editor,
+.treemenu-editor-link:hover > .treemenu-editor{
     display:block;
 }

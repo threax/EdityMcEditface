@@ -9,17 +9,22 @@ namespace HtmlAgilityPack
     {
         public static IEnumerable<HtmlNode> Select(this HtmlNode node, String query)
         {
+            var prefix = "";
+            if(node != node.OwnerDocument.DocumentNode)
+            {
+                prefix = ".";
+            }
             IEnumerable<HtmlNode> result;
             switch (query[0])
             {
                 case '[':
-                    result = node.SelectNodes($"//*[@{query.Substring(1)}");
+                    result = node.SelectNodes($"{prefix}//*[@{query.Substring(1)}");
                     break;
                 case '#':
-                    result = node.SelectNodes($"//*[@id='{query.Substring(1)}']");
+                    result = node.SelectNodes($"{prefix}//*[@id='{query.Substring(1)}']");
                     break;
                 case '.':
-                    result = node.SelectNodes($"//*[@class='{query.Substring(1)}']");
+                    result = node.SelectNodes($"{prefix}//*[@class='{query.Substring(1)}']");
                     break;
                 default:
                     if (query.Contains('['))
@@ -30,7 +35,7 @@ namespace HtmlAgilityPack
                     {
                         query = query.Replace(".", "[@class='") + "']";
                     }
-                    result = node.SelectNodes("//" + query);
+                    result = node.SelectNodes($"{prefix}//{query}");
                     break;
             }
             if(result == null)

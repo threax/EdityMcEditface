@@ -8,8 +8,6 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
 {
     public class CreateTreeMenuEditor : ServerSideTransform
     {
-        private List<String> controllerNames = new List<string>();
-
         public CreateTreeMenuEditor()
         {
 
@@ -20,6 +18,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
             var controllerNode = getControllerNode("treeMenu", document.DocumentNode);
             if(controllerNode != null)
             {
+                controllerNode.SetAttributeValue("data-hr-config-treemenu-editmode", "true");
                 //Find templates
                 var folderModel = getModelNode("folders", controllerNode);
                 if (folderModel != null)
@@ -107,11 +106,11 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
 
         private static String editorText =
 @"<div class=""treemenu-editor"">
-    <a href=""#""><span class=""glyphicon glyphicon-arrow-up""></span></a>
-    <a href=""#""><span class=""glyphicon glyphicon-arrow-down""></span></a>
-    <a href=""#""><span class=""glyphicon glyphicon-plus"" ></span></a>
-    <a href=""#""><span class=""glyphicon glyphicon-pencil"" ></span></a>
-    <a href=""#""><span class=""glyphicon glyphicon-trash"" ></span></a>
+    <a href=""#"" data-hr-on-click=""moveUp""><span class=""glyphicon glyphicon-arrow-up""></span></a>
+    <a href=""#"" data-hr-on-click=""moveDown""><span class=""glyphicon glyphicon-arrow-down""></span></a>
+    <a href=""#"" data-hr-on-click=""addItem""><span class=""glyphicon glyphicon-plus"" ></span></a>
+    <a href=""#"" data-hr-on-click=""editItem""><span class=""glyphicon glyphicon-pencil"" ></span></a>
+    <a href=""#"" data-hr-on-click=""deleteItem""><span class=""glyphicon glyphicon-trash"" ></span></a>
 </div>";
     }
 }

@@ -1,13 +1,82 @@
 ﻿"use strict";
 
+jsns.define("edity.widgets.treemenu.editor", [
+], function (exports, module) {
+    function applyChanges(menuData, updateCb) {
+        updateCb(null);
+        updateCb(menuData);
+    }
+
+    function moveUp(evt, menuData, itemData, updateCb) {
+        evt.preventDefault();
+        evt.stopPropagation();
+        alert('moveup');
+        applyChanges(menuData, updateCb);
+    }
+
+    function moveDown(evt, menuData, itemData, updateCb) {
+        evt.preventDefault();
+        evt.stopPropagation();
+        alert('moveDown');
+        applyChanges(menuData, updateCb);
+    }
+
+    function addItem(evt, menuData, itemData, updateCb) {
+        evt.preventDefault();
+        evt.stopPropagation();
+        alert('addItem');
+        applyChanges(menuData, updateCb);
+    }
+
+    function editItem(evt, menuData, itemData, updateCb) {
+        evt.preventDefault();
+        evt.stopPropagation();
+        alert('editItem');
+        applyChanges(menuData, updateCb);
+    }
+
+    function deleteItem(evt, menuData, itemData, updateCb) {
+        evt.preventDefault();
+        evt.stopPropagation();
+        alert('deleteItem');
+        applyChanges(menuData, updateCb);
+    }
+
+    function fireItemAdded(menuData, listener, itemData, updateCb) {
+
+        listener.moveUp = function (evt) {
+            moveUp(evt, menuData, itemData, updateCb);
+        }
+
+        listener.moveDown = function (evt) {
+            moveDown(evt, menuData, itemData, updateCb);
+        }
+
+        listener.addItem = function (evt) {
+            addItem(evt, menuData, itemData, updateCb);
+        }
+
+        listener.editItem = function (evt) {
+            editItem(evt, menuData, itemData, updateCb);
+        }
+
+        listener.deleteItem = function (evt) {
+            deleteItem(evt, menuData, itemData, updateCb);
+        }
+    } 
+
+    exports.fireItemAdded = fireItemAdded;
+});
+
 jsns.run([
     "htmlrest.storage",
     "htmlrest.rest",
     "htmlrest.components",
     "htmlrest.bindingcollection",
     "htmlrest.domquery",
-    "htmlrest.controller"
-], function (exports, module, storage, rest, component, BindingCollection, domQuery, controller) {
+    "htmlrest.controller",
+    "edity.widgets.treemenu.editor"
+], function (exports, module, storage, rest, component, BindingCollection, domQuery, controller, treeEditor) {
 
     controller.create("treeMenu", TreeMenuController);
 
@@ -17,6 +86,8 @@ jsns.run([
      */
     function TreeMenuController(bindings) {
         var rootModel = bindings.getModel('children');
+        var config = bindings.getConfig();
+        var editMode = config["treemenu-editmode"] === 'true';
 
         var ajaxurl = rootModel.getSrc();
 
@@ -86,7 +157,8 @@ jsns.run([
 
                 foldersModel.setData(categories.folders, function (folderComponent, data) {
                     var id = data.id;
-                    folderComponent.setListener({
+
+                    var listener = {
                         toggleMenuItem: function (evt) {
                             evt.preventDefault();
 
@@ -94,7 +166,12 @@ jsns.run([
                             buildMenu(folderComponent, menuCacheInfo);
                             toggleMenu(menuCacheInfo, folderComponent.getToggle('children'));
                         }
-                    });
+                    };
+                    if (editMode) {
+                        treeEditor.fireItemAdded(menuData, listener, data, initialSetup);
+                    }
+                    folderComponent.setListener(listener);
+
                     var childData = getMenuCacheInfo(data.id);
                     if (childData.expanded) {
                         buildMenu(folderComponent, childData, autoHide);

@@ -63,7 +63,7 @@ jsns.define("edity.widgets.treemenu.editor", [
         listener.deleteItem = function (evt) {
             deleteItem(evt, menuData, itemData, updateCb);
         }
-    } 
+    }
 
     exports.fireItemAdded = fireItemAdded;
 });
@@ -90,15 +90,20 @@ jsns.run([
         var editMode = config["treemenu-editmode"] === 'true';
 
         var ajaxurl = rootModel.getSrc();
+        var getNextId = (function () {
+            var i = -1;
+            return function() {
+                return ++i;
+            }
+        })();
 
         var sessionStorageCache = 'treemenu-categorycache-' + ajaxurl;
         var sessionStorageMenu = 'treemenu-sessionstorage-' + ajaxurl;
         var menuCache = storage.getSessionJson(sessionStorageCache, {});
-        var menuParentLists = {};
         var menuData = null;
+        var createdItems = {};
         window.onbeforeunload = function (e) {
             storage.storeJsonInSession(sessionStorageCache, menuCache);
-            storage.storeJsonInSession(sessionStorageMenu, menuData);
         };
 
         initialSetup(storage.getSessionJson(sessionStorageMenu));
@@ -116,15 +121,28 @@ jsns.run([
                 else {
                     //Clear old menu info, the menu was changed
                     menuCache = {};
-                    menu.empty();
-                    menuParentLists = {};
+                    createdItems = {};
                 }
             }
 
             menuData = data;
             if (menuData !== null) {
-                var menuCacheInfo = getMenuCacheInfo(0);
-                buildMenu(bindings, menuCacheInfo, false);
+                if (data['menuItemId'] === undefined) {
+                    setupFolder(data, null);
+                }
+
+                var menuCacheInfo = getMenuCacheInfo(data.menuItemId);
+                buildMenu(bindings, menuCacheInfo, menuData, false);
+            }
+        }
+
+        function setupFolder(data, parent) {
+            data.menuItemId = getNextId();
+            data.menuItemParent = parent;
+            var folders = data.folders;
+            for (var i = 0; i < folders.length; ++i) {
+                //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
+                setupFolder(folders[i], data);
             }
         }
 
@@ -138,32 +156,31 @@ jsns.run([
             return menuCache[parentCategoryId];
         }
 
-        function buildMenu(parentBindings, menuCacheInfo, autoHide) {
+        function buildMenu(parentBindings, menuCacheInfo, folder, autoHide) {
             if (autoHide === undefined) {
                 autoHide = true;
             }
 
-            var list = menuParentLists[menuCacheInfo.id];
-            if (list === undefined) {
+            if (!createdItems[menuCacheInfo.id]) {
                 var parentModel = parentBindings.getModel('children');
-                var categories = menuData.entries[menuCacheInfo.id];
+                var list = null;
                 parentModel.setData({}, function (created) {
                     list = created;
                 });
-                menuParentLists[menuCacheInfo.id] = list;
+                createdItems[menuCacheInfo.id] = true;
 
                 var foldersModel = list.getModel('folders');
                 var linksModel = list.getModel('links');
 
-                foldersModel.setData(categories.folders, function (folderComponent, data) {
-                    var id = data.id;
+                foldersModel.setData(folder.folders, function (folderComponent, data) {
+                    var id = data.menuItemId;
+                    var menuCacheInfo = getMenuCacheInfo(id);
 
                     var listener = {
                         toggleMenuItem: function (evt) {
                             evt.preventDefault();
 
-                            var menuCacheInfo = getMenuCacheInfo(id);
-                            buildMenu(folderComponent, menuCacheInfo);
+                            buildMenu(folderComponent, menuCacheInfo, data);
                             toggleMenu(menuCacheInfo, folderComponent.getToggle('children'));
                         }
                     };
@@ -172,13 +189,12 @@ jsns.run([
                     }
                     folderComponent.setListener(listener);
 
-                    var childData = getMenuCacheInfo(data.id);
-                    if (childData.expanded) {
-                        buildMenu(folderComponent, childData, autoHide);
+                    if (menuCacheInfo.expanded) {
+                        buildMenu(folderComponent, menuCacheInfo, data, autoHide);
                     }
                 });
 
-                linksModel.setData(categories.pages);
+                linksModel.setData(folder.pages);
             }
         }
 

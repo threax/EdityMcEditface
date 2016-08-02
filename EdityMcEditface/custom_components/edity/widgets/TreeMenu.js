@@ -88,6 +88,7 @@ jsns.run([
         var rootModel = bindings.getModel('children');
         var config = bindings.getConfig();
         var editMode = config["treemenu-editmode"] === 'true';
+        var version = config["treemenu-version"];
 
         var ajaxurl = rootModel.getSrc();
         var getNextId = (function () {
@@ -97,20 +98,31 @@ jsns.run([
             }
         })();
 
-        var sessionStorageCache = 'treemenu-categorycache-' + ajaxurl;
-        var sessionStorageMenu = 'treemenu-sessionstorage-' + ajaxurl;
-        var menuCache = storage.getSessionJson(sessionStorageCache, {});
+        var menuStorageId = 'treemenu-cache-' + ajaxurl;
+        var sessionData = storage.getSessionJson(menuStorageId, null);
+        var menuCache = null;
         var menuData = null;
         var createdItems = {};
         window.onbeforeunload = function (e) {
-            storage.storeJsonInSession(sessionStorageCache, menuCache);
+            storage.storeJsonInSession(menuStorageId,{
+                cache: menuCache,
+                data: menuData,
+                version: version
+            });
         };
 
-        initialSetup(storage.getSessionJson(sessionStorageMenu));
-
-        rest.get(ajaxurl, function (data) {
-            initialSetup(data);
-        });
+        if (sessionData === null || sessionData.version !== version) {
+            //No data, get it
+            menuCache = {};
+            rest.get(ajaxurl, function (data) {
+                initialSetup(data);
+            });
+        }
+        else {
+            //Use what we had
+            menuCache = sessionData.cache;
+            initialSetup(sessionData.data);
+        }
 
         function initialSetup(data) {
             //are we the same
@@ -138,7 +150,6 @@ jsns.run([
 
         function setupFolder(data, parent) {
             data.menuItemId = getNextId();
-            data.menuItemParent = parent;
             var folders = data.folders;
             for (var i = 0; i < folders.length; ++i) {
                 //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?

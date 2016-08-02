@@ -3,22 +3,33 @@
 jsns.define("edity.widgets.treemenu.editor", [
 ], function (exports, module) {
     function applyChanges(menuData, updateCb) {
-        updateCb(null);
-        updateCb(menuData);
+        updateCb();
     }
 
     function moveUp(evt, menuData, itemData, updateCb) {
         evt.preventDefault();
         evt.stopPropagation();
-        alert('moveup');
-        applyChanges(menuData, updateCb);
+        var parent = itemData.parent;
+        var loc = parent.folders.indexOf(itemData);
+        if (loc > 0) {
+            var swap = parent.folders[loc - 1];
+            parent.folders[loc - 1] = itemData;
+            parent.folders[loc] = swap;
+            applyChanges(menuData, updateCb);
+        }
     }
 
     function moveDown(evt, menuData, itemData, updateCb) {
         evt.preventDefault();
         evt.stopPropagation();
-        alert('moveDown');
-        applyChanges(menuData, updateCb);
+        var parent = itemData.parent;
+        var loc = parent.folders.indexOf(itemData);
+        if (loc + 1 < parent.folders.length) {
+            var swap = parent.folders[loc + 1];
+            parent.folders[loc + 1] = itemData;
+            parent.folders[loc] = swap;
+            applyChanges(menuData, updateCb);
+        }
     }
 
     function addItem(evt, menuData, itemData, updateCb) {
@@ -104,6 +115,9 @@ jsns.run([
         var menuData = null;
         var createdItems = {};
         window.onbeforeunload = function (e) {
+            if (editMode) {
+                removeParents(menuData);
+            }
             storage.storeJsonInSession(menuStorageId,{
                 cache: menuCache,
                 data: menuData,
@@ -125,22 +139,14 @@ jsns.run([
         }
 
         function initialSetup(data) {
-            //are we the same
-            if (menuData !== null && data !== null) {
-                if (menuData.instanceId === data.instanceId) {
-                    return;
-                }
-                else {
-                    //Clear old menu info, the menu was changed
-                    menuCache = {};
-                    createdItems = {};
-                }
-            }
-
             menuData = data;
             if (menuData !== null) {
                 if (data['menuItemId'] === undefined) {
-                    setupFolder(data, null);
+                    createIds(data);
+                }
+
+                if (editMode) {
+                    findParents(data, null);
                 }
 
                 var menuCacheInfo = getMenuCacheInfo(data.menuItemId);
@@ -148,12 +154,38 @@ jsns.run([
             }
         }
 
-        function setupFolder(data, parent) {
+        function rebuildMenu() {
+            createdItems = {};
+            var childModel = bindings.getModel('children');
+            childModel.setData([]);
+            var menuCacheInfo = getMenuCacheInfo(menuData.menuItemId);
+            buildMenu(bindings, menuCacheInfo, menuData, false);
+        }
+
+        function createIds(data) {
             data.menuItemId = getNextId();
             var folders = data.folders;
             for (var i = 0; i < folders.length; ++i) {
                 //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
-                setupFolder(folders[i], data);
+                createIds(folders[i]);
+            }
+        }
+
+        function findParents(data, parent) {
+            data.parent = parent;
+            var folders = data.folders;
+            for (var i = 0; i < folders.length; ++i) {
+                //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
+                findParents(folders[i], data);
+            }
+        }
+
+        function removeParents(data) {
+            delete data.parent;
+            var folders = data.folders;
+            for (var i = 0; i < folders.length; ++i) {
+                //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
+                removeParents(folders[i]);
             }
         }
 
@@ -196,7 +228,7 @@ jsns.run([
                         }
                     };
                     if (editMode) {
-                        treeEditor.fireItemAdded(menuData, listener, data, initialSetup);
+                        treeEditor.fireItemAdded(menuData, listener, data, rebuildMenu);
                     }
                     folderComponent.setListener(listener);
 

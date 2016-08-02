@@ -108,6 +108,7 @@ namespace EdityMcEditface.NetCore.Controllers
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);
             dr.addTransform(new CreateSettingsForm());
             dr.addTransform(new CreateTreeMenuEditor());
+            dr.addTransform(new HashTreeMenus(fileFinder));
             pageStack.pushLayout("edit.html");
             pageStack.pushLayout("default.html");
             foreach (var editStackItem in fileFinder.Project.EditComponents)
@@ -122,6 +123,7 @@ namespace EdityMcEditface.NetCore.Controllers
         private IActionResult buildAsPage(PageStack pageStack, String layout)
         {
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);
+            dr.addTransform(new HashTreeMenus(fileFinder));
             pageStack.pushLayout(layout);
             return build(pageStack, dr);
         }

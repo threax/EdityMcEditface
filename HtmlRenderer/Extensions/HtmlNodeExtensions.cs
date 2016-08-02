@@ -44,5 +44,28 @@ namespace HtmlAgilityPack
             }
             return result;
         }
+
+        public static void AddClass(this HtmlNode node, String cls)
+        {
+            var clses = node.GetAttributeValue("class", "");
+            if (clses != "")
+            {
+                clses += " ";
+            }
+            clses += cls;
+            node.SetAttributeValue("class", clses);
+        }
+
+        public static HtmlNode FirstElementChild(this HtmlNode node)
+        {
+            foreach (var child in node.ChildNodes)
+            {
+                if (child.NodeType == HtmlNodeType.Element)
+                {
+                    return child;
+                }
+            }
+            return null;
+        }
     }
 }

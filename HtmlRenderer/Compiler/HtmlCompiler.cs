@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer;
+using EdityMcEditface.HtmlRenderer.Transforms;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,6 +41,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             pageStack.pushLayout(layout);
 
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(environment);
+            dr.addTransform(new HashTreeMenus(fileFinder));
             var document = dr.getDocument(pageStack.Pages);
             var outDir = Path.GetDirectoryName(outFile);
             if (!Directory.Exists(outDir))

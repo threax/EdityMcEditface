@@ -137,10 +137,10 @@ jsns.define("edity.widgets.treemenu.editor", [
 
             var linkData = createLinkModel.getData();
             var newItem = {
-                title: linkData.name,
+                name: linkData.name,
                 link: linkData.link
             };
-            currentParent.pages.push(newItem);
+            currentParent.links.push(newItem);
             finishAdd(newItem);
         }
         this.createLink = createLink;
@@ -179,11 +179,11 @@ jsns.define("edity.widgets.treemenu.editor", [
             }
         }
         else {
-            loc = parent.pages.indexOf(itemData);
+            loc = parent.links.indexOf(itemData);
             if (loc > 0) {
-                var swap = parent.pages[loc - 1];
-                parent.pages[loc - 1] = itemData;
-                parent.pages[loc] = swap;
+                var swap = parent.links[loc - 1];
+                parent.links[loc - 1] = itemData;
+                parent.links[loc] = swap;
                 applyChanges(menuData, updateCb);
             }
         }
@@ -203,11 +203,11 @@ jsns.define("edity.widgets.treemenu.editor", [
             }
         }
         else {
-            loc = parent.pages.indexOf(itemData);
-            if (loc !== -1 && loc + 1 < parent.pages.length) {
-                var swap = parent.pages[loc + 1];
-                parent.pages[loc + 1] = itemData;
-                parent.pages[loc] = swap;
+            loc = parent.links.indexOf(itemData);
+            if (loc !== -1 && loc + 1 < parent.links.length) {
+                var swap = parent.links[loc + 1];
+                parent.links[loc + 1] = itemData;
+                parent.links[loc] = swap;
                 applyChanges(menuData, updateCb);
             }
         }
@@ -363,7 +363,7 @@ jsns.run([
                 //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
                 findParents(folders[i], data);
             }
-            var links = data.pages;
+            var links = data.links;
             for (var i = 0; i < links.length; ++i) {
                 links[i].parent = data;
             }
@@ -376,7 +376,7 @@ jsns.run([
                 //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
                 removeParents(folders[i]);
             }
-            var links = data.pages;
+            var links = data.links;
             for (var i = 0; i < links.length; ++i) {
                 delete links[i].parent;
             }
@@ -431,14 +431,14 @@ jsns.run([
                 });
 
                 if (editMode) {
-                    linksModel.setData(folder.pages, function (component, data) {
+                    linksModel.setData(folder.links, function (component, data) {
                         var listener = {};
                         treeEditor.fireItemAdded(menuData, listener, data, rebuildMenu);
                         component.setListener(listener);
                     });
                 }
                 else {
-                    linksModel.setData(folder.pages);
+                    linksModel.setData(folder.links);
                 }
             }
         }

@@ -71,6 +71,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
 @"<div class=""treemenu-editor"">
     <a href=""#"" data-hr-on-click=""moveUp""><span class=""glyphicon glyphicon-arrow-up""></span></a>
     <a href=""#"" data-hr-on-click=""moveDown""><span class=""glyphicon glyphicon-arrow-down""></span></a>
+    <a href=""#"" data-hr-on-click=""editItem""><span class=""glyphicon glyphicon-pencil"" ></span></a>
     <a href=""#"" data-hr-on-click=""deleteItem""><span class=""glyphicon glyphicon-trash"" ></span></a>
 </div>";
     }

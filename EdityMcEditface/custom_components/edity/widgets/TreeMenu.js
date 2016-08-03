@@ -16,12 +16,19 @@ jsns.define("edity.widgets.treemenu.editor", [
         var model = bindings.getModel("properties");
         var currentMenuItem = null;
         var currentEditingCompleteCallback = null;
+        var linkToggle = bindings.getToggle('link');
 
         function edit(menuItem, editingCompleteCallback) {
             dialog.on();
             model.setData(menuItem);
             currentMenuItem = menuItem;
             currentEditingCompleteCallback = editingCompleteCallback;
+            if (menuItem.hasOwnProperty('link')) {
+                linkToggle.on();
+            }
+            else {
+                linkToggle.off();
+            }
         }
         this.edit = edit;
 

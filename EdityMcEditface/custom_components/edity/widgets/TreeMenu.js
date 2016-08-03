@@ -5,6 +5,7 @@ jsns.define("edity.widgets.treemenu.editor", [
 ], function (exports, module, controller) {
 
     var editTreeMenuItem = null;
+    var deleteTreeMenuItem = null;
 
     function EditTreeMenuItemController(bindings) {
         editTreeMenuItem = this;
@@ -37,9 +38,44 @@ jsns.define("edity.widgets.treemenu.editor", [
         this.updateMenuItem = updateMenuItem;
     }
 
+    function DeleteTreeMenuItemController(bindings) {
+        deleteTreeMenuItem = this;
+
+        var dialog = bindings.getToggle('dialog');
+        var model = bindings.getModel('info');
+        var currentMenuItem = null;
+        var currentCallback = null;
+
+        function confirm(menuItem, deleteCallback) {
+            currentMenuItem = menuItem;
+            currentCallback = deleteCallback;
+            model.setData(menuItem);
+            dialog.on();
+        }
+        this.confirm = confirm;
+
+        function deleteItem(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            var parent = currentMenuItem.parent;
+            var loc = parent.folders.indexOf(currentMenuItem);
+            if (loc !== -1) {
+                parent.folders.splice(loc, 1);
+                currentCallback();
+            }
+
+            currentMenuItem = null;
+            currentCallback = null;
+            dialog.off();
+        }
+        this.deleteItem = deleteItem;
+    }
+
     function createControllers() {
         if (editTreeMenuItem === null) {
             controller.create("editTreeMenuItem", EditTreeMenuItemController);
+            controller.create("deleteTreeMenuItem", DeleteTreeMenuItemController);
         }
     }
 
@@ -91,13 +127,9 @@ jsns.define("edity.widgets.treemenu.editor", [
     function deleteItem(evt, menuData, itemData, updateCb) {
         evt.preventDefault();
         evt.stopPropagation();
-        //Needs a confirm
-        var parent = itemData.parent;
-        var loc = parent.folders.indexOf(itemData);
-        if (loc !== -1) {
-            parent.folders.splice(loc, 1);
+        deleteTreeMenuItem.confirm(itemData, function () {
             applyChanges(menuData, updateCb);
-        }
+        });
     }
 
     function fireItemAdded(menuData, listener, itemData, updateCb) {

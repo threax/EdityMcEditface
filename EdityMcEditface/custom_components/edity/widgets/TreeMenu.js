@@ -3,7 +3,8 @@
 jsns.define("edity.widgets.treemenu.editor", [
     "htmlrest.controller",
     "htmlrest.toggles",
-], function (exports, module, controller, toggles) {
+    "htmlrest.rest",
+], function (exports, module, controller, toggles, rest) {
 
     var editTreeMenuItem = null;
     var deleteTreeMenuItem = null;
@@ -128,7 +129,9 @@ jsns.define("edity.widgets.treemenu.editor", [
             var folderData = createFolderModel.getData();
             var newItem = {
                 name: folderData.name,
-                pages: []
+                folders: [],
+                links: [],
+                parent:currentParent
             };
             currentParent.folders.push(newItem);
             finishAdd(newItem);
@@ -150,7 +153,8 @@ jsns.define("edity.widgets.treemenu.editor", [
             var linkData = createLinkModel.getData();
             var newItem = {
                 name: linkData.name,
-                link: linkData.link
+                link: linkData.link,
+                parent: currentParent
             };
             currentParent.links.push(newItem);
             finishAdd(newItem);
@@ -165,16 +169,44 @@ jsns.define("edity.widgets.treemenu.editor", [
         }
     }
 
+    function menuJsonSerializeReplacer(key, value) {
+        if (key === 'parent' || key === 'menuItemId') {
+            return undefined;
+        }
+        return value;
+    }
+
+    function RootNodeControls(bindings, context) {
+        var menuData = context.menuData;
+        var updateCb = context.updateCb;
+        var saveUrl = context.saveUrl;
+        var uploadUrl = bindings.getModel('treeMenuEditRoot').getSrc();
+
+        function save(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            var blob = new Blob([JSON.stringify(menuData, menuJsonSerializeReplacer, 4)], { type: "application/json" });
+            rest.upload(uploadUrl + saveUrl, blob);
+        }
+        this.save = save;
+
+        function addItem(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            addTreeMenuItem.createNewItem(menuData, function () {
+                updateCb();
+            });
+        }
+        this.addItem = addItem;
+    }
+    exports.RootNodeControls = RootNodeControls;
+
     function createControllers() {
         if (editTreeMenuItem === null) {
             controller.create("editTreeMenuItem", EditTreeMenuItemController);
             controller.create("deleteTreeMenuItem", DeleteTreeMenuItemController);
             controller.create("createTreeMenuItem", AddTreeMenuItemController);
         }
-    }
-
-    function applyChanges(menuData, updateCb) {
-        updateCb();
     }
 
     function moveUp(evt, menuData, itemData, updateCb) {
@@ -187,7 +219,7 @@ jsns.define("edity.widgets.treemenu.editor", [
                 var swap = parent.folders[loc - 1];
                 parent.folders[loc - 1] = itemData;
                 parent.folders[loc] = swap;
-                applyChanges(menuData, updateCb);
+                updateCb();
             }
         }
         else {
@@ -196,7 +228,7 @@ jsns.define("edity.widgets.treemenu.editor", [
                 var swap = parent.links[loc - 1];
                 parent.links[loc - 1] = itemData;
                 parent.links[loc] = swap;
-                applyChanges(menuData, updateCb);
+                updateCb();
             }
         }
     }
@@ -206,12 +238,12 @@ jsns.define("edity.widgets.treemenu.editor", [
         evt.stopPropagation();
         var parent = itemData.parent;
         var loc = parent.folders.indexOf(itemData);
-        if (loc !== -1){
-            if(loc + 1 < parent.folders.length) {
+        if (loc !== -1) {
+            if (loc + 1 < parent.folders.length) {
                 var swap = parent.folders[loc + 1];
                 parent.folders[loc + 1] = itemData;
                 parent.folders[loc] = swap;
-                applyChanges(menuData, updateCb);
+                updateCb();
             }
         }
         else {
@@ -220,7 +252,7 @@ jsns.define("edity.widgets.treemenu.editor", [
                 var swap = parent.links[loc + 1];
                 parent.links[loc + 1] = itemData;
                 parent.links[loc] = swap;
-                applyChanges(menuData, updateCb);
+                updateCb();
             }
         }
     }
@@ -229,15 +261,15 @@ jsns.define("edity.widgets.treemenu.editor", [
         evt.preventDefault();
         evt.stopPropagation();
         addTreeMenuItem.createNewItem(itemData, function () {
-            applyChanges(menuData, updateCb);
+            updateCb();
         });
     }
 
     function editItem(evt, menuData, itemData, updateCb) {
         evt.preventDefault();
         evt.stopPropagation();
-        editTreeMenuItem.edit(itemData, function(){
-            applyChanges(menuData, updateCb);
+        editTreeMenuItem.edit(itemData, function () {
+            updateCb();
         });
     }
 
@@ -245,12 +277,12 @@ jsns.define("edity.widgets.treemenu.editor", [
         evt.preventDefault();
         evt.stopPropagation();
         deleteTreeMenuItem.confirm(itemData, function () {
-            applyChanges(menuData, updateCb);
+            updateCb();
         });
     }
 
     function fireItemAdded(menuData, listener, itemData, updateCb) {
-        createControllers();
+        createControllers(menuData);
 
         listener.moveUp = function (evt) {
             moveUp(evt, menuData, itemData, updateCb);
@@ -301,7 +333,7 @@ jsns.run([
         var ajaxurl = rootModel.getSrc();
         var getNextId = (function () {
             var i = -1;
-            return function() {
+            return function () {
                 return ++i;
             }
         })();
@@ -315,7 +347,7 @@ jsns.run([
             if (editMode) {
                 removeParents(menuData);
             }
-            storage.storeJsonInSession(menuStorageId,{
+            storage.storeJsonInSession(menuStorageId, {
                 cache: menuCache,
                 data: menuData,
                 version: version
@@ -344,6 +376,11 @@ jsns.run([
 
                 if (editMode) {
                     findParents(data, null);
+                    controller.create("treeMenuEditRoot", treeEditor.RootNodeControls, { //This isn't really right, will create controllers for all tree menus on the page, need to single out somehow
+                        menuData: menuData,
+                        updateCb: rebuildMenu,
+                        saveUrl: ajaxurl
+                    });
                 }
 
                 var menuCacheInfo = getMenuCacheInfo(data.menuItemId);

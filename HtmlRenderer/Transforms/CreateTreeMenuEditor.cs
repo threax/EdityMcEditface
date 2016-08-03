@@ -19,6 +19,10 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
             if(controllerNode != null)
             {
                 controllerNode.SetAttributeValue("data-hr-config-treemenu-editmode", "true");
+                controllerNode.AddClass("treemenu-editor");
+                var rootControllerDoc = new HtmlDocument();
+                rootControllerDoc.LoadHtml(String.Format(rootEditor, environment.getValue("uploadUrl", "")));
+                controllerNode.InsertBefore(rootControllerDoc.DocumentNode, controllerNode.FirstChild);
                 //Find templates
                 var folderModel = HtmlrestQueries.getModelNode("folders", controllerNode);
                 if (folderModel != null)
@@ -57,6 +61,12 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                 }
             }
         }
+
+        private static String rootEditor =
+@"<div class=""treemenu-editor-rootcontrols"" data-hr-controller=""treeMenuEditRoot"" data-hr-model=""treeMenuEditRoot"" data-hr-model-src=""{0}"" data-hr-keep>
+        <a href = ""#"" data-hr-on-click=""save"" ><span class=""glyphicon glyphicon-floppy-disk"" ></span></a>
+        <a href = ""#"" data-hr-on-click=""addItem"" ><span class=""glyphicon glyphicon-plus"" ></span></a>
+    </div>";
 
         private static String folderEditor =
 @"<div class=""treemenu-editor"">

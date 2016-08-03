@@ -1,7 +1,48 @@
 ﻿"use strict";
 
 jsns.define("edity.widgets.treemenu.editor", [
-], function (exports, module) {
+    "htmlrest.controller",
+], function (exports, module, controller) {
+
+    var editTreeMenuItem = null;
+
+    function EditTreeMenuItemController(bindings) {
+        editTreeMenuItem = this;
+
+        var dialog = bindings.getToggle("dialog");
+        var model = bindings.getModel("properties");
+        var currentMenuItem = null;
+        var currentEditingCompleteCallback = null;
+
+        function edit(menuItem, editingCompleteCallback) {
+            dialog.on();
+            model.setData(menuItem);
+            currentMenuItem = menuItem;
+            currentEditingCompleteCallback = editingCompleteCallback;
+        }
+        this.edit = edit;
+
+        function updateMenuItem(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            dialog.off();
+
+            var data = model.getData();
+            currentMenuItem.name = data.name;
+
+            currentEditingCompleteCallback(currentMenuItem);
+            currentMenuItem = null;
+            currentEditingCompleteCallback = null;
+        }
+        this.updateMenuItem = updateMenuItem;
+    }
+
+    function createControllers() {
+        if (editTreeMenuItem === null) {
+            controller.create("editTreeMenuItem", EditTreeMenuItemController);
+        }
+    }
+
     function applyChanges(menuData, updateCb) {
         updateCb();
     }
@@ -24,7 +65,7 @@ jsns.define("edity.widgets.treemenu.editor", [
         evt.stopPropagation();
         var parent = itemData.parent;
         var loc = parent.folders.indexOf(itemData);
-        if (loc + 1 < parent.folders.length) {
+        if (loc !== -1 && loc + 1 < parent.folders.length) {
             var swap = parent.folders[loc + 1];
             parent.folders[loc + 1] = itemData;
             parent.folders[loc] = swap;
@@ -42,18 +83,25 @@ jsns.define("edity.widgets.treemenu.editor", [
     function editItem(evt, menuData, itemData, updateCb) {
         evt.preventDefault();
         evt.stopPropagation();
-        alert('editItem');
-        applyChanges(menuData, updateCb);
+        editTreeMenuItem.edit(itemData, function(){
+            applyChanges(menuData, updateCb);
+        });
     }
 
     function deleteItem(evt, menuData, itemData, updateCb) {
         evt.preventDefault();
         evt.stopPropagation();
-        alert('deleteItem');
-        applyChanges(menuData, updateCb);
+        //Needs a confirm
+        var parent = itemData.parent;
+        var loc = parent.folders.indexOf(itemData);
+        if (loc !== -1) {
+            parent.folders.splice(loc, 1);
+            applyChanges(menuData, updateCb);
+        }
     }
 
     function fireItemAdded(menuData, listener, itemData, updateCb) {
+        createControllers();
 
         listener.moveUp = function (evt) {
             moveUp(evt, menuData, itemData, updateCb);

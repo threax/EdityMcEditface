@@ -33,7 +33,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                             if(childModel != null)
                             {
                                 var doc = new HtmlDocument();
-                                doc.LoadHtml(editorText);
+                                doc.LoadHtml(folderEditor);
                                 insertNode.AppendChild(doc.DocumentNode);
                                 insertNode.AddClass("treemenu-editor-folder");
                             }
@@ -50,7 +50,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                         var insertNode = linkTemplate.FirstElementChild();
                         if (insertNode != null)
                         {
-                            insertNode.InnerHtml += editorText;
+                            insertNode.InnerHtml += linkEditor;
                             insertNode.AddClass("treemenu-editor-link");
                         }
                     }
@@ -58,12 +58,19 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
             }
         }
 
-        private static String editorText =
+        private static String folderEditor =
 @"<div class=""treemenu-editor"">
     <a href=""#"" data-hr-on-click=""moveUp""><span class=""glyphicon glyphicon-arrow-up""></span></a>
     <a href=""#"" data-hr-on-click=""moveDown""><span class=""glyphicon glyphicon-arrow-down""></span></a>
     <a href=""#"" data-hr-on-click=""addItem""><span class=""glyphicon glyphicon-plus"" ></span></a>
     <a href=""#"" data-hr-on-click=""editItem""><span class=""glyphicon glyphicon-pencil"" ></span></a>
+    <a href=""#"" data-hr-on-click=""deleteItem""><span class=""glyphicon glyphicon-trash"" ></span></a>
+</div>";
+
+        private static String linkEditor =
+@"<div class=""treemenu-editor"">
+    <a href=""#"" data-hr-on-click=""moveUp""><span class=""glyphicon glyphicon-arrow-up""></span></a>
+    <a href=""#"" data-hr-on-click=""moveDown""><span class=""glyphicon glyphicon-arrow-down""></span></a>
     <a href=""#"" data-hr-on-click=""deleteItem""><span class=""glyphicon glyphicon-trash"" ></span></a>
 </div>";
     }

@@ -170,11 +170,22 @@ jsns.define("edity.widgets.treemenu.editor", [
         evt.stopPropagation();
         var parent = itemData.parent;
         var loc = parent.folders.indexOf(itemData);
-        if (loc > 0) {
-            var swap = parent.folders[loc - 1];
-            parent.folders[loc - 1] = itemData;
-            parent.folders[loc] = swap;
-            applyChanges(menuData, updateCb);
+        if (loc !== -1) {
+            if (loc > 0) {
+                var swap = parent.folders[loc - 1];
+                parent.folders[loc - 1] = itemData;
+                parent.folders[loc] = swap;
+                applyChanges(menuData, updateCb);
+            }
+        }
+        else {
+            loc = parent.pages.indexOf(itemData);
+            if (loc > 0) {
+                var swap = parent.pages[loc - 1];
+                parent.pages[loc - 1] = itemData;
+                parent.pages[loc] = swap;
+                applyChanges(menuData, updateCb);
+            }
         }
     }
 
@@ -183,11 +194,22 @@ jsns.define("edity.widgets.treemenu.editor", [
         evt.stopPropagation();
         var parent = itemData.parent;
         var loc = parent.folders.indexOf(itemData);
-        if (loc !== -1 && loc + 1 < parent.folders.length) {
-            var swap = parent.folders[loc + 1];
-            parent.folders[loc + 1] = itemData;
-            parent.folders[loc] = swap;
-            applyChanges(menuData, updateCb);
+        if (loc !== -1){
+            if(loc + 1 < parent.folders.length) {
+                var swap = parent.folders[loc + 1];
+                parent.folders[loc + 1] = itemData;
+                parent.folders[loc] = swap;
+                applyChanges(menuData, updateCb);
+            }
+        }
+        else {
+            loc = parent.pages.indexOf(itemData);
+            if (loc !== -1 && loc + 1 < parent.pages.length) {
+                var swap = parent.pages[loc + 1];
+                parent.pages[loc + 1] = itemData;
+                parent.pages[loc] = swap;
+                applyChanges(menuData, updateCb);
+            }
         }
     }
 
@@ -341,6 +363,10 @@ jsns.run([
                 //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
                 findParents(folders[i], data);
             }
+            var links = data.pages;
+            for (var i = 0; i < links.length; ++i) {
+                links[i].parent = data;
+            }
         }
 
         function removeParents(data) {
@@ -349,6 +375,10 @@ jsns.run([
             for (var i = 0; i < folders.length; ++i) {
                 //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
                 removeParents(folders[i]);
+            }
+            var links = data.pages;
+            for (var i = 0; i < links.length; ++i) {
+                delete links[i].parent;
             }
         }
 
@@ -400,7 +430,16 @@ jsns.run([
                     }
                 });
 
-                linksModel.setData(folder.pages);
+                if (editMode) {
+                    linksModel.setData(folder.pages, function (component, data) {
+                        var listener = {};
+                        treeEditor.fireItemAdded(menuData, listener, data, rebuildMenu);
+                        component.setListener(listener);
+                    });
+                }
+                else {
+                    linksModel.setData(folder.pages);
+                }
             }
         }
 

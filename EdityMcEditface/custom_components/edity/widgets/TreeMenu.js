@@ -17,13 +17,15 @@ jsns.define("edity.widgets.treemenu.editor", [
         var currentMenuItem = null;
         var currentEditingCompleteCallback = null;
         var linkToggle = bindings.getToggle('link');
+        var makingLink = false;
 
         function edit(menuItem, editingCompleteCallback) {
             dialog.on();
             model.setData(menuItem);
             currentMenuItem = menuItem;
             currentEditingCompleteCallback = editingCompleteCallback;
-            if (menuItem.hasOwnProperty('link')) {
+            makingLink = menuItem.hasOwnProperty('link');
+            if (makingLink) {
                 linkToggle.on();
             }
             else {
@@ -39,6 +41,9 @@ jsns.define("edity.widgets.treemenu.editor", [
 
             var data = model.getData();
             currentMenuItem.name = data.name;
+            if (makingLink) {
+                currentMenuItem.link = data.link;
+            }
 
             currentEditingCompleteCallback(currentMenuItem);
             currentMenuItem = null;

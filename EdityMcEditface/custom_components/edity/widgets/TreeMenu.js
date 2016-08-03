@@ -2,10 +2,12 @@
 
 jsns.define("edity.widgets.treemenu.editor", [
     "htmlrest.controller",
-], function (exports, module, controller) {
+    "htmlrest.toggles",
+], function (exports, module, controller, toggles) {
 
     var editTreeMenuItem = null;
     var deleteTreeMenuItem = null;
+    var addTreeMenuItem = null;
 
     function EditTreeMenuItemController(bindings) {
         editTreeMenuItem = this;
@@ -72,10 +74,90 @@ jsns.define("edity.widgets.treemenu.editor", [
         this.deleteItem = deleteItem;
     }
 
+    function AddTreeMenuItemController(bindings) {
+        addTreeMenuItem = this;
+
+        var currentParent = null;
+        var currentCallback = null;
+
+        var questionModel = bindings.getModel('question');
+        var createFolderModel = bindings.getModel('createFolder');
+        var createLinkModel = bindings.getModel('createLink');
+
+        var dialog = bindings.getToggle('dialog');
+
+        var questionToggle = bindings.getToggle('question');
+        var createFolderToggle = bindings.getToggle('createFolder');
+        var createLinkToggle = bindings.getToggle('createLink');
+        var toggleGroup = new toggles.Group(questionToggle, createFolderToggle, createLinkToggle);
+
+        toggleGroup.show(questionToggle);
+
+        function createNewItem(parent, createdCallback) {
+            currentParent = parent;
+            currentCallback = createdCallback;
+            questionModel.setData(parent);
+            toggleGroup.show(questionToggle);
+            dialog.on();
+        }
+        this.createNewItem = createNewItem;
+
+        function startFolderCreation(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            toggleGroup.show(createFolderToggle);
+        }
+        this.startFolderCreation = startFolderCreation;
+
+        function createFolder(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            var folderData = createFolderModel.getData();
+            var newItem = {
+                name: folderData.name,
+                pages: []
+            };
+            currentParent.folders.push(newItem);
+            finishAdd(newItem);
+        }
+        this.createFolder = createFolder;
+
+        function startLinkCreation(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            toggleGroup.show(createLinkToggle);
+        }
+        this.startLinkCreation = startLinkCreation;
+
+        function createLink(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            var linkData = createLinkModel.getData();
+            var newItem = {
+                title: linkData.name,
+                link: linkData.link
+            };
+            currentParent.pages.push(newItem);
+            finishAdd(newItem);
+        }
+        this.createLink = createLink;
+
+        function finishAdd(newItem) {
+            dialog.off();
+            currentCallback(newItem);
+            currentCallback = null;
+            currentParent = null;
+        }
+    }
+
     function createControllers() {
         if (editTreeMenuItem === null) {
             controller.create("editTreeMenuItem", EditTreeMenuItemController);
             controller.create("deleteTreeMenuItem", DeleteTreeMenuItemController);
+            controller.create("createTreeMenuItem", AddTreeMenuItemController);
         }
     }
 
@@ -112,8 +194,9 @@ jsns.define("edity.widgets.treemenu.editor", [
     function addItem(evt, menuData, itemData, updateCb) {
         evt.preventDefault();
         evt.stopPropagation();
-        alert('addItem');
-        applyChanges(menuData, updateCb);
+        addTreeMenuItem.createNewItem(itemData, function () {
+            applyChanges(menuData, updateCb);
+        });
     }
 
     function editItem(evt, menuData, itemData, updateCb) {

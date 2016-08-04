@@ -9,21 +9,20 @@ jsns.run([
 function (exports, module, storage, rest, controller, navmenu) {
     function CommitController(commitDialog) {
         var commitModel = commitDialog.getModel('commit');
+        var dialog = commitDialog.getToggle('dialog');
 
         function commit(evt) {
             evt.preventDefault();
             var data = commitModel.getData();
             rest.post(commitModel.getSrc(), data,
                 function (resultData) {
-                    $('#commitModal').modal('hide'); //Still jquery because of bootstrap
+                    dialog.off();
                 },
                 function (resultData) {
                     alert('Error Committing');
                 });
         }
         this.commit = commit;
-
-        var dialog = commitDialog.getToggle('dialog');
 
         function NavButtonController(created) {
             function commit() {

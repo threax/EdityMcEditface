@@ -7,6 +7,10 @@ jsns.run([
     "htmlrest.widgets.navmenu"
 ],
 function (exports, module, storage, rest, controller, navmenu) {
+    function determineCommitVariant(data) {
+        return data.state;
+    }
+
     function CommitController(commitDialog) {
         var commitModel = commitDialog.getModel('commit');
         var dialog = commitDialog.getToggle('dialog');
@@ -29,7 +33,7 @@ function (exports, module, storage, rest, controller, navmenu) {
                 dialog.on();
                 var changedFiles = commitDialog.getModel('changedFiles');
                 rest.get(changedFiles.getSrc(), function (data) {
-                    changedFiles.setData(data);
+                    changedFiles.setData(data, null, determineCommitVariant);
                 },
                 function (data) {
                     alert('Cannot get uncommitted changes. Please try again later.');

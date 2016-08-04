@@ -16,6 +16,15 @@
                         <template>
                             <li>{|filePath}</li>
                         </template>
+                        <template data-hr-variant="added">
+                            <li style="color:green;">{|filePath}</li>
+                        </template>
+                        <template data-hr-variant="removed">
+                            <li style="color:red;">{|filePath}</li>
+                        </template>
+                        <template data-hr-variant="Modified">
+                            <li style="color:blue;">{|filePath}</li>
+                        </template>
                     </ol>
                     <div class="form-group">
                         <label for="message">Message</label>

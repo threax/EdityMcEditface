@@ -16,14 +16,14 @@
                         <template>
                             <li>{|filePath}</li>
                         </template>
-                        <template data-hr-variant="added">
-                            <li style="color:green;">{|filePath}</li>
+                        <template data-hr-variant="NewInWorkdir">
+                            <li style="color:green;">{|filePath} <span class="pull-right">A</span></li>
                         </template>
-                        <template data-hr-variant="removed">
-                            <li style="color:red;">{|filePath}</li>
+                        <template data-hr-variant="Missing">
+                            <li style="color:red;">{|filePath} <span class="pull-right">D</span></li>
                         </template>
                         <template data-hr-variant="Modified">
-                            <li style="color:blue;">{|filePath}</li>
+                            <li style="color:blue;">{|filePath} <span class="pull-right">M</span></li>
                         </template>
                     </ol>
                     <div class="form-group">

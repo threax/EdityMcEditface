@@ -34,9 +34,10 @@
     }
   },
   "vars": {
-    "uploadUrl": "edity/upload",
-    "pageSettingsUrl": "edity/page/settings",
-    "savePageUrl": "edity/Page",
+    "uploadUrl": "/edity/upload",
+    "pageSettingsUrl": "/edity/page/settings",
+    "savePageUrl": "/edity/Page",
+    "deletePageUrl": "/edity/Page",
     "mediaBrowseDir": "/",
     "pageTemplateUrl": "/edity/templates"
   },

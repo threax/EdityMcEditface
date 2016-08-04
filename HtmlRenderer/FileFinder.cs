@@ -129,6 +129,48 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         /// <summary>
+        /// Delete a project file.
+        /// </summary>
+        /// <param name="file">The name of the file to delete.</param>
+        public void deleteFile(String file)
+        {
+            file = getFullProjectPath(file);
+            if (File.Exists(file))
+            {
+                File.Delete(file);
+            }
+        }
+
+        /// <summary>
+        /// Delete a folder
+        /// </summary>
+        /// <param name="folder">The name of the folder to delete.</param>
+        public void deleteFolder(String folder)
+        {
+            folder = getFullProjectPath(folder);
+            if (Directory.Exists(folder))
+            {
+                //Do a couple trys
+                try
+                {
+                    Directory.Delete(folder, true);
+                }
+                catch (Exception)
+                {
+                    try
+                    {
+                        Directory.Delete(folder, true);
+                    }
+                    catch (Exception)
+                    {
+                        //Third time throws if there is a problem.
+                        Directory.Delete(folder, true);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Find the templates in the current project directory.
         /// </summary>
         public IEnumerable<Template> Templates

@@ -72,6 +72,29 @@ namespace EdityMcEditface.Controllers
             return StatusCode((int)HttpStatusCode.OK);
         }
 
+        [HttpDelete("{*file}")]
+        public IActionResult Delete(String file)
+        {
+            TargetFileInfo fileInfo = new TargetFileInfo(file);
+            var outputFile = fileInfo.OriginalFileName;
+            if (fileInfo.Extension == "")
+            {
+                outputFile = fileInfo.HtmlFile;
+            }
+            if (fileInfo.IsProjectFile)
+            {
+                throw new ValidationException("Cannot delete project files with the delete function.");
+            }
+
+            fileFinder.deleteFile(outputFile);
+            fileFinder.deleteFile(fileInfo.FileNoExtension + ".json");
+            fileFinder.deleteFile(fileInfo.FileNoExtension + ".css");
+            fileFinder.deleteFile(fileInfo.FileNoExtension + ".js");
+            fileFinder.deleteFolder(getUploadFolder(fileInfo));
+
+            return StatusCode((int)HttpStatusCode.OK);
+        }
+
         [HttpPost("[action]/{*pageUrl}")]
         public async Task<ImageUploadResponse> Asset(String pageUrl)
         {
@@ -80,7 +103,7 @@ namespace EdityMcEditface.Controllers
             try
             {
                 TargetFileInfo fileInfo = new TargetFileInfo(pageUrl);
-                var autoFileFolder = Path.Combine("AutoUploadedImages", fileInfo.FileNoExtension);
+                string autoFileFolder = getUploadFolder(fileInfo);
                 var file = this.Request.Form.Files.First();
                 var autoFileFile = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                 var autoPath = Path.Combine(autoFileFolder, autoFileFile);
@@ -104,6 +127,11 @@ namespace EdityMcEditface.Controllers
             }
 
             return imageResponse;
+        }
+
+        private static string getUploadFolder(TargetFileInfo fileInfo)
+        {
+            return Path.Combine("AutoUploadedImages", fileInfo.FileNoExtension);
         }
     }
 }

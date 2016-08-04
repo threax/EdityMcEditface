@@ -311,12 +311,9 @@ jsns.define("edity.widgets.treemenu.editor", [
 jsns.run([
     "htmlrest.storage",
     "htmlrest.rest",
-    "htmlrest.components",
-    "htmlrest.bindingcollection",
-    "htmlrest.domquery",
     "htmlrest.controller",
     "edity.widgets.treemenu.editor"
-], function (exports, module, storage, rest, component, BindingCollection, domQuery, controller, treeEditor) {
+], function (exports, module, storage, rest, controller, treeEditor) {
 
     controller.create("treeMenu", TreeMenuController);
 

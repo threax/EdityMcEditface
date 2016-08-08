@@ -20,6 +20,7 @@ function (exports, module, storage, rest, controller, navmenu) {
             var data = commitModel.getData();
             rest.post(commitModel.getSrc(), data,
                 function (resultData) {
+                    commitModel.clear();
                     dialog.off();
                 },
                 function (resultData) {

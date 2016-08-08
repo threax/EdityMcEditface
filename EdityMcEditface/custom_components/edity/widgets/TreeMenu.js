@@ -175,14 +175,20 @@ jsns.define("edity.widgets.treemenu.editor", [
         }
 
         function replaceUrl(x) {
-            return '-';
+            switch (x) {
+                case ' ':
+                    return '-';
+                default:
+                    return '';
+            }
         }
 
         function nameChanged(evt) {
             if (autoTypeUrl) {
                 var data = createLinkModel.getData();
+                var urlName = encodeURI(data.name.replace(/\s|[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, replaceUrl));
                 linkAutoTypeModel.setData({
-                    link: '/' + encodeURI(data.name.replace(/\s/g, replaceUrl))
+                    link: '/' + urlName
                 });
             }
         }

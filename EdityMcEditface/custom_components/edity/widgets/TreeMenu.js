@@ -128,6 +128,7 @@ jsns.define("edity.widgets.treemenu.editor", [
         function createFolder(evt) {
             evt.preventDefault();
             evt.stopPropagation();
+            createFolderModel.clear();
             var folderData = createFolderModel.getData();
             var newItem = {
                 name: folderData.name,
@@ -143,6 +144,8 @@ jsns.define("edity.widgets.treemenu.editor", [
         function startLinkCreation(evt) {
             evt.preventDefault();
             evt.stopPropagation();
+            createLinkModel.clear();
+            linkAutoTypeModel.clear();
             autoTypeUrl = true;
 
             toggleGroup.show(createLinkToggle);

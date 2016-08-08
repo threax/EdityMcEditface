@@ -37,33 +37,6 @@ function (exports, module, storage, rest, controller, navmenu, sourceSync) {
         config.imageUploadUrl = '/edity/Page/Asset/' + window.location.pathname;
     };
 
-    function SaveController(component) {
-        var load = component.getToggle("load");
-        load.off();
-
-        function save(evt) {
-            var saveModel = component.getModel("save");
-
-            evt.preventDefault();
-
-            load.on();
-            var content = editor.innerHTML;
-            var blob = new Blob([content], { type: "text/html" });
-            rest.upload(saveModel.getSrc() + '/' + window.location.pathname, blob, function () {
-                load.off();
-            },
-            function () {
-                load.off();
-                alert("Error saving page. Please try again later.");
-            });
-        }
-        this.save = save;
-    }
-
-    var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
-    editMenu.add("SaveButton", SaveController);
-    editMenu.add("PreviewButton");
-
     sourceSync.setSourceAccessor({
         getHtml: function () {
             return editor.innerHTML;

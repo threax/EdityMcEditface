@@ -1,5 +1,26 @@
 ﻿"use strict";
 
+jsns.define("edity.pageSourceSync", [
+
+], function (exports, module) {
+    var sourceAccessor;
+
+    function setHtml(value) {
+        sourceAccessor.setHtml(value);
+    }
+    exports.setHtml = setHtml;
+
+    function getHtml() {
+        return sourceAccessor.getHtml();
+    }
+    exports.getHtml = getHtml;
+
+    function setSourceAccessor(value) {
+        sourceAccessor = value;
+    }
+    exports.setSourceAccessor = setSourceAccessor;
+});
+
 jsns.run([
     "htmlrest.storage",
     "htmlrest.components",

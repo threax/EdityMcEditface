@@ -4,9 +4,10 @@ jsns.run([
     "htmlrest.storage",
     "htmlrest.rest",
     "htmlrest.controller",
-    "htmlrest.widgets.navmenu"
+    "htmlrest.widgets.navmenu",
+    "edity.pageSourceSync"
 ],
-function (exports, module, storage, rest, controller, navmenu) {
+function (exports, module, storage, rest, controller, navmenu, sourceSync) {
 
     // config
     var editor = document.getElementById('editArea');
@@ -63,29 +64,12 @@ function (exports, module, storage, rest, controller, navmenu) {
     editMenu.add("SaveButton", SaveController);
     editMenu.add("PreviewButton");
 
-    function EditSourceController(bindings) {
-        var sourceModel = bindings.getModel('source');
-        var editSourceDialog = bindings.getToggle('dialog');
-
-        function apply(evt) {
-            evt.preventDefault();
-            editSourceDialog.off();
-            editor.innerHTML = sourceModel.getData().source;
+    sourceSync.setSourceAccessor({
+        getHtml: function () {
+            return editor.innerHTML;
+        },
+        setHtml: function (value) {
+            editor.innerHTML = value;
         }
-        this.apply = apply;
-
-        function NavItemController() {
-            function edit() {
-                editSourceDialog.on();
-                sourceModel.setData({
-                    source: editor.innerHTML
-                });
-            }
-            this.edit = edit;
-        }
-
-        editMenu.add("EditSourceNavItem", NavItemController);
-    }
-
-    controller.create("editSource", EditSourceController);
+    });
 });

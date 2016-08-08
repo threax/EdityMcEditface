@@ -29,6 +29,7 @@ function (exports, module, domQuery, storage, rest, controller, navmenu, sourceS
         function NavItemController() {
             function edit() {
                 editSourceDialog.on();
+                cm.setSize(null, window.innerHeight - 250);
                 cm.setValue(sourceSync.getHtml());
                 setTimeout(function () {
                     cm.refresh();

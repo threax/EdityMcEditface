@@ -96,6 +96,7 @@ jsns.define("edity.widgets.treemenu.editor", [
         var questionModel = bindings.getModel('question');
         var createFolderModel = bindings.getModel('createFolder');
         var createLinkModel = bindings.getModel('createLink');
+        var linkAutoTypeModel = bindings.getModel('linkAutoType');
 
         var dialog = bindings.getToggle('dialog');
 
@@ -103,6 +104,7 @@ jsns.define("edity.widgets.treemenu.editor", [
         var createFolderToggle = bindings.getToggle('createFolder');
         var createLinkToggle = bindings.getToggle('createLink');
         var toggleGroup = new toggles.Group(questionToggle, createFolderToggle, createLinkToggle);
+        var autoTypeUrl = true;
 
         toggleGroup.show(questionToggle);
 
@@ -131,7 +133,7 @@ jsns.define("edity.widgets.treemenu.editor", [
                 name: folderData.name,
                 folders: [],
                 links: [],
-                parent:currentParent
+                parent: currentParent
             };
             currentParent.folders.push(newItem);
             finishAdd(newItem);
@@ -141,6 +143,7 @@ jsns.define("edity.widgets.treemenu.editor", [
         function startLinkCreation(evt) {
             evt.preventDefault();
             evt.stopPropagation();
+            autoTypeUrl = true;
 
             toggleGroup.show(createLinkToggle);
         }
@@ -167,6 +170,25 @@ jsns.define("edity.widgets.treemenu.editor", [
             currentCallback = null;
             currentParent = null;
         }
+
+        function replaceUrl(x) {
+            return '-';
+        }
+
+        function nameChanged(evt) {
+            if (autoTypeUrl) {
+                var data = createLinkModel.getData();
+                linkAutoTypeModel.setData({
+                    link: '/' + encodeURI(data.name.replace(/\s/g, replaceUrl))
+                });
+            }
+        }
+        this.nameChanged = nameChanged;
+
+        function cancelAutoType() {
+            autoTypeUrl = false;
+        }
+        this.cancelAutoType = cancelAutoType;
     }
 
     function menuJsonSerializeReplacer(key, value) {

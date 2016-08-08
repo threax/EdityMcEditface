@@ -9,6 +9,10 @@
       "js": [ { "file": "/lib/bootstrap.native/dist/bootstrap-native.min.js" } ],
       "dependencies": [ "transitions" ]
     },
+    "codemirror": {
+      "js": [ { "file": "/lib/codemirror/lib/codemirror.js" } ],
+      "css": ["/lib/codemirror/lib/codemirror.css"]
+    },
     "ckeditor": {
       "js": [ { "file": "/lib/ckeditor/ckeditor.js" } ]
     },

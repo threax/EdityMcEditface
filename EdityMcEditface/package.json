@@ -15,6 +15,7 @@
     "bootstrap": "~3.3.6",
     "bootstrap.native": "~1.0.2",
     "ckeditor": "~4.5.9",
-    "ckeditor-youtube-plugin": "^2.1.1"
+    "ckeditor-youtube-plugin": "^2.1.1",
+    "codemirror": "~5.17.0"
   }
 }

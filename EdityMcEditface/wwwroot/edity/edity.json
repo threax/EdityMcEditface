@@ -11,7 +11,7 @@
     },
     "codemirror": {
       "js": [
-        { "file": "/lib/codemirror/lib/codemirror.js" },
+        { "file": "/lib/codemirror/lib/codemirror.js" }
       ],
       "css": [ "/lib/codemirror/lib/codemirror.css" ]
     },
@@ -22,6 +22,7 @@
         { "file": "/lib/codemirror/mode/javascript/javascript.js" },
         { "file": "/lib/codemirror/mode/htmlmixed/htmlmixed.js" }
       ],
+      "css": [ "/lib/codemirror/theme/edity.css" ],
       "dependencies": [ "codemirror" ]
     },
     "ckeditor": {

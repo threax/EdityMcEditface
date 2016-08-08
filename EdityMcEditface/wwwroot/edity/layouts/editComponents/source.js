@@ -15,7 +15,8 @@ function (exports, module, domQuery, storage, rest, controller, navmenu, sourceS
         var codemirrorElement = domQuery.first('#editSourceTextarea');
         var cm = CodeMirror.fromTextArea(codemirrorElement, {
             lineNumbers: true,
-            mode: "htmlmixed"
+            mode: "htmlmixed",
+            theme: "edity"
         });
 
         function apply(evt) {

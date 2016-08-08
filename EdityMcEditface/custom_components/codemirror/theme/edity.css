@@ -1,0 +1,55 @@
+﻿/*
+
+    Name:       edity
+    Author:     Andrew Piper
+
+    Name:       material
+    Author:     Michael Kaminsky (http://github.com/mkaminsky11)
+
+    Original material color scheme by Mattia Astorino (https://github.com/equinusocio/edity-theme)
+
+*/
+
+.cm-s-edity {
+  background-color: #1e282e;
+  color: rgba(233, 237, 237, 1);
+}
+.cm-s-edity .CodeMirror-gutters {
+  background: #263238;
+  color: rgb(83,127,126);
+  border: none;
+}
+.cm-s-edity .CodeMirror-guttermarker, .cm-s-edity .CodeMirror-guttermarker-subtle, .cm-s-edity .CodeMirror-linenumber { color: rgb(83,127,126); }
+.cm-s-edity .CodeMirror-cursor { border-left: 1px solid #f8f8f0; }
+.cm-s-edity div.CodeMirror-selected { background: rgba(255, 255, 255, 0.15); }
+.cm-s-edity.CodeMirror-focused div.CodeMirror-selected { background: rgba(255, 255, 255, 0.10); }
+.cm-s-edity .CodeMirror-line::selection, .cm-s-edity .CodeMirror-line > span::selection, .cm-s-edity .CodeMirror-line > span > span::selection { background: rgba(255, 255, 255, 0.10); }
+.cm-s-edity .CodeMirror-line::-moz-selection, .cm-s-edity .CodeMirror-line > span::-moz-selection, .cm-s-edity .CodeMirror-line > span > span::-moz-selection { background: rgba(255, 255, 255, 0.10); }
+
+.cm-s-edity .CodeMirror-activeline-background { background: rgba(0, 0, 0, 0); }
+.cm-s-edity .cm-keyword { color: rgba(199, 146, 234, 1); }
+.cm-s-edity .cm-operator { color: rgba(233, 237, 237, 1); }
+.cm-s-edity .cm-variable-2 { color: #80CBC4; }
+.cm-s-edity .cm-variable-3 { color: #82B1FF; }
+.cm-s-edity .cm-builtin { color: #DECB6B; }
+.cm-s-edity .cm-atom { color: #80CBC4; }
+.cm-s-edity .cm-number { color: #F77669; }
+.cm-s-edity .cm-def { color: rgba(233, 237, 237, 1); }
+.cm-s-edity .cm-string { color: #d69d85; }
+.cm-s-edity .cm-string-2 { color: #80CBC4; }
+.cm-s-edity .cm-comment { color: #546E7A; }
+.cm-s-edity .cm-variable { color: #82B1FF; }
+.cm-s-edity .cm-meta { color: #80CBC4; }
+.cm-s-edity .cm-attribute { color: #d1e2ff; }
+.cm-s-edity .cm-property { color: #80CBAE; }
+.cm-s-edity .cm-qualifier { color: #DECB6B; }
+.cm-s-edity .cm-variable-3 { color: #DECB6B; }
+.cm-s-edity .cm-tag { color: #82B1FF; }
+.cm-s-edity .cm-error {
+  color: rgba(255, 255, 255, 1.0);
+  background-color: #EC5F67;
+}
+.cm-s-edity .CodeMirror-matchingbracket {
+  text-decoration: underline;
+  color: white !important;
+}

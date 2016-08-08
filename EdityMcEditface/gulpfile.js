@@ -95,6 +95,7 @@ gulp.task("copylibs", function () {
         libs: [
             "./custom_components/ckeditor/**/*",
             "./custom_components/edity/**/*",
+            "./custom_components/codemirror/**/*",
             "!**/*.intellisense.js"],
         baseName: './custom_components',
         dest: libDir

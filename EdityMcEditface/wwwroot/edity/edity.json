@@ -12,9 +12,17 @@
     "codemirror": {
       "js": [
         { "file": "/lib/codemirror/lib/codemirror.js" },
+      ],
+      "css": [ "/lib/codemirror/lib/codemirror.css" ]
+    },
+    "codemirror-html": {
+      "js": [
+        { "file": "/lib/codemirror/mode/xml/xml.js" },
+        { "file": "/lib/codemirror/mode/css/css.js" },
+        { "file": "/lib/codemirror/mode/javascript/javascript.js" },
         { "file": "/lib/codemirror/mode/htmlmixed/htmlmixed.js" }
       ],
-      "css": ["/lib/codemirror/lib/codemirror.css"]
+      "dependencies": [ "codemirror" ]
     },
     "ckeditor": {
       "js": [ { "file": "/lib/ckeditor/ckeditor.js" } ]

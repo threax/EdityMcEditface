@@ -1,31 +1,37 @@
 ﻿"use strict";
 
 jsns.run([
+    "htmlrest.domquery",
     "htmlrest.storage",
     "htmlrest.rest",
     "htmlrest.controller",
     "htmlrest.widgets.navmenu",
     "edity.pageSourceSync"
 ],
-function (exports, module, storage, rest, controller, navmenu, sourceSync) {
+function (exports, module, domQuery, storage, rest, controller, navmenu, sourceSync) {
 
     function EditSourceController(bindings) {
-        var sourceModel = bindings.getModel('source');
         var editSourceDialog = bindings.getToggle('dialog');
+        var codemirrorElement = domQuery.first('#editSourceTextarea');
+        var cm = CodeMirror.fromTextArea(codemirrorElement, {
+            lineNumbers: true,
+            mode: "htmlmixed"
+        });
 
         function apply(evt) {
             evt.preventDefault();
             editSourceDialog.off();
-            sourceSync.setHtml(sourceModel.getData().source);
+            sourceSync.setHtml(cm.getValue());
         }
         this.apply = apply;
 
         function NavItemController() {
             function edit() {
                 editSourceDialog.on();
-                sourceModel.setData({
-                    source: sourceSync.getHtml()
-                });
+                cm.setValue(sourceSync.getHtml());
+                setTimeout(function () {
+                    cm.refresh();
+                }, 500);
             }
             this.edit = edit;
         }

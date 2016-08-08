@@ -3,7 +3,7 @@
     <li><a data-toggle="modal" data-target="#sourceModal" data-hr-on-click="edit">Edit Source</a></li>
 </template>
 <div class="modal fade" id="sourceModal" data-hr-controller="editSource" tabindex="-1" role="dialog" aria-labelledby="sourceModalLabel" data-hr-toggle="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog sourceEditorModal" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -11,7 +11,7 @@
             </div>
             <form data-hr-on-submit="apply" data-hr-model="source">
                 <div class="modal-body">
-                    <textarea name="source" class="form-control" rows="30"></textarea>
+                    <textarea name="source" rows="30" id="editSourceTextarea"></textarea>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary">Apply Changes</button>

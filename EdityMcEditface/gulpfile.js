@@ -54,6 +54,7 @@ gulp.task("copylibs", function () {
                "./node_modules/bootstrap/dist/**/*",
                "./node_modules/bootstrap.native/dist/**/*",
                "./node_modules/codemirror/lib/**/*",
+               "./node_modules/codemirror/mode/htmlmixed/**/*",
                "./node_modules/ckeditor/ckeditor.js",
                "./node_modules/ckeditor/contents.css",
                "./node_modules/ckeditor/skins/moono/**/*",

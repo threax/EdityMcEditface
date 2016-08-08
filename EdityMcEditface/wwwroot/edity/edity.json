@@ -10,7 +10,10 @@
       "dependencies": [ "transitions" ]
     },
     "codemirror": {
-      "js": [ { "file": "/lib/codemirror/lib/codemirror.js" } ],
+      "js": [
+        { "file": "/lib/codemirror/lib/codemirror.js" },
+        { "file": "/lib/codemirror/mode/htmlmixed/htmlmixed.js" }
+      ],
       "css": ["/lib/codemirror/lib/codemirror.css"]
     },
     "ckeditor": {

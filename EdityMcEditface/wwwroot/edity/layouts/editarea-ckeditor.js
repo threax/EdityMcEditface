@@ -10,7 +10,7 @@ jsns.run([
 function (exports, module, storage, rest, controller, navmenu, sourceSync) {
 
     // config
-    var editor = document.getElementById('editArea');
+    var editor = undefined;
 
     CKEDITOR.editorConfig = function (config) {
         config.toolbarGroups = [
@@ -37,12 +37,30 @@ function (exports, module, storage, rest, controller, navmenu, sourceSync) {
         config.imageUploadUrl = '/edity/Page/Asset/' + window.location.pathname;
     };
 
+    CKEDITOR.on('instanceReady', function (ev) {
+        editor = ev.editor;
+        var keys = ["body", "head", "html", "title", "base", "command", "link", "meta", "noscript", "script", "style", "audio", "dd", "dt",
+                    "figcaption", "video", "address", "article", "aside", "blockquote", "details", "div", "dl", "fieldset", "figure",
+                    "footer", "form", "h1", "h2", "h3", "h4", "h5", "h6", "header", "hgroup", "hr", "main", "menu", "nav", "p", "pre", 
+                    "section", "table", "ul", "center", "dir", "noframes", "caption", "col", "colgroup", "tbody", "td", "tfoot", "th", "thead", "tr", "br", "ol"];
+
+        for (var i = 0; i < keys.length; ++i) {
+            ev.editor.dataProcessor.writer.setRules(keys[i], {
+                indent: true,
+                breakBeforeOpen: true,
+                breakAfterOpen: false,
+                breakBeforeClose: false,
+                breakAfterClose: false
+            });
+        }
+    });
+
     sourceSync.setSourceAccessor({
         getHtml: function () {
-            return editor.innerHTML;
+            return editor.getData();
         },
         setHtml: function (value) {
-            editor.innerHTML = value;
+            editor.setData(value);
         }
     });
 });

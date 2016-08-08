@@ -66,6 +66,13 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
 @"<div class=""treemenu-editor-rootcontrols"" data-hr-controller=""treeMenuEditRoot"" data-hr-model=""treeMenuEditRoot"" data-hr-model-src=""{0}"" data-hr-keep>
         <a href = ""#"" data-hr-on-click=""save"" ><span class=""glyphicon glyphicon-floppy-disk"" ></span></a>
         <a href = ""#"" data-hr-on-click=""addItem"" ><span class=""glyphicon glyphicon-plus"" ></span></a>
+        <div class=""load-linebar center-block pull-right"" data-hr-toggle=""loading"" data-hr-style-off=""display:none"">
+            <div class=""rect1""></div>
+            <div class=""rect2""></div>
+            <div class=""rect3""></div>
+            <div class=""rect4""></div>
+            <div class=""rect5""></div>
+        </div>
     </div>";
 
         private static String folderEditor =

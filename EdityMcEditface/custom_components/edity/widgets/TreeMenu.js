@@ -212,19 +212,27 @@ jsns.define("edity.widgets.treemenu.editor", [
         var updateCb = context.updateCb;
         var saveUrl = context.saveUrl;
         var uploadUrl = bindings.getModel('treeMenuEditRoot').getSrc();
+        var loading = bindings.getToggle('loading');
+        loading.off();
 
         function save(evt) {
             evt.preventDefault();
             evt.stopPropagation();
+            loading.on();
             var blob = new Blob([JSON.stringify(menuData, menuJsonSerializeReplacer, 4)], { type: "application/json" });
-            rest.upload(uploadUrl + saveUrl, blob);
+            rest.upload(uploadUrl + saveUrl, blob, function () {
+                loading.off();
+            }, function () {
+                alert('Error saving menu, please try again later.')
+                loading.off();
+            });
         }
         this.save = save;
 
-        function addItem(evt) {
-            evt.preventDefault();
-            evt.stopPropagation();
-            addTreeMenuItem.createNewItem(menuData, function () {
+            function addItem(evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+                addTreeMenuItem.createNewItem(menuData, function () {
                 updateCb();
             });
         }

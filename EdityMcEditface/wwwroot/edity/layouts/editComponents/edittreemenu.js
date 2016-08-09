@@ -80,6 +80,13 @@ jsns.run([
                 parent.folders.splice(loc, 1);
                 currentCallback();
             }
+            else {
+                loc = parent.links.indexOf(currentMenuItem);
+                if (loc !== -1) {
+                    parent.links.splice(loc, 1);
+                    currentCallback();
+                }
+            }
 
             currentMenuItem = null;
             currentCallback = null;
@@ -121,6 +128,7 @@ jsns.run([
         function startFolderCreation(evt) {
             evt.preventDefault();
             evt.stopPropagation();
+            createFolderModel.clear();
 
             toggleGroup.show(createFolderToggle);
         }
@@ -129,7 +137,6 @@ jsns.run([
         function createFolder(evt) {
             evt.preventDefault();
             evt.stopPropagation();
-            createFolderModel.clear();
             var folderData = createFolderModel.getData();
             var newItem = {
                 name: folderData.name,

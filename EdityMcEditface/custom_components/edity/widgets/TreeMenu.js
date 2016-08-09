@@ -12,14 +12,14 @@ jsns.define("edity.widgets.treemenu.editorSync", [
     }
     exports.fireItemAdded = fireItemAdded;
 
-    function fireCreateRootNodeControls(menuData, updateCb, saveUrl) {
-        createRootNodeControls.fire(menuData, updateCb, saveUrl);
+    function fireCreateRootNodeControls(controllerElementName, menuData, updateCb, saveUrl) {
+        createRootNodeControls.fire(controllerElementName, menuData, updateCb, saveUrl);
     }
     exports.fireCreateRootNodeControls = fireCreateRootNodeControls;
 
     function setEditorListener(value) {
-        itemAdded.add(value, value.itemAdded)
-        createRootNodeControls.add(value, value.createRootNodeControls)
+        itemAdded.modifier.add(value, value.itemAdded)
+        createRootNodeControls.modifier.add(value, value.createRootNodeControls)
     }
     exports.setEditorListener = setEditorListener;
 });
@@ -89,12 +89,7 @@ jsns.define("edity.widgets.treemenu.controller", [
 
                 if (editMode) {
                     findParents(data, null);
-                    editorSync.fireCreateRootNodeControls(menuData, rebuildMenu, ajaxurl);
-                    //controller.create("treeMenuEditRoot", treeEditor.RootNodeControls, { //This isn't really right, will create controllers for all tree menus on the page, need to single out somehow
-                    //    menuData: menuData,
-                    //    updateCb: rebuildMenu,
-                    //    saveUrl: ajaxurl
-                    //});
+                    editorSync.fireCreateRootNodeControls("treeMenuEditRoot", menuData, rebuildMenu, ajaxurl); //This isn't really right, will create controllers for all tree menus on the page, need to single out somehow
                 }
 
                 var menuCacheInfo = getMenuCacheInfo(data.menuItemId);

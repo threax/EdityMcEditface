@@ -1,10 +1,11 @@
 ﻿"use strict";
 
-jsns.define("edity.widgets.treemenu.editor", [
+jsns.run([
     "htmlrest.controller",
     "htmlrest.toggles",
     "htmlrest.rest",
-], function (exports, module, controller, toggles, rest) {
+    "edity.widgets.treemenu.editorSync"
+], function (exports, module, controller, toggles, rest, editorSync) {
 
     var editTreeMenuItem = null;
     var deleteTreeMenuItem = null;
@@ -238,7 +239,6 @@ jsns.define("edity.widgets.treemenu.editor", [
         }
         this.addItem = addItem;
     }
-    exports.RootNodeControls = RootNodeControls;
 
     function createControllers() {
         if (editTreeMenuItem === null) {
@@ -344,5 +344,16 @@ jsns.define("edity.widgets.treemenu.editor", [
         }
     }
 
-    exports.fireItemAdded = fireItemAdded;
+    function createRootNodeControls(controllerElementName, menuData, updateCb, saveUrl) {
+        controller.create(controllerElementName, RootNodeControls, {
+            menuData: menuData,
+            updateCb: updateCb,
+            saveUrl: saveUrl
+        });
+    }
+
+    editorSync.setEditorListener({
+        itemAdded: fireItemAdded,
+        createRootNodeControls: createRootNodeControls
+    });
 });

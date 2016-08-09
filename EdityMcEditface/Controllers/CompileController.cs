@@ -18,19 +18,25 @@ namespace EdityMcEditface.Controllers
     public class CompileController : Controller
     {
         private SiteBuilder builder;
+        private WorkQueue workQueue;
 
-        public CompileController(SiteBuilder builder)
+        public CompileController(SiteBuilder builder, WorkQueue workQueue)
         {
             this.builder = builder;
+            this.workQueue = workQueue;
         }
 
         [HttpPost]
         public async Task<CompilerResult> Index()
         {
             Stopwatch sw = new Stopwatch();
-            sw.Start();
 
-            await builder.BuildSite();
+            await workQueue.FireAsync(() =>
+            {
+                sw.Start();
+                builder.BuildSite();
+                sw.Stop();
+            });
 
             return new CompilerResult()
             {

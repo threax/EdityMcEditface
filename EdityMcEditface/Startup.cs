@@ -97,6 +97,8 @@ namespace EdityMcEditface
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddSingleton<WorkQueue, WorkQueue>();
+
             services.AddScoped<AuthUserInfo>();
 
             switch (EdityServerConfiguration["ProjectMode"])

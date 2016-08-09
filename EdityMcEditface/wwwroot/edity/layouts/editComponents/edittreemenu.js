@@ -10,6 +10,26 @@ jsns.run([
     var editTreeMenuItem = null;
     var deleteTreeMenuItem = null;
     var addTreeMenuItem = null;
+    var chooseMenuItem = null;
+
+    function deleteMenuItem(menuItem) {
+        var parent = menuItem.parent;
+        var loc = parent.folders.indexOf(menuItem);
+        if (loc !== -1) {
+            menuItem.parent = null;
+            parent.folders.splice(loc, 1);
+            return "folder";
+        }
+        else {
+            loc = parent.links.indexOf(menuItem);
+            if (loc !== -1) {
+                menuItem.parent = null;
+                parent.links.splice(loc, 1);
+                return "link";
+            }
+        }
+        return false;
+    }
 
     function EditTreeMenuItemController(bindings) {
         editTreeMenuItem = this;
@@ -74,18 +94,8 @@ jsns.run([
             evt.preventDefault();
             evt.stopPropagation();
 
-            var parent = currentMenuItem.parent;
-            var loc = parent.folders.indexOf(currentMenuItem);
-            if (loc !== -1) {
-                parent.folders.splice(loc, 1);
+            if (deleteMenuItem(currentMenuItem)) {
                 currentCallback();
-            }
-            else {
-                loc = parent.links.indexOf(currentMenuItem);
-                if (loc !== -1) {
-                    parent.links.splice(loc, 1);
-                    currentCallback();
-                }
             }
 
             currentMenuItem = null;
@@ -247,11 +257,46 @@ jsns.run([
         this.addItem = addItem;
     }
 
+    function MenuItemChoiceController(bindings, context, data) {
+        var row = data;
+        var callback = context;
+
+        function itemChosen(evt) {
+            evt.preventDefault();
+            callback(row);
+        }
+
+        this.itemChosen = itemChosen;
+    }
+
+    function ChooseMenuItemController(bindings, context) {
+        chooseMenuItem = this;
+
+        var dialog = bindings.getToggle("dialog");
+        var promptModel = bindings.getModel("prompt");
+        var chooser = bindings.getModel("chooser");
+        var currentChosenCb;
+
+        function chosen(item) {
+            currentChosenCb(item);
+            dialog.off();
+        }
+
+        function chooseItem(prompt, items, chosenCb) {
+            promptModel.setData(prompt);
+            dialog.on();
+            currentChosenCb = chosenCb;
+            chooser.setData(items, controller.createOnCallback(MenuItemChoiceController, chosen));
+        }
+        this.chooseItem = chooseItem;
+    }
+
     function createControllers() {
         if (editTreeMenuItem === null) {
             controller.create("editTreeMenuItem", EditTreeMenuItemController);
             controller.create("deleteTreeMenuItem", DeleteTreeMenuItemController);
             controller.create("createTreeMenuItem", AddTreeMenuItemController);
+            controller.create("chooseTreeMenuItem", ChooseMenuItemController);
         }
     }
 
@@ -354,9 +399,45 @@ jsns.run([
         }
     }
 
+    function itemIter(items, skipItem) {
+        var i = 0;
+        return function () {
+            var item = null;
+            if (i < items.length) {
+                item = items[i++];
+                if (item === skipItem) {
+                    if (i < items.length) {
+                        item = items[i++];
+                    }
+                    else {
+                        item = null;
+                    }
+                }
+            }
+            return item;
+        }
+    }
+
     function moveToChild(evt, menuData, itemData, updateCb) {
         evt.preventDefault();
         evt.stopPropagation();
+        
+        chooseMenuItem.chooseItem("Nest " + itemData.name + " under...", itemIter(itemData.parent.folders, itemData), function (selectedItem) {
+            var result = deleteMenuItem(itemData);
+            if (result) {
+                switch (result) {
+                    case "folder":
+                        selectedItem.folders.push(itemData);
+                        break;
+                    case "link":
+                        selectedItem.links.push(itemData);
+                        break;
+                }
+
+                itemData.parent = selectedItem;
+                updateCb();
+            }
+        });
     }
 
     function fireItemAdded(menuData, bindListenerCb, itemData, updateCb) {

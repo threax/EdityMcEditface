@@ -327,6 +327,38 @@ jsns.run([
         });
     }
 
+    function moveToParent(evt, menuData, itemData, updateCb) {
+        evt.preventDefault();
+        evt.stopPropagation();
+        var parent = itemData.parent;
+        var superParent = parent.parent;
+        if (superParent) {
+            var loc = parent.folders.indexOf(itemData);
+            if (loc !== -1) {
+                var swap = parent.folders[loc];
+                parent.folders.splice(loc, 1);
+                superParent.folders.push(swap);
+                swap.parent = superParent;
+                updateCb();
+            }
+            else {
+                loc = parent.links.indexOf(itemData);
+                if (loc !== -1) {
+                    var swap = parent.links[loc];
+                    parent.links.splice(loc, 1);
+                    superParent.links.push(swap);
+                    swap.parent = superParent;
+                    updateCb();
+                }
+            }
+        }
+    }
+
+    function moveToChild(evt, menuData, itemData, updateCb) {
+        evt.preventDefault();
+        evt.stopPropagation();
+    }
+
     function fireItemAdded(menuData, bindListenerCb, itemData, updateCb) {
         createControllers(menuData);
 
@@ -349,6 +381,14 @@ jsns.run([
 
             deleteItem: function (evt) {
                 deleteItem(evt, menuData, itemData, updateCb);
+            },
+
+            moveToParent: function (evt) {
+                moveToParent(evt, menuData, itemData, updateCb);
+            },
+
+            moveToChild: function (evt) {
+                moveToChild(evt, menuData, itemData, updateCb);
             }
         });
     }

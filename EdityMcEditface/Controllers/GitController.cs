@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.StaticFiles;
 using System.IO;
 using EdityMcEditface.Models.Git;
 using Microsoft.AspNetCore.Authorization;
+using EdityMcEditface.ErrorHandling;
+using EdityMcEditface.HtmlRenderer;
 
 namespace EdityMcEditface.Controllers
 {
@@ -60,6 +62,35 @@ namespace EdityMcEditface.Controllers
             }
         }
 
+        [HttpGet]
+        public IEnumerable<ConflictInfo> Conflicts()
+        {
+            return repo.Index.Conflicts.Select(s =>
+            {
+                return new ConflictInfo()
+                {
+                    FilePath = s.Ancestor.Path
+                };
+            });
+        }
+
+        [HttpGet("{*file}")]
+        public MergeInfo MergeInfo([FromServices] FileFinder fileFinder, String file)
+        {
+            var targetFileInfo = new TargetFileInfo(file);
+
+            var openFile = targetFileInfo.OriginalFileName;
+            if(targetFileInfo.Extension == "")
+            {
+                openFile = targetFileInfo.HtmlFile;
+            }
+
+            using (var stream = new StreamReader(fileFinder.readFile(openFile)))
+            {
+                return new MergeInfo(stream);
+            }
+        }
+
         [HttpGet("{*file}")]
         public IEnumerable<History> History(String file)
         {
@@ -96,15 +127,50 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost]
-        public void Commit([FromBody]NewCommit newCommit)
+        public void Commit([FromServices]Signature signature, [FromBody]NewCommit newCommit)
         {
+            if (!repo.Index.IsFullyMerged)
+            {
+                throw new ErrorResultException("Cannot commit while there are conflicts. Please resolve these first.");
+            }
+
             var status = repo.RetrieveStatus();
 
             if (status.IsDirty)
             {
                 repo.Stage("*");
-                var signature = new Signature("Andrew Piper", "piper.andrew@spcollege.edu", DateTime.Now);
                 repo.Commit(newCommit.Message, signature, signature);
+            }
+        }
+
+        [HttpPost]
+        public void Pull([FromServices]Signature signature)
+        {
+            try
+            {
+                var result = repo.Network.Pull(signature, new PullOptions());
+                switch (result.Status)
+                {
+                    case MergeStatus.Conflicts:
+                        throw new ErrorResultException("Pull from source resulted in conflicts, please resolve them manually.");
+                }
+            }
+            catch (LibGit2SharpException ex)
+            {
+                throw new ErrorResultException(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public void Push()
+        {
+            try
+            {
+                repo.Network.Push(repo.Head, null);
+            }
+            catch(LibGit2SharpException ex)
+            {
+                throw new ErrorResultException(ex.Message);
             }
         }
     }

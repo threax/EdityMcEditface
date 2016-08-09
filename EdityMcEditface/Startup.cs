@@ -134,6 +134,12 @@ namespace EdityMcEditface
                 return new Repository(projectFolder);
             });
 
+            services.AddTransient<Signature, Signature>(s =>
+            {
+                var userInfo = s.GetRequiredService<AuthUserInfo>();
+                return new Signature(userInfo.User, userInfo.User + "@spcollege.edu", DateTime.Now);
+            });
+
             services.AddTransient<AuthChecker, AuthChecker>();
 
             switch (EdityServerConfiguration["Compiler"])

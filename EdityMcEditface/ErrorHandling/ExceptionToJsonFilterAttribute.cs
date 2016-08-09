@@ -45,6 +45,18 @@ namespace EdityMcEditface.ErrorHandling
                 return;
             }
 
+            //ExceptionErrorResult becomes a ErrorResult with the given status code
+            var exceptionErrorResult = context.Exception as ErrorResultException;
+            if(exceptionErrorResult != null)
+            {
+                context.Result = new JsonResult(new ErrorResult(exceptionErrorResult.Message))
+                {
+                    StatusCode = (int)exceptionErrorResult.StatusCode
+                };
+
+                return;
+            }
+
             //File not found becomes a Not Found (404).
             var fileNotFoundException = context.Exception as FileNotFoundException;
             if(fileNotFoundException != null)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibGit2Sharp;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,7 +19,16 @@ namespace EdityMcEditface.Models.Page
 
         public String GetUserProjectPath(String user)
         {
-            return Path.Combine(projectFolder, "UserRepos", user);
+            var repoPath = Path.Combine(projectFolder, "UserRepos", user);
+            if (!Directory.Exists(repoPath))
+            {
+                Directory.CreateDirectory(repoPath);
+            }
+            if (!Repository.IsValid(repoPath))
+            {
+                Repository.Clone(Path.Combine(projectFolder, "Master"), repoPath);
+            }
+            return repoPath;
         }
 
         public String PublishedProjectPath

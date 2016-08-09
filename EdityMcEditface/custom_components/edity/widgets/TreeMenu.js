@@ -7,8 +7,8 @@ jsns.define("edity.widgets.treemenu.editorSync", [
     var itemAdded = new LateBoundEvent();
     var createRootNodeControls = new LateBoundEvent();
 
-    function fireItemAdded(menuData, listener, itemData, updateCb) {
-        itemAdded.fire(menuData, listener, itemData, updateCb);
+    function fireItemAdded(menuData, bindListenerCb, itemData, updateCb) {
+        itemAdded.fire(menuData, bindListenerCb, itemData, updateCb);
     }
     exports.fireItemAdded = fireItemAdded;
 
@@ -181,7 +181,7 @@ jsns.define("edity.widgets.treemenu.controller", [
                         }
                     };
                     if (editMode) {
-                        editorSync.fireItemAdded(menuData, listener, data, rebuildMenu);
+                        editorSync.fireItemAdded(menuData, function (editListener) { folderComponent.setListener(editListener); }, data, rebuildMenu);
                     }
                     folderComponent.setListener(listener);
 
@@ -194,7 +194,7 @@ jsns.define("edity.widgets.treemenu.controller", [
                     linksModel.setData(folder.links, function (component, data) {
                         var listener = {
                         };
-                        editorSync.fireItemAdded(menuData, listener, data, rebuildMenu);
+                        editorSync.fireItemAdded(menuData, function (editListener) { component.setListener(editListener); }, data, rebuildMenu);
                         component.setListener(listener);
                     });
                 }

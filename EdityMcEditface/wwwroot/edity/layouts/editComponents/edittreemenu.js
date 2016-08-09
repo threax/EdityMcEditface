@@ -320,28 +320,30 @@ jsns.run([
         });
     }
 
-    function fireItemAdded(menuData, listener, itemData, updateCb) {
+    function fireItemAdded(menuData, bindListenerCb, itemData, updateCb) {
         createControllers(menuData);
 
-        listener.moveUp = function (evt) {
-            moveUp(evt, menuData, itemData, updateCb);
-        }
+        bindListenerCb({
+            moveUp: function (evt) {
+                moveUp(evt, menuData, itemData, updateCb);
+            },
 
-        listener.moveDown = function (evt) {
-            moveDown(evt, menuData, itemData, updateCb);
-        }
+            moveDown: function (evt) {
+                moveDown(evt, menuData, itemData, updateCb);
+            },
 
-        listener.addItem = function (evt) {
-            addItem(evt, menuData, itemData, updateCb);
-        }
+            addItem: function (evt) {
+                addItem(evt, menuData, itemData, updateCb);
+            },
 
-        listener.editItem = function (evt) {
-            editItem(evt, menuData, itemData, updateCb);
-        }
+            editItem: function (evt) {
+                editItem(evt, menuData, itemData, updateCb);
+            },
 
-        listener.deleteItem = function (evt) {
-            deleteItem(evt, menuData, itemData, updateCb);
-        }
+            deleteItem: function (evt) {
+                deleteItem(evt, menuData, itemData, updateCb);
+            }
+        });
     }
 
     function createRootNodeControls(controllerElementName, menuData, updateCb, saveUrl) {

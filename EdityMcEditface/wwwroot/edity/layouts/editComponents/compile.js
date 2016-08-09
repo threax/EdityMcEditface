@@ -15,6 +15,7 @@ function (exports, module, storage, rest, controller, toggles, navmenu) {
         var fail = bindings.getToggle("fail");
         var compiling = bindings.getToggle("compiling");
         var toggleGroup = new toggles.Group(start, success, fail, compiling);
+        var resultsModel = bindings.getModel("results");
 
         var publishToggle = bindings.getToggle('publish');
 
@@ -26,8 +27,9 @@ function (exports, module, storage, rest, controller, toggles, navmenu) {
                 publishToggle.off();
                 toggleGroup.show(compiling);
                 rest.post('/edity/Compile', {},
-                    function () {
+                    function (data) {
                         publishToggle.on();
+                        resultsModel.setData(data);
                         toggleGroup.show(success);
                     }, function () {
                         publishToggle.on();

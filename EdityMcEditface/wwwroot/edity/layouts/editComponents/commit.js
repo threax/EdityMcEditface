@@ -19,9 +19,10 @@ jsns.run([
     "htmlrest.rest",
     "htmlrest.controller",
     "htmlrest.widgets.navmenu",
+    "htmlrest.toggles",
     "edity.commitSync"
 ],
-function (exports, module, storage, rest, controller, navmenu, commitSync) {
+function (exports, module, storage, rest, controller, navmenu, toggles, commitSync) {
     var currentRowCreatedCallback;
 
     function determineCommitVariant(data) {
@@ -44,15 +45,23 @@ function (exports, module, storage, rest, controller, navmenu, commitSync) {
         var commitModel = commitDialog.getModel('commit');
         var dialog = commitDialog.getToggle('dialog');
 
+        var main = commitDialog.getToggle('main');
+        var load = commitDialog.getToggle('load');
+        var error = commitDialog.getToggle('error');
+        var toggleGroup = new toggles.Group(main, load, error);
+
         function commit(evt) {
             evt.preventDefault();
+            toggleGroup.activate(load);
             var data = commitModel.getData();
             rest.post(commitModel.getSrc(), data,
                 function (resultData) {
+                    toggleGroup.activate(main);
                     commitModel.clear();
                     dialog.off();
                 },
                 function (resultData) {
+                    toggleGroup.activate(main);
                     alert('Error Committing');
                 });
         }
@@ -60,13 +69,15 @@ function (exports, module, storage, rest, controller, navmenu, commitSync) {
 
         function NavButtonController(created) {
             function commit() {
+                toggleGroup.activate(load);
                 dialog.on();
                 var changedFiles = commitDialog.getModel('changedFiles');
                 rest.get(changedFiles.getSrc(), function (data) {
+                    toggleGroup.activate(main);
                     changedFiles.setData(data, commitRowCreated, determineCommitVariant);
                 },
                 function (data) {
-                    alert('Cannot get uncommitted changes. Please try again later.');
+                    toggleGroup.activate(error);
                 });
             }
             this.commit = commit;

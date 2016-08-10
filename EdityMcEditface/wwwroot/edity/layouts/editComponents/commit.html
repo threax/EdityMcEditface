@@ -5,11 +5,23 @@
 <div class="modal fade" id="commitModal" data-hr-controller="commit" tabindex="-1" role="dialog" aria-labelledby="commitModalLabel" data-hr-toggle="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form data-hr-on-submit="commit" data-hr-model="commit" data-hr-model-src="/edity/Git/Commit">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="commitModalLabel">Commit</h4>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="commitModalLabel">Commit</h4>
+            </div>
+            <div class="modal-body" data-hr-toggle="load" data-hr-style-off="display:none;">
+                <div class="center">
+                    <div class="load-linebar center-block">
+                        <div class="rect1"></div>
+                        <div class="rect2"></div>
+                        <div class="rect3"></div>
+                        <div class="rect4"></div>
+                        <div class="rect5"></div>
+                    </div>
+                    <p>Working...</p>
                 </div>
+            </div>
+            <form data-hr-on-submit="commit" data-hr-model="commit" data-hr-model-src="/edity/Git/Commit" data-hr-toggle="main" data-hr-style-off="display:none;">
                 <div class="modal-body">
                     <label>Changed Files</label>
                     <ol data-hr-model="changedFiles" data-hr-model-src="/edity/Git/UncommittedChanges" data-hr-model-component="commitComponent">
@@ -36,6 +48,11 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </form>
+            <div class="modal-body" data-hr-toggle="error" data-hr-style-off="display:none;">
+                <p class="center">
+                    Cannot get uncommitted changes. Please try again later.
+                </p>
+            </div>
         </div>
     </div>
 </div>

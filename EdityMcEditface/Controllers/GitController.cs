@@ -10,6 +10,7 @@ using EdityMcEditface.Models.Git;
 using Microsoft.AspNetCore.Authorization;
 using EdityMcEditface.ErrorHandling;
 using EdityMcEditface.HtmlRenderer;
+using System.Net;
 
 namespace EdityMcEditface.Controllers
 {
@@ -34,12 +35,11 @@ namespace EdityMcEditface.Controllers
         public IEnumerable<UncommittedChange> UncommittedChanges()
         {
             var status = repo.RetrieveStatus();
-            
-            return status.Where(s => s.State != FileStatus.Ignored).Select(s => 
+
+            return status.Where(s => s.State != FileStatus.Ignored).Select(s =>
             {
-                return new UncommittedChange()
+                return new UncommittedChange(s.State)
                 {
-                    State = s.State,
                     FilePath = s.FilePath
                 };
             });
@@ -54,7 +54,7 @@ namespace EdityMcEditface.Controllers
             var historyCommits = repo.Commits.QueryBy(file);
             var latestCommit = historyCommits.First();
             var blob = latestCommit.Commit[file].Target as Blob;
-            if(blob != null)
+            if (blob != null)
             {
                 diff.Original = blob.GetContentText();
             }
@@ -111,7 +111,7 @@ namespace EdityMcEditface.Controllers
             var targetFileInfo = new TargetFileInfo(file);
 
             var openFile = targetFileInfo.OriginalFileName;
-            if(targetFileInfo.Extension == "")
+            if (targetFileInfo.Extension == "")
             {
                 openFile = targetFileInfo.HtmlFile;
             }
@@ -199,9 +199,30 @@ namespace EdityMcEditface.Controllers
             {
                 repo.Network.Push(repo.Head, null);
             }
-            catch(LibGit2SharpException ex)
+            catch (LibGit2SharpException ex)
             {
                 throw new ErrorResultException(ex.Message);
+            }
+        }
+
+        [HttpPost("{*file}")]
+        public async Task<IActionResult> Resolve([FromServices] FileFinder fileFinder, String file)
+        {
+            if(repo.Index.Conflicts.Any(s => file == s.Ancestor.Path))
+            {
+                TargetFileInfo fileInfo = new TargetFileInfo(file);
+                using (Stream stream = fileFinder.writeFile(fileInfo.OriginalFileName))
+                {
+                    await this.Request.Form.Files.First().CopyToAsync(stream);
+                }
+
+                repo.Index.Add(file);
+
+                return StatusCode((int)HttpStatusCode.OK);
+            }
+            else
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest);
             }
         }
     }

@@ -15,7 +15,7 @@ function (exports, module, storage, rest, controller, navmenu, commitSync) {
                 dialog.on();
 
                 rest.get(source + '/' + data.filePath, function (successData) {
-                    initUI(successData);
+                    initUI(data.filePath, successData);
                 },
                 function (failData) {
                     alert("Cannot read merge data, please try again later");
@@ -44,11 +44,15 @@ function (exports, module, storage, rest, controller, navmenu, commitSync) {
         var dialog = bindings.getToggle('dialog');
         var mergeModel = bindings.getModel('merge');
         var source = mergeModel.getSrc();
+        var config = bindings.getConfig();
+        var dv;
+        var savePath;
 
-        function initUI(data) {
+        function initUI(path, data) {
+            savePath = path;
             var target = document.getElementById("mergeViewArea");
             target.innerHTML = "";
-            var dv = CodeMirror.MergeView(target, {
+            dv = CodeMirror.MergeView(target, {
                 value: data.merged,
                 origLeft: data.theirs,
                 orig: data.mine,
@@ -71,6 +75,20 @@ function (exports, module, storage, rest, controller, navmenu, commitSync) {
                 dv.rightOriginal().refresh();
             }, 500);
         }
+
+        function save(evt) {
+            evt.preventDefault();
+
+            var content = dv.editor().getValue();
+            var blob = new Blob([content], { type: "text/html" });
+            rest.upload(config.resolvepath + '/' + savePath, blob, function () {
+                dialog.off();
+            },
+            function () {
+                alert("Error saving merge. Please try again later.");
+            });
+        }
+        this.save = save;
     }
 
     controller.create("merge", MergeController);

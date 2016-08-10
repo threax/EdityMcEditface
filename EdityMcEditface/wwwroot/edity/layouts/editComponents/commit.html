@@ -42,35 +42,4 @@
         </div>
     </div>
 </div>
-
-<template data-hr-component="TestMergeNavItem">
-    <li><a data-toggle="modal" data-target="#mergeModal" data-hr-on-click="testMerge">Test Merge</a></li>
-</template>
-<div class="modal fade" id="mergeModal" data-hr-controller="merge" tabindex="-1" role="dialog" aria-labelledby="mergeModalLabel" data-hr-toggle="dialog">
-    <div class="modal-dialog mergeModal" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="mergeModalLabel">Merge</h4>
-            </div>
-            <div class="modal-body">
-                  <form class="row" data-hr-model="merge" data-hr-model-src="/edity/Git/MergeInfo">
-                      <div class="col-sm-4">
-                          <textarea name="theirs" class="form-control" rows="50"></textarea>
-                      </div>
-                      <div class="col-sm-4">
-                          <textarea name="merged" class="form-control" rows="50"></textarea>
-                      </div>
-                      <div class="col-sm-4">
-                          <textarea name="mine" class="form-control" rows="50"></textarea>
-                      </div>
-                  </form>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Commit</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 {mainContent}

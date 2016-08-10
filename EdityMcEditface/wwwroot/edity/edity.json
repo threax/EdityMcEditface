@@ -75,5 +75,5 @@
       "extension": ".html"
     }
   ],
-  "editComponents": [ "editComponents/save.html", "editComponents/commit.html", "editComponents/settings.html", "editComponents/compile.html", "editComponents/source.html", "editComponents/media.html" ]
+  "editComponents": [ "editComponents/save.html", "editComponents/commit.html", "editComponents/merge.html", "editComponents/settings.html", "editComponents/compile.html", "editComponents/source.html", "editComponents/media.html" ]
 }

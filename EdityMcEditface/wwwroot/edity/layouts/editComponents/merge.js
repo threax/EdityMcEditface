@@ -71,22 +71,6 @@ function (exports, module, storage, rest, controller, navmenu, commitSync) {
                 dv.rightOriginal().refresh();
             }, 500);
         }
-
-        function NavButtonController(created) {
-            function merge() {
-                dialog.on();
-                rest.get(source + window.location.pathname, function (data) {
-                    initUI(data);
-                },
-                function (failData) {
-                    alert("Cannot read merge data, please try again later");
-                });
-            }
-            this.merge = merge;
-        }
-
-        var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
-        editMenu.add("MergeNavItem", NavButtonController);
     }
 
     controller.create("merge", MergeController);

@@ -1,8 +1,5 @@
-﻿<template data-hr-component="MergeNavItem">
-    <li><a data-toggle="modal" data-target="#mergeModal" data-hr-on-click="merge">Merge</a></li>
-</template>
-<template data-hr-component="commitComponent" data-hr-variant="Conflicted">
-    <li style="color:red;">{|filePath} <a class="pull-right" data-hr-on-click="merge">Resolve</a></li>
+﻿<template data-hr-component="commitComponent" data-hr-variant="Conflicted">
+    <li style="color:orange;">{|filePath} <a class="pull-right" data-hr-on-click="merge">Resolve Conflict</a></li>
 </template>
 <div class="modal fade" id="mergeModal" data-hr-controller="merge" tabindex="-1" role="dialog" aria-labelledby="mergeModalLabel" data-hr-toggle="dialog">
     <div class="modal-dialog mergeModal" role="document">

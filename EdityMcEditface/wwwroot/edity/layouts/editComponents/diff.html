@@ -1,0 +1,20 @@
+﻿<template data-hr-component="commitComponent" data-hr-variant="ModifiedWithDiff">
+    <li style="color:green;">{|filePath} <a class="pull-right" data-hr-on-click="diff">View Diff</a></li>
+</template>
+<div class="modal fade" id="diffModal" data-hr-controller="diff" tabindex="-1" role="dialog" aria-labelledby="diffModalLabel" data-hr-toggle="dialog">
+    <div class="modal-dialog diffModal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="diffModalLabel">Diff</h4>
+            </div>
+            <div class="modal-body" data-hr-model="diff" data-hr-model-src="/edity/Git/UncommittedDiff" id="diffViewArea">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Commit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{mainContent}

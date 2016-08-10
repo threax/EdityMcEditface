@@ -45,6 +45,37 @@ namespace EdityMcEditface.Controllers
             });
         }
 
+        [HttpGet("{*file}")]
+        public DiffInfo UncommittedDiff([FromServices] FileFinder fileFinder, String file)
+        {
+            var diff = new DiffInfo();
+
+            //Original File
+            var historyCommits = repo.Commits.QueryBy(file);
+            var latestCommit = historyCommits.First();
+            var blob = latestCommit.Commit[file].Target as Blob;
+            if(blob != null)
+            {
+                diff.Original = blob.GetContentText();
+            }
+
+            //Changed file
+            var targetFileInfo = new TargetFileInfo(file);
+
+            var openFile = targetFileInfo.OriginalFileName;
+            if (targetFileInfo.Extension == "")
+            {
+                openFile = targetFileInfo.HtmlFile;
+            }
+
+            using (var stream = new StreamReader(fileFinder.readFile(openFile)))
+            {
+                diff.Changed = stream.ReadToEnd();
+            }
+
+            return diff;
+        }
+
         [HttpGet]
         public IEnumerable<History> History()
         {

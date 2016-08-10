@@ -2,6 +2,6 @@
     width:90%;
 }
 
-.CodeMirror-merge-r-chunk { background: #342d18; }
+.mergeModal .CodeMirror-merge-r-chunk { background: #342d18; }
 
-.CodeMirror-merge-l-chunk { background: #2e1e25; }
+.mergeModal .CodeMirror-merge-l-chunk { background: #2e1e25; }

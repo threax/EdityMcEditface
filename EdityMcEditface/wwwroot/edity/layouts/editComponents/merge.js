@@ -9,8 +9,34 @@ jsns.run([
 ],
 function (exports, module, storage, rest, controller, navmenu, commitSync) {
     function MergeController(bindings) {
-        function mergeVariant(data) {
+        function MergeRow(bindings, data) {
+            function merge(evt) {
+                evt.preventDefault();
+                dialog.on();
 
+                rest.get(source + '/' + data.filePath, function (successData) {
+                    initUI(successData);
+                },
+                function (failData) {
+                    alert("Cannot read merge data, please try again later");
+                });
+            }
+            this.merge = merge;
+
+            bindings.setListener(this);
+        }
+
+        function mergeRowCreated(bindings, data) {
+            new MergeRow(bindings, data);
+        }
+
+        function mergeVariant(data) {
+            if (data.state === "Conflicted") {
+                return {
+                    variant: "Conflicted",
+                    rowCreated: mergeRowCreated
+                };
+            }
         }
 
         commitSync.determineCommitVariantEvent.add(this, mergeVariant)
@@ -54,7 +80,7 @@ function (exports, module, storage, rest, controller, navmenu, commitSync) {
                 },
                 function (failData) {
                     alert("Cannot read merge data, please try again later");
-                })
+                });
             }
             this.merge = merge;
         }

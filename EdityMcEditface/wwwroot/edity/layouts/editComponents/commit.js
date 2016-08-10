@@ -22,12 +22,22 @@ jsns.run([
     "edity.commitSync"
 ],
 function (exports, module, storage, rest, controller, navmenu, commitSync) {
+    var currentRowCreatedCallback;
+
     function determineCommitVariant(data) {
         var listenerVariant = commitSync.fireDetermineCommitVariant(data);
         if (listenerVariant) {
-            return listenerVariant[0]; 
+            currentRowCreatedCallback = listenerVariant[0].rowCreated;
+            return listenerVariant[0].variant; 
         }
         return data.state;
+    }
+
+    function commitRowCreated(bindings, data) {
+        if (currentRowCreatedCallback) {
+            currentRowCreatedCallback(bindings, data);
+            currentRowCreatedCallback = null;
+        }
     }
 
     function CommitController(commitDialog) {
@@ -53,7 +63,7 @@ function (exports, module, storage, rest, controller, navmenu, commitSync) {
                 dialog.on();
                 var changedFiles = commitDialog.getModel('changedFiles');
                 rest.get(changedFiles.getSrc(), function (data) {
-                    changedFiles.setData(data, null, determineCommitVariant);
+                    changedFiles.setData(data, commitRowCreated, determineCommitVariant);
                 },
                 function (data) {
                     alert('Cannot get uncommitted changes. Please try again later.');

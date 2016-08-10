@@ -15,7 +15,7 @@ function (exports, module, storage, rest, controller, navmenu, commitSync) {
                 dialog.on();
 
                 rest.get(source + '/' + data.filePath, function (successData) {
-                    initUI(successData);
+                    initUI(data.filePath, successData);
                 },
                 function (failData) {
                     alert("Cannot read diff data, please try again later");
@@ -44,11 +44,15 @@ function (exports, module, storage, rest, controller, navmenu, commitSync) {
         var dialog = bindings.getToggle('dialog');
         var diffModel = bindings.getModel('diff');
         var source = diffModel.getSrc();
+        var dv;
+        var config = bindings.getConfig();
+        var savePath;
 
-        function initUI(data) {
+        function initUI(path, data) {
+            savePath = path;
             var target = document.getElementById("diffViewArea");
             target.innerHTML = "";
-            var dv = CodeMirror.MergeView(target, {
+            dv = CodeMirror.MergeView(target, {
                 value: data.changed,
                 origLeft: data.original,
                 lineNumbers: true,
@@ -68,6 +72,20 @@ function (exports, module, storage, rest, controller, navmenu, commitSync) {
                 dv.leftOriginal().refresh();
             }, 500);
         }
+
+        function save(evt) {
+            evt.preventDefault();
+
+            var content = dv.editor().getValue();
+            var blob = new Blob([content], { type: "text/html" });
+            rest.upload(config.saveurl + '/' + savePath, blob, function () {
+                dialog.off();
+            },
+            function () {
+                alert("Error saving merge. Please try again later.");
+            });
+        }
+        this.save = save;
     }
 
     controller.create("diff", DiffController);

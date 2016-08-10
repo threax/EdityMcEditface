@@ -4,10 +4,17 @@ jsns.run([
     "htmlrest.storage",
     "htmlrest.rest",
     "htmlrest.controller",
-    "htmlrest.widgets.navmenu"
+    "htmlrest.widgets.navmenu",
+    "edity.commitSync"
 ],
-function (exports, module, storage, rest, controller, navmenu) {
+function (exports, module, storage, rest, controller, navmenu, commitSync) {
     function MergeController(bindings) {
+        function mergeVariant(data) {
+
+        }
+
+        commitSync.determineCommitVariantEvent.add(this, mergeVariant)
+
         var dialog = bindings.getToggle('dialog');
         var mergeModel = bindings.getModel('merge');
         var source = mergeModel.getSrc();

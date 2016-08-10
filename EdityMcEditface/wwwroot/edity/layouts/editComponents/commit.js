@@ -1,13 +1,32 @@
 ﻿"use strict";
 
+jsns.define("edity.commitSync", [
+    "htmlrest.eventhandler"
+],
+function (exports, module, EventHandler) {
+    var determineCommitVariantEvent = new EventHandler();
+
+    function fireDetermineCommitVariant(data) {
+        return determineCommitVariantEvent.fire(data);
+    }
+
+    exports.determineCommitVariantEvent = determineCommitVariantEvent.modifier;
+    exports.fireDetermineCommitVariant = fireDetermineCommitVariant;
+})
+
 jsns.run([
     "htmlrest.storage",
     "htmlrest.rest",
     "htmlrest.controller",
-    "htmlrest.widgets.navmenu"
+    "htmlrest.widgets.navmenu",
+    "edity.commitSync"
 ],
-function (exports, module, storage, rest, controller, navmenu) {
+function (exports, module, storage, rest, controller, navmenu, commitSync) {
     function determineCommitVariant(data) {
+        var listenerVariant = commitSync.fireDetermineCommitVariant(data);
+        if (listenerVariant) {
+            return listenerVariant[0]; 
+        }
         return data.state;
     }
 

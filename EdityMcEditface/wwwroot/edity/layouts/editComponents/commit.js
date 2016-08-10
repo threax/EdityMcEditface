@@ -47,5 +47,28 @@ function (exports, module, storage, rest, controller, navmenu) {
         editMenu.add("CommitNavItem", NavButtonController);
     }
 
+    function MergeController(bindings) {
+        var dialog = bindings.getToggle('dialog');
+        var mergeModel = bindings.getModel('merge');
+        var source = mergeModel.getSrc();
+
+        function NavButtonController(created) {
+            function testMerge() {
+                dialog.on();
+                rest.get(source + window.location.pathname, function (data) {
+                    mergeModel.setData(data);
+                }, 
+                function (failData) {
+                    alert("Cannot read merge data, please try again later");
+                })
+            }
+            this.testMerge = testMerge;
+        }
+
+        var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
+        editMenu.add("TestMergeNavItem", NavButtonController);
+    }
+
     controller.create("commit", CommitController);
+    controller.create("merge", MergeController);
 });

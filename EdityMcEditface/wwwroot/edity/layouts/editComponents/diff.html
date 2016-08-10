@@ -7,8 +7,13 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="diffModalLabel">Diff</h4>
+                <div class="row">
+                    <h4 class="col-xs-6">Original</h4>
+                    <h4 class="col-xs-6">Changed</h4>
+                </div>
             </div>
-            <div class="modal-body" data-hr-model="diff" data-hr-model-src="/edity/Git/UncommittedDiff" id="diffViewArea">
+            <div class="modal-body" data-hr-model="diff" data-hr-model-src="/edity/Git/UncommittedDiff">
+                <div id="diffViewArea"></div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Commit</button>

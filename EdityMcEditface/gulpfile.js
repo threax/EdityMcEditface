@@ -58,6 +58,7 @@ gulp.task("copylibs", function () {
                "./node_modules/codemirror/mode/javascript/**/*",
                "./node_modules/codemirror/mode/css/**/*",
                "./node_modules/codemirror/mode/htmlmixed/**/*",
+               "./node_modules/codemirror/addon/merge/**/*",
                "./node_modules/ckeditor/ckeditor.js",
                "./node_modules/ckeditor/contents.css",
                "./node_modules/ckeditor/skins/moono/**/*",
@@ -93,6 +94,7 @@ gulp.task("copylibs", function () {
 
     copyFiles({
         libs: [
+            "./custom_components/diff_match_patch/**/*",
             "./custom_components/ckeditor/**/*",
             "./custom_components/edity/**/*",
             "./custom_components/codemirror/**/*",

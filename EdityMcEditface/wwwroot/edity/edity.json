@@ -9,6 +9,9 @@
       "js": [ { "file": "/lib/bootstrap.native/dist/bootstrap-native.min.js" } ],
       "dependencies": [ "transitions" ]
     },
+    "diff_match_patch": {
+      "js": [ { "file": "/lib/diff_match_patch/diff_match_patch.js" } ]
+    },
     "codemirror": {
       "js": [
         { "file": "/lib/codemirror/lib/codemirror.js" }
@@ -24,6 +27,13 @@
       ],
       "css": [ "/lib/codemirror/theme/edity.css" ],
       "dependencies": [ "codemirror" ]
+    },
+    "codemirror-merge": {
+      "js": [
+        { "file": "/lib/codemirror/addon/merge/merge.js" }
+      ],
+      "css": [ "/lib/codemirror/addon/merge/merge.css" ],
+      "dependencies": [ "codemirror-html", "diff_match_patch" ]
     },
     "ckeditor": {
       "js": [ { "file": "/lib/ckeditor/ckeditor.js" } ]

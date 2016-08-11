@@ -18,6 +18,32 @@ function (exports, module, storage, controller, navmenu, toggles, GitService) {
         var error = bindings.getToggle('error');
         var group = new toggles.Group(load, main, cantSync, error);
 
+        function push(evt) {
+            evt.preventDefault();
+            group.activate(load);
+            GitService.push()
+            .then(function (data) {
+                group.activate(main);
+            })
+            .catch(function(data){
+                group.activate(error);
+            });
+        }
+        this.push = push;
+
+        function pull(evt) {
+            evt.preventDefault();
+            group.activate(load);
+            GitService.pull()
+            .then(function (data) {
+                group.activate(main);
+            })
+            .catch(function (data) {
+                group.activate(error);
+            });
+        }
+        this.pull = pull;
+
         function NavButtonController(created) {
             function sync() {
                 group.activate(load);

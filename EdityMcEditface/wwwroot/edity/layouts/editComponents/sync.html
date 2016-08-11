@@ -20,18 +20,20 @@
                     <p>Working...</p>
                 </div>
             </div>
-            <div class="modal-body" data-hr-toggle="main" data-hr-style-off="display:none;">
-                <p>Sync main stuff</p>
+            <div data-hr-toggle="main" data-hr-style-off="display:none;">
+                <div class="modal-body">
+                    <p>Sync main stuff</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-hr-on-click="pull">Pull</button>
+                    <button type="button" class="btn btn-default" data-hr-on-click="push">Push</button>
+                </div>
             </div>
             <div class="modal-body" data-hr-toggle="cantSync" data-hr-style-off="display:none;">
                 <p>Can't sync with uncommitted changes. Please commit first before trying to sync.</p>
             </div>
             <div class="modal-body" data-hr-toggle="error" data-hr-style-off="display:none;">
                 <p>Can't contact server. Please try again later.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-hr-on-click="save">Pull</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Push</button>
             </div>
         </div>
     </div>

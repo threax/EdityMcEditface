@@ -40,4 +40,14 @@ jsns.define("edity.GitService", [
         return rest.uploadPromise(host + '/edity/Git/Resolve/' + file, blob);
     }
     exports.resolve = resolve;
+
+    function pull() {
+        return rest.postPromise(host + '/edity/Git/Pull');
+    }
+    exports.pull = pull;
+
+    function push() {
+        return rest.postPromise(host + '/edity/Git/Push');
+    }
+    exports.push = push;
 });

@@ -5,21 +5,23 @@ jsns.run([
     "htmlrest.rest",
     "htmlrest.controller",
     "htmlrest.widgets.navmenu",
-    "edity.commitSync"
+    "edity.commitSync",
+    "edity.GitService"
 ],
-function (exports, module, storage, rest, controller, navmenu, commitSync) {
+function (exports, module, storage, rest, controller, navmenu, commitSync, GitService) {
     function MergeController(bindings) {
         function MergeRow(bindings, data) {
             function merge(evt) {
                 evt.preventDefault();
                 dialog.on();
 
-                rest.get(source + '/' + data.filePath, function (successData) {
-                    initUI(data.filePath, successData);
-                },
-                function (failData) {
-                    alert("Cannot read merge data, please try again later");
-                });
+                GitService.mergeInfo(data.filePath)
+                    .then(function (successData) {
+                        initUI(data.filePath, successData);
+                    })
+                    .catch(function (failData) {
+                        alert("Cannot read merge data, please try again later");
+                    });
             }
             this.merge = merge;
 
@@ -43,8 +45,6 @@ function (exports, module, storage, rest, controller, navmenu, commitSync) {
 
         var dialog = bindings.getToggle('dialog');
         var mergeModel = bindings.getModel('merge');
-        var source = mergeModel.getSrc();
-        var config = bindings.getConfig();
         var dv;
         var savePath;
 
@@ -80,11 +80,11 @@ function (exports, module, storage, rest, controller, navmenu, commitSync) {
             evt.preventDefault();
 
             var content = dv.editor().getValue();
-            var blob = new Blob([content], { type: "text/html" });
-            rest.upload(config.resolvepath + '/' + savePath, blob, function () {
+            GitService.resolve(savePath, content)
+            .then(function (data) {
                 dialog.off();
-            },
-            function () {
+            })
+            .catch(function (data) {
                 alert("Error saving merge. Please try again later.");
             });
         }

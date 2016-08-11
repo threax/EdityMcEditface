@@ -24,4 +24,20 @@ jsns.define("edity.GitService", [
         return rest.postPromise(host + '/edity/Git/Commit', data);
     }
     exports.commit = commit;
+
+    function uncommittedDiff(file) {
+        return rest.getPromise(host + '/edity/Git/UncommittedDiff/' + file);
+    }
+    exports.uncommittedDiff = uncommittedDiff;
+
+    function mergeInfo(file) {
+        return rest.getPromise(host + '/edity/Git/MergeInfo/' + file);
+    }
+    exports.mergeInfo = mergeInfo;
+
+    function resolve(file, content) {
+        var blob = new Blob([content], { type: "text/html" });
+        return rest.uploadPromise(host + '/edity/Git/Resolve/' + file, blob);
+    }
+    exports.resolve = resolve;
 });

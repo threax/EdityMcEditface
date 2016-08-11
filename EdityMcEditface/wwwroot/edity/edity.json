@@ -70,8 +70,7 @@
     "savePageUrl": "/edity/Page",
     "deletePageUrl": "/edity/Page",
     "mediaBrowseDir": "/",
-    "pageTemplateUrl": "/edity/templates",
-    "uncommittedDiffUrl": "/edity/Git/UncommittedDiff"
+    "pageTemplateUrl": "/edity/templates"
   },
   "additionalContent": [ "lib/bootstrap/dist/fonts" ],
   "compilers": [

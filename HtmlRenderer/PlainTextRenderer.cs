@@ -30,7 +30,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns></returns>
         public String getDocument(IEnumerable<PageStackItem> pageStack)
         {
-            String mainContentVar = $"{openingDelimiter}mainContent{closingDelimiter}";
+            String mainContentVar = $"{openingDelimiter}{openingDelimiter}mainContent{closingDelimiter}{closingDelimiter}";
             String innerHtml = "";
             foreach (var page in pageStack)
             {

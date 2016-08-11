@@ -54,7 +54,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             };
             pageStack.pushLayout(layout);
 
-            var dr = new PlainTextRenderer(environment, StringExtensions.JsonEscape, '<', '>');
+            var dr = new PlainTextRenderer(environment, StringExtensions.JsonEscape);
             var document = dr.getDocument(pageStack.Pages);
             var outDir = Path.GetDirectoryName(outFile);
             if (!Directory.Exists(outDir))

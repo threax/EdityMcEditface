@@ -53,10 +53,15 @@
           "file": "/lib/edity/widgets/TreeMenu.js",
           "async": true
         }
-      ]
+      ],
+      "dependencies": [ "htmlrest" ]
     },
     "TreeMenuEditor": {
       "css": [ "/lib/edity/widgets/TreeMenuEditor.css" ]
+    },
+    "GitService": {
+      "js": [ { "file": "/lib/edity/services/GitService.js" } ],
+      "dependencies": [ "htmlrest" ]
     }
   },
   "vars": {
@@ -76,5 +81,5 @@
       "extension": ".html"
     }
   ],
-  "editComponents": [ "editComponents/save.html", "editComponents/commit.html", "editComponents/merge.html", "editComponents/diff.html", "editComponents/settings.html", "editComponents/compile.html", "editComponents/source.html", "editComponents/media.html" ]
+  "editComponents": [ "editComponents/save.html", "editComponents/commit.html", "editComponents/merge.html", "editComponents/diff.html", "editComponents/sync.html", "editComponents/settings.html", "editComponents/compile.html", "editComponents/source.html", "editComponents/media.html" ]
 }

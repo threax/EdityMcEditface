@@ -45,6 +45,12 @@ namespace EdityMcEditface.Controllers
             });
         }
 
+        [HttpGet]
+        public bool HasUncommittedChanges()
+        {
+            return UncommittedChanges().Any();
+        }
+
         [HttpGet("{*file}")]
         public DiffInfo UncommittedDiff([FromServices] FileFinder fileFinder, String file)
         {
@@ -177,6 +183,11 @@ namespace EdityMcEditface.Controllers
         [HttpPost]
         public void Pull([FromServices]Signature signature)
         {
+            if (HasUncommittedChanges())
+            {
+                throw new ErrorResultException("Cannot pull with uncommitted changes. Please commit first and try again.");
+            }
+
             try
             {
                 var result = repo.Network.Pull(signature, new PullOptions());
@@ -195,6 +206,11 @@ namespace EdityMcEditface.Controllers
         [HttpPost]
         public void Push()
         {
+            if (HasUncommittedChanges())
+            {
+                throw new ErrorResultException("Cannot push with uncommitted changes. Please commit first and try again.");
+            }
+
             try
             {
                 repo.Network.Push(repo.Head, null);

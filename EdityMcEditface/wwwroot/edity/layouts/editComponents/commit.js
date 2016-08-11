@@ -16,13 +16,13 @@ function (exports, module, EventHandler) {
 
 jsns.run([
     "htmlrest.storage",
-    "htmlrest.rest",
     "htmlrest.controller",
     "htmlrest.widgets.navmenu",
     "htmlrest.toggles",
-    "edity.commitSync"
+    "edity.commitSync",
+    "edity.GitService"
 ],
-function (exports, module, storage, rest, controller, navmenu, toggles, commitSync) {
+function (exports, module, storage, controller, navmenu, toggles, commitSync, GitService) {
     var currentRowCreatedCallback;
 
     function determineCommitVariant(data) {
@@ -54,13 +54,13 @@ function (exports, module, storage, rest, controller, navmenu, toggles, commitSy
             evt.preventDefault();
             toggleGroup.activate(load);
             var data = commitModel.getData();
-            rest.post(commitModel.getSrc(), data,
-                function (resultData) {
+            GitService.commit(data)
+                .then(function (resultData) {
                     toggleGroup.activate(main);
                     commitModel.clear();
                     dialog.off();
-                },
-                function (resultData) {
+                })
+                .catch(function (errorData) {
                     toggleGroup.activate(main);
                     alert('Error Committing');
                 });
@@ -72,13 +72,14 @@ function (exports, module, storage, rest, controller, navmenu, toggles, commitSy
                 toggleGroup.activate(load);
                 dialog.on();
                 var changedFiles = commitDialog.getModel('changedFiles');
-                rest.get(changedFiles.getSrc(), function (data) {
-                    toggleGroup.activate(main);
-                    changedFiles.setData(data, commitRowCreated, determineCommitVariant);
-                },
-                function (data) {
-                    toggleGroup.activate(error);
-                });
+                GitService.uncommittedChanges()
+                    .then(function (data) {
+                        toggleGroup.activate(main);
+                        changedFiles.setData(data, commitRowCreated, determineCommitVariant);
+                    })
+                    .catch(function (data) {
+                        toggleGroup.activate(error);
+                    });
             }
             this.commit = commit;
         }

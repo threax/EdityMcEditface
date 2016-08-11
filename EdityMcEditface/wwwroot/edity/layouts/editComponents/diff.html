@@ -1,5 +1,5 @@
 ﻿<template data-hr-component="commitComponent" data-hr-variant="ModifiedWithDiff">
-    <li style="color:green;">{|filePath} <a class="pull-right" data-hr-on-click="diff">View Diff</a></li>
+    <li style="color:green;">{{|filePath}} <a class="pull-right" data-hr-on-click="diff">View Diff</a></li>
 </template>
 <div class="modal fade" id="diffModal" data-hr-controller="diff" tabindex="-1" role="dialog" aria-labelledby="diffModalLabel" data-hr-toggle="dialog">
     <div class="modal-dialog diffModal" role="document">
@@ -12,7 +12,7 @@
                     <h4 class="col-xs-6">Changed</h4>
                 </div>
             </div>
-            <div class="modal-body" data-hr-model="diff" data-hr-model-src="{uncommittedDiffUrl}" data-hr-config-saveurl="{uploadUrl}">
+            <div class="modal-body" data-hr-model="diff" data-hr-model-src="{{uncommittedDiffUrl}}" data-hr-config-saveurl="{{uploadUrl}}">
                 <div id="diffViewArea"></div>
             </div>
             <div class="modal-footer">
@@ -22,4 +22,4 @@
         </div>
     </div>
 </div>
-{mainContent}
+{{mainContent}}

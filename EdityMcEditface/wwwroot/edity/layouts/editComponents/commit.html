@@ -26,16 +26,16 @@
                     <label>Changed Files</label>
                     <ol data-hr-model="changedFiles" data-hr-model-src="/edity/Git/UncommittedChanges" data-hr-model-component="commitComponent">
                         <template data-hr-component="commitComponent">
-                            <li>{|filePath}</li>
+                            <li>{{|filePath}}</li>
                         </template>
                         <template data-hr-component="commitComponent" data-hr-variant="Added">
-                            <li style="color:green;">{|filePath} <span class="pull-right">Added</span></li>
+                            <li style="color:green;">{{|filePath}} <span class="pull-right">Added</span></li>
                         </template>
                         <template data-hr-component="commitComponent" data-hr-variant="Removed">
-                            <li style="color:darkred;">{|filePath} <span class="pull-right">Deleted</span></li>
+                            <li style="color:darkred;">{{|filePath}} <span class="pull-right">Deleted</span></li>
                         </template>
                         <template data-hr-component="commitComponent" data-hr-variant="Modified">
-                            <li style="color:blue;">{|filePath} <span class="pull-right">Modified</span></li>
+                            <li style="color:blue;">{{|filePath}} <span class="pull-right">Modified</span></li>
                         </template>
                     </ol>
                     <div class="form-group">
@@ -56,4 +56,4 @@
         </div>
     </div>
 </div>
-{mainContent}
+{{mainContent}}

@@ -1,5 +1,5 @@
 ﻿<template data-hr-component="MediaNavItem">
-    <li><a data-toggle="modal" data-target="#mediaModal" data-hr-on-click="loadMedia" data-hr-model="browse" data-hr-model-src="{mediaBrowseDir}">Media</a></li>
+    <li><a data-toggle="modal" data-target="#mediaModal" data-hr-on-click="loadMedia" data-hr-model="browse" data-hr-model-src="{{mediaBrowseDir}}">Media</a></li>
 </template>
 <div class="modal fade" id="mediaModal" data-hr-controller="media" tabindex="-1" role="dialog" aria-labelledby="mediaModalLabel" data-hr-toggle="dialog">
     <div class="modal-dialog" role="document">
@@ -25,12 +25,12 @@
                 <div class="modal-body">
                     <ol class="filebrowser-directory-list" data-hr-model="directories" data-hr-model-src="/edity/list">
                         <template>
-                            <li data-hr-on-click="changeDirectory">{|name}</li>
+                            <li data-hr-on-click="changeDirectory">{{|name}}</li>
                         </template>
                     </ol>
                     <ol class="filebrowser-file-list" data-hr-model="files">
                         <template>
-                            <li><a href="{|link}" target="_blank">{|name}</a></li>
+                            <li><a href="{{|link}}" target="_blank">{{|name}}</a></li>
                         </template>
                     </ol>
                 </div>
@@ -55,4 +55,4 @@
         </div>
     </div>
 </div>
-{mainContent}
+{{mainContent}}

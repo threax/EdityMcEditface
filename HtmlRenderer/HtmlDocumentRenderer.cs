@@ -57,7 +57,7 @@ namespace EdityMcEditface.HtmlRenderer
                         templateContent = templateContent.Replace("{css}", "");
                     }
                 }
-                innerHtml = templateContent.Replace("{mainContent}", innerHtml);
+                innerHtml = templateContent.Replace("{{mainContent}}", innerHtml);
             }
 
             //Build variables up

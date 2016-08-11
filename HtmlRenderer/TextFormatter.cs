@@ -11,13 +11,13 @@ namespace EdityMcEditface.HtmlRenderer
         public static String formatText(String text, ValueProvider environment, Func<String, String> escapeFunc, char openingDelimiter = '{', char closingDelimiter = '}')
         {
             StringBuilder output = new StringBuilder(text.Length);
-            var textStart = 0;
-            var bracketStart = 0;
-            var bracketEnd = 0;
-            var bracketCount = 0;
-            var bracketCheck = 0;
-            var length = 0;
-            var variable = "";
+            int textStart = 0;
+            int bracketStart = 0;
+            int bracketEnd = 0;
+            int bracketCount = 0;
+            int bracketCheck = 0;
+            String variable;
+            String bracketVariable;
             String value;
             for (var i = 0; i < text.Length; ++i)
             {
@@ -47,24 +47,17 @@ namespace EdityMcEditface.HtmlRenderer
                         //Output everything up to this point
                         output.Append(text.Substring(textStart, bracketStart - textStart));
                         bracketEnd = i;
-                        length = bracketEnd - bracketStart - bracketCount - 1;
+                        bracketVariable = text.Substring(bracketStart, bracketEnd - bracketStart + 1);
 
                         switch (bracketCount)
                         {
                             case 1:
                                 //1 bracket, output as is
-                                output.Append(text.Substring(bracketStart, bracketEnd - bracketStart + 1));
+                                output.Append(bracketVariable);
                                 break;
                             case 2:
-                                variable = text.Substring(bracketStart + bracketCount, length);
-                                if (variable[0] == '|') //Starts with a pipe, pass it to the client side without the pipe.
-                                {
-                                    value = $"{openingDelimiter}{variable.Substring(1)}{closingDelimiter}";
-                                }
-                                else
-                                {
-                                    value = environment.getValue(variable, "");
-                                }
+                                variable = bracketVariable.Substring(bracketCount, bracketVariable.Length - bracketCount * 2);
+                                value = environment.getValue(variable, bracketVariable);
                                 if (environment.shouldEncodeOutput(variable))
                                 {
                                     value = escapeFunc(value);
@@ -73,7 +66,7 @@ namespace EdityMcEditface.HtmlRenderer
                                 break;
                             default:
                                 //Multiple brackets, escape by removing one
-                                output.Append(text.Substring(bracketStart + 1, bracketEnd - bracketStart - 1));
+                                output.Append(bracketVariable.Substring(1, bracketVariable.Length - 2));
                                 break;
                         }
 

@@ -16,6 +16,9 @@ namespace EdityMcEditface.HtmlRenderer
             var bracketEnd = 0;
             var bracketCount = 0;
             var bracketCheck = 0;
+            var length = 0;
+            var variable = "";
+            String value;
             for (var i = 0; i < text.Length; ++i)
             {
                 if (text[i] == openingDelimiter)
@@ -41,27 +44,39 @@ namespace EdityMcEditface.HtmlRenderer
                     //If the check got back to 0 we found a variable
                     if(bracketCheck == 0)
                     {
+                        //Output everything up to this point
+                        output.Append(text.Substring(textStart, bracketStart - textStart));
                         bracketEnd = i;
-                        var length = bracketEnd - bracketStart - bracketCount - 1;
-                        if (length > 0)
+                        length = bracketEnd - bracketStart - bracketCount - 1;
+
+                        switch (bracketCount)
                         {
-                            var variable = text.Substring(bracketStart + bracketCount, length);
-                            String value;
-                            if (variable[0] == '|') //Starts with a pipe, pass it to the client side without the pipe.
-                            {
-                                value = $"{openingDelimiter}{variable.Substring(1)}{closingDelimiter}";
-                            }
-                            else
-                            {
-                                value = environment.getValue(variable, "");
-                            }
-                            output.Append(text.Substring(textStart, bracketStart - textStart));
-                            if (environment.shouldEncodeOutput(variable))
-                            {
-                                value = escapeFunc(value);
-                            }
-                            output.Append(value);
+                            case 1:
+                                //1 bracket, output as is
+                                output.Append(text.Substring(bracketStart, bracketEnd - bracketStart + 1));
+                                break;
+                            case 2:
+                                variable = text.Substring(bracketStart + bracketCount, length);
+                                if (variable[0] == '|') //Starts with a pipe, pass it to the client side without the pipe.
+                                {
+                                    value = $"{openingDelimiter}{variable.Substring(1)}{closingDelimiter}";
+                                }
+                                else
+                                {
+                                    value = environment.getValue(variable, "");
+                                }
+                                if (environment.shouldEncodeOutput(variable))
+                                {
+                                    value = escapeFunc(value);
+                                }
+                                output.Append(value);
+                                break;
+                            default:
+                                //Multiple brackets, escape by removing one
+                                output.Append(text.Substring(bracketStart + 1, bracketEnd - bracketStart - 1));
+                                break;
                         }
+
                         textStart = i + 1;
                     }
                 }

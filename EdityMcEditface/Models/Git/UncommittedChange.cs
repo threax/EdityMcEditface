@@ -48,30 +48,22 @@ namespace EdityMcEditface.Models.Git
                 case FileStatus.Unaltered:
                     State = GitFileStatus.Unaltered;
                     break;
-                case FileStatus.Added:
-                case FileStatus.Untracked:
-                    //case FileStatus.NewInIndex:
-                    //case FileStatus.NewInWorkdir:
+                case FileStatus.NewInIndex:
+                case FileStatus.NewInWorkdir:
                     State = GitFileStatus.Added;
                     break;
-                case FileStatus.Removed:
-                case FileStatus.Missing:
-                    //case FileStatus.DeletedFromIndex:
-                    //case FileStatus.DeletedFromWorkdir:
+                case FileStatus.DeletedFromIndex:
+                case FileStatus.DeletedFromWorkdir:
                     State = GitFileStatus.Removed;
                     break;
                 case FileStatus.RenamedInIndex:
                 case FileStatus.RenamedInWorkdir:
                     State = GitFileStatus.Renamed;
                     break;
-                case FileStatus.StagedTypeChange:
-                case FileStatus.TypeChanged:
-                    //case FileStatus.TypeChangeInIndex:
-                    //case FileStatus.TypeChangeInWorkdir:
-                case FileStatus.Modified:
-                case FileStatus.Staged:
-                    //case FileStatus.ModifiedInIndex:
-                    //case FileStatus.ModifiedInWorkdir:
+                case FileStatus.TypeChangeInIndex:
+                case FileStatus.TypeChangeInWorkdir:
+                case FileStatus.ModifiedInIndex:
+                case FileStatus.ModifiedInWorkdir:
                     State = GitFileStatus.Modified;
                     break;
                 case FileStatus.Unreadable:

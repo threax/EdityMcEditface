@@ -14,6 +14,7 @@ namespace EdityMcEditface.Models.Page
         {
             this.projectFolder = projectFolder;
             this.BackupPath = backupPath;
+            this.MasterRepoPath = projectFolder;
         }
 
         public String GetUserProjectPath(String user)
@@ -30,5 +31,7 @@ namespace EdityMcEditface.Models.Page
         }
 
         public String BackupPath { get; private set; }
+
+        public String MasterRepoPath { get; private set; }
     }
 }

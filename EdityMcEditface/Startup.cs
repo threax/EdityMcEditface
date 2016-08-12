@@ -147,18 +147,34 @@ namespace EdityMcEditface
                 case "RoundRobin":
                     services.AddTransient<SiteBuilder, RoundRobinSiteBuilder>(s =>
                     {
+                        var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var settings = createSiteBuilderSettings(s);
-                        return new RoundRobinSiteBuilder(settings, new ServerManagerRoundRobinDeployer(settings.SiteName, settings.CompiledVirtualFolder)
+                        var builder = new RoundRobinSiteBuilder(settings, new ServerManagerRoundRobinDeployer(settings.SiteName, settings.CompiledVirtualFolder)
                         {
                             AppHostConfigPath = EdityServerConfiguration["AppHostConfigPath"]
                         });
+
+                        if(EdityServerConfiguration["ProjectMode"] == "OneRepoPerUser")
+                        {
+                            builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
+                        }
+
+                        return builder;
                     });
                     break;
                 case "Direct":
                 default:
                     services.AddTransient<SiteBuilder, DirectOutputSiteBuilder>(s =>
                     {
-                        return new DirectOutputSiteBuilder(createSiteBuilderSettings(s));
+                        var projectFinder = s.GetRequiredService<ProjectFinder>();
+                        var builder = new DirectOutputSiteBuilder(createSiteBuilderSettings(s));
+
+                        if (EdityServerConfiguration["ProjectMode"] == "OneRepoPerUser")
+                        {
+                            builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
+                        }
+
+                        return builder;
                     });
                     break;
             }

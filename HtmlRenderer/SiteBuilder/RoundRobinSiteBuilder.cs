@@ -46,5 +46,15 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
                 }
             }
         }
+
+        public void addPreBuildTask(BuildTask task)
+        {
+            directOutput.addPreBuildTask(task);
+        }
+
+        public void addPostBuildTask(BuildTask task)
+        {
+            directOutput.addPostBuildTask(task);
+        }
     }
 }

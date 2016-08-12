@@ -5,12 +5,8 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 {
-    public interface SiteBuilder
+    public interface BuildTask
     {
-        void addPreBuildTask(BuildTask task);
-
-        void addPostBuildTask(BuildTask task);
-
-        void BuildSite();
+        void execute();
     }
 }

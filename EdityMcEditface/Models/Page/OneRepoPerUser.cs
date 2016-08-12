@@ -15,6 +15,7 @@ namespace EdityMcEditface.Models.Page
         {
             this.projectFolder = projectFolder;
             this.BackupPath = backupPath;
+            this.MasterRepoPath = Path.Combine(projectFolder, "Master");
         }
 
         public String GetUserProjectPath(String user)
@@ -26,7 +27,7 @@ namespace EdityMcEditface.Models.Page
             }
             if (!Repository.IsValid(repoPath))
             {
-                Repository.Clone(Path.Combine(projectFolder, "Master"), repoPath);
+                Repository.Clone(MasterRepoPath, repoPath);
             }
             return repoPath;
         }
@@ -40,5 +41,7 @@ namespace EdityMcEditface.Models.Page
         }
 
         public String BackupPath { get; private set; }
+
+        public String MasterRepoPath { get; private set; }
     }
 }

@@ -16,6 +16,8 @@ namespace EdityMcEditface.Models.Page
 
         String PublishedProjectPath { get; }
 
+        String MasterRepoPath { get; }
+
         String BackupPath { get; }
     }
 }

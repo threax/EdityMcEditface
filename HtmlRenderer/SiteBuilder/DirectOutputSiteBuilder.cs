@@ -11,6 +11,8 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
     public class DirectOutputSiteBuilder : SiteBuilder
     {
         private SiteBuilderSettings settings;
+        private List<BuildTask> preBuildTasks = new List<BuildTask>();
+        private List<BuildTask> postBuildTasks = new List<BuildTask>();
 
         public DirectOutputSiteBuilder(SiteBuilderSettings settings)
         {
@@ -46,6 +48,12 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 
         public void BuildSite()
         {
+            //Pre build tasks
+            foreach(var task in preBuildTasks)
+            {
+                task.execute();
+            }
+
             //Handle output folder
             MultiTryDirDelete(settings.OutDir);
 
@@ -71,6 +79,22 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             {
                 compiler.copyProjectContent();
             }
+
+            //Post build tasks
+            foreach (var task in postBuildTasks)
+            {
+                task.execute();
+            }
+        }
+
+        public void addPreBuildTask(BuildTask task)
+        {
+            preBuildTasks.Add(task);
+        }
+
+        public void addPostBuildTask(BuildTask task)
+        {
+            postBuildTasks.Add(task);
         }
     }
 }

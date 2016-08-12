@@ -10,9 +10,29 @@
                 <h4 class="modal-title" id="compileModalLabel">Publish</h4>
             </div>
             <div class="modal-body">
-                <p data-hr-toggle="start" data-hr-style-off="display:none;">
-                    Press Publish to compile this website.
-                </p>
+                <div data-hr-toggle="start" data-hr-style-off="display:none;">
+                    <h4 data-hr-model="info">Unpublished Changes - {{behindBy}}</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Message</th>
+                                <th>Author</th>
+                                <th>When</th>
+                            </tr>
+                        </thead>
+                        <tbody data-hr-model="changes" data-hr-model-component="compileModal.HistoryTable"></tbody>
+                    </table>
+                    <template data-hr-component="compileModal.HistoryTable">
+                        <table>
+                            <tr>
+                                <td>{{message}}</td>
+                                <td>{{name}}</td>
+                                <td>{{when}}</td>
+                            </tr>
+                        </table>
+                    </template>
+                    <p>Press Publish to compile this website.</p>
+                </div>
                 <p data-hr-toggle="success" data-hr-style-off="display:none;" data-hr-model="results">
                     Website compiled in {{elapsedSeconds}} seconds and published.
                 </p>
@@ -27,7 +47,7 @@
                         <div class="rect4"></div>
                         <div class="rect5"></div>
                     </div>
-                    <p>Compiling</p>
+                    <p>Working</p>
                 </div>
             </div>
             <div class="modal-footer">

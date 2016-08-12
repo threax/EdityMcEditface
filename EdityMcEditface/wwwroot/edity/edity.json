@@ -62,6 +62,10 @@
     "GitService": {
       "js": [ { "file": "/lib/edity/services/GitService.js" } ],
       "dependencies": [ "htmlrest" ]
+    },
+    "CompileService": {
+      "js": [ { "file": "/lib/edity/services/CompileService.js" } ],
+      "dependencies": [ "htmlrest" ]
     }
   },
   "vars": {

@@ -5,9 +5,10 @@ jsns.run([
     "htmlrest.rest",
     "htmlrest.controller",
     "htmlrest.toggles",
-    "htmlrest.widgets.navmenu"
+    "htmlrest.widgets.navmenu",
+    "edity.CompileService"
 ],
-function (exports, module, storage, rest, controller, toggles, navmenu) {
+function (exports, module, storage, rest, controller, toggles, navmenu, CompileService) {
 
     function CompileController(bindings) {
         var start = bindings.getToggle("start");
@@ -16,6 +17,8 @@ function (exports, module, storage, rest, controller, toggles, navmenu) {
         var compiling = bindings.getToggle("compiling");
         var toggleGroup = new toggles.Group(start, success, fail, compiling);
         var resultsModel = bindings.getModel("results");
+        var changesModel = bindings.getModel("changes");
+        var infoModel = bindings.getModel('info');
 
         var publishToggle = bindings.getToggle('publish');
 
@@ -40,8 +43,17 @@ function (exports, module, storage, rest, controller, toggles, navmenu) {
 
         function NavButtonController(created) {
             function compile() {
-                toggleGroup.show(start);
+                toggleGroup.show(compiling);
                 dialogToggle.on();
+                CompileService.getStatus()
+                .then(function (data) {
+                    infoModel.setData(data);
+                    changesModel.setData(data.behindHistory);
+                    toggleGroup.activate(start);
+                })
+                .catch(function (err) {
+                    toggleGroup.show(fail);
+                });
             }
             this.compile = compile;
         }

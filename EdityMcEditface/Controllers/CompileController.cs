@@ -2,6 +2,9 @@
 using EdityMcEditface.HtmlRenderer.Compiler;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
 using EdityMcEditface.Models.Compiler;
+using EdityMcEditface.Models.Git;
+using EdityMcEditface.Models.Page;
+using LibGit2Sharp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -24,6 +27,31 @@ namespace EdityMcEditface.Controllers
         {
             this.builder = builder;
             this.workQueue = workQueue;
+        }
+
+        [HttpGet("Status")]
+        public CompilerStatus Status([FromServices] ProjectFinder projectFinder)
+        {
+            var repo = new Repository(projectFinder.PublishedProjectPath);
+
+            repo.Fetch("origin");
+
+            var head = repo.Head.Commits.First();
+            var tracked = repo.Head.TrackedBranch.Commits.First();
+            var divergence = repo.ObjectDatabase.CalculateHistoryDivergence(head, tracked);
+
+            var behindCommits = repo.Commits.QueryBy(new CommitFilter()
+            {
+                SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time,
+                IncludeReachableFrom = divergence.Another,
+                ExcludeReachableFrom = divergence.CommonAncestor
+            });
+
+            return new CompilerStatus()
+            {
+                BehindBy = divergence.BehindBy.GetValueOrDefault(),
+                BehindHistory = behindCommits.Select(c => new History(c))
+            };
         }
 
         [HttpPost]

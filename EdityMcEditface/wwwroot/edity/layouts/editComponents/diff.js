@@ -8,6 +8,32 @@ jsns.run([
     "edity.GitService"
 ],
 function (exports, module, storage, rest, controller, navmenu, GitService) {
+    var revertConfirmation;
+
+    function ConfirmRevertController(bindings) {
+        revertConfirmation = this;
+        var targetFile;
+        var dialog = bindings.getToggle('dialog');
+        var info = bindings.getModel('info');
+
+        function revert() {
+            GitService.revert(targetFile)
+            .then(function (data) {
+                dialog.off();
+            });
+            targetFile = null;
+        }
+        this.revert = revert;
+
+        function confirm(file) {
+            targetFile = file;
+            info.setData(file);
+            dialog.on();
+        }
+        this.confirm = confirm;
+    }
+    controller.create("diff-revertFileConfirmation", ConfirmRevertController);
+
     function DiffController(bindings) {
         function DiffRow(bindings, data) {
             function diff(evt) {
@@ -27,7 +53,7 @@ function (exports, module, storage, rest, controller, navmenu, GitService) {
             function revert(evt) {
                 evt.preventDefault();
 
-                GitService.revert(data.filePath);
+                revertConfirmation.confirm(data.filePath);
             }
             this.revert = revert;
 

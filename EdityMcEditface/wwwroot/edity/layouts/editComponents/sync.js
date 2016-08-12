@@ -17,7 +17,8 @@ function (exports, module, storage, controller, navmenu, toggles, iter, GitServi
         var main = bindings.getToggle('main');
         var cantSync = bindings.getToggle('cantSync');
         var error = bindings.getToggle('error');
-        var group = new toggles.Group(load, main, cantSync, error);
+        var noChanges = bindings.getToggle('noChanges');
+        var group = new toggles.Group(load, main, cantSync, error, noChanges);
 
         var changesModel = bindings.getModel('changes');
         var behindHistory = bindings.getModel('behindHistory');
@@ -56,10 +57,15 @@ function (exports, module, storage, controller, navmenu, toggles, iter, GitServi
                 group.activate(cantSync);
             }
             else {
-                group.activate(main);
-                changesModel.setData(data);
-                behindHistory.setData(iter(data.behindHistory, formatRow));
-                aheadHistory.setData(iter(data.aheadHistory, formatRow));
+                if (data.aheadBy === 0 && data.behindBy === 0) {
+                    group.activate(noChanges);
+                }
+                else {
+                    group.activate(main);
+                    changesModel.setData(data);
+                    behindHistory.setData(iter(data.behindHistory, formatRow));
+                    aheadHistory.setData(iter(data.aheadHistory, formatRow));
+                }
             }
         }
 

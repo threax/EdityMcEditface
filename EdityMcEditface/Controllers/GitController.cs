@@ -46,37 +46,39 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpGet]
-        public SyncInfo SyncInfo()
+        public async Task<SyncInfo> SyncInfo()
         {
-            repo.Fetch("origin");
-
-            var head = repo.Head.Commits.First();
-            var tracked = repo.Head.TrackedBranch.Commits.First();
-            var divergence = repo.ObjectDatabase.CalculateHistoryDivergence(head, tracked);
-            Console.WriteLine(divergence);
-
-            var aheadCommits = repo.Commits.QueryBy(new CommitFilter()
+            return await Task.Run<SyncInfo>(() =>
             {
-                SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time,
-                IncludeReachableFrom = divergence.One,
-                ExcludeReachableFrom = divergence.CommonAncestor
+                repo.Fetch("origin");
+
+                var head = repo.Head.Commits.First();
+                var tracked = repo.Head.TrackedBranch.Commits.First();
+                var divergence = repo.ObjectDatabase.CalculateHistoryDivergence(head, tracked);
+
+                var aheadCommits = repo.Commits.QueryBy(new CommitFilter()
+                {
+                    SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time,
+                    IncludeReachableFrom = divergence.One,
+                    ExcludeReachableFrom = divergence.CommonAncestor
+                });
+
+                var behindCommits = repo.Commits.QueryBy(new CommitFilter()
+                {
+                    SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time,
+                    IncludeReachableFrom = divergence.Another,
+                    ExcludeReachableFrom = divergence.CommonAncestor
+                });
+
+                return new SyncInfo()
+                {
+                    HasUncomittedChanges = UncommittedChanges().Any(),
+                    AheadBy = divergence.AheadBy.GetValueOrDefault(),
+                    BehindBy = divergence.BehindBy.GetValueOrDefault(),
+                    AheadHistory = aheadCommits.Select(c => new History(c)),
+                    BehindHistory = behindCommits.Select(c => new History(c))
+                };
             });
-
-            var behindCommits = repo.Commits.QueryBy(new CommitFilter()
-            {
-                SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time,
-                IncludeReachableFrom = divergence.Another,
-                ExcludeReachableFrom = divergence.CommonAncestor
-            });
-
-            return new SyncInfo()
-            {
-                HasUncomittedChanges = UncommittedChanges().Any(),
-                AheadBy = divergence.AheadBy.GetValueOrDefault(),
-                BehindBy = divergence.BehindBy.GetValueOrDefault(),
-                AheadHistory = aheadCommits.Select(c => new History(c)),
-                BehindHistory = behindCommits.Select(c => new History(c))
-            };
         }
 
         [HttpGet("{*file}")]

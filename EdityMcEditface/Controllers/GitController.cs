@@ -46,9 +46,37 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpGet]
-        public bool HasUncommittedChanges()
+        public SyncInfo SyncInfo()
         {
-            return UncommittedChanges().Any();
+            repo.Fetch("origin");
+
+            var head = repo.Head.Commits.First();
+            var tracked = repo.Head.TrackedBranch.Commits.First();
+            var divergence = repo.ObjectDatabase.CalculateHistoryDivergence(head, tracked);
+            Console.WriteLine(divergence);
+
+            var aheadCommits = repo.Commits.QueryBy(new CommitFilter()
+            {
+                SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time,
+                IncludeReachableFrom = divergence.One,
+                ExcludeReachableFrom = divergence.CommonAncestor
+            });
+
+            var behindCommits = repo.Commits.QueryBy(new CommitFilter()
+            {
+                SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time,
+                IncludeReachableFrom = divergence.Another,
+                ExcludeReachableFrom = divergence.CommonAncestor
+            });
+
+            return new SyncInfo()
+            {
+                HasUncomittedChanges = UncommittedChanges().Any(),
+                AheadBy = divergence.AheadBy.GetValueOrDefault(),
+                BehindBy = divergence.BehindBy.GetValueOrDefault(),
+                AheadHistory = aheadCommits.Select(c => new History(c)),
+                BehindHistory = behindCommits.Select(c => new History(c))
+            };
         }
 
         [HttpGet("{*file}")]
@@ -88,14 +116,7 @@ namespace EdityMcEditface.Controllers
             var historyCommits = repo.Commits;
             foreach (var logEntry in historyCommits)
             {
-                yield return new History()
-                {
-                    Message = logEntry.Message,
-                    Name = logEntry.Author.Name,
-                    Email = logEntry.Author.Email,
-                    When = logEntry.Author.When,
-                    Sha = logEntry.Sha
-                };
+                yield return new History(logEntry);
             }
         }
 
@@ -183,7 +204,7 @@ namespace EdityMcEditface.Controllers
         [HttpPost]
         public void Pull([FromServices]Signature signature)
         {
-            if (HasUncommittedChanges())
+            if (UncommittedChanges().Any())
             {
                 throw new ErrorResultException("Cannot pull with uncommitted changes. Please commit first and try again.");
             }
@@ -206,7 +227,7 @@ namespace EdityMcEditface.Controllers
         [HttpPost]
         public void Push()
         {
-            if (HasUncommittedChanges())
+            if (UncommittedChanges().Any())
             {
                 throw new ErrorResultException("Cannot push with uncommitted changes. Please commit first and try again.");
             }

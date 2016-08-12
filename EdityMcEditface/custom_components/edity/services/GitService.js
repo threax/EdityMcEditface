@@ -10,10 +10,10 @@ jsns.define("edity.GitService", [
     }
     exports.setHost = setHost;
 
-    function hasUncommittedChanges() {
-        return rest.getPromise(host + '/edity/Git/HasUncommittedChanges');
+    function syncInfo() {
+        return rest.getPromise(host + '/edity/Git/SyncInfo');
     }
-    exports.hasUncommittedChanges = hasUncommittedChanges;
+    exports.syncInfo = syncInfo;
 
     function uncommittedChanges() {
         return rest.getPromise(host + '/edity/Git/UncommittedChanges');

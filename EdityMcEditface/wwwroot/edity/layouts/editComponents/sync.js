@@ -5,9 +5,10 @@ jsns.run([
     "htmlrest.controller",
     "htmlrest.widgets.navmenu",
     "htmlrest.toggles",
+    "htmlrest.iter",
     "edity.GitService"
 ],
-function (exports, module, storage, controller, navmenu, toggles, GitService) {
+function (exports, module, storage, controller, navmenu, toggles, iter, GitService) {
     function SyncController(bindings) {
         var commitModel = bindings.getModel('commit');
         var dialog = bindings.getToggle('dialog');
@@ -18,13 +19,18 @@ function (exports, module, storage, controller, navmenu, toggles, GitService) {
         var error = bindings.getToggle('error');
         var group = new toggles.Group(load, main, cantSync, error);
 
+        var changesModel = bindings.getModel('changes');
+        var behindHistory = bindings.getModel('behindHistory');
+        var aheadHistory = bindings.getModel('aheadHistory');
+
         function push(evt) {
             evt.preventDefault();
             group.activate(load);
             GitService.push()
             .then(function (data) {
-                group.activate(main);
+                return GitService.syncInfo();
             })
+            .then(setupSyncInfo)
             .catch(function(data){
                 group.activate(error);
             });
@@ -36,28 +42,34 @@ function (exports, module, storage, controller, navmenu, toggles, GitService) {
             group.activate(load);
             GitService.pull()
             .then(function (data) {
-                group.activate(main);
+                return GitService.syncInfo();
             })
+            .then(setupSyncInfo)
             .catch(function (data) {
                 group.activate(error);
             });
         }
         this.pull = pull;
 
+        function setupSyncInfo(data) {
+            if (data.hasUncomittedChanges) {
+                group.activate(cantSync);
+            }
+            else {
+                group.activate(main);
+                changesModel.setData(data);
+                behindHistory.setData(iter(data.behindHistory, formatRow));
+                aheadHistory.setData(iter(data.aheadHistory, formatRow));
+            }
+        }
+
         function NavButtonController(created) {
             function sync() {
                 group.activate(load);
                 dialog.on();
 
-                GitService.hasUncommittedChanges()
-                .then(function (data) {
-                    if (data) {
-                        group.activate(cantSync);
-                    }
-                    else {
-                        group.activate(main);
-                    }
-                })
+                GitService.syncInfo()
+                .then(setupSyncInfo)
                 .catch(function (data) {
                     group.activate(error);
                 });
@@ -67,6 +79,12 @@ function (exports, module, storage, controller, navmenu, toggles, GitService) {
 
         var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
         editMenu.add("SyncNavItem", NavButtonController);
+    }
+
+    function formatRow(row) {
+        var date = new Date(row.when);
+        row.when = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        return row;
     }
 
     controller.create("sync", SyncController);

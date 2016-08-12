@@ -8,6 +8,20 @@ namespace EdityMcEditface.Models.Git
 {
     public class History
     {
+        public History()
+        {
+
+        }
+
+        public History(Commit commit)
+        {
+            Message = commit.Message;
+            Name = commit.Author.Name;
+            Email = commit.Author.Email;
+            When = commit.Author.When;
+            Sha = commit.Sha;
+        }
+
         public string Message { get; internal set; }
         public string Sha { get; internal set; }
         public string Name { get; internal set; }

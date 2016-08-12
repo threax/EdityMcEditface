@@ -5,10 +5,9 @@ jsns.run([
     "htmlrest.rest",
     "htmlrest.controller",
     "htmlrest.widgets.navmenu",
-    "edity.commitSync",
     "edity.GitService"
 ],
-function (exports, module, storage, rest, controller, navmenu, commitSync, GitService) {
+function (exports, module, storage, rest, controller, navmenu, GitService) {
     function MergeController(bindings) {
         function MergeRow(bindings, data) {
             function merge(evt) {
@@ -41,7 +40,7 @@ function (exports, module, storage, rest, controller, navmenu, commitSync, GitSe
             }
         }
 
-        commitSync.determineCommitVariantEvent.add(this, mergeVariant)
+        GitService.determineCommitVariantEvent.add(this, mergeVariant)
 
         var dialog = bindings.getToggle('dialog');
         var mergeModel = bindings.getModel('merge');

@@ -1,32 +1,17 @@
 ﻿"use strict";
 
-jsns.define("edity.commitSync", [
-    "htmlrest.eventhandler"
-],
-function (exports, module, EventHandler) {
-    var determineCommitVariantEvent = new EventHandler();
-
-    function fireDetermineCommitVariant(data) {
-        return determineCommitVariantEvent.fire(data);
-    }
-
-    exports.determineCommitVariantEvent = determineCommitVariantEvent.modifier;
-    exports.fireDetermineCommitVariant = fireDetermineCommitVariant;
-})
-
 jsns.run([
     "htmlrest.storage",
     "htmlrest.controller",
     "htmlrest.widgets.navmenu",
     "htmlrest.toggles",
-    "edity.commitSync",
     "edity.GitService"
 ],
-function (exports, module, storage, controller, navmenu, toggles, commitSync, GitService) {
+function (exports, module, storage, controller, navmenu, toggles, GitService) {
     var currentRowCreatedCallback;
 
     function determineCommitVariant(data) {
-        var listenerVariant = commitSync.fireDetermineCommitVariant(data);
+        var listenerVariant = GitService.fireDetermineCommitVariant(data);
         if (listenerVariant) {
             currentRowCreatedCallback = listenerVariant[0].rowCreated;
             return listenerVariant[0].variant; 
@@ -49,6 +34,31 @@ function (exports, module, storage, controller, navmenu, toggles, commitSync, Gi
         var load = commitDialog.getToggle('load');
         var error = commitDialog.getToggle('error');
         var toggleGroup = new toggles.Group(main, load, error);
+        var changedFiles = commitDialog.getModel('changedFiles');
+
+        function updateUncommittedFiles() {
+            GitService.uncommittedChanges()
+                    .then(function (data) {
+                        toggleGroup.activate(main);
+                        changedFiles.setData(data, commitRowCreated, determineCommitVariant);
+                    })
+                    .catch(function (data) {
+                        toggleGroup.activate(error);
+                    });
+        }
+
+        GitService.revertStarted.add(this, function () {
+            toggleGroup.activate(load);
+        });
+
+        GitService.revertCompleted.add(this, function (success) {
+            if (success) {
+                updateUncommittedFiles();
+            }
+            else {
+                toggleGroup.activate(error);
+            }
+        });
 
         function commit(evt) {
             evt.preventDefault();
@@ -71,15 +81,7 @@ function (exports, module, storage, controller, navmenu, toggles, commitSync, Gi
             function commit() {
                 toggleGroup.activate(load);
                 dialog.on();
-                var changedFiles = commitDialog.getModel('changedFiles');
-                GitService.uncommittedChanges()
-                    .then(function (data) {
-                        toggleGroup.activate(main);
-                        changedFiles.setData(data, commitRowCreated, determineCommitVariant);
-                    })
-                    .catch(function (data) {
-                        toggleGroup.activate(error);
-                    });
+                updateUncommittedFiles();
             }
             this.commit = commit;
         }

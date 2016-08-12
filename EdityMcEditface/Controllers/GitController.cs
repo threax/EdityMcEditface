@@ -243,23 +243,50 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost("{*file}")]
-        public async Task<IActionResult> Resolve([FromServices] FileFinder fileFinder, String file)
+        public async Task Resolve([FromServices] FileFinder fileFinder, String file)
         {
-            if(repo.Index.Conflicts.Any(s => file == s.Ancestor.Path))
+            if (repo.Index.Conflicts.Any(s => file == s.Ancestor.Path))
             {
-                TargetFileInfo fileInfo = new TargetFileInfo(file);
-                using (Stream stream = fileFinder.writeFile(fileInfo.OriginalFileName))
-                {
-                    await this.Request.Form.Files.First().CopyToAsync(stream);
-                }
-
-                repo.Index.Add(file);
-
-                return StatusCode((int)HttpStatusCode.OK);
+                throw new ErrorResultException($"No conflicts to resolve for {file}.");
             }
-            else
+
+            TargetFileInfo fileInfo = new TargetFileInfo(file);
+            using (Stream stream = fileFinder.writeFile(fileInfo.OriginalFileName))
             {
-                return StatusCode((int)HttpStatusCode.BadRequest);
+                await this.Request.Form.Files.First().CopyToAsync(stream);
+            }
+
+            repo.Index.Add(file);
+        }
+
+        [HttpPost("{*file}")]
+        public async Task Revert([FromServices] FileFinder fileFinder, String file)
+        {
+            //Original File
+            var historyCommits = repo.Commits.QueryBy(file);
+            var latestCommit = historyCommits.FirstOrDefault();
+            if (latestCommit != null)
+            {
+                var blob = latestCommit.Commit[file].Target as Blob;
+                if (blob != null)
+                {
+                    //Changed file
+                    var targetFileInfo = new TargetFileInfo(file);
+
+                    var openFile = targetFileInfo.OriginalFileName;
+                    if (targetFileInfo.Extension == "")
+                    {
+                        openFile = targetFileInfo.HtmlFile;
+                    }
+
+                    using (var dest = fileFinder.writeFile(openFile))
+                    {
+                        using (var source = blob.GetContentStream())
+                        {
+                            await source.CopyToAsync(dest);
+                        }
+                    }
+                }
             }
         }
     }

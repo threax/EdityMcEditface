@@ -5,10 +5,9 @@ jsns.run([
     "htmlrest.rest",
     "htmlrest.controller",
     "htmlrest.widgets.navmenu",
-    "edity.commitSync",
     "edity.GitService"
 ],
-function (exports, module, storage, rest, controller, navmenu, commitSync, GitService) {
+function (exports, module, storage, rest, controller, navmenu, GitService) {
     function DiffController(bindings) {
         function DiffRow(bindings, data) {
             function diff(evt) {
@@ -24,6 +23,13 @@ function (exports, module, storage, rest, controller, navmenu, commitSync, GitSe
                 });
             }
             this.diff = diff;
+
+            function revert(evt) {
+                evt.preventDefault();
+
+                GitService.revert(data.filePath);
+            }
+            this.revert = revert;
 
             bindings.setListener(this);
         }
@@ -41,7 +47,7 @@ function (exports, module, storage, rest, controller, navmenu, commitSync, GitSe
             }
         }
 
-        commitSync.determineCommitVariantEvent.add(this, diffVariant)
+        GitService.determineCommitVariantEvent.add(this, diffVariant)
 
         var dialog = bindings.getToggle('dialog');
         var diffModel = bindings.getModel('diff');

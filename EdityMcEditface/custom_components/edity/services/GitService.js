@@ -1,9 +1,10 @@
 ﻿"use strict";
 
 jsns.define("edity.GitService", [
-    "htmlrest.rest"
-], function (exports, module, rest) {
-    var host = "http://localhost:5000";
+    "htmlrest.rest",
+    "htmlrest.eventhandler"
+], function (exports, module, rest, EventHandler) {
+    var host = "";
 
     function setHost(url) {
         host = url;
@@ -50,4 +51,31 @@ jsns.define("edity.GitService", [
         return rest.postPromise(host + '/edity/Git/Push');
     }
     exports.push = push;
+
+    var revertStarted = new EventHandler();
+    var revertCompleted = new EventHandler();
+
+    function revert(file) {
+        revertStarted.fire();
+        return rest.postPromise(host + '/edity/Git/Revert/' + file)
+        .then(function (data) {
+            revertCompleted.fire(true);
+        })
+        .catch(function (data) {
+            revertCompleted.fire(false);
+        });
+    }
+    exports.revert = revert;
+    exports.revertStarted = revertStarted.modifier;
+    exports.revertCompleted = revertCompleted.modifier;
+
+    //Commit variant detection and sync
+    var determineCommitVariantEvent = new EventHandler();
+
+    function fireDetermineCommitVariant(data) {
+        return determineCommitVariantEvent.fire(data);
+    }
+
+    exports.determineCommitVariantEvent = determineCommitVariantEvent.modifier;
+    exports.fireDetermineCommitVariant = fireDetermineCommitVariant;
 });

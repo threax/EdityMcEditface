@@ -33,18 +33,24 @@ function (exports, module, storage, controller, navmenu, toggles, GitService) {
         var main = commitDialog.getToggle('main');
         var load = commitDialog.getToggle('load');
         var error = commitDialog.getToggle('error');
-        var toggleGroup = new toggles.Group(main, load, error);
+        var noChanges = commitDialog.getToggle('noChanges');
+        var toggleGroup = new toggles.Group(main, load, error, noChanges);
         var changedFiles = commitDialog.getModel('changedFiles');
 
         function updateUncommittedFiles() {
             GitService.uncommittedChanges()
-                    .then(function (data) {
+                .then(function (data) {
+                    if (data.length > 0) {
                         toggleGroup.activate(main);
                         changedFiles.setData(data, commitRowCreated, determineCommitVariant);
-                    })
-                    .catch(function (data) {
-                        toggleGroup.activate(error);
-                    });
+                    }
+                    else {
+                        toggleGroup.activate(noChanges);
+                    }
+                })
+                .catch(function (data) {
+                    toggleGroup.activate(error);
+                });
         }
 
         GitService.revertStarted.add(this, function () {

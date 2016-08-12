@@ -105,7 +105,7 @@ namespace EdityMcEditface.HtmlRenderer
             var realFile = findRealFile(file);
             if (realFile != null)
             {
-                return File.Open(realFile, FileMode.Open, FileAccess.Read);
+                return File.Open(realFile, FileMode.Open, FileAccess.Read, FileShare.Read);
             }
             throw new FileNotFoundException($"Cannot find file to read {file}", file);
         }

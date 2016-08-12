@@ -20,22 +20,17 @@ function (exports, module, storage, rest, controller, toggles, navmenu, CompileS
         var changesModel = bindings.getModel("changes");
         var infoModel = bindings.getModel('info');
 
-        var publishToggle = bindings.getToggle('publish');
-
         var dialogToggle = bindings.getToggle('dialog');
 
         bindings.setListener({
             runCompiler: function (evt) {
                 evt.preventDefault();
-                publishToggle.off();
                 toggleGroup.show(compiling);
                 rest.post('/edity/Compile', {},
                     function (data) {
-                        publishToggle.on();
                         resultsModel.setData(data);
                         toggleGroup.show(success);
                     }, function () {
-                        publishToggle.on();
                         toggleGroup.show(fail);
                     });
             }

@@ -9,8 +9,8 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="compileModalLabel">Publish</h4>
             </div>
-            <div class="modal-body">
-                <div data-hr-toggle="start" data-hr-style-off="display:none;">
+            <div data-hr-toggle="start" data-hr-style-off="display:none;">
+                <div class="modal-body">
                     <h4 data-hr-model="info">Unpublished Changes - {{behindBy}}</h4>
                     <table class="table table-bordered">
                         <thead>
@@ -33,26 +33,41 @@
                     </template>
                     <p>Press Publish to compile this website.</p>
                 </div>
-                <p data-hr-toggle="success" data-hr-style-off="display:none;" data-hr-model="results">
-                    Website compiled in {{elapsedSeconds}} seconds and published.
-                </p>
-                <p data-hr-toggle="fail" data-hr-style-off="display:none;">
-                    An error occured while compiling the website.
-                </p>
-                <div class="center" data-hr-toggle="compiling" data-hr-style-off="display:none;">
-                    <div class="load-linebar center-block">
-                        <div class="rect1"></div>
-                        <div class="rect2"></div>
-                        <div class="rect3"></div>
-                        <div class="rect4"></div>
-                        <div class="rect5"></div>
-                    </div>
-                    <p>Working</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-hr-on-click="runCompiler">Publish</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-hr-on-click="runCompiler" data-hr-toggle="publish" data-hr-style-off="display:none;">Publish</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <div data-hr-toggle="success" data-hr-style-off="display:none;">
+                <div class="modal-body">
+                    <p data-hr-model="results">
+                        Website compiled in {{elapsedSeconds}} seconds and published.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+                </div>
+            </div>
+            <div data-hr-toggle="fail" data-hr-style-off="display:none;">
+                <div class="modal-body">
+                    <p>
+                        An error occured while compiling the website.
+                    </p>
+                </div>
+            </div>
+            <div data-hr-toggle="compiling" data-hr-style-off="display:none;">
+                <div class="modal-body">
+                    <div class="center">
+                        <div class="load-linebar center-block">
+                            <div class="rect1"></div>
+                            <div class="rect2"></div>
+                            <div class="rect3"></div>
+                            <div class="rect4"></div>
+                            <div class="rect5"></div>
+                        </div>
+                        <p>Working</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

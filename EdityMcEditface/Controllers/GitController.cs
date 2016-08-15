@@ -114,13 +114,21 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<History> History()
+        public IEnumerable<History> History([FromQuery]int page = 0, [FromQuery]int count = 25)
         {
-            var historyCommits = repo.Commits;
+            var historyCommits = repo.Commits.Skip(page * count).Take(count);
             foreach (var logEntry in historyCommits)
             {
                 yield return new History(logEntry);
             }
+        }
+
+        [HttpGet("{*file}")]
+        public int HistoryCount(String file)
+        {
+            var fileInfo = new TargetFileInfo(file);
+
+            return repo.Commits.QueryBy(fileInfo.DerivedFileName).Count();
         }
 
         [HttpGet]
@@ -147,11 +155,11 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpGet("{*file}")]
-        public IEnumerable<History> History(String file)
+        public IEnumerable<History> History(String file, [FromQuery]int page = 0, [FromQuery]int count = 25)
         {
             var fileInfo = new TargetFileInfo(file);
 
-            var historyCommits = repo.Commits.QueryBy(fileInfo.DerivedFileName);
+            var historyCommits = repo.Commits.QueryBy(fileInfo.DerivedFileName).Skip(page * count).Take(count);
             foreach (var logEntry in historyCommits)
             {
                 yield return new History()

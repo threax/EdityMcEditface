@@ -4,9 +4,11 @@ jsns.run([
     "htmlrest.controller",
     "htmlrest.widgets.navmenu",
     "htmlrest.toggles",
+    "htmlrest.widgets.pagenumbers",
+    "htmlrest.iter",
     "edity.GitService"
 ],
-function (exports, module, controller, navmenu, toggles, GitService) {
+function (exports, module, controller, navmenu, toggles, PageNumbers, iter, GitService) {
     function HistoryController(bindings) {
         var dialog = bindings.getToggle('dialog');
 
@@ -17,17 +19,49 @@ function (exports, module, controller, navmenu, toggles, GitService) {
 
         var historyModel = bindings.getModel('history');
 
+        var pagedData = GitService.createHistoryPager(window.location.pathname, 10);
+        pagedData.updating.add(this, dataUpdating);
+        pagedData.updated.add(this, dataUpdated);
+        pagedData.error.add(this, loadFailed);
+
+        function dataUpdating() {
+            toggleGroup.show(load);
+        }
+
+        function dataUpdated(data) {
+            historyModel.setData(iter(data, function(item){
+                item.when = new Date(item.when).toLocaleString();
+                return item;
+            }));
+            toggleGroup.activate(main);
+            pageNumbers.currentPage = pagedData.currentPage;
+            pageNumbers.updatePages();
+            toggleGroup.show(main);
+        }
+
+        function loadFailed() {
+            toggleGroup.show(error);
+        }
+
+        var pageNumbers = new PageNumbers(bindings.getModel('pageNumbers'), bindings);
+        pageNumbers.resultsPerPage = pagedData.resultsPerPage;
+        pageNumbers.pageChangeRequested.add(this, pageChangeRequested);
+
+        function pageChangeRequested(pageNum) {
+            pagedData.currentPage = pageNum;
+            pagedData.updateData();
+        }
+
         function NavButtonController(created) {
             function history() {
                 dialog.on();
                 toggleGroup.activate(load);
-                GitService.history(window.location.pathname)
+                pagedData.updateData();
+                GitService.historyCount(window.location.pathname)
                 .then(function (data) {
-                    historyModel.setData(data);
-                    toggleGroup.activate(main);
-                })
-                .catch(function (data) {
-                    toggleGroup.activate(error);
+                    pageNumbers.totalResults = data;
+                    pageNumbers.currentPage = 0;
+                    pageNumbers.updatePages();
                 });
             }
             this.history = history;

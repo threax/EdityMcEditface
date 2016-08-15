@@ -7,7 +7,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="historyModalLabel">History</h4>
+                <h4 class="modal-title" id="historyModalLabel">History of {{title}}</h4>
             </div>
             <div class="modal-body" data-hr-toggle="load" data-hr-style-off="display:none;">
                 <div class="center">
@@ -40,7 +40,26 @@
                             <td>{{when}}</td>
                         </tr>
                     </table>
-                </template>                    
+                </template>              
+                <ul class="pagination" data-hr-model="pageNumbers">
+                    <li>
+                        <a aria-label="Previous" data-hr-on-click="previousPage">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li data-hr-toggle="page0" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page0"><a>{{page0}}</a></li>
+                    <li data-hr-toggle="page1" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page1"><a>{{page1}}</a></li>
+                    <li data-hr-toggle="page2" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page2"><a>{{page2}}</a></li>
+                    <li data-hr-toggle="page3" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page3"><a>{{page3}}</a></li>
+                    <li data-hr-toggle="page4" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page4"><a>{{page4}}</a></li>
+                    <li data-hr-toggle="page5" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page5"><a>{{page5}}</a></li>
+                    <li data-hr-toggle="page6" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page6"><a>{{page6}}</a></li>
+                    <li>
+                        <a aria-label="Next" data-hr-on-click="nextPage">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>      
             </div>
             <div class="modal-body" data-hr-toggle="error" data-hr-style-off="display:none;">
                 <p class="center">

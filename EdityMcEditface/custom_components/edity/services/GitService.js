@@ -2,8 +2,9 @@
 
 jsns.define("edity.GitService", [
     "htmlrest.rest",
-    "htmlrest.eventhandler"
-], function (exports, module, rest, EventHandler) {
+    "htmlrest.eventhandler",
+    "htmlrest.data.paged",
+], function (exports, module, rest, EventHandler, PagedData) {
     var host = "";
 
     function setHost(url) {
@@ -36,10 +37,15 @@ jsns.define("edity.GitService", [
     }
     exports.mergeInfo = mergeInfo;
 
-    function history(file) {
-        return rest.getPromise(host + '/edity/Git/History/' + file);
+    function historyCount(file) {
+        return rest.getPromise(host + '/edity/Git/HistoryCount/' + file);
     }
-    exports.history = history;
+    exports.historyCount = historyCount;
+
+    function createHistoryPager(file, count) {
+        return new PagedData(host + '/edity/Git/History/' + file, count);
+    }
+    exports.createHistoryPager = createHistoryPager;
 
     function resolve(file, content) {
         var blob = new Blob([content], { type: "text/html" });

@@ -113,7 +113,7 @@ namespace EdityMcEditface.Controllers
 
             using (var stream = new StreamReader(fileFinder.readFile(openFile)))
             {
-                diff.Changed = stream.ReadToEnd();
+                diff.Changed = stream.ReadToEnd().Replace("\r", "");
             }
 
             return diff;

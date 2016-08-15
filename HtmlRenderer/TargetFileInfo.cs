@@ -48,6 +48,9 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        /// <summary>
+        /// The extension of the file.
+        /// </summary>
         public string Extension
         {
             get
@@ -56,6 +59,9 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        /// <summary>
+        /// The file as an html file, with the .html extension. DerivedFileName is probably more useful.
+        /// </summary>
         public string HtmlFile
         {
             get
@@ -64,6 +70,37 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        /// <summary>
+        /// This will be true if the target file is an html file.
+        /// </summary>
+        public bool PointsToHtmlFile
+        {
+            get
+            {
+                return !isDirectory && (extension == "" || ".html".Equals(extension, StringComparison.InvariantCultureIgnoreCase));
+            }
+        }
+
+        /// <summary>
+        /// The derived file name for the file on the disk. 
+        /// If this is an html file it will have the correct name and extension, otherwise it will return the OriginalFileName.
+        /// This will correctly handle index.html files and files with no extensions.
+        /// </summary>
+        public String DerivedFileName
+        {
+            get
+            {
+                if (PointsToHtmlFile)
+                {
+                    return htmlFile;
+                }
+                return originalFileName;
+            }
+        }
+
+        /// <summary>
+        /// Return true if the file is a project file.
+        /// </summary>
         public bool IsProjectFile
         {
             get
@@ -72,6 +109,9 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        /// <summary>
+        /// Get the name of the file with no extension.
+        /// </summary>
         public String FileNoExtension
         {
             get
@@ -80,6 +120,9 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        /// <summary>
+        /// The file name as it was originally seen
+        /// </summary>
         public String OriginalFileName
         {
             get
@@ -88,6 +131,9 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        /// <summary>
+        /// Redirect to the file without an html extension
+        /// </summary>
         public String NoHtmlRedirect
         {
             get
@@ -124,13 +170,9 @@ namespace EdityMcEditface.HtmlRenderer
                 file = "index";
             }
             file = file.TrimStart('\\', '/');
-            if(file == "")
+            if(file == "" || file.Equals(".html", StringComparison.OrdinalIgnoreCase))
             {
                 file = "index";
-            }
-            else if (file.Equals(".html", StringComparison.OrdinalIgnoreCase))
-            {
-                file = "index.html";
             }
 
             return file;

@@ -54,7 +54,7 @@ namespace EdityMcEditface.Controllers
         public IActionResult Delete(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
-            if (fileInfo.Extension == ".html")
+            if (fileInfo.PointsToHtmlFile)
             {
                 fileFinder.erasePage(fileInfo.HtmlFile);
             }

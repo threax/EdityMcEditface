@@ -36,6 +36,11 @@ jsns.define("edity.GitService", [
     }
     exports.mergeInfo = mergeInfo;
 
+    function history(file) {
+        return rest.getPromise(host + '/edity/Git/History/' + file);
+    }
+    exports.history = history;
+
     function resolve(file, content) {
         var blob = new Blob([content], { type: "text/html" });
         return rest.uploadPromise(host + '/edity/Git/Resolve/' + file, blob);

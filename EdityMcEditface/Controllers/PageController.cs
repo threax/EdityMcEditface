@@ -56,16 +56,11 @@ namespace EdityMcEditface.Controllers
         public async Task<IActionResult> Index(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
-            var outputFile = fileInfo.OriginalFileName;
-            if (fileInfo.Extension == "")
-            {
-                outputFile = fileInfo.HtmlFile;
-            }
             if (fileInfo.IsProjectFile)
             {
                 throw new ValidationException("Cannot update project files with the save function.");
             }
-            using (Stream stream = fileFinder.writeFile(outputFile))
+            using (Stream stream = fileFinder.writeFile(fileInfo.DerivedFileName))
             {
                 await this.Request.Form.Files.First().CopyToAsync(stream);
             }
@@ -76,17 +71,12 @@ namespace EdityMcEditface.Controllers
         public IActionResult Delete(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
-            var outputFile = fileInfo.OriginalFileName;
-            if (fileInfo.Extension == "")
-            {
-                outputFile = fileInfo.HtmlFile;
-            }
             if (fileInfo.IsProjectFile)
             {
                 throw new ValidationException("Cannot delete project files with the delete function.");
             }
 
-            fileFinder.deleteFile(outputFile);
+            fileFinder.deleteFile(fileInfo.DerivedFileName);
             fileFinder.deleteFile(fileInfo.FileNoExtension + ".json");
             fileFinder.deleteFile(fileInfo.FileNoExtension + ".css");
             fileFinder.deleteFile(fileInfo.FileNoExtension + ".js");

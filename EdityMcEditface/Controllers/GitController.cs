@@ -105,13 +105,7 @@ namespace EdityMcEditface.Controllers
             //Changed file
             var targetFileInfo = new TargetFileInfo(file);
 
-            var openFile = targetFileInfo.OriginalFileName;
-            if (targetFileInfo.Extension == "")
-            {
-                openFile = targetFileInfo.HtmlFile;
-            }
-
-            using (var stream = new StreamReader(fileFinder.readFile(openFile)))
+            using (var stream = new StreamReader(fileFinder.readFile(targetFileInfo.DerivedFileName)))
             {
                 diff.Changed = stream.ReadToEnd().Replace("\r", "");
             }
@@ -146,13 +140,7 @@ namespace EdityMcEditface.Controllers
         {
             var targetFileInfo = new TargetFileInfo(file);
 
-            var openFile = targetFileInfo.OriginalFileName;
-            if (targetFileInfo.Extension == "")
-            {
-                openFile = targetFileInfo.HtmlFile;
-            }
-
-            using (var stream = new StreamReader(fileFinder.readFile(openFile)))
+            using (var stream = new StreamReader(fileFinder.readFile(targetFileInfo.DerivedFileName)))
             {
                 return new MergeInfo(stream);
             }
@@ -161,7 +149,9 @@ namespace EdityMcEditface.Controllers
         [HttpGet("{*file}")]
         public IEnumerable<History> History(String file)
         {
-            var historyCommits = repo.Commits.QueryBy(file);
+            var fileInfo = new TargetFileInfo(file);
+
+            var historyCommits = repo.Commits.QueryBy(fileInfo.DerivedFileName);
             foreach (var logEntry in historyCommits)
             {
                 yield return new History()
@@ -282,13 +272,7 @@ namespace EdityMcEditface.Controllers
                     //Changed file
                     var targetFileInfo = new TargetFileInfo(file);
 
-                    var openFile = targetFileInfo.OriginalFileName;
-                    if (targetFileInfo.Extension == "")
-                    {
-                        openFile = targetFileInfo.HtmlFile;
-                    }
-
-                    using (var dest = fileFinder.writeFile(openFile))
+                    using (var dest = fileFinder.writeFile(targetFileInfo.DerivedFileName))
                     {
                         using (var source = blob.GetContentStream())
                         {

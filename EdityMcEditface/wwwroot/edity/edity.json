@@ -56,9 +56,6 @@
       ],
       "dependencies": [ "htmlrest" ]
     },
-    "TreeMenuEditor": {
-      "css": [ "/lib/edity/widgets/TreeMenuEditor.css" ]
-    },
     "GitService": {
       "js": [ { "file": "/lib/edity/services/GitService.js" } ],
       "dependencies": [ "htmlrest" ]

@@ -88,11 +88,18 @@ namespace EdityMcEditface.Controllers
 
             //Original File
             var historyCommits = repo.Commits.QueryBy(file);
-            var latestCommit = historyCommits.First();
-            var blob = latestCommit.Commit[file].Target as Blob;
-            if (blob != null)
+            var latestCommit = historyCommits.FirstOrDefault();
+            if (latestCommit != null)
             {
-                diff.Original = blob.GetContentText();
+                var blob = latestCommit.Commit[file].Target as Blob;
+                if (blob != null)
+                {
+                    diff.Original = blob.GetContentText();
+                }
+            }
+            else
+            {
+                diff.Original = $"Could not read original file {file}.";
             }
 
             //Changed file

@@ -122,6 +122,11 @@ gulp.task("copylibs", function () {
     concatJs(htmlrestCompile);
 });
 
+var jsInFolder = ['./custom_components/**/*.js', '!./custom_components/htmlrest/htmlrest.js', '!./custom_components/htmlrest/htmlrest.min.js'];
+gulp.task('watchers', function () {
+    gulp.watch(jsInFolder, ['copylibs']);
+});
+
 function copyFiles(settings) {
     gulp.src(settings.libs, { base: settings.baseName })
         .pipe(gulp.dest(settings.dest));

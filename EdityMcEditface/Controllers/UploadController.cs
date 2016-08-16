@@ -43,7 +43,7 @@ namespace EdityMcEditface.Controllers
         public async Task<IActionResult> Index(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
-            using (Stream stream = fileFinder.writeFile(fileInfo.OriginalFileName))
+            using (Stream stream = fileFinder.writeFile(fileInfo.DerivedFileName))
             {
                 await this.Request.Form.Files.First().CopyToAsync(stream);
             }
@@ -60,7 +60,7 @@ namespace EdityMcEditface.Controllers
             }
             else
             {
-                fileFinder.eraseProjectFile(fileInfo.OriginalFileName);
+                fileFinder.eraseProjectFile(fileInfo.DerivedFileName);
             }
             return StatusCode((int)HttpStatusCode.OK);
         }

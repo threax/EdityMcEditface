@@ -4,10 +4,13 @@
     "transitions": {
       "css": [ "/edity/css/fade.min.css" ]
     },
-    "bootstrap": {
-      "css": [ "/lib/bootstrap/dist/css/bootstrap.css", "/lib/bootstrap/dist/css/bootstrap-theme.css" ],
+    "bootstrap-native": {
       "js": [ { "file": "/lib/bootstrap.native/dist/bootstrap-native.min.js" } ],
       "dependencies": [ "transitions" ]
+    },
+    "bootstrap": {
+      "css": [ "/lib/bootstrap/dist/css/bootstrap.css", "/lib/bootstrap/dist/css/bootstrap-theme.css" ],
+      "dependencies": [ "bootstrap-native" ]
     },
     "diff_match_patch": {
       "js": [ { "file": "/lib/diff_match_patch/diff_match_patch.js" } ]

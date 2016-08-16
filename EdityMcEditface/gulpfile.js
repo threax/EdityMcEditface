@@ -1,4 +1,4 @@
-﻿/// <binding BeforeBuild='copynodelibs, copybowerlibs' Clean='clean' />
+﻿/// <binding Clean='clean' ProjectOpened='watchers' />
 "use strict";
 
 var gulp = require("gulp"),

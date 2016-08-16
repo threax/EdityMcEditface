@@ -83,7 +83,7 @@ namespace EdityMcEditface
                     { "BackupFilePath", Path.Combine(siteRootPath, "wwwroot") }
             })
             .AddJsonFile(EditySettingsFile, optional: true, reloadOnChange: true)
-            .AddJsonFile($"{EditySettingsFile}.{env.EnvironmentName}.json", optional: true);
+            .AddJsonFile($"{Path.GetFileNameWithoutExtension(EditySettingsFile)}.{env.EnvironmentName}.json", optional: true);
 
             EdityServerConfiguration = builder.Build();
         }

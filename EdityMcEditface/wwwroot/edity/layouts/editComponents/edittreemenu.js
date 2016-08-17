@@ -235,7 +235,7 @@ jsns.run([
         function nameChanged(evt) {
             if (autoTypeUrl) {
                 var data = createLinkModel.getData();
-                var urlName = encodeURI(data.name.replace(/\s|[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, replaceUrl));
+                var urlName = encodeURI(data.name.replace(/\s|[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, replaceUrl)).toLowerCase();
                 linkAutoTypeModel.setData({
                     link: '/' + urlName
                 });

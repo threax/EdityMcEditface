@@ -9,6 +9,7 @@ jsns.define("edity.PageService", [
 
     function setHtml(value) {
         sourceAccessor.setHtml(value);
+        sourceUpdated();
     }
     exports.setHtml = setHtml;
 
@@ -30,12 +31,10 @@ jsns.define("edity.PageService", [
 
     function doSave() {
         if (needsSave) {
+            needsSave = false;
             var content = exports.getHtml();
             var blob = new Blob([content], { type: "text/html" });
             return rest.uploadPromise('/edity/Page/' + window.location.pathname, blob)
-            .then(function (data) {
-                needsSave = false;
-            })
             .catch(function (data) {
                 needsSave = true;
             });

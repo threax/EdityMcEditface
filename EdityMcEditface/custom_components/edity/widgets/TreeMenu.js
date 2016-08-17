@@ -3,7 +3,6 @@
 jsns.define("edity.widgets.treemenu.editorSync", [
     "htmlrest.lateboundeventhandler"
 ], function (exports, module, LateBoundEvent) {
-
     var itemAdded = new LateBoundEvent();
     var createRootNodeControls = new LateBoundEvent();
 
@@ -12,8 +11,8 @@ jsns.define("edity.widgets.treemenu.editorSync", [
     }
     exports.fireItemAdded = fireItemAdded;
 
-    function fireCreateRootNodeControls(controllerElementName, menuData, updateCb, saveUrl) {
-        createRootNodeControls.fire(controllerElementName, menuData, updateCb, saveUrl);
+    function fireCreateRootNodeControls(controllerElementName, menuData, updateCb, saveUrl, parentBindings) {
+        createRootNodeControls.fire(controllerElementName, menuData, updateCb, saveUrl, parentBindings);
     }
     exports.fireCreateRootNodeControls = fireCreateRootNodeControls;
 
@@ -89,7 +88,7 @@ jsns.define("edity.widgets.treemenu.controller", [
 
                 if (editMode) {
                     findParents(data, null);
-                    editorSync.fireCreateRootNodeControls("treeMenuEditRoot", menuData, rebuildMenu, ajaxurl); //This isn't really right, will create controllers for all tree menus on the page, need to single out somehow
+                    editorSync.fireCreateRootNodeControls("treeMenuEditRoot", menuData, rebuildMenu, ajaxurl, bindings); //This isn't really right, will create controllers for all tree menus on the page, need to single out somehow
                 }
 
                 var menuCacheInfo = getMenuCacheInfo(data.menuItemId);

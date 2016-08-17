@@ -31,6 +31,10 @@ jsns.define("edity.widgets.treemenu.controller", [
     "edity.widgets.treemenu.editorSync"
 ], function (exports, module, storage, rest, controller, editorSync) {
 
+    function isFolder(menuItem) {
+        return !menuItem.hasOwnProperty("link");
+    }
+
     /**
      * This function builds a controller that handles a tree menu on the page.
      * @param {type} bindings
@@ -38,7 +42,7 @@ jsns.define("edity.widgets.treemenu.controller", [
     function TreeMenuController(bindings) {
         var rootModel = bindings.getModel('children');
         var config = bindings.getConfig();
-        var editMode = config["treemenu-editmode"] === 'true';
+        var editMode = false;//config["treemenu-editmode"] === 'true';
         var version = config["treemenu-version"];
 
         var ajaxurl = rootModel.getSrc();
@@ -107,37 +111,31 @@ jsns.define("edity.widgets.treemenu.controller", [
         }
 
         function createIds(data) {
-            data.menuItemId = getNextId();
-            var folders = data.folders;
-            for (var i = 0; i < folders.length; ++i) {
-                //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
-                createIds(folders[i]);
+            if (isFolder(data)) {
+                data.menuItemId = getNextId();
+                var children = data.children;
+                for (var i = 0; i < children.length; ++i) {
+                    //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
+                    createIds(children[i]);
+                }
             }
         }
 
         function findParents(data, parent) {
             data.parent = parent;
-            var folders = data.folders;
-            for (var i = 0; i < folders.length; ++i) {
+            var children = data.children;
+            for (var i = 0; i < children.length; ++i) {
                 //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
-                findParents(folders[i], data);
-            }
-            var links = data.links;
-            for (var i = 0; i < links.length; ++i) {
-                links[i].parent = data;
+                findParents(children[i], data);
             }
         }
 
         function removeParents(data) {
             delete data.parent;
-            var folders = data.folders;
-            for (var i = 0; i < folders.length; ++i) {
+            var children = data.children;
+            for (var i = 0; i < children.length; ++i) {
                 //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
-                removeParents(folders[i]);
-            }
-            var links = data.links;
-            for (var i = 0; i < links.length; ++i) {
-                delete links[i].parent;
+                removeParents(children[i]);
             }
         }
 
@@ -165,10 +163,9 @@ jsns.define("edity.widgets.treemenu.controller", [
                 });
                 createdItems[menuCacheInfo.id] = true;
 
-                var foldersModel = list.getModel('folders');
-                var linksModel = list.getModel('links');
+                var childItemsModel = list.getModel('childItems');
 
-                foldersModel.setData(folder.folders, function (folderComponent, data) {
+                childItemsModel.setData(folder.children, function (folderComponent, data) {
                     var id = data.menuItemId;
                     var menuCacheInfo = getMenuCacheInfo(id);
 
@@ -188,19 +185,11 @@ jsns.define("edity.widgets.treemenu.controller", [
                     if (menuCacheInfo.expanded) {
                         buildMenu(folderComponent, menuCacheInfo, data, autoHide);
                     }
+                }, function (row) {
+                    if (!isFolder(row)) {
+                        return "link";
+                    }
                 });
-
-                if (editMode) {
-                    linksModel.setData(folder.links, function (component, data) {
-                        var listener = {
-                        };
-                        editorSync.fireItemAdded(ajaxurl, data, function (editListener) { component.setListener(editListener); });
-                        component.setListener(listener);
-                    });
-                }
-                else {
-                    linksModel.setData(folder.links);
-                }
             }
         }
 

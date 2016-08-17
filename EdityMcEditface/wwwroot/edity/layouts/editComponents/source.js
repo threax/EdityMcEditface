@@ -6,9 +6,9 @@ jsns.run([
     "htmlrest.rest",
     "htmlrest.controller",
     "htmlrest.widgets.navmenu",
-    "edity.pageSourceSync"
+    "edity.PageService"
 ],
-function (exports, module, domQuery, storage, rest, controller, navmenu, sourceSync) {
+function (exports, module, domQuery, storage, rest, controller, navmenu, pageService) {
 
     function EditSourceController(bindings) {
         var editSourceDialog = bindings.getToggle('dialog');
@@ -22,7 +22,7 @@ function (exports, module, domQuery, storage, rest, controller, navmenu, sourceS
         function apply(evt) {
             evt.preventDefault();
             editSourceDialog.off();
-            sourceSync.setHtml(cm.getValue());
+            pageService.setHtml(cm.getValue());
         }
         this.apply = apply;
 
@@ -30,7 +30,7 @@ function (exports, module, domQuery, storage, rest, controller, navmenu, sourceS
             function edit() {
                 editSourceDialog.on();
                 cm.setSize(null, window.innerHeight - 250);
-                cm.setValue(sourceSync.getHtml());
+                cm.setValue(pageService.getHtml());
                 setTimeout(function () {
                     cm.refresh();
                 }, 500);

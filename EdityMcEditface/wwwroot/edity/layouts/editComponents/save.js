@@ -3,9 +3,9 @@
 jsns.run([
     "htmlrest.rest",
     "htmlrest.widgets.navmenu",
-    "edity.pageSourceSync"
+    "edity.PageService"
 ],
-function (exports, module, rest, navmenu, sourceSync) {
+function (exports, module, rest, navmenu, pageService) {
     function SaveController(component) {
         var load = component.getToggle("load");
         load.off();
@@ -16,7 +16,7 @@ function (exports, module, rest, navmenu, sourceSync) {
             evt.preventDefault();
 
             load.on();
-            var content = sourceSync.getHtml();
+            var content = pageService.getHtml();
             var blob = new Blob([content], { type: "text/html" });
             rest.upload(saveModel.getSrc() + '/' + window.location.pathname, blob, function () {
                 load.off();

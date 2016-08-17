@@ -66,12 +66,19 @@
     "CompileService": {
       "js": [ { "file": "/lib/edity/services/CompileService.js" } ],
       "dependencies": [ "htmlrest" ]
+    },
+    "SaveService": {
+      "js": [ { "file": "/lib/edity/services/SaveService.js" } ],
+      "dependencies": [ "htmlrest" ]
+    },
+    "PageService": {
+      "js": [ { "file": "/lib/edity/services/PageService.js" } ],
+      "dependencies": [ "SaveService", "htmlrest" ]
     }
   },
   "vars": {
     "uploadUrl": "/edity/upload",
     "pageSettingsUrl": "/edity/page/settings",
-    "savePageUrl": "/edity/Page",
     "deletePageUrl": "/edity/Page",
     "mediaBrowseDir": "/",
     "pageTemplateUrl": "/edity/templates"

@@ -5,9 +5,9 @@ jsns.run([
     "htmlrest.rest",
     "htmlrest.controller",
     "htmlrest.widgets.navmenu",
-    "edity.pageSourceSync"
+    "edity.PageService"
 ],
-function (exports, module, storage, rest, controller, navmenu, sourceSync) {
+function (exports, module, storage, rest, controller, navmenu, pageService) {
 
     // config
     var editor = undefined;
@@ -53,9 +53,13 @@ function (exports, module, storage, rest, controller, navmenu, sourceSync) {
                 breakAfterClose: false
             });
         }
+
+        editor.on('change', function () {
+            pageService.sourceUpdated();
+        });
     });
 
-    sourceSync.setSourceAccessor({
+    pageService.setSourceAccessor({
         getHtml: function () {
             return editor.getData();
         },

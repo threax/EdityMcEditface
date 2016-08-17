@@ -3,28 +3,21 @@
 jsns.run([
     "htmlrest.rest",
     "htmlrest.widgets.navmenu",
-    "edity.PageService"
+    "edity.PageService",
+    "edity.SaveService"
 ],
-function (exports, module, rest, navmenu, pageService) {
+function (exports, module, rest, navmenu, pageService, saveService) {
     function SaveController(component) {
         var load = component.getToggle("load");
         load.off();
 
+        saveService.saveStartedEvent.add(load, load.on);
+        saveService.saveCompletedEvent.add(load, load.off);
+        saveService.saveErrorEvent.add(load, load.off);
+
         function save(evt) {
-            var saveModel = component.getModel("save");
-
             evt.preventDefault();
-
-            load.on();
-            var content = pageService.getHtml();
-            var blob = new Blob([content], { type: "text/html" });
-            rest.upload(saveModel.getSrc() + '/' + window.location.pathname, blob, function () {
-                load.off();
-            },
-            function () {
-                load.off();
-                alert("Error saving page. Please try again later.");
-            });
+            saveService.saveNow();
         }
         this.save = save;
     }

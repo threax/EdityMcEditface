@@ -6,8 +6,8 @@ jsns.define("edity.widgets.treemenu.editorSync", [
     var itemAdded = new LateBoundEvent();
     var createRootNodeControls = new LateBoundEvent();
 
-    function fireItemAdded(menuData, bindListenerCb, itemData, updateCb) {
-        itemAdded.fire(menuData, bindListenerCb, itemData, updateCb);
+    function fireItemAdded(saveUrl, itemData, bindListenerCb) {
+        itemAdded.fire(saveUrl, itemData, bindListenerCb);
     }
     exports.fireItemAdded = fireItemAdded;
 
@@ -17,8 +17,9 @@ jsns.define("edity.widgets.treemenu.editorSync", [
     exports.fireCreateRootNodeControls = fireCreateRootNodeControls;
 
     function setEditorListener(value) {
-        itemAdded.modifier.add(value, value.itemAdded)
-        createRootNodeControls.modifier.add(value, value.createRootNodeControls)
+        //Important order, need to create root nodes first
+        createRootNodeControls.modifier.add(value, value.createRootNodeControls);
+        itemAdded.modifier.add(value, value.itemAdded);
     }
     exports.setEditorListener = setEditorListener;
 });
@@ -180,7 +181,7 @@ jsns.define("edity.widgets.treemenu.controller", [
                         }
                     };
                     if (editMode) {
-                        editorSync.fireItemAdded(menuData, function (editListener) { folderComponent.setListener(editListener); }, data, rebuildMenu);
+                        editorSync.fireItemAdded(ajaxurl, data, function (editListener) { folderComponent.setListener(editListener); });
                     }
                     folderComponent.setListener(listener);
 
@@ -193,7 +194,7 @@ jsns.define("edity.widgets.treemenu.controller", [
                     linksModel.setData(folder.links, function (component, data) {
                         var listener = {
                         };
-                        editorSync.fireItemAdded(menuData, function (editListener) { component.setListener(editListener); }, data, rebuildMenu);
+                        editorSync.fireItemAdded(ajaxurl, data, function (editListener) { component.setListener(editListener); });
                         component.setListener(listener);
                     });
                 }

@@ -4,8 +4,39 @@ jsns.run([
     "htmlrest.controller",
     "htmlrest.toggles",
     "htmlrest.rest",
-    "edity.widgets.treemenu.editorSync"
-], function (exports, module, controller, toggles, rest, editorSync) {
+    "edity.widgets.treemenu.editorSync",
+    "edity.SaveService"
+], function (exports, module, controller, toggles, rest, editorSync, saveService) {
+
+    var treeMenuEditors = {};
+
+    function TreeMenuEditor(menuData, updateCb, saveUrl) {
+        var hasChanges = false;
+
+        function save() {
+            if (hasChanges) {
+                hasChanges = false;
+                var blob = new Blob([JSON.stringify(menuData, menuJsonSerializeReplacer, 4)], { type: "application/json" });
+                return rest.uploadPromise('/edity/upload' + saveUrl, blob)
+                .catch(function (data) {
+                    hasChanges = true;
+                });
+            }
+        }
+        saveService.saveEvent.add(this, save);
+
+        function update() {
+            hasChanges = true;
+            updateCb();
+            saveService.requestSave();
+        }
+        this.update = update;
+
+        function getMenuData() {
+            return menuData;
+        }
+        this.getMenuData = getMenuData;
+    }
 
     var editTreeMenuItem = null;
     var deleteTreeMenuItem = null;
@@ -226,33 +257,10 @@ jsns.run([
     }
 
     function RootNodeControls(bindings, context) {
-        var menuData = context.menuData;
-        var updateCb = context.updateCb;
-        var saveUrl = context.saveUrl;
-        var uploadUrl = bindings.getModel('treeMenuEditRoot').getSrc();
-        var loading = bindings.getToggle('loading');
-        loading.off();
-
-        function save(evt) {
-            evt.preventDefault();
-            evt.stopPropagation();
-            loading.on();
-            var blob = new Blob([JSON.stringify(menuData, menuJsonSerializeReplacer, 4)], { type: "application/json" });
-            rest.upload(uploadUrl + saveUrl, blob, function () {
-                loading.off();
-            }, function () {
-                alert('Error saving menu, please try again later.')
-                loading.off();
-            });
-        }
-        this.save = save;
-
         function addItem(evt) {
             evt.preventDefault();
             evt.stopPropagation();
-            addTreeMenuItem.createNewItem(menuData, function () {
-                updateCb();
-            });
+            addTreeMenuItem.createNewItem(context.getMenuData(), context.update);
         }
         this.addItem = addItem;
     }
@@ -421,7 +429,7 @@ jsns.run([
     function moveToChild(evt, menuData, itemData, updateCb) {
         evt.preventDefault();
         evt.stopPropagation();
-        
+
         chooseMenuItem.chooseItem("Nest " + itemData.name + " under...", itemIter(itemData.parent.folders, itemData), function (selectedItem) {
             var result = deleteMenuItem(itemData);
             if (result) {
@@ -440,46 +448,52 @@ jsns.run([
         });
     }
 
-    function fireItemAdded(menuData, bindListenerCb, itemData, updateCb) {
-        createControllers(menuData);
+    function fireItemAdded(saveUrl, itemData, bindListenerCb) {
+        createControllers();
+        var treeEditor = treeMenuEditors[saveUrl];
+
+        if (!treeEditor) {
+            throw new Error('Cannot find tree menu editor for "' + saveUrl + '" did you create the root controller?');
+        }
 
         bindListenerCb({
             moveUp: function (evt) {
-                moveUp(evt, menuData, itemData, updateCb);
+                moveUp(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
             },
 
             moveDown: function (evt) {
-                moveDown(evt, menuData, itemData, updateCb);
+                moveDown(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
             },
 
             addItem: function (evt) {
-                addItem(evt, menuData, itemData, updateCb);
+                addItem(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
             },
 
             editItem: function (evt) {
-                editItem(evt, menuData, itemData, updateCb);
+                editItem(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
             },
 
             deleteItem: function (evt) {
-                deleteItem(evt, menuData, itemData, updateCb);
+                deleteItem(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
             },
 
             moveToParent: function (evt) {
-                moveToParent(evt, menuData, itemData, updateCb);
+                moveToParent(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
             },
 
             moveToChild: function (evt) {
-                moveToChild(evt, menuData, itemData, updateCb);
+                moveToChild(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
             }
         });
     }
 
-    function createRootNodeControls(controllerElementName, menuData, updateCb, saveUrl) {
-        controller.create(controllerElementName, RootNodeControls, {
-            menuData: menuData,
-            updateCb: updateCb,
-            saveUrl: saveUrl
-        });
+    function createRootNodeControls(controllerElementName, menuData, updateCb, saveUrl, parentBindings) {
+        var treeMenuEditor = treeMenuEditors[saveUrl];
+        if (treeMenuEditor === undefined) {
+            treeMenuEditor = new TreeMenuEditor(menuData, updateCb, saveUrl);
+            treeMenuEditors[saveUrl] = treeMenuEditor;
+        }
+        controller.create(controllerElementName, RootNodeControls, treeMenuEditor, parentBindings);
     }
 
     editorSync.setEditorListener({

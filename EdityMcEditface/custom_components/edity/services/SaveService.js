@@ -7,6 +7,7 @@ jsns.define("edity.SaveService", [
 ], function (exports, module, TimedTrigger, EventHandler, PromiseEventHandler) {
     var allowSave = true;
     var saveAgainWhenSaveCompleted = false;
+    var outstandingSaveRequest = false;
 
     var saveTrigger = new TimedTrigger(5000);
     var saveStartedEvent = new EventHandler();
@@ -19,6 +20,7 @@ jsns.define("edity.SaveService", [
     exports.saveEvent = saveEvent.modifier;
 
     function doSave() {
+        outstandingSaveRequest = false;
         allowSave = false;
         saveStartedEvent.fire();
         saveEvent.fire()
@@ -35,6 +37,7 @@ jsns.define("edity.SaveService", [
 
     function requestSave() {
         if (allowSave) {
+            outstandingSaveRequest = true;
             saveTrigger.fire();
         }
         else {
@@ -61,4 +64,10 @@ jsns.define("edity.SaveService", [
             doSave();
         }
     }
+
+    window.addEventListener('beforeunload', function (evt) {
+        if (outstandingSaveRequest) {
+            doSave();
+        }
+    });
 });

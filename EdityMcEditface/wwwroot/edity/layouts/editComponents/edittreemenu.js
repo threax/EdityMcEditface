@@ -45,19 +45,11 @@ jsns.run([
 
     function deleteMenuItem(menuItem) {
         var parent = menuItem.parent;
-        var loc = parent.folders.indexOf(menuItem);
+        var loc = parent.children.indexOf(menuItem);
         if (loc !== -1) {
             menuItem.parent = null;
-            parent.folders.splice(loc, 1);
+            parent.children.splice(loc, 1);
             return "folder";
-        }
-        else {
-            loc = parent.links.indexOf(menuItem);
-            if (loc !== -1) {
-                menuItem.parent = null;
-                parent.links.splice(loc, 1);
-                return "link";
-            }
         }
         return false;
     }
@@ -181,11 +173,10 @@ jsns.run([
             var folderData = createFolderModel.getData();
             var newItem = {
                 name: folderData.name,
-                folders: [],
-                links: [],
+                children: [],
                 parent: currentParent
             };
-            currentParent.folders.push(newItem);
+            currentParent.children.push(newItem);
             finishAdd(newItem);
         }
         this.createFolder = createFolder;
@@ -211,7 +202,7 @@ jsns.run([
                 link: linkData.link,
                 parent: currentParent
             };
-            currentParent.links.push(newItem);
+            currentParent.children.push(newItem);
             finishAdd(newItem);
         }
         this.createLink = createLink;
@@ -312,21 +303,12 @@ jsns.run([
         evt.preventDefault();
         evt.stopPropagation();
         var parent = itemData.parent;
-        var loc = parent.folders.indexOf(itemData);
+        var loc = parent.children.indexOf(itemData);
         if (loc !== -1) {
             if (loc > 0) {
-                var swap = parent.folders[loc - 1];
-                parent.folders[loc - 1] = itemData;
-                parent.folders[loc] = swap;
-                updateCb();
-            }
-        }
-        else {
-            loc = parent.links.indexOf(itemData);
-            if (loc > 0) {
-                var swap = parent.links[loc - 1];
-                parent.links[loc - 1] = itemData;
-                parent.links[loc] = swap;
+                var swap = parent.children[loc - 1];
+                parent.children[loc - 1] = itemData;
+                parent.children[loc] = swap;
                 updateCb();
             }
         }
@@ -336,21 +318,12 @@ jsns.run([
         evt.preventDefault();
         evt.stopPropagation();
         var parent = itemData.parent;
-        var loc = parent.folders.indexOf(itemData);
+        var loc = parent.children.indexOf(itemData);
         if (loc !== -1) {
-            if (loc + 1 < parent.folders.length) {
-                var swap = parent.folders[loc + 1];
-                parent.folders[loc + 1] = itemData;
-                parent.folders[loc] = swap;
-                updateCb();
-            }
-        }
-        else {
-            loc = parent.links.indexOf(itemData);
-            if (loc !== -1 && loc + 1 < parent.links.length) {
-                var swap = parent.links[loc + 1];
-                parent.links[loc + 1] = itemData;
-                parent.links[loc] = swap;
+            if (loc + 1 < parent.children.length) {
+                var swap = parent.children[loc + 1];
+                parent.children[loc + 1] = itemData;
+                parent.children[loc] = swap;
                 updateCb();
             }
         }
@@ -386,23 +359,13 @@ jsns.run([
         var parent = itemData.parent;
         var superParent = parent.parent;
         if (superParent) {
-            var loc = parent.folders.indexOf(itemData);
+            var loc = parent.children.indexOf(itemData);
             if (loc !== -1) {
-                var swap = parent.folders[loc];
-                parent.folders.splice(loc, 1);
-                superParent.folders.push(swap);
+                var swap = parent.children[loc];
+                parent.children.splice(loc, 1);
+                superParent.children.push(swap);
                 swap.parent = superParent;
                 updateCb();
-            }
-            else {
-                loc = parent.links.indexOf(itemData);
-                if (loc !== -1) {
-                    var swap = parent.links[loc];
-                    parent.links.splice(loc, 1);
-                    superParent.links.push(swap);
-                    swap.parent = superParent;
-                    updateCb();
-                }
             }
         }
     }
@@ -413,7 +376,7 @@ jsns.run([
             var item = null;
             if (i < items.length) {
                 item = items[i++];
-                if (item === skipItem) {
+                while (item != null && (item === skipItem || !editorSync.isFolder(item))) {
                     if (i < items.length) {
                         item = items[i++];
                     }
@@ -430,18 +393,10 @@ jsns.run([
         evt.preventDefault();
         evt.stopPropagation();
 
-        chooseMenuItem.chooseItem("Nest " + itemData.name + " under...", itemIter(itemData.parent.folders, itemData), function (selectedItem) {
+        chooseMenuItem.chooseItem("Nest " + itemData.name + " under...", itemIter(itemData.parent.children, itemData), function (selectedItem) {
             var result = deleteMenuItem(itemData);
             if (result) {
-                switch (result) {
-                    case "folder":
-                        selectedItem.folders.push(itemData);
-                        break;
-                    case "link":
-                        selectedItem.links.push(itemData);
-                        break;
-                }
-
+                selectedItem.children.push(itemData);
                 itemData.parent = selectedItem;
                 updateCb();
             }

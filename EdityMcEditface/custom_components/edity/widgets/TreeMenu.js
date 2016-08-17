@@ -22,6 +22,11 @@ jsns.define("edity.widgets.treemenu.editorSync", [
         itemAdded.modifier.add(value, value.itemAdded);
     }
     exports.setEditorListener = setEditorListener;
+
+    function isFolder(menuItem) {
+        return !menuItem.hasOwnProperty("link");
+    }
+    exports.isFolder = isFolder;
 });
 
 jsns.define("edity.widgets.treemenu.controller", [
@@ -30,11 +35,6 @@ jsns.define("edity.widgets.treemenu.controller", [
     "htmlrest.controller",
     "edity.widgets.treemenu.editorSync"
 ], function (exports, module, storage, rest, controller, editorSync) {
-
-    function isFolder(menuItem) {
-        return !menuItem.hasOwnProperty("link");
-    }
-
     /**
      * This function builds a controller that handles a tree menu on the page.
      * @param {type} bindings
@@ -42,7 +42,7 @@ jsns.define("edity.widgets.treemenu.controller", [
     function TreeMenuController(bindings) {
         var rootModel = bindings.getModel('children');
         var config = bindings.getConfig();
-        var editMode = false;//config["treemenu-editmode"] === 'true';
+        var editMode = config["treemenu-editmode"] === 'true';
         var version = config["treemenu-version"];
 
         var ajaxurl = rootModel.getSrc();
@@ -111,7 +111,7 @@ jsns.define("edity.widgets.treemenu.controller", [
         }
 
         function createIds(data) {
-            if (isFolder(data)) {
+            if (editorSync.isFolder(data)) {
                 data.menuItemId = getNextId();
                 var children = data.children;
                 for (var i = 0; i < children.length; ++i) {
@@ -124,18 +124,22 @@ jsns.define("edity.widgets.treemenu.controller", [
         function findParents(data, parent) {
             data.parent = parent;
             var children = data.children;
-            for (var i = 0; i < children.length; ++i) {
-                //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
-                findParents(children[i], data);
+            if (children) {
+                for (var i = 0; i < children.length; ++i) {
+                    //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
+                    findParents(children[i], data);
+                }
             }
         }
 
         function removeParents(data) {
             delete data.parent;
             var children = data.children;
-            for (var i = 0; i < children.length; ++i) {
-                //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
-                removeParents(children[i]);
+            if (children) {
+                for (var i = 0; i < children.length; ++i) {
+                    //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
+                    removeParents(children[i]);
+                }
             }
         }
 
@@ -186,7 +190,7 @@ jsns.define("edity.widgets.treemenu.controller", [
                         buildMenu(folderComponent, menuCacheInfo, data, autoHide);
                     }
                 }, function (row) {
-                    if (!isFolder(row)) {
+                    if (!editorSync.isFolder(row)) {
                         return "link";
                     }
                 });

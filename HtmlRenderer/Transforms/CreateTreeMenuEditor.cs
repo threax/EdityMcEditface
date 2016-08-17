@@ -24,7 +24,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                 rootControllerDoc.LoadHtml(rootEditor);
                 controllerNode.InsertBefore(rootControllerDoc.DocumentNode, controllerNode.FirstChild);
                 //Find templates
-                var folderModel = HtmlrestQueries.getModelNode("folders", controllerNode);
+                var folderModel = HtmlrestQueries.getModelNode("childItems", controllerNode);
                 if (folderModel != null)
                 {
                     var folderTemplate = HtmlrestQueries.getModelTemplate(folderModel);
@@ -43,12 +43,8 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                             }
                         }
                     }
-                }
 
-                var linkModel = HtmlrestQueries.getModelNode("links", controllerNode);
-                if (linkModel != null)
-                {
-                    var linkTemplate = HtmlrestQueries.getModelTemplate(linkModel);
+                    var linkTemplate = HtmlrestQueries.getModelTemplate(folderModel, "link");
                     if (linkTemplate != null)
                     {
                         var insertNode = linkTemplate.FirstElementChild();

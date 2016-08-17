@@ -18,17 +18,25 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
             return context.Select($"[data-hr-model='{name}']").FirstOrDefault();
         }
 
-        public static HtmlNode getModelTemplate(HtmlNode modelNode)
+        public static HtmlNode getModelTemplate(HtmlNode modelNode, String variant = null)
         {
+            IEnumerable<HtmlNode> query;
             var componentName = modelNode.GetAttributeValue("data-hr-model-component", (string)null);
             if (componentName != null)
             {
-                return modelNode.OwnerDocument.DocumentNode.Select($"[data-hr-component='{componentName}']").FirstOrDefault();
+                query = modelNode.OwnerDocument.DocumentNode.Select($"[data-hr-component='{componentName}']");
             }
             else
             {
-                return modelNode.Select("template").FirstOrDefault();
+                query = modelNode.Select("template");
             }
+
+            if (variant != null)
+            {
+                query = query.Where(i => i.GetAttributeValue("data-hr-variant", (String)null) == variant);
+            }
+
+            return query.FirstOrDefault();
         }
 
         public static String getModelSrc(HtmlNode node)

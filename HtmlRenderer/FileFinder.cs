@@ -177,10 +177,27 @@ namespace EdityMcEditface.HtmlRenderer
         {
             get
             {
-                return Directory.EnumerateFiles(getFullProjectPath("edity/templates")).Select(t => new Template()
+                IEnumerable<Template> query = null;
+                var templatePath = getFullProjectPath("edity/templates");
+                if (Directory.Exists(templatePath))
                 {
-                    Path = Path.ChangeExtension(getUrlFromSystemPath(t), null)
-                });
+                    query = Directory.EnumerateFiles(templatePath).Select(t => new Template()
+                    {
+                        Path = Path.ChangeExtension(getUrlFromSystemPath(t), null)
+                    });
+                }
+                else
+                {
+                    templatePath = getBackupPath("edity/templates");
+                    if (Directory.Exists(templatePath))
+                    {
+                        query = Directory.EnumerateFiles(templatePath).Select(t => new Template()
+                        {
+                            Path = Path.ChangeExtension(getUrlFromSystemPath(t), null)
+                        });
+                    }
+                }
+                return query;
             }
         }
 
@@ -406,7 +423,7 @@ namespace EdityMcEditface.HtmlRenderer
                 fullProjectPath = Path.GetFullPath(backupPath);
                 if (fullPath.StartsWith(fullProjectPath))
                 {
-                    return path.Substring(fullPath.Length - 1);
+                    return path.Substring(fullProjectPath.Length);
                 }
             }
             return path;

@@ -32,25 +32,34 @@ namespace EdityMcEditface.Controllers
         [HttpGet("Status")]
         public CompilerStatus Status([FromServices] ProjectFinder projectFinder)
         {
-            var repo = new Repository(projectFinder.PublishedProjectPath);
-
-            repo.Fetch("origin");
-
-            var head = repo.Head.Commits.First();
-            var tracked = repo.Head.TrackedBranch.Commits.First();
-            var divergence = repo.ObjectDatabase.CalculateHistoryDivergence(head, tracked);
-
-            var behindCommits = repo.Commits.QueryBy(new CommitFilter()
+            if (projectFinder.PublishedProjectPath != projectFinder.MasterRepoPath)
             {
-                SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time,
-                IncludeReachableFrom = divergence.Another,
-                ExcludeReachableFrom = divergence.CommonAncestor
-            });
+                var repo = new Repository(projectFinder.PublishedProjectPath);
+
+                repo.Fetch("origin");
+
+                var head = repo.Head.Commits.First();
+                var tracked = repo.Head.TrackedBranch.Commits.First();
+                var divergence = repo.ObjectDatabase.CalculateHistoryDivergence(head, tracked);
+
+                var behindCommits = repo.Commits.QueryBy(new CommitFilter()
+                {
+                    SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time,
+                    IncludeReachableFrom = divergence.Another,
+                    ExcludeReachableFrom = divergence.CommonAncestor
+                });
+
+                return new CompilerStatus()
+                {
+                    BehindBy = divergence.BehindBy.GetValueOrDefault(),
+                    BehindHistory = behindCommits.Select(c => new History(c))
+                };
+            }
 
             return new CompilerStatus()
             {
-                BehindBy = divergence.BehindBy.GetValueOrDefault(),
-                BehindHistory = behindCommits.Select(c => new History(c))
+                BehindBy = -1,
+                BehindHistory = null
             };
         }
 

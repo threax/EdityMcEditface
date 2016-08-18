@@ -51,8 +51,19 @@ namespace EdityMcEditface
             var configPath = commandLineConfig["config"];
             if (!String.IsNullOrEmpty(configPath))
             {
-                Startup.EditySettingsFile = Path.GetFileName(configPath);
-                Startup.EditySettingsRoot = Path.GetDirectoryName(configPath);
+                configPath = Path.GetFullPath(configPath);
+                if (File.Exists(configPath))
+                {
+                    Startup.EditySettingsFile = Path.GetFileName(configPath);
+                    Startup.EditySettingsRoot = Path.GetDirectoryName(configPath);
+                }
+            }
+
+            var workingDirPath = commandLineConfig["workingDir"];
+            if (!String.IsNullOrEmpty(workingDirPath))
+            {
+                var fullWorkDir = Path.GetFullPath(workingDirPath);
+                Environment.CurrentDirectory = fullWorkDir;
             }
 #endif
 

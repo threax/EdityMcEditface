@@ -1,11 +1,11 @@
 ﻿"use strict";
 
 jsns.run([
-    "htmlrest.controller",
-    "htmlrest.formlifecycle",
-    "htmlrest.storage",
-    "htmlrest.rest",
-    "htmlrest.widgets.navmenu"
+    "hr.controller",
+    "hr.formlifecycle",
+    "hr.storage",
+    "hr.rest",
+    "hr.widgets.navmenu"
 ],
 function (exports, module, controller, FormLifecycle, storage, rest, navmenu) {
 

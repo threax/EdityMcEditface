@@ -1,11 +1,11 @@
 ﻿"use strict";
 
 jsns.run([
-    "htmlrest.domquery",
-    "htmlrest.storage",
-    "htmlrest.rest",
-    "htmlrest.controller",
-    "htmlrest.widgets.navmenu",
+    "hr.domquery",
+    "hr.storage",
+    "hr.rest",
+    "hr.controller",
+    "hr.widgets.navmenu",
     "edity.PageService"
 ],
 function (exports, module, domQuery, storage, rest, controller, navmenu, pageService) {

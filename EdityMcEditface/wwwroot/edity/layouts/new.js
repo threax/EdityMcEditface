@@ -1,10 +1,10 @@
 ﻿"use strict";
 
 jsns.run([
-    "htmlrest.rest",
-    "htmlrest.components",
-    "htmlrest.domquery",
-    "htmlrest.controller"
+    "hr.rest",
+    "hr.components",
+    "hr.domquery",
+    "hr.controller"
 ],
 function (exports, module, rest, component, domQuery, controller) {
 

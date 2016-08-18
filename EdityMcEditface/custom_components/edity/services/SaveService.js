@@ -1,9 +1,9 @@
 ﻿"use strict";
 
 jsns.define("edity.SaveService", [
-    "htmlrest.timedtrigger",
-    "htmlrest.eventhandler",
-    "htmlrest.promiseeventhandler",
+    "hr.timedtrigger",
+    "hr.eventhandler",
+    "hr.promiseeventhandler",
 ], function (exports, module, TimedTrigger, EventHandler, PromiseEventHandler) {
     var allowSave = true;
     var saveAgainWhenSaveCompleted = false;

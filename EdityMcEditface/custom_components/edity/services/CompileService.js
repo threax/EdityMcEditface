@@ -1,8 +1,8 @@
 ﻿"use strict";
 
 jsns.define("edity.CompileService", [
-    "htmlrest.rest",
-    "htmlrest.eventhandler"
+    "hr.rest",
+    "hr.eventhandler"
 ], function (exports, module, rest, EventHandler) {
     var host = "";
 

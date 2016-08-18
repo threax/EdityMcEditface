@@ -1,9 +1,9 @@
 ﻿"use strict";
 
 jsns.run([
-    "htmlrest.components",
-    "htmlrest.domquery",
-    "htmlrest.widgets.navmenu"
+    "hr.components",
+    "hr.domquery",
+    "hr.widgets.navmenu"
 ],
 function (exports, module, component, domQuery, navmenu) {
     var navMenu = domQuery.first('[data-editor-navmenu]');

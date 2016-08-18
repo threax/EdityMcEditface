@@ -1,8 +1,8 @@
 ﻿"use strict";
 
 jsns.run([
-    "htmlrest.rest",
-    "htmlrest.widgets.navmenu",
+    "hr.rest",
+    "hr.widgets.navmenu",
     "edity.PageService",
     "edity.SaveService"
 ],

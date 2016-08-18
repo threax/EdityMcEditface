@@ -2,7 +2,7 @@
 
 jsns.define("edity.PageService", [
     "edity.SaveService",
-    "htmlrest.rest"
+    "hr.rest"
 ], function (exports, module, saveService, rest) {
     var sourceAccessor;
     var needsSave = false;

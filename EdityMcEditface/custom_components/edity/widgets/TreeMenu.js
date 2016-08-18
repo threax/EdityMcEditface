@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 jsns.define("edity.widgets.treemenu.editorSync", [
-    "htmlrest.lateboundeventhandler"
+    "hr.lateboundeventhandler"
 ], function (exports, module, LateBoundEvent) {
     var itemAdded = new LateBoundEvent();
     var createRootNodeControls = new LateBoundEvent();
@@ -30,9 +30,9 @@ jsns.define("edity.widgets.treemenu.editorSync", [
 });
 
 jsns.define("edity.widgets.treemenu.controller", [
-    "htmlrest.storage",
-    "htmlrest.rest",
-    "htmlrest.controller",
+    "hr.storage",
+    "hr.rest",
+    "hr.controller",
     "edity.widgets.treemenu.editorSync"
 ], function (exports, module, storage, rest, controller, editorSync) {
     /**
@@ -217,7 +217,7 @@ jsns.define("edity.widgets.treemenu.controller", [
 });
 
 jsns.run([
-    "htmlrest.controller",
+    "hr.controller",
     "edity.widgets.treemenu.controller"
 ], function (exports, module, controller, treemenu) {
     controller.create("treeMenu", treemenu.TreeMenuController);

@@ -1,11 +1,11 @@
 ﻿"use strict";
 
 jsns.run([
-    "htmlrest.storage",
-    "htmlrest.rest",
-    "htmlrest.controller",
-    "htmlrest.toggles",
-    "htmlrest.widgets.navmenu",
+    "hr.storage",
+    "hr.rest",
+    "hr.controller",
+    "hr.toggles",
+    "hr.widgets.navmenu",
     "edity.CompileService"
 ],
 function (exports, module, storage, rest, controller, toggles, navmenu, CompileService) {

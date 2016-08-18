@@ -1,11 +1,11 @@
 ﻿"use strict";
 
 jsns.run([
-    "htmlrest.controller",
-    "htmlrest.widgets.navmenu",
-    "htmlrest.toggles",
-    "htmlrest.widgets.pagenumbers",
-    "htmlrest.iter",
+    "hr.controller",
+    "hr.widgets.navmenu",
+    "hr.toggles",
+    "hr.widgets.pagenumbers",
+    "hr.iter",
     "edity.GitService"
 ],
 function (exports, module, controller, navmenu, toggles, PageNumbers, iter, GitService) {

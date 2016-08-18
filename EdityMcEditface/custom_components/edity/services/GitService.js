@@ -1,9 +1,9 @@
 ﻿"use strict";
 
 jsns.define("edity.GitService", [
-    "htmlrest.rest",
-    "htmlrest.eventhandler",
-    "htmlrest.data.paged",
+    "hr.rest",
+    "hr.eventhandler",
+    "hr.data.paged",
 ], function (exports, module, rest, EventHandler, PagedData) {
     var host = "";
 

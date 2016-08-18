@@ -1,12 +1,12 @@
 ﻿"use strict";
 jsns.run([
-    "htmlrest.rest",
-    "htmlrest.storage",
-    "htmlrest.bindingcollection",
-    "htmlrest.toggles",
-    "htmlrest.iter",
-    "htmlrest.controller",
-    "htmlrest.widgets.navmenu"
+    "hr.rest",
+    "hr.storage",
+    "hr.bindingcollection",
+    "hr.toggles",
+    "hr.iter",
+    "hr.controller",
+    "hr.widgets.navmenu"
 ],
 function (exports, module, rest, storage, BindingCollection, toggles, iter, controller, navmenu) {
 

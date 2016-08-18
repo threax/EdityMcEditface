@@ -1,9 +1,9 @@
 ﻿"use strict";
 
 jsns.run([
-    "htmlrest.controller",
-    "htmlrest.toggles",
-    "htmlrest.rest",
+    "hr.controller",
+    "hr.toggles",
+    "hr.rest",
     "edity.widgets.treemenu.editorSync",
     "edity.SaveService"
 ], function (exports, module, controller, toggles, rest, editorSync, saveService) {

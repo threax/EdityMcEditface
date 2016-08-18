@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer.Transforms
 {
-    public static class HtmlrestQueries
+    public static class HtmlRapierQueries
     {
         public static HtmlNode getControllerNode(String name, HtmlNode context)
         {

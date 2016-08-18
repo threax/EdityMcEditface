@@ -15,7 +15,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
 
         public void transform(HtmlDocument document, TemplateEnvironment environment, List<PageStackItem> pageDefinitions)
         {
-            var controllerNode = HtmlrestQueries.getControllerNode("treeMenu", document.DocumentNode);
+            var controllerNode = HtmlRapierQueries.getControllerNode("treeMenu", document.DocumentNode);
             if(controllerNode != null)
             {
                 controllerNode.SetAttributeValue("data-hr-config-treemenu-editmode", "true");
@@ -24,16 +24,16 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                 rootControllerDoc.LoadHtml(rootEditor);
                 controllerNode.InsertBefore(rootControllerDoc.DocumentNode, controllerNode.FirstChild);
                 //Find templates
-                var folderModel = HtmlrestQueries.getModelNode("childItems", controllerNode);
+                var folderModel = HtmlRapierQueries.getModelNode("childItems", controllerNode);
                 if (folderModel != null)
                 {
-                    var folderTemplate = HtmlrestQueries.getModelTemplate(folderModel);
+                    var folderTemplate = HtmlRapierQueries.getModelTemplate(folderModel);
                     if (folderTemplate != null)
                     {
                         var insertNode = folderTemplate.Select("[data-hr-on-click='toggleMenuItem']").FirstOrDefault();
                         if (insertNode != null)
                         {
-                            var childModel = HtmlrestQueries.getModelNode("children", folderTemplate);
+                            var childModel = HtmlRapierQueries.getModelNode("children", folderTemplate);
                             if(childModel != null)
                             {
                                 var doc = new HtmlDocument();
@@ -44,7 +44,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                         }
                     }
 
-                    var linkTemplate = HtmlrestQueries.getModelTemplate(folderModel, "link");
+                    var linkTemplate = HtmlRapierQueries.getModelTemplate(folderModel, "link");
                     if (linkTemplate != null)
                     {
                         var insertNode = linkTemplate.FirstElementChild();

@@ -20,10 +20,10 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
         {
             using (var sha = new SHA256Managed())
             {
-                var controllerNode = HtmlrestQueries.getControllerNode("treeMenu", document.DocumentNode);
+                var controllerNode = HtmlRapierQueries.getControllerNode("treeMenu", document.DocumentNode);
                 if (controllerNode != null)
                 {
-                    var file = HtmlrestQueries.getModelSrc(controllerNode);
+                    var file = HtmlRapierQueries.getModelSrc(controllerNode);
                     if (file != null)
                     {
                         using (var stream = fileFinder.readFile(file))

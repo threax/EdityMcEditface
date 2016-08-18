@@ -1,4 +1,4 @@
 set HERE=%~dp0
 cd ..\wwwroot\lib
-mklink /D htmlrest %HERE%htmlrest
+mklink /D HtmlRapier %HERE%HtmlRapier
 cd %HERE%

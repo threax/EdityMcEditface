@@ -1,3 +1,6 @@
 [submodule "EdityMcEditface/custom_components/htmlrest"]
 	path = EdityMcEditface/custom_components/htmlrest
 	url = https://github.com/threax/htmlrest.git
+[submodule "EdityMcEditface/custom_components/HtmlRapier"]
+	path = EdityMcEditface/custom_components/HtmlRapier
+	url = https://github.com/threax/HtmlRapier.git

@@ -5,10 +5,10 @@ jsns.run([
     "hr.controller",
     "hr.widgets.navmenu",
     "hr.toggles",
-    "hr.iter",
+    "hr.iterable",
     "edity.GitService"
 ],
-function (exports, module, storage, controller, navmenu, toggles, iter, GitService) {
+function (exports, module, storage, controller, navmenu, toggles, Iterable, GitService) {
     function SyncController(bindings) {
         var commitModel = bindings.getModel('commit');
         var dialog = bindings.getToggle('dialog');
@@ -63,8 +63,8 @@ function (exports, module, storage, controller, navmenu, toggles, iter, GitServi
                 else {
                     group.activate(main);
                     changesModel.setData(data);
-                    behindHistory.setData(iter(data.behindHistory, formatRow));
-                    aheadHistory.setData(iter(data.aheadHistory, formatRow));
+                    behindHistory.setData(new Iterable(data.behindHistory).select(formatRow));
+                    aheadHistory.setData(new Iterable(data.aheadHistory).select(formatRow));
                 }
             }
         }

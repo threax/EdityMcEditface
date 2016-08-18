@@ -5,10 +5,10 @@ jsns.run([
     "hr.widgets.navmenu",
     "hr.toggles",
     "hr.widgets.pagenumbers",
-    "hr.iter",
+    "hr.iterable",
     "edity.GitService"
 ],
-function (exports, module, controller, navmenu, toggles, PageNumbers, iter, GitService) {
+function (exports, module, controller, navmenu, toggles, PageNumbers, Iterable, GitService) {
     function HistoryController(bindings) {
         var dialog = bindings.getToggle('dialog');
 
@@ -29,7 +29,7 @@ function (exports, module, controller, navmenu, toggles, PageNumbers, iter, GitS
         }
 
         function dataUpdated(data) {
-            historyModel.setData(iter(data, function(item){
+            historyModel.setData(new Iterable(data).select(function(item){
                 item.when = new Date(item.when).toLocaleString();
                 return item;
             }));

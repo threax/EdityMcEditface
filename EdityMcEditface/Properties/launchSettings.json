@@ -17,7 +17,7 @@
     },
     "EdityMcEditface": {
       "commandName": "Project",
-      "workingDirectory": "C:\\Development\\HtmlRapier\\docs",
+      "workingDirectory": "C:\\Development\\EdityMcEditface\\EdityMcEditface\\custom_components\\HtmlRapier\\docs",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/",
       "environmentVariables": {

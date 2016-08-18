@@ -115,7 +115,7 @@ gulp.task("copylibs", function () {
         output: "HtmlRapier",
         dest: "./custom_components/HtmlRapier",
         //base: './custom_components/HtmlRapier',
-        sourceRoot: "C:/Development/EdityMcEditface/EdityMcEditface/custom_components/HtmlRapier/src/"
+        sourceRoot: "/lib/HtmlRapier/src/"
     };
 
     minifyJs(htmlRapierCompile);

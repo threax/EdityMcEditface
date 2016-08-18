@@ -4,11 +4,11 @@ jsns.run([
     "hr.storage",
     "hr.bindingcollection",
     "hr.toggles",
-    "hr.iter",
+    "hr.iterable",
     "hr.controller",
     "hr.widgets.navmenu"
 ],
-function (exports, module, rest, storage, BindingCollection, toggles, iter, controller, navmenu) {
+function (exports, module, rest, storage, BindingCollection, toggles, Iterable, controller, navmenu) {
 
     function getFileName(path) {
         return path.replace(/^.*?([^\\\/]*)$/, '$1');
@@ -67,7 +67,12 @@ function (exports, module, rest, storage, BindingCollection, toggles, iter, cont
         function getFilesSuccess(data) {
             toggleGroup.show(main);
 
-            directoryModel.setData(iter(data.directories, function (dir) { return { name: getFileName(dir), link: dir } }),
+            var iter = new Iterable(data.directories)
+                       .select(function (i) {
+                           return { name: getFileName(i), link: i };
+                       });
+
+            directoryModel.setData(iter,
                 function (created, data) {
                     var link = data.link;
                     created.setListener({
@@ -78,7 +83,12 @@ function (exports, module, rest, storage, BindingCollection, toggles, iter, cont
                     });
                 });
 
-            fileModel.setData(iter(data.files, function (file) { return { name: getFileName(file), link: file } }));
+            iter = new Iterable(data.files)
+                       .select(function (i) {
+                           return { name: getFileName(i), link: i };
+                       });
+
+            fileModel.setData(iter);
 
             if (parentFolders.length === 0) {
                 upDir.off();

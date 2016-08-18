@@ -103,26 +103,26 @@ gulp.task("copylibs", function () {
         dest: libDir
     });
 
-    //Minify htmlrest, need to specify the load order for jsns to be first
-    var htmlrestCompile = {
-        libs: ["./custom_components/htmlrest/src/jsns.js",
-               "./custom_components/htmlrest/src/polyfill.js",
-               "./custom_components/htmlrest/src/**/*.js",
-               "./custom_components/htmlrest/plugin/**/*",
-               "./custom_components/htmlrest/widgets/**/*",
-               "./custom_components/htmlrest/data/**/*",
+    //Minify htmlRapier, need to specify the load order for jsns to be first
+    var htmlRapierCompile = {
+        libs: ["./custom_components/HtmlRapier/src/jsns.js",
+               "./custom_components/HtmlRapier/src/polyfill.js",
+               "./custom_components/HtmlRapier/src/**/*.js",
+               "./custom_components/HtmlRapier/plugin/**/*",
+               "./custom_components/HtmlRapier/widgets/**/*",
+               "./custom_components/HtmlRapier/data/**/*",
                "!**/*.intellisense.js"],
-        output: "htmlrest",
-        dest: "./custom_components/htmlrest",
-        //base: './custom_components/htmlrest',
-        sourceRoot: "C:/Development/EdityMcEditface/EdityMcEditface/custom_components/htmlrest/src/"
+        output: "HtmlRapier",
+        dest: "./custom_components/HtmlRapier",
+        //base: './custom_components/HtmlRapier',
+        sourceRoot: "C:/Development/EdityMcEditface/EdityMcEditface/custom_components/HtmlRapier/src/"
     };
 
-    minifyJs(htmlrestCompile);
-    concatJs(htmlrestCompile);
+    minifyJs(htmlRapierCompile);
+    concatJs(htmlRapierCompile);
 });
 
-var jsInFolder = ['./custom_components/**/*.js', '!./custom_components/htmlrest/htmlrest.js', '!./custom_components/htmlrest/htmlrest.min.js'];
+var jsInFolder = ['./custom_components/**/*.js', '!./custom_components/HtmlRapier/HtmlRapier.js', '!./custom_components/HtmlRapier/HtmlRapier.min.js'];
 gulp.task('watchers', function () {
     gulp.watch(jsInFolder, ['copylibs']);
 });

@@ -44,9 +44,9 @@
     "edityLoading": {
       "css": [ "/edity/css/loading.min.css" ]
     },
-    "htmlrest": {
+    "HtmlRapier": {
       "js": [
-        { "file": "/lib/htmlrest/htmlrest.js" }
+        { "file": "/lib/HtmlRapier/HtmlRapier.js" }
       ],
       "hasMin": true
     },
@@ -57,23 +57,23 @@
           "async": true
         }
       ],
-      "dependencies": [ "htmlrest" ]
+      "dependencies": [ "HtmlRapier" ]
     },
     "GitService": {
       "js": [ { "file": "/lib/edity/services/GitService.js" } ],
-      "dependencies": [ "htmlrest" ]
+      "dependencies": [ "HtmlRapier" ]
     },
     "CompileService": {
       "js": [ { "file": "/lib/edity/services/CompileService.js" } ],
-      "dependencies": [ "htmlrest" ]
+      "dependencies": [ "HtmlRapier" ]
     },
     "SaveService": {
       "js": [ { "file": "/lib/edity/services/SaveService.js" } ],
-      "dependencies": [ "htmlrest" ]
+      "dependencies": [ "HtmlRapier" ]
     },
     "PageService": {
       "js": [ { "file": "/lib/edity/services/PageService.js" } ],
-      "dependencies": [ "SaveService", "htmlrest" ]
+      "dependencies": [ "SaveService", "HtmlRapier" ]
     }
   },
   "vars": {

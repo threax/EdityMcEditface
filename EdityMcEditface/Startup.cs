@@ -76,7 +76,7 @@ namespace EdityMcEditface
             {
                     { "ProjectMode", "SingleRepo" },
                     { "Compiler", "Direct" },
-                    { "OutputPath", Path.Combine(Directory.GetCurrentDirectory(), "Compiled") },
+                    { "OutputPath", Path.Combine(Directory.GetCurrentDirectory(), "..\\Compiled") },
                     { "CompiledVirtualFolder", "" },
                     { "SiteName", "" },
                     { "ProjectPath", Directory.GetCurrentDirectory() },

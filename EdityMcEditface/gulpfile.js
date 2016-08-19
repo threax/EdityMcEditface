@@ -8,6 +8,9 @@ var gulp = require("gulp"),
     uglify = require("gulp-uglify"),
     rename = require("gulp-rename"),
     sourcemaps = require("gulp-sourcemaps");
+var less = require('gulp-less');
+var path = require('path');
+var uglifycss = require('gulp-uglifycss');
 
 var webroot = "./wwwroot/";
 
@@ -81,7 +84,7 @@ gulp.task("copylibs", function () {
                "./node_modules/ckeditor/plugins/widget/**/*",
                "./node_modules/ckeditor/plugins/lineutils/**/*",
                "./node_modules/ckeditor/plugins/notification/**/*",
-               "./node_modules/ckeditor/plugins/image/**/*",],
+               "./node_modules/ckeditor/plugins/image/**/*", ],
         baseName: './node_modules',
         dest: libDir
     });
@@ -115,16 +118,35 @@ gulp.task("copylibs", function () {
         output: "HtmlRapier",
         dest: "./custom_components/HtmlRapier",
         //base: './custom_components/HtmlRapier',
-        sourceRoot: "/lib/HtmlRapier/src/"
+        sourceRoot: __dirname + "wwwroot/lib/HtmlRapier/src/"
     };
 
     minifyJs(htmlRapierCompile);
     concatJs(htmlRapierCompile);
+
+    less({
+        files: [
+        './custom_modules/bootstrap/bootstrap-custom.less'
+        ],
+        dest: libDir
+    });
 });
 
-var jsInFolder = ['./custom_components/**/*.js', '!./custom_components/HtmlRapier/HtmlRapier.js', '!./custom_components/HtmlRapier/HtmlRapier.min.js'];
+function less(settings) {
+    return gulp.src(setttings.files)
+      .pipe(less({
+          paths: [path.join(__dirname)]
+      }))
+      .pipe(uglifycss({
+          "maxLineLen": 80,
+          "uglyComments": true
+      }))
+      .pipe(gulp.dest(settings.dest));
+}
+
+var watchFiles = ['./custom_components/**/*.js', '!./custom_components/HtmlRapier/HtmlRapier.js', '!./custom_components/HtmlRapier/HtmlRapier.min.js', './custom_components/**/*.less'];
 gulp.task('watchers', function () {
-    gulp.watch(jsInFolder, ['copylibs']);
+    gulp.watch(watchFiles, ['copylibs']);
 });
 
 function copyFiles(settings) {
@@ -132,7 +154,7 @@ function copyFiles(settings) {
         .pipe(gulp.dest(settings.dest));
 }
 
-function minifyJs(settings) {  
+function minifyJs(settings) {
     return gulp.src(settings.libs, { base: settings.base })
         .pipe(sourcemaps.init())
         .pipe(concat(settings.output + '.js'))

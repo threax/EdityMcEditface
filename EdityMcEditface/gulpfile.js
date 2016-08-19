@@ -11,6 +11,8 @@ var gulp = require("gulp"),
 var less = require('gulp-less');
 var path = require('path');
 var uglifycss = require('gulp-uglifycss');
+var gutil = require('gulp-util');
+var plumber = require('gulp-plumber');
 
 var webroot = "./wwwroot/";
 
@@ -49,12 +51,13 @@ gulp.task("min:css", function () {
 
 gulp.task("min", ["min:js", "min:css"]);
 
-gulp.task("copylibs", function () {
+gulp.task("default", function () {
     var libDir = webroot + "lib/";
 
     copyFiles({
         libs: ["./node_modules/jquery/dist/**/*",
                "./node_modules/bootstrap/dist/**/*",
+               "!./node_modules/bootstrap/dist/css/**/*",
                "./node_modules/bootstrap.native/dist/**/*",
                "./node_modules/codemirror/lib/**/*",
                "./node_modules/codemirror/mode/xml/**/*",
@@ -118,35 +121,24 @@ gulp.task("copylibs", function () {
         output: "HtmlRapier",
         dest: "./custom_components/HtmlRapier",
         //base: './custom_components/HtmlRapier',
-        sourceRoot: __dirname + "wwwroot/lib/HtmlRapier/src/"
+        sourceRoot: __dirname + "/custom_components/HtmlRapier/src/"
     };
 
     minifyJs(htmlRapierCompile);
     concatJs(htmlRapierCompile);
 
-    less({
+    compileLess({
         files: [
-        './custom_modules/bootstrap/bootstrap-custom.less'
+        __dirname + '/custom_components/bootstrap/bootstrap-custom.less'
         ],
-        dest: libDir
+        dest: libDir + '/bootstrap/dist/css',
+        importPaths: path.join(__dirname),
     });
 });
 
-function less(settings) {
-    return gulp.src(setttings.files)
-      .pipe(less({
-          paths: [path.join(__dirname)]
-      }))
-      .pipe(uglifycss({
-          "maxLineLen": 80,
-          "uglyComments": true
-      }))
-      .pipe(gulp.dest(settings.dest));
-}
-
 var watchFiles = ['./custom_components/**/*.js', '!./custom_components/HtmlRapier/HtmlRapier.js', '!./custom_components/HtmlRapier/HtmlRapier.min.js', './custom_components/**/*.less'];
 gulp.task('watchers', function () {
-    gulp.watch(watchFiles, ['copylibs']);
+    gulp.watch(watchFiles, ['default']);
 });
 
 function copyFiles(settings) {
@@ -171,3 +163,20 @@ function concatJs(settings) {
         .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: settings.sourceRoot }))
         .pipe(gulp.dest(settings.dest));
 };
+
+function compileLess(settings) {
+    return gulp.src(settings.files, { base: settings.baseName })
+           .pipe(plumber(function (error) {
+               gutil.log(gutil.colors.red(error.message));
+               gutil.beep();
+               this.emit('end');
+           }))
+           .pipe(less({
+               paths: settings.importPaths
+           }))
+           .pipe(uglifycss({
+               "maxLineLen": 80,
+               "uglyComments": true
+           }))
+           .pipe(gulp.dest(settings.dest));
+}

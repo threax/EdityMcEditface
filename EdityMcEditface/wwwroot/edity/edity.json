@@ -9,7 +9,7 @@
       "dependencies": [ "transitions" ]
     },
     "bootstrap": {
-      "css": [ "/lib/bootstrap/dist/css/bootstrap.css", "/lib/bootstrap/dist/css/bootstrap-theme.css" ],
+      "css": [ "/lib/bootstrap/dist/css/bootstrap-custom.css" ],
       "dependencies": [ "bootstrap-native" ]
     },
     "diff_match_patch": {

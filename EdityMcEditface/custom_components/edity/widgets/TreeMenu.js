@@ -31,10 +31,10 @@ jsns.define("edity.widgets.treemenu.editorSync", [
 
 jsns.define("edity.widgets.treemenu.controller", [
     "hr.storage",
-    "hr.rest",
+    "hr.http",
     "hr.controller",
     "edity.widgets.treemenu.editorSync"
-], function (exports, module, storage, rest, controller, editorSync) {
+], function (exports, module, storage, http, controller, editorSync) {
     /**
      * This function builds a controller that handles a tree menu on the page.
      * @param {type} bindings
@@ -74,7 +74,8 @@ jsns.define("edity.widgets.treemenu.controller", [
             //No data, get it
             menuCache = {
             };
-            rest.get(ajaxurl, function (data) {
+            http.get(ajaxurl)
+            .then(function (data) {
                 initialSetup(data);
             });
         }

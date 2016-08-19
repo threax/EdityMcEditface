@@ -1,10 +1,10 @@
 ﻿"use strict";
 
 jsns.define("edity.GitService", [
-    "hr.rest",
+    "hr.http",
     "hr.eventhandler",
     "hr.data.paged",
-], function (exports, module, rest, EventHandler, PagedData) {
+], function (exports, module, http, EventHandler, PagedData) {
     var host = "";
 
     function setHost(url) {
@@ -13,32 +13,32 @@ jsns.define("edity.GitService", [
     exports.setHost = setHost;
 
     function syncInfo() {
-        return rest.getPromise(host + '/edity/Git/SyncInfo');
+        return http.get(host + '/edity/Git/SyncInfo');
     }
     exports.syncInfo = syncInfo;
 
     function uncommittedChanges() {
-        return rest.getPromise(host + '/edity/Git/UncommittedChanges');
+        return http.get(host + '/edity/Git/UncommittedChanges');
     }
     exports.uncommittedChanges = uncommittedChanges;
 
     function commit(data) {
-        return rest.postPromise(host + '/edity/Git/Commit', data);
+        return http.post(host + '/edity/Git/Commit', data);
     }
     exports.commit = commit;
 
     function uncommittedDiff(file) {
-        return rest.getPromise(host + '/edity/Git/UncommittedDiff/' + file);
+        return http.get(host + '/edity/Git/UncommittedDiff/' + file);
     }
     exports.uncommittedDiff = uncommittedDiff;
 
     function mergeInfo(file) {
-        return rest.getPromise(host + '/edity/Git/MergeInfo/' + file);
+        return http.get(host + '/edity/Git/MergeInfo/' + file);
     }
     exports.mergeInfo = mergeInfo;
 
     function historyCount(file) {
-        return rest.getPromise(host + '/edity/Git/HistoryCount/' + file);
+        return http.get(host + '/edity/Git/HistoryCount/' + file);
     }
     exports.historyCount = historyCount;
 
@@ -49,17 +49,17 @@ jsns.define("edity.GitService", [
 
     function resolve(file, content) {
         var blob = new Blob([content], { type: "text/html" });
-        return rest.uploadPromise(host + '/edity/Git/Resolve/' + file, blob);
+        return http.upload(host + '/edity/Git/Resolve/' + file, blob);
     }
     exports.resolve = resolve;
 
     function pull() {
-        return rest.postPromise(host + '/edity/Git/Pull');
+        return http.post(host + '/edity/Git/Pull');
     }
     exports.pull = pull;
 
     function push() {
-        return rest.postPromise(host + '/edity/Git/Push');
+        return http.post(host + '/edity/Git/Push');
     }
     exports.push = push;
 
@@ -68,7 +68,7 @@ jsns.define("edity.GitService", [
 
     function revert(file) {
         revertStarted.fire();
-        return rest.postPromise(host + '/edity/Git/Revert/' + file)
+        return http.post(host + '/edity/Git/Revert/' + file)
         .then(function (data) {
             revertCompleted.fire(true);
         })

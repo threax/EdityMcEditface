@@ -2,8 +2,8 @@
 
 jsns.define("edity.PageService", [
     "edity.SaveService",
-    "hr.rest"
-], function (exports, module, saveService, rest) {
+    "hr.http"
+], function (exports, module, saveService, http) {
     var sourceAccessor;
     var needsSave = false;
 
@@ -34,7 +34,7 @@ jsns.define("edity.PageService", [
             needsSave = false;
             var content = exports.getHtml();
             var blob = new Blob([content], { type: "text/html" });
-            return rest.uploadPromise('/edity/Page/' + window.location.pathname, blob)
+            return http.upload('/edity/Page/' + window.location.pathname, blob)
             .catch(function (data) {
                 needsSave = true;
             });

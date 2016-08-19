@@ -2,12 +2,11 @@
 
 jsns.run([
     "hr.storage",
-    "hr.rest",
     "hr.controller",
     "hr.widgets.navmenu",
     "edity.PageService"
 ],
-function (exports, module, storage, rest, controller, navmenu, pageService) {
+function (exports, module, storage, controller, navmenu, pageService) {
 
     // config
     var editor = undefined;

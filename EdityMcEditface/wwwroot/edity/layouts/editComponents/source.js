@@ -3,12 +3,11 @@
 jsns.run([
     "hr.domquery",
     "hr.storage",
-    "hr.rest",
     "hr.controller",
     "hr.widgets.navmenu",
     "edity.PageService"
 ],
-function (exports, module, domQuery, storage, rest, controller, navmenu, pageService) {
+function (exports, module, domQuery, storage, controller, navmenu, pageService) {
 
     function EditSourceController(bindings) {
         var editSourceDialog = bindings.getToggle('dialog');

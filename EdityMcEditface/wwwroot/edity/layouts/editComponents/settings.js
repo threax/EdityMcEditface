@@ -4,10 +4,10 @@ jsns.run([
     "hr.controller",
     "hr.formlifecycle",
     "hr.storage",
-    "hr.rest",
+    "hr.http",
     "hr.widgets.navmenu"
 ],
-function (exports, module, controller, FormLifecycle, storage, rest, navmenu) {
+function (exports, module, controller, FormLifecycle, storage, http, navmenu) {
 
     var deletePageConfirmation;
 
@@ -22,7 +22,7 @@ function (exports, module, controller, FormLifecycle, storage, rest, navmenu) {
         function deletePage(evt) {
             evt.preventDefault();
             evt.stopPropagation();
-            rest.delete(uploadUrl + currentUrl);
+            http.delete(uploadUrl + currentUrl);
             currentUrl = null;
             dialog.off();
         }

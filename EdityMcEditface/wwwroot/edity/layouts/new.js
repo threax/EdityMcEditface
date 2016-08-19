@@ -1,23 +1,25 @@
 ﻿"use strict";
 
 jsns.run([
-    "hr.rest",
+    "hr.http",
     "hr.components",
     "hr.domquery",
     "hr.controller"
 ],
-function (exports, module, rest, component, domQuery, controller) {
+function (exports, module, http, component, domQuery, controller) {
 
     function createPage(path, uploadPath) {
-        rest.get(path + ".html", function (templateData) {
+        http.get(path + ".html")
+        .then(function (templateData) {
             //Make a blob
             var blob = new Blob([templateData], { type: "text/html" });
-            rest.upload(uploadPath + window.location.pathname + ".html", blob, function () {
-                window.location.href = window.location.href + ".html";
-            },
-            function () {
-                alert('Could not create new page. Please try again later');
-            });
+            return http.upload(uploadPath + window.location.pathname, blob);
+        })
+        .then(function (data) {
+            window.location.href = window.location.href;
+        })
+        .catch(function (data) {
+            alert('Could not create new page. Please try again later');
         });
     }
 
@@ -32,13 +34,13 @@ function (exports, module, rest, component, domQuery, controller) {
     function NewController(bindings) {
         var templatesModel = bindings.getModel('templates');
         var config = bindings.getConfig();
-        rest.get(templatesModel.getSrc(),
-            function (data) {
-                templatesModel.setData(data, controller.createOnCallback(TemplateItemController, config));
-            },
-            function (data) {
-                alert('Cannot load templates, please try again later');
-            });
+        http.get(templatesModel.getSrc())
+        .then(function (data) {
+            templatesModel.setData(data, controller.createOnCallback(TemplateItemController, config));
+        })
+        .catch(function (data) {
+            alert('Cannot load templates, please try again later');
+        });
     }
 
     controller.create("new", NewController);

@@ -19,5 +19,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
         public String Template { get; set; } = "default";
 
         public String Extension { get; set; } = null;
+
+        public Dictionary<String, String> Settings { get; set; }
     }
 }

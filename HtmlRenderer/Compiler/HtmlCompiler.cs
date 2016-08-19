@@ -14,13 +14,15 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
         private String outDir;
         private String backupPath;
         private String layout;
+        private String siteRoot;
 
-        public HtmlCompiler(String inDir, String outDir, String backupPath, String layout)
+        public HtmlCompiler(String inDir, String outDir, String backupPath, String layout, Dictionary<String, String> settings)
         {
             this.inDir = inDir;
             this.outDir = outDir;
             this.backupPath = backupPath;
             this.layout = layout;
+            settings.TryGetValue("siteRoot", out this.siteRoot);
         }
 
         public void buildPage(String relativeFile)
@@ -42,6 +44,10 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
 
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(environment);
             dr.addTransform(new HashTreeMenus(fileFinder));
+            if (!String.IsNullOrEmpty(siteRoot))
+            {
+                dr.addTransform(new FixRelativeUrls(siteRoot));
+            }
             var document = dr.getDocument(pageStack.Pages);
             var outDir = Path.GetDirectoryName(outFile);
             if (!Directory.Exists(outDir))

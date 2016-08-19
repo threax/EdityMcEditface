@@ -2,12 +2,12 @@
 
 jsns.run([
     "hr.storage",
-    "hr.rest",
+    "hr.http",
     "hr.controller",
     "hr.widgets.navmenu",
     "edity.GitService"
 ],
-function (exports, module, storage, rest, controller, navmenu, GitService) {
+function (exports, module, storage, http, controller, navmenu, GitService) {
     var revertConfirmation;
 
     function ConfirmRevertController(bindings) {
@@ -111,10 +111,11 @@ function (exports, module, storage, rest, controller, navmenu, GitService) {
 
             var content = dv.editor().getValue();
             var blob = new Blob([content], { type: "text/html" });
-            rest.upload(config.saveurl + '/' + savePath, blob, function () {
+            http.upload(config.saveurl + '/' + savePath, blob)
+            .then(function () {
                 dialog.off();
-            },
-            function () {
+            })
+            .catch(function () {
                 alert("Error saving merge. Please try again later.");
             });
         }

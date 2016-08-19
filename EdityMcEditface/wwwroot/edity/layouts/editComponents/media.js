@@ -1,6 +1,6 @@
 ﻿"use strict";
 jsns.run([
-    "hr.rest",
+    "hr.http",
     "hr.storage",
     "hr.bindingcollection",
     "hr.toggles",
@@ -8,7 +8,7 @@ jsns.run([
     "hr.controller",
     "hr.widgets.navmenu"
 ],
-function (exports, module, rest, storage, BindingCollection, toggles, Iterable, controller, navmenu) {
+function (exports, module, http, storage, BindingCollection, toggles, Iterable, controller, navmenu) {
 
     function getFileName(path) {
         return path.replace(/^.*?([^\\\/]*)$/, '$1');
@@ -61,7 +61,9 @@ function (exports, module, rest, storage, BindingCollection, toggles, Iterable, 
 
         function loadCurrentFolder() {
             toggleGroup.show(load);
-            rest.get(listFilesUrl + currentFolder, getFilesSuccess, getFilesFail);
+            http.get(listFilesUrl + currentFolder)
+            .then(getFilesSuccess)
+            .catch(getFilesFail);
         }
 
         function getFilesSuccess(data) {
@@ -114,11 +116,11 @@ function (exports, module, rest, storage, BindingCollection, toggles, Iterable, 
             var formData = new FormData(this);
             var filename = uploadModel.getData()["file"];
             filename = getFileName(filename);
-            rest.upload(uploadModel.getSrc() + fileBrowser.getCurrentDirectory() + '/' + filename, formData,
-            function (data) {
+            http.upload(uploadModel.getSrc() + fileBrowser.getCurrentDirectory() + '/' + filename, formData)
+            .then(function (data) {
                 fileBrowser.refresh();
-            },
-            function (data) {
+            })
+            .catch(function (data) {
                 alert("File Upload Failed");
             });
         }

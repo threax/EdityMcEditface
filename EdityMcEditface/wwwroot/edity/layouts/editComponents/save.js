@@ -1,12 +1,11 @@
 ﻿"use strict";
 
 jsns.run([
-    "hr.rest",
     "hr.widgets.navmenu",
     "edity.PageService",
     "edity.SaveService"
 ],
-function (exports, module, rest, navmenu, pageService, saveService) {
+function (exports, module, navmenu, pageService, saveService) {
     function SaveController(component) {
         var load = component.getToggle("load");
         load.off();

@@ -20,6 +20,6 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
 
         public String Extension { get; set; } = null;
 
-        public Dictionary<String, String> Settings { get; set; }
+        public Dictionary<String, String> Settings { get; set; } = new Dictionary<string, string>();
     }
 }

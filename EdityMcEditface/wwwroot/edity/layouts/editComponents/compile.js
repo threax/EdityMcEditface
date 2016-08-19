@@ -2,13 +2,13 @@
 
 jsns.run([
     "hr.storage",
-    "hr.rest",
+    "hr.http",
     "hr.controller",
     "hr.toggles",
     "hr.widgets.navmenu",
     "edity.CompileService"
 ],
-function (exports, module, storage, rest, controller, toggles, navmenu, CompileService) {
+function (exports, module, storage, http, controller, toggles, navmenu, CompileService) {
 
     function CompileController(bindings) {
         var start = bindings.getToggle("start");
@@ -26,13 +26,14 @@ function (exports, module, storage, rest, controller, toggles, navmenu, CompileS
             runCompiler: function (evt) {
                 evt.preventDefault();
                 toggleGroup.show(compiling);
-                rest.post('/edity/Compile', {},
-                    function (data) {
-                        resultsModel.setData(data);
-                        toggleGroup.show(success);
-                    }, function () {
-                        toggleGroup.show(fail);
-                    });
+                http.post('/edity/Compile', {})
+                .then(function (data) {
+                    resultsModel.setData(data);
+                    toggleGroup.show(success);
+                })
+                .catch(function () {
+                    toggleGroup.show(fail);
+                });
             }
         });
 

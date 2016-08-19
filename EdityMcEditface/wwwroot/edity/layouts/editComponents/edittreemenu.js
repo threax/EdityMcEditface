@@ -3,10 +3,10 @@
 jsns.run([
     "hr.controller",
     "hr.toggles",
-    "hr.rest",
+    "hr.http",
     "edity.widgets.treemenu.editorSync",
     "edity.SaveService"
-], function (exports, module, controller, toggles, rest, editorSync, saveService) {
+], function (exports, module, controller, toggles, http, editorSync, saveService) {
 
     var treeMenuEditors = {};
 
@@ -17,7 +17,7 @@ jsns.run([
             if (hasChanges) {
                 hasChanges = false;
                 var blob = new Blob([JSON.stringify(menuData, menuJsonSerializeReplacer, 4)], { type: "application/json" });
-                return rest.uploadPromise('/edity/upload' + saveUrl, blob)
+                return http.upload('/edity/upload' + saveUrl, blob)
                 .catch(function (data) {
                     hasChanges = true;
                 });

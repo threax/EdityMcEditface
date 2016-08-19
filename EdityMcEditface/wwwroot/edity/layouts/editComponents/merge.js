@@ -2,12 +2,11 @@
 
 jsns.run([
     "hr.storage",
-    "hr.rest",
     "hr.controller",
     "hr.widgets.navmenu",
     "edity.GitService"
 ],
-function (exports, module, storage, rest, controller, navmenu, GitService) {
+function (exports, module, storage, controller, navmenu, GitService) {
     function MergeController(bindings) {
         function MergeRow(bindings, data) {
             function merge(evt) {

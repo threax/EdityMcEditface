@@ -109,21 +109,29 @@ gulp.task("default", function () {
         dest: libDir
     });
 
+    var htmlRapierLibs = [
+        "./custom_components/HtmlRapier/src/jsns.js",
+        "./custom_components/HtmlRapier/src/polyfill.js",
+        "./custom_components/HtmlRapier/src/**/*.js",
+        "./custom_components/HtmlRapier/plugin/**/*",
+        "./custom_components/HtmlRapier/widgets/**/*",
+        "./custom_components/HtmlRapier/data/**/*",
+        "!**/*.intellisense.js"
+    ]
+
     //Minify htmlRapier, need to specify the load order for jsns to be first
     var htmlRapierCompile = {
-        libs: ["./custom_components/HtmlRapier/src/jsns.js",
-               "./custom_components/HtmlRapier/src/polyfill.js",
-               "./custom_components/HtmlRapier/src/**/*.js",
-               "./custom_components/HtmlRapier/plugin/**/*",
-               "./custom_components/HtmlRapier/widgets/**/*",
-               "./custom_components/HtmlRapier/data/**/*",
-               "!**/*.intellisense.js"],
+        libs: htmlRapierLibs,
         output: "HtmlRapier",
         dest: "./custom_components/HtmlRapier",
         //base: './custom_components/HtmlRapier',
         sourceRoot: __dirname + "/custom_components/HtmlRapier/src/"
     };
 
+    minifyJs(htmlRapierCompile);
+    concatJs(htmlRapierCompile);
+
+    htmlRapierCompile.dest = "./wwwroot/lib/HtmlRapier";
     minifyJs(htmlRapierCompile);
     concatJs(htmlRapierCompile);
 

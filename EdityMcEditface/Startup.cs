@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Http;
 using EdityMcEditface.Models.Auth;
 using EdityMcEditface.Models.Page;
 using Swashbuckle.Swagger.Model;
+using Identity.FileAuthorization;
 
 namespace EdityMcEditface
 {
@@ -140,7 +141,9 @@ namespace EdityMcEditface
                 return new Signature(userInfo.User, userInfo.User + "@spcollege.edu", DateTime.Now);
             });
 
-            services.AddTransient<AuthChecker, AuthChecker>();
+            //services.AddTransient<AuthChecker, AuthChecker>();
+            services.AddIdentity<NoUserUser, NoUserRole>()
+            .AddNoAuthorization<NoUserUser, NoUserRole>();
 
             switch (EdityServerConfiguration["Compiler"])
             {
@@ -241,7 +244,7 @@ namespace EdityMcEditface
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {
-                AuthenticationScheme = AuthenticationConfig.CookieAuthenticationSchemeName,
+                AuthenticationScheme = "Identity.Application",// AuthenticationConfig.CookieAuthenticationSchemeName,
                 LoginPath = new PathString("/edity/Auth/LogIn/"),
                 AccessDeniedPath = new PathString("/edity/Auth/AccessDenied/"),
                 AutomaticAuthenticate = true,

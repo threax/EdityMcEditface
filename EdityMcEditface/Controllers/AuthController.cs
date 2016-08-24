@@ -1,4 +1,7 @@
-﻿using EdityMcEditface.Models.Auth;
+﻿using EdityMcEditface.ErrorHandling;
+using EdityMcEditface.Models.Auth;
+using Identity.FileAuthorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,29 +15,66 @@ namespace EdityMcEditface.Controllers
     [Route("edity/[controller]/[action]")]
     public class AuthController : Controller
     {
-        private AuthChecker authChecker;
+        private UserManager<NoUserUser> userManager;
+        private SignInManager<NoUserUser> signInManager;
+        private RoleManager<NoUserRole> roleManager;
 
-        public AuthController(AuthChecker authChecker)
+        public AuthController(UserManager<NoUserUser> userManager, SignInManager<NoUserUser> signInManager, RoleManager<NoUserRole> roleManager)
         {
-            this.authChecker = authChecker;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.roleManager = roleManager;
         }
 
         [HttpGet]
         public async Task<IActionResult> LogIn(String returnUrl)
         {
-            if (authChecker.IsValid)
+            //temp, create the user first
+            var user = new NoUserUser()
             {
-                await HttpContext.Authentication.SignInAsync(authChecker.AuthenticationScheme, authChecker.ClaimsPrincipal);
-            }
+                Name = "Anon",
+                Email = "anon@spcollege.edu"
+            };
+            await userManager.CreateAsync(user, "Password@43");
 
-            return SafeRedirect(ref returnUrl);
+            var claims = new[] {
+                    new Claim(ClaimTypes.Role, Roles.EditPages),
+                    new Claim(ClaimTypes.Role, Roles.Compile),
+                    new Claim(ClaimTypes.Role, Roles.UploadAnything),
+                    new Claim(ClaimTypes.Role, Roles.Shutdown),
+                };
+
+            await userManager.AddClaimsAsync(user, claims);
+
+            var roles = new[] {
+                    Roles.EditPages,
+                    Roles.Compile,
+                    Roles.UploadAnything,
+                    Roles.Shutdown,
+                };
+            await userManager.AddToRolesAsync(user, roles);
+
+            foreach(var role in roles)
+            {
+                await roleManager.CreateAsync(new NoUserRole(role));
+            }
+            //end temp
+
+            var result = await signInManager.PasswordSignInAsync("Anon", "Password@43", false, false);
+            if (result.Succeeded)
+            {
+                return SafeRedirect(ref returnUrl);
+            }
+            else
+            {
+                throw new ErrorResultException("Invalid login");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> LogOut(String returnUrl)
         {
-            await HttpContext.Authentication.SignOutAsync(authChecker.AuthenticationScheme);
-
+            await signInManager.SignOutAsync();
             return SafeRedirect(ref returnUrl);
         }
 

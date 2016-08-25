@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Identity.NoSqlAuthorization
 {
-    public class NoUserUser
+    public class NoSqlUser
     {
-        public NoUserUser()
+        public NoSqlUser()
         {
             Id = Guid.NewGuid().ToString();
         }
 
-        public NoUserUser(String name, String email)
+        public NoSqlUser(String name, String email)
         {
             this.Name = name;
             this.Email = email;

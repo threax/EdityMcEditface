@@ -141,11 +141,11 @@ namespace EdityMcEditface
                 return new Signature(userInfo.User, userInfo.User + "@spcollege.edu", DateTime.Now);
             });
 
-            services.AddIdentity<NoUserUser, NoUserRole>(o =>
+            services.AddIdentity<NoSqlUser, NoSqlRole>(o =>
             {
                 o.Cookies.ApplicationCookie.AuthenticationScheme = "Cookies";
             })
-           .AddNoAuthorization<NoUserUser, NoUserRole>();
+           .AddNoAuthorization<NoSqlUser, NoSqlRole>();
 
             switch (EdityServerConfiguration["Compiler"])
             {

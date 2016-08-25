@@ -8,19 +8,19 @@ using System.Security.Claims;
 
 namespace Identity.NoSqlAuthorization
 {
-    public class NoUserStore<TUser> :
+    public class NoSqlUserStore<TUser> :
         IUserLoginStore<TUser>,
         IUserRoleStore<TUser>,
         IUserClaimStore<TUser>,
         IUserPasswordStore<TUser>,
         IUserEmailStore<TUser>,
         IUserLockoutStore<TUser>
-        where TUser : NoUserUser
+        where TUser : NoSqlUser
     {
         private List<TUser> users;
         private IAuthSerializer<TUser> serializer;
 
-        public NoUserStore(IAuthSerializer<TUser> serializer)
+        public NoSqlUserStore(IAuthSerializer<TUser> serializer)
         {
             this.serializer = serializer;
             users = new List<TUser>(serializer.Load());

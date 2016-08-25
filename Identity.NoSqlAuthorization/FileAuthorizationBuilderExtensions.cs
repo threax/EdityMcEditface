@@ -11,16 +11,16 @@ namespace Identity.NoSqlAuthorization
     public static class FileAuthorizationBuilderExtensions
     {
         public static IdentityBuilder AddNoAuthorization<TUser, TRole>(this IdentityBuilder builder) 
-            where TUser : NoUserUser 
-            where TRole : NoUserRole
+            where TUser : NoSqlUser 
+            where TRole : NoSqlRole
         {
             GetDefaultServices<TUser, TRole>(builder);
             return builder;
         }
 
         private static void GetDefaultServices<TUser, TRole>(IdentityBuilder builder) 
-            where TUser : NoUserUser
-            where TRole : NoUserRole
+            where TUser : NoSqlUser
+            where TRole : NoSqlRole
         {
             builder.Services.AddScoped(typeof(IAuthSerializer<TUser>), (sp) =>
             {
@@ -35,13 +35,13 @@ namespace Identity.NoSqlAuthorization
             builder.Services.AddScoped(typeof(IUserStore<TUser>), (sp) =>
             {
                 var serializer = sp.GetRequiredService<IAuthSerializer<TUser>>();
-                return new NoUserStore<TUser>(serializer);
+                return new NoSqlUserStore<TUser>(serializer);
             });
 
             builder.Services.AddScoped(typeof(IRoleStore<TRole>), (sp) =>
             {
                 var serializer = sp.GetRequiredService<IAuthSerializer<TRole>>();
-                return new NoUserRoleStore<TRole>(serializer);
+                return new NoSqlRoleStore<TRole>(serializer);
             });
         }
     }

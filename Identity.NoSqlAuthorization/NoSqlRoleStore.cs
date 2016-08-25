@@ -8,12 +8,12 @@ using System.Threading;
 
 namespace Identity.NoSqlAuthorization
 {
-    public class NoUserRoleStore<TRole> : IRoleClaimStore<TRole> where TRole : NoUserRole
+    public class NoSqlRoleStore<TRole> : IRoleClaimStore<TRole> where TRole : NoSqlRole
     {
         private List<TRole> roles;
         private IAuthSerializer<TRole> serializer;
 
-        public NoUserRoleStore(IAuthSerializer<TRole> serializer)
+        public NoSqlRoleStore(IAuthSerializer<TRole> serializer)
         {
             this.serializer = serializer;
             roles = new List<TRole>(serializer.Load());

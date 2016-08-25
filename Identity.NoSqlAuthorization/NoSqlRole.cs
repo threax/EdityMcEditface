@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Identity.NoSqlAuthorization
 {
-    public class NoUserRole
+    public class NoSqlRole
     {
-        public NoUserRole(String name)
+        public NoSqlRole(String name)
         {
             this.Name = name;
         }

@@ -15,11 +15,11 @@ namespace EdityMcEditface.Controllers
     [Route("edity/[controller]/[action]")]
     public class AuthController : Controller
     {
-        private UserManager<NoUserUser> userManager;
-        private SignInManager<NoUserUser> signInManager;
-        private RoleManager<NoUserRole> roleManager;
+        private UserManager<NoSqlUser> userManager;
+        private SignInManager<NoSqlUser> signInManager;
+        private RoleManager<NoSqlRole> roleManager;
 
-        public AuthController(UserManager<NoUserUser> userManager, SignInManager<NoUserUser> signInManager, RoleManager<NoUserRole> roleManager)
+        public AuthController(UserManager<NoSqlUser> userManager, SignInManager<NoSqlUser> signInManager, RoleManager<NoSqlRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -30,7 +30,7 @@ namespace EdityMcEditface.Controllers
         public async Task<IActionResult> CreateUnsafeDefaultUser()
         {
             //temp, create the user first
-            var user = new NoUserUser()
+            var user = new NoSqlUser()
             {
                 Name = "Anon",
                 Email = "anon@spcollege.edu"
@@ -56,7 +56,7 @@ namespace EdityMcEditface.Controllers
 
             foreach (var role in roles)
             {
-                var ourRole = new NoUserRole(role);
+                var ourRole = new NoSqlRole(role);
                 await roleManager.CreateAsync(ourRole);
                 await roleManager.UpdateAsync(ourRole);
             }

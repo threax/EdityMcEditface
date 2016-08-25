@@ -1,6 +1,4 @@
-﻿#define LOCAL_RUN_ENABLED
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

@@ -17,7 +17,7 @@
     },
     "EdityMcEditface": {
       "commandName": "Project",
-      "commandLineArgs": "--workingDirOff=\"custom_components\\HtmlRapier\\docs\"",
+      "commandLineArgs": "--workingDir=\"custom_components\\HtmlRapier\\docs\"",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/",
       "environmentVariables": {

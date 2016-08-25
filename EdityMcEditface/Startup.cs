@@ -145,7 +145,8 @@ namespace EdityMcEditface
             {
                 o.Cookies.ApplicationCookie.AuthenticationScheme = "Cookies";
             })
-           .AddNoAuthorization<NoSqlUser, NoSqlRole>();
+           .AddNoSqlAuthorization<NoSqlUser, NoSqlRole>()
+           .AddJsonSerializers<NoSqlUser, NoSqlRole>();
 
             switch (EdityServerConfiguration["Compiler"])
             {

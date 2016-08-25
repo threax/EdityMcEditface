@@ -1,8 +1,57 @@
 <h1>Edity McEditface Manual</h1>
-<p>This will contain info on how to use and setup Edity McEditface.</p>
-<p>&nbsp;</p>
-<h2>Command Line Args</h2>
-<p><code>--browse=URL</code> open default browser to relative url on site. Start with a /</p>
-<p><code>--server.urls=&quot;<a href="http://localhost:3421">http://host:po</a>rt&quot;</code> Set the server url.</p>
-<p><code>--config=PATH</code> Use the config file located at PATH</p>
-<p><code>--workingDir=PATH</code> Use PATH as the working dir for the program.</p>
+<p>Edity McEditface is a next generation cms that outputs static website content designed to&nbsp;interact with microservices for &quot;server side&quot; functions. The chief goals as as follows:</p>
+<ul>
+	<li>Natural editing interface.
+	<ul>
+		<li>Editing a page shows exactly what that page will look like when it is output minus the editing controls.</li>
+	</ul></li>
+	<li>Produce static content that is native to http and the web.
+	<ul>
+		<li>Produce fully formed .html, .css and .js files for our output. Any additional static data can be served with raw .json files and accessed with plain http.</li>
+		<li>No app&nbsp;processing on the server is required to serve these files.</li>
+	</ul></li>
+	<li>Development uses static html files.
+	<ul>
+		<li>Variables can be added to these files, but no logic. Any logic must be written in a javascript file.</li>
+		<li>Open and close html tags in the same file. Makes getting correct output much easier.</li>
+		<li>Include files by convention. Any page be it a content page or layout can define a .css, .js and .json (for settings) file. These will be automatically detected and used.</li>
+	</ul></li>
+	<li>Use a linked content system to gather html dependencies.
+	<ul>
+		<li>Instead of manually including your js and css files define them in a centralized location along with anything they depend on. Then you can refer to this in the page settings for a given page this way the locations and versions of these files can easily change without having to update a ton of different pages.</li>
+	</ul></li>
+	<li>Separation of CMS backend from deployed version of the website.
+	<ul>
+		<li>Allows offline content development. Create and edit&nbsp;a website on your local machine and push the output of the compiler to your server.</li>
+		<li>Also possible to host the CMS to provide easier collaboration.</li>
+		<li>Possibly improve sever security since now you are just serving raw files instead of running a web app with its own potential security holes.</li>
+	</ul></li>
+	<li>Use Git for version management.
+	<ul>
+		<li>Can also support other git clients against the repo in case of emergency.</li>
+		<li>Utilizes LibGit2Sharp internally.</li>
+		<li>Can work in a single shared repo mode or with a repo for each user of the site.</li>
+		<li>Enables chains of approval as changes move from one git repo to the next.</li>
+	</ul></li>
+	<li>NoSql, no database is required to run this program.
+	<ul>
+		<li>This does not prevent server side development, create a micro service and interact with it on your pages SPA style.</li>
+	</ul></li>
+	<li>No opinion on client side frameworks.
+	<ul>
+		<li>Edity McEditface uses the HtmlRapier javascript library with Bootstrap to provide its editing capabilities, but the website being constructed need not use these things.</li>
+	</ul></li>
+</ul>
+<h2>Configuration</h2>
+<p>There are 2 major modes for Edity McEditface to run under.</p>
+<h3>Local Mode</h3>
+<p>Local mode&nbsp;allows you to point the CMS at a folder that is a git repo and use that as the content. Any pages created or files uploaded will be added to this git repo.</p>
+<p>There are a few command line args to facilitate this:</p>
+<ul>
+	<li><code>--browse=URL</code> open default browser to relative url on site. Start with a /</li>
+	<li><code>--server.urls=&quot;<a href="http://localhost:3421">http://host:po</a>rt&quot;</code> Set the server url.</li>
+	<li><code>--config=PATH</code> Use the config file located at PATH</li>
+	<li><code>--workingDir=PATH</code> Use PATH as the working dir for the program.</li>
+</ul>
+<h3>Hosted Mode</h3>
+<p>Hosted mode allows you to run the cms more like a traditional cms like Wordpress. You must still have another site that hosts the static content for your normal visitors to use. The hosted CMS mostly acts the same as the local one.</p>

@@ -26,43 +26,43 @@ namespace EdityMcEditface.Controllers
             this.roleManager = roleManager;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> CreateUnsafeDefaultUser()
-        {
-            //temp, create the user first
-            var user = new NoSqlUser()
-            {
-                Name = "Anon",
-                Email = "anon@spcollege.edu"
-            };
-            await userManager.CreateAsync(user, "Password@43");
+        //[HttpGet]
+        //public async Task<IActionResult> CreateUnsafeDefaultUser()
+        //{
+        //    //temp, create the user first
+        //    var user = new NoSqlUser()
+        //    {
+        //        Name = "Anon",
+        //        Email = "anon@spcollege.edu"
+        //    };
+        //    await userManager.CreateAsync(user, "Password@43");
 
-            var claims = new[] {
-                    new Claim(ClaimTypes.Role, Roles.EditPages),
-                    new Claim(ClaimTypes.Role, Roles.Compile),
-                    new Claim(ClaimTypes.Role, Roles.UploadAnything),
-                    new Claim(ClaimTypes.Role, Roles.Shutdown),
-                };
+        //    var claims = new[] {
+        //            new Claim(ClaimTypes.Role, Roles.EditPages),
+        //            new Claim(ClaimTypes.Role, Roles.Compile),
+        //            new Claim(ClaimTypes.Role, Roles.UploadAnything),
+        //            new Claim(ClaimTypes.Role, Roles.Shutdown),
+        //        };
 
-            await userManager.AddClaimsAsync(user, claims);
+        //    await userManager.AddClaimsAsync(user, claims);
 
-            var roles = new[] {
-                    Roles.EditPages,
-                    Roles.Compile,
-                    Roles.UploadAnything,
-                    Roles.Shutdown,
-                };
-            await userManager.AddToRolesAsync(user, roles);
+        //    var roles = new[] {
+        //            Roles.EditPages,
+        //            Roles.Compile,
+        //            Roles.UploadAnything,
+        //            Roles.Shutdown,
+        //        };
+        //    await userManager.AddToRolesAsync(user, roles);
 
-            foreach (var role in roles)
-            {
-                var ourRole = new NoSqlRole(role);
-                await roleManager.CreateAsync(ourRole);
-                await roleManager.UpdateAsync(ourRole);
-            }
-            //end temp
-            return SafeRedirect("/");
-        }
+        //    foreach (var role in roles)
+        //    {
+        //        var ourRole = new NoSqlRole(role);
+        //        await roleManager.CreateAsync(ourRole);
+        //        await roleManager.UpdateAsync(ourRole);
+        //    }
+        //    //end temp
+        //    return SafeRedirect("/");
+        //}
 
         [HttpGet]
         public async Task<IActionResult> LogIn(String returnUrl)

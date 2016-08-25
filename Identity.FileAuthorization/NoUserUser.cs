@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -27,12 +28,16 @@ namespace Identity.FileAuthorization
 
         public List<String> Roles { get; private set; } = new List<string>();
 
+        [JsonProperty]
         internal String PasswordHash { get; set; }
 
+        [JsonProperty]
         internal String NormalizedEmail { get; set; }
 
+        [JsonProperty]
         internal String NormalizedName { get; set; }
 
+        [JsonProperty]
         internal string Id { get; private set; }
 
         internal bool HasClaim(Claim claim)

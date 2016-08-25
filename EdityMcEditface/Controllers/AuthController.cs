@@ -27,7 +27,7 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> LogIn(String returnUrl)
+        public async Task<IActionResult> CreateUnsafeDefaultUser()
         {
             //temp, create the user first
             var user = new NoUserUser()
@@ -54,16 +54,23 @@ namespace EdityMcEditface.Controllers
                 };
             await userManager.AddToRolesAsync(user, roles);
 
-            foreach(var role in roles)
+            foreach (var role in roles)
             {
-                await roleManager.CreateAsync(new NoUserRole(role));
+                var ourRole = new NoUserRole(role);
+                await roleManager.CreateAsync(ourRole);
+                await roleManager.UpdateAsync(ourRole);
             }
             //end temp
+            return SafeRedirect("/");
+        }
 
+        [HttpGet]
+        public async Task<IActionResult> LogIn(String returnUrl)
+        {
             var result = await signInManager.PasswordSignInAsync("Anon", "Password@43", false, false);
             if (result.Succeeded)
             {
-                return SafeRedirect(ref returnUrl);
+                return SafeRedirect(returnUrl);
             }
             else
             {
@@ -75,10 +82,10 @@ namespace EdityMcEditface.Controllers
         public async Task<IActionResult> LogOut(String returnUrl)
         {
             await signInManager.SignOutAsync();
-            return SafeRedirect(ref returnUrl);
+            return SafeRedirect(returnUrl);
         }
 
-        private IActionResult SafeRedirect(ref string returnUrl)
+        private IActionResult SafeRedirect(string returnUrl)
         {
             //See if we have anything
             if (String.IsNullOrEmpty(returnUrl))

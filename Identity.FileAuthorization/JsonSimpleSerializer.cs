@@ -9,6 +9,13 @@ namespace Identity.FileAuthorization
 {
     public class JsonSimpleSerializer<T> : IAuthSerializer<T>
     {
+        static JsonSerializerSettings serializerSettings = new JsonSerializerSettings();
+
+        static JsonSimpleSerializer()
+        {
+            serializerSettings.Converters.Add(new ClaimConverter());
+        }
+
         String file;
 
         public JsonSimpleSerializer(String file)
@@ -22,7 +29,7 @@ namespace Identity.FileAuthorization
             {
                 using (var tr = new StreamReader(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
                 {
-                    return JsonConvert.DeserializeObject<IEnumerable<T>>(tr.ReadToEnd());
+                    return JsonConvert.DeserializeObject<IEnumerable<T>>(tr.ReadToEnd(), serializerSettings);
                 }
             }
             return new T[0];
@@ -32,7 +39,7 @@ namespace Identity.FileAuthorization
         {
             using(var tw = new StreamWriter(File.Open(file, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None)))
             {
-                var json = JsonConvert.SerializeObject(roles);
+                var json = JsonConvert.SerializeObject(roles, serializerSettings);
                 tw.Write(json);
             }
         }

@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Identity.NoSqlAuthorization
 {
-    public static class FileAuthorizationBuilderExtensions
+    public static class NoSqlAuthorizationBuilderExtensions
     {
         public static IdentityBuilder AddNoAuthorization<TUser, TRole>(this IdentityBuilder builder) 
             where TUser : NoSqlUser 

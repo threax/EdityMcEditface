@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
 
-namespace Identity.FileAuthorization
+namespace Identity.NoSqlAuthorization
 {
     public class JsonSimpleSerializer<T> : IAuthSerializer<T>
     {

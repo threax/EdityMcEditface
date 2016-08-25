@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using System.Threading;
 
-namespace Identity.FileAuthorization
+namespace Identity.NoSqlAuthorization
 {
     public class NoUserRoleStore<TRole> : IRoleClaimStore<TRole> where TRole : NoUserRole
     {

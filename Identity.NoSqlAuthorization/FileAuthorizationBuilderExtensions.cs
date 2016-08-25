@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Identity.FileAuthorization
+namespace Identity.NoSqlAuthorization
 {
     public static class FileAuthorizationBuilderExtensions
     {

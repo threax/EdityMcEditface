@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Identity.FileAuthorization
+namespace Identity.NoSqlAuthorization
 {
     public class NoUserUser
     {

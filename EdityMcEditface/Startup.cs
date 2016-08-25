@@ -21,7 +21,7 @@ using Microsoft.AspNetCore.Http;
 using EdityMcEditface.Models.Auth;
 using EdityMcEditface.Models.Page;
 using Swashbuckle.Swagger.Model;
-using Identity.FileAuthorization;
+using Identity.NoSqlAuthorization;
 
 namespace EdityMcEditface
 {

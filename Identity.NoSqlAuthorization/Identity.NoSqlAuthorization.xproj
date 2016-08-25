@@ -7,8 +7,8 @@
 
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>6ac6e301-ae6e-4c8c-9bdf-1a6e172fe2bf</ProjectGuid>
-    <RootNamespace>Identity.FileAuthorization</RootNamespace>
+    <ProjectGuid>9b89389a-3523-4aef-9559-b1c04044afca</ProjectGuid>
+    <RootNamespace>Identity.NoSqlAuthorization</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>

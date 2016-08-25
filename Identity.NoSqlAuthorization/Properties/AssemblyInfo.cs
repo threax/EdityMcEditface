@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Identity.FileAuthorization")]
+[assembly: AssemblyProduct("Identity.NoSqlAuthorization")]
 [assembly: AssemblyTrademark("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6ac6e301-ae6e-4c8c-9bdf-1a6e172fe2bf")]
+[assembly: Guid("9b89389a-3523-4aef-9559-b1c04044afca")]

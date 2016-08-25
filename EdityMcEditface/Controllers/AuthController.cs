@@ -1,6 +1,6 @@
 ﻿using EdityMcEditface.ErrorHandling;
 using EdityMcEditface.Models.Auth;
-using Identity.FileAuthorization;
+using Identity.NoSqlAuthorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;

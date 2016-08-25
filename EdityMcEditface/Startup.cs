@@ -71,6 +71,13 @@ namespace EdityMcEditface
                 }
             }
 
+            var defaultProjectPath = Directory.GetCurrentDirectory();
+            //Check to see if this is our running folder, if so go into wwwroot
+            if(String.Compare(defaultProjectPath, siteRootPath.TrimEnd('/', '\\')) == 0)
+            {
+                defaultProjectPath = Path.Combine(defaultProjectPath, "wwwroot");
+            }
+
             builder = new ConfigurationBuilder()
             .SetBasePath(EditySettingsRoot)
             .AddInMemoryCollection(new Dictionary<String, String>
@@ -80,7 +87,7 @@ namespace EdityMcEditface
                     { "OutputPath", Path.Combine(Directory.GetCurrentDirectory(), $"..\\{Path.GetFileName(Directory.GetCurrentDirectory())}-EdityOutput") },
                     { "CompiledVirtualFolder", "" },
                     { "SiteName", "" },
-                    { "ProjectPath", Directory.GetCurrentDirectory() },
+                    { "ProjectPath", defaultProjectPath },
                     { "BackupFilePath", Path.Combine(siteRootPath, "wwwroot") }
             })
             .AddJsonFile(EditySettingsFile, optional: true, reloadOnChange: true)

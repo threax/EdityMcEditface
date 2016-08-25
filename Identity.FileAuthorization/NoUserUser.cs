@@ -13,9 +13,18 @@ namespace Identity.FileAuthorization
             Id = Guid.NewGuid().ToString();
         }
 
+        public NoUserUser(String name, String email)
+        {
+            this.Name = name;
+            this.Email = email;
+        }
+
         public string Email { get; set; }
+
         public string Name { get; set; }
+
         public List<Claim> Claims { get; private set; } = new List<Claim>();
+
         public List<String> Roles { get; private set; } = new List<string>();
 
         internal String PasswordHash { get; set; }

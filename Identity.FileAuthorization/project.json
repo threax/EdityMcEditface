@@ -2,7 +2,8 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "Microsoft.AspNetCore.Identity": "1.0.0"
+    "Microsoft.AspNetCore.Identity": "1.0.0",
+    "Newtonsoft.Json": "9.0.1"
   },
 
   "frameworks": {

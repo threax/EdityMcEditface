@@ -14,9 +14,11 @@ namespace Identity.FileAuthorization
         }
 
         public string Id { get; internal set; }
+
         public string NormalizedName { get; internal set; }
 
         public IList<Claim> Claims { get; private set; } = new List<Claim>();
+
         public string Name { get; internal set; }
 
         internal void AddClaim(Claim claim)

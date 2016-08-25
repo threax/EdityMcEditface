@@ -22,14 +22,26 @@ namespace Identity.FileAuthorization
             where TUser : NoUserUser
             where TRole : NoUserRole
         {
+            builder.Services.AddScoped(typeof(IAuthSerializer<TUser>), (sp) =>
+            {
+                return new JsonSimpleSerializer<TUser>("users.json");
+            });
+
+            builder.Services.AddScoped(typeof(IAuthSerializer<TRole>), (sp) =>
+            {
+                return new JsonSimpleSerializer<TRole>("roles.json");
+            });
+
             builder.Services.AddScoped(typeof(IUserStore<TUser>), (sp) =>
             {
-                var store =  new NoUserStore<TUser>();
-                return store;
+                var serializer = sp.GetRequiredService<IAuthSerializer<TUser>>();
+                return new NoUserStore<TUser>(serializer);
             });
+
             builder.Services.AddScoped(typeof(IRoleStore<TRole>), (sp) =>
             {
-                return new NoUserRoleStore<TRole>();
+                var serializer = sp.GetRequiredService<IAuthSerializer<TRole>>();
+                return new NoUserRoleStore<TRole>(serializer);
             });
         }
     }

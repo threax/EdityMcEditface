@@ -17,11 +17,13 @@ namespace Identity.FileAuthorization
         IUserLockoutStore<TUser>
         where TUser : NoUserUser
     {
-        private List<NoUserUser> users = new List<NoUserUser>();
+        private List<TUser> users;
+        private IAuthSerializer<TUser> serializer;
 
-        public NoUserStore()
+        public NoUserStore(IAuthSerializer<TUser> serializer)
         {
-
+            this.serializer = serializer;
+            users = new List<TUser>(serializer.Load());
         }
 
         public void Dispose()
@@ -64,7 +66,7 @@ namespace Identity.FileAuthorization
             {
                 if (userInstance.NormalizedEmail == normalizedEmail)
                 {
-                    return Task.FromResult((TUser)userInstance);
+                    return Task.FromResult(userInstance);
                 }
             }
             return Task.FromResult(default(TUser));
@@ -76,7 +78,7 @@ namespace Identity.FileAuthorization
             {
                 if (userInstance.Id == userId)
                 {
-                    return Task.FromResult((TUser)userInstance);
+                    return Task.FromResult(userInstance);
                 }
             }
             return Task.FromResult(default(TUser));
@@ -93,7 +95,7 @@ namespace Identity.FileAuthorization
             {
                 if (userInstance.NormalizedName == normalizedUserName)
                 {
-                    return Task.FromResult((TUser)userInstance);
+                    return Task.FromResult(userInstance);
                 }
             }
             return Task.FromResult(default(TUser));
@@ -172,7 +174,7 @@ namespace Identity.FileAuthorization
             {
                 if (userInstance.HasClaim(claim))
                 {
-                    list.Add((TUser)userInstance);
+                    list.Add(userInstance);
                 }
             }
             return Task.FromResult((IList<TUser>)list);
@@ -186,7 +188,7 @@ namespace Identity.FileAuthorization
             {
                 if (user.HasRole(roleName))
                 {
-                    list.Add((TUser)user);
+                    list.Add(user);
                 }
             }
 
@@ -283,6 +285,7 @@ namespace Identity.FileAuthorization
 
         public Task<IdentityResult> UpdateAsync(TUser user, CancellationToken cancellationToken)
         {
+            serializer.Save(users);
             return Task.FromResult(IdentityResult.Success);
         }
     }

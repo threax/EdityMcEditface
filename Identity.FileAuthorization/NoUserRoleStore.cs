@@ -10,11 +10,13 @@ namespace Identity.FileAuthorization
 {
     public class NoUserRoleStore<TRole> : IRoleClaimStore<TRole> where TRole : NoUserRole
     {
-        private List<NoUserRole> roles = new List<NoUserRole>();
+        private List<TRole> roles;
+        private IAuthSerializer<TRole> serializer;
 
-        public NoUserRoleStore()
+        public NoUserRoleStore(IAuthSerializer<TRole> serializer)
         {
-
+            this.serializer = serializer;
+            roles = new List<TRole>(serializer.Load());
         }
 
         public void Dispose()
@@ -46,7 +48,7 @@ namespace Identity.FileAuthorization
             {
                 if (role.Id == roleId)
                 {
-                    return Task.FromResult((TRole)role);
+                    return Task.FromResult(role);
                 }
             }
             return Task.FromResult(default(TRole));
@@ -58,7 +60,7 @@ namespace Identity.FileAuthorization
             {
                 if (role.NormalizedName == normalizedRoleName)
                 {
-                    return Task.FromResult((TRole)role);
+                    return Task.FromResult(role);
                 }
             }
             return Task.FromResult(default(TRole));
@@ -104,6 +106,7 @@ namespace Identity.FileAuthorization
 
         public Task<IdentityResult> UpdateAsync(TRole role, CancellationToken cancellationToken)
         {
+            serializer.Save(roles);
             return Task.FromResult(IdentityResult.Success);
         }
     }

@@ -62,7 +62,7 @@ namespace EdityMcEditface
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
 
-            if(EditySettingsRoot == null)
+            if (EditySettingsRoot == null)
             {
                 EditySettingsRoot = siteRootPath;
                 if (Configuration.getVal("EditySettings:ReadFromCurrentDirectory", false))
@@ -141,9 +141,11 @@ namespace EdityMcEditface
                 return new Signature(userInfo.User, userInfo.User + "@spcollege.edu", DateTime.Now);
             });
 
-            //services.AddTransient<AuthChecker, AuthChecker>();
-            services.AddIdentity<NoUserUser, NoUserRole>()
-            .AddNoAuthorization<NoUserUser, NoUserRole>();
+            services.AddIdentity<NoUserUser, NoUserRole>(o =>
+            {
+                o.Cookies.ApplicationCookie.AuthenticationScheme = "Cookies";
+            })
+           .AddNoAuthorization<NoUserUser, NoUserRole>();
 
             switch (EdityServerConfiguration["Compiler"])
             {
@@ -157,7 +159,7 @@ namespace EdityMcEditface
                             AppHostConfigPath = EdityServerConfiguration["AppHostConfigPath"]
                         });
 
-                        if(EdityServerConfiguration["ProjectMode"] == "OneRepoPerUser")
+                        if (EdityServerConfiguration["ProjectMode"] == "OneRepoPerUser")
                         {
                             builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
                         }
@@ -244,7 +246,7 @@ namespace EdityMcEditface
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {
-                AuthenticationScheme = "Identity.Application",// AuthenticationConfig.CookieAuthenticationSchemeName,
+                AuthenticationScheme = "Cookies",
                 LoginPath = new PathString("/edity/Auth/LogIn/"),
                 AccessDeniedPath = new PathString("/edity/Auth/AccessDenied/"),
                 AutomaticAuthenticate = true,

@@ -104,7 +104,8 @@ gulp.task("default", function () {
             "./custom_components/ckeditor/**/*",
             "./custom_components/edity/**/*",
             "./custom_components/codemirror/**/*",
-            "!**/*.intellisense.js"],
+            "!**/*.intellisense.js",
+            "!**/*.less"],
         baseName: './custom_components',
         dest: libDir
     });
@@ -140,6 +141,14 @@ gulp.task("default", function () {
         __dirname + '/custom_components/bootstrap/bootstrap-custom.less'
         ],
         dest: libDir + '/bootstrap/dist/css',
+        importPaths: path.join(__dirname),
+    });
+
+    compileLess({
+        files: [
+        __dirname + '/custom_components/edity/**/*.less'
+        ],
+        dest: libDir + '/edity',
         importPaths: path.join(__dirname),
     });
 });

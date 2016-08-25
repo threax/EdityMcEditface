@@ -2,7 +2,7 @@
   "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
   "contentMap": {
     "transitions": {
-      "css": [ "/edity/css/fade.min.css" ]
+      "css": [ "/lib/edity/css/fade.css" ]
     },
     "bootstrap-native": {
       "js": [ { "file": "/lib/bootstrap.native/dist/bootstrap-native.min.js" } ],
@@ -42,7 +42,7 @@
       "js": [ { "file": "/lib/ckeditor/ckeditor.js" } ]
     },
     "edityLoading": {
-      "css": [ "/edity/css/loading.min.css" ]
+      "css": [ "/lib/edity/css/loading.css" ]
     },
     "HtmlRapier": {
       "js": [

@@ -171,10 +171,7 @@ namespace EdityMcEditface
                     {
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var settings = createSiteBuilderSettings(s);
-                        var builder = new RoundRobinSiteBuilder(settings, new ServerManagerRoundRobinDeployer(settings.SiteName)
-                        {
-                            AppHostConfigPath = EdityServerConfiguration["AppHostConfigPath"]
-                        });
+                        var builder = new RoundRobinSiteBuilder(settings, new WebConfigRoundRobinDeployer());
 
                         if (EdityServerConfiguration["ProjectMode"] == "OneRepoPerUser")
                         {

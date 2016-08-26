@@ -3,7 +3,6 @@
     "HtmlRenderer": "1.0.0-*",
     "LibGit2Sharp": "0.22.0",
     "Swashbuckle": "6.0.0-beta901",
-    "Microsoft.Web.Administration": "7.0.0",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0",
     "Microsoft.Extensions.Configuration.Json": "1.0.0",
     "Microsoft.Extensions.Logging": "1.0.0",
@@ -40,7 +39,7 @@
     "emitEntryPoint": true,
     "preserveCompilationContext": true,
     "copyToOutput": [ "NativeBinaries\\amd64\\git2-785d8c4.dll", "NativeBinaries\\x86\\git2-785d8c4.dll" ],
-    "define": [ "LOCAL_RUN_ENABLED_OFF" ]
+    "define": [ "LOCAL_RUN_ENABLED" ]
   },
 
   "runtimeOptions": {

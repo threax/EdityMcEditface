@@ -12,7 +12,7 @@ namespace EdityMcEditface
     {
         public String siteName;
 
-        public ServerManagerRoundRobinDeployer(String siteName, String virtualDirectoryName)
+        public ServerManagerRoundRobinDeployer(String siteName)
         {
             this.siteName = siteName;
         }

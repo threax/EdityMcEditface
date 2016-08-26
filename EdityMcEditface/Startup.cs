@@ -93,7 +93,6 @@ namespace EdityMcEditface
                     { "ProjectMode", "SingleRepo" },
                     { "Compiler", "Direct" },
                     { "OutputPath", Path.Combine(Directory.GetCurrentDirectory(), $"..\\{Path.GetFileName(Directory.GetCurrentDirectory())}-EdityOutput") },
-                    { "CompiledVirtualFolder", "" },
                     { "SiteName", "" },
                     { "ProjectPath", defaultProjectPath },
                     { "BackupFilePath", Path.Combine(siteRootPath, "wwwroot") }
@@ -172,7 +171,7 @@ namespace EdityMcEditface
                     {
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var settings = createSiteBuilderSettings(s);
-                        var builder = new RoundRobinSiteBuilder(settings, new ServerManagerRoundRobinDeployer(settings.SiteName, settings.CompiledVirtualFolder)
+                        var builder = new RoundRobinSiteBuilder(settings, new ServerManagerRoundRobinDeployer(settings.SiteName)
                         {
                             AppHostConfigPath = EdityServerConfiguration["AppHostConfigPath"]
                         });
@@ -290,7 +289,6 @@ namespace EdityMcEditface
                 InDir = projectFinder.PublishedProjectPath,
                 BackupPath = projectFinder.BackupPath,
                 OutDir = EdityServerConfiguration["OutputPath"],
-                CompiledVirtualFolder = EdityServerConfiguration["CompiledVirtualFolder"],
                 SiteName = EdityServerConfiguration["SiteName"]
             };
         }

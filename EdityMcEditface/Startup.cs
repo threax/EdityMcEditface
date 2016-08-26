@@ -30,7 +30,7 @@ namespace EdityMcEditface
     public class Startup
     {
         public static String EditySettingsRoot { get; set; }
-        public static String EditySettingsFile { get; set; } = "edityserver.json";
+        public static String EditySettingsFile { get; set; } = "Config/edityserver.json";
 
         private String runningFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         private IHostingEnvironment env;

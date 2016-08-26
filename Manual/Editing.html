@@ -1,1 +1,5 @@
 <h1>Editing A Site</h1>
+<p>Edity McEditface uses a convention when building pages where any page (.html) file can have a javascript (.js), style sheet (.css) and a settings file (.json) with the same file name will be gathered up and used as a single page. When the content renders a stack is created starting at the content page and adding each layout defined in the settings above that up to the default layout that provides the main site structure.</p>
+<p><img height="661" src="/AutoUploadedImages\PageStack\9f3c9c54-5d24-4720-9d51-977a08e8df6e.png" width="308" /></p>
+<p>This graphic shows the page stack. The arrows point up the stack starting at the individual page on the bottom&nbsp;to the default.html master layout at the top. Each file in the page stack can define its own content files the same way the page file does. Any variables defined in the stack will be overwritten by the item that is lower on the stack, so a variable in a page file overrides a variable in a layout file. Any&nbsp;linked content specified at any point in the stack will be included in the final render only once even if it is defined multiple times.</p>
+<p>&nbsp;</p>

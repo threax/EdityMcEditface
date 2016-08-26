@@ -22,6 +22,8 @@ using EdityMcEditface.Models.Auth;
 using EdityMcEditface.Models.Page;
 using Swashbuckle.Swagger.Model;
 using Identity.NoSqlAuthorization;
+using EdityMcEditface.Models.Config;
+using Microsoft.Extensions.Options;
 
 namespace EdityMcEditface
 {
@@ -55,17 +57,23 @@ namespace EdityMcEditface
                 .SetBasePath(siteRootPath)
                 .AddInMemoryCollection(new Dictionary<String, String>
                 {
-                    { "EditySettings:ReadFromCurrentDirectory", "false" }
+                    { "EditySettings:ReadFromCurrentDirectory", "false" },
+                    { "EditySettings:UsersFile", Path.Combine(siteRootPath, "Config/users.json") },
+                    { "EditySettings:RolesFile", Path.Combine(siteRootPath, "Config/roles.json") }
                 })
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
 
+            EditySettings = new EditySettings();
+            ConfigurationBinder.Bind(Configuration.GetSection("EditySettings"), EditySettings);
+            
+
             if (EditySettingsRoot == null)
             {
                 EditySettingsRoot = siteRootPath;
-                if (Configuration.getVal("EditySettings:ReadFromCurrentDirectory", false))
+                if (EditySettings.ReadFromCurrentDirectory)
                 {
                     EditySettingsRoot = Path.Combine(Directory.GetCurrentDirectory());
                 }
@@ -97,6 +105,8 @@ namespace EdityMcEditface
         }
 
         public IConfigurationRoot Configuration { get; }
+
+        public EditySettings EditySettings { get; set; }
 
         public IConfigurationRoot EdityServerConfiguration { get; }
 
@@ -153,7 +163,7 @@ namespace EdityMcEditface
                 o.Cookies.ApplicationCookie.AuthenticationScheme = "Cookies";
             })
            .AddNoSqlAuthorization<NoSqlUser, NoSqlRole>()
-           .AddJsonSerializers<NoSqlUser, NoSqlRole>();
+           .AddJsonSerializers<NoSqlUser, NoSqlRole>(EditySettings.UsersFile, EditySettings.RolesFile);
 
             switch (EdityServerConfiguration["Compiler"])
             {

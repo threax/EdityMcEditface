@@ -1,0 +1,63 @@
+<h2>Configuration</h2>
+<p>There are 2 major modes for Edity McEditface to run under. These are provided by different builds that are built&nbsp;by setting the LOCAL_RUN_ENABLED Conditional Configuraiton Symbol on and off&nbsp;when building the project.</p>
+<p>When LOCAL_RUN_ENABLED is set the program will have additional command line options that it can take along with a ShutdownController that can close down the web server.</p>
+<h3>Local Mode</h3>
+<p>Local mode&nbsp;allows you to point the CMS at a folder that is a git repo and use that as the content. Any pages created or files uploaded will be added to this git repo.</p>
+<p>You can start a local instance by running EdityMcEditface.exe. You can use the following command line arguments to modify where the program gets its files.</p>
+<ul>
+	<li><code><font face="Courier New">--browse=URL</font></code> open default browser to relative url on site. Start with a /</li>
+	<li><code><font face="Courier New">--server.urls=&quot;http://host:port&quot;</font></code> Set the server url.</li>
+	<li><code><font face="Courier New">--config=PATH</font></code> Use the config file located at PATH</li>
+	<li><code><font face="Courier New">--workingDir=PATH</font></code> Use PATH as the working dir for the program.</li>
+</ul>
+<h3>Hosted Mode</h3>
+<p>Hosted mode allows you to run the cms more like a traditional hosted cms. You must still have another site that hosts the static content for your normal visitors to use. The hosted CMS mostly acts the same as the local one, but does not have any command line options and does not have a way to shut it down.</p>
+<h3>Common Configuration</h3>
+<p>No matter if you are using a local or hosted build the configuraiton works more or less the same way. The configuration will be handled on a file by file basis.</p>
+<h4>appsettings.json</h4>
+<p>This file is the default Asp.net Core configuration file. In addition to the standard settings for logging and site configuration provided by that file you can create an additional section called EditySettings that looks like the following:</p>
+<pre style="margin: 0px; line-height: 125%;"><span style="background-color: rgb(255, 240, 240);">&quot;EditySettings&quot;</span><span style="color: rgb(255, 0, 0); background-color: rgb(255, 170, 170);">:</span> {
+    <span style="color: rgb(0, 119, 0);">&quot;ReadFromCurrentDirectory&quot;</span>: <span style="color: rgb(0, 136, 0); font-weight: bold;">false</span>,
+    <span style="color: rgb(0, 119, 0);">&quot;UsersFile&quot;</span>: <span style="background-color: rgb(255, 240, 240);">&quot;Config/users.json&quot;</span>,
+    <span style="color: rgb(0, 119, 0);">&quot;RolesFile&quot;</span>: <span style="background-color: rgb(255, 240, 240);">&quot;Config/roles.json&quot;</span>
+  }</pre>
+<p>The meanings of each variable are as follows:</p>
+<ul>
+	<li>ReadFromCurrentDirectory - Determines if the server settings, which are in another file, can be read from the current working directory or must be read from the application directory. In hosted mode you should make this false and in local mode it sould be true.</li>
+	<li>UsersFile - The location of the file used to store user configuration info.</li>
+	<li>RolesFile - The location of the file used to store role configuration info.</li>
+</ul>
+<h4>edityserver.json</h4>
+<p>This file lives in the Config folder within the project root. It determines the settings for the cms itself. This is done separately from appsettings.json to help support local mode. A typical file will look like the following:</p>
+<pre style="margin: 0px; line-height: 125%;">{
+  <span style="color: rgb(0, 119, 0);">&quot;Compiler&quot;</span>: <span style="background-color: rgb(255, 240, 240);">&quot;Direct&quot;</span>,
+  <span style="color: rgb(0, 119, 0);">&quot;ProjectPath&quot;</span>: <span style="background-color: rgb(255, 240, 240);">&quot;..\\Manual&quot;</span>,
+  <span style="color: rgb(0, 119, 0);">&quot;OutputPath&quot;</span>: <span style="background-color: rgb(255, 240, 240);">&quot;..\\ManualOutput&quot;</span>,
+  <span style="color: rgb(0, 119, 0);">&quot;SiteName&quot;</span>: <span style="color: rgb(0, 136, 0); font-weight: bold;">null</span>,
+  <span style="color: rgb(0, 119, 0);">&quot;AppHostConfigPath&quot;</span>: <span style="color: rgb(0, 136, 0); font-weight: bold;">null</span>,
+  <span style="color: rgb(0, 119, 0);">&quot;ProjectMode&quot;</span>: <span style="background-color: rgb(255, 240, 240);">&quot;OneRepo&quot;</span>
+}</pre>
+<p>The meanings of each variable are as follows:</p>
+<ul>
+	<li>Compiler - &quot;Direct&quot; or &quot;RoundRobin&quot; - Defaults to Direct
+	<ul>
+		<li>Direct - Directly compile the website to the OutputPath. OutputPath will be deleted each time a new compile occures. This is best for local mode where you will upload the website output somewhere as a separate step.</li>
+		<li>RoundRobin - Outputs the site into a randomly created subfolder of OutputPath. When the compilation is complete the compiler will attempt to update the virtual directory in IIS to the new randomly created folder and will then delete the old output. This ensures that the sites stay online even during a compile. A few of the variables in this configuration file only take effect when the RoundRobin compiler is used:
+		<ul>
+			<li>SiteName - The name of the website in IIS, used to modify the current virtual directory to the new output.</li>
+			<li>AppHostConfigPath - The path to applicationHost.config for IIS. This way the virtual directories for the websites can be modified as needed.
+			<ul>
+				<li>Note this currently means that you have to give this app write permission. Another method using web.config url rewrites to go into the correct directory is being investigated that will not require permissions in system folders.</li>
+			</ul></li>
+		</ul></li>
+	</ul></li>
+	<li>ProjectPath - The path to the root project folder.</li>
+	<li>BackupFilePath - The path that &quot;backup&quot; files come out of. This is the directory that Edity will use to serve up the files that it needs for a&nbsp;project that are not included in your local project. This is things like the default layout, templates, editors and content files like css and javascript that make the editor work. It is extremely unlikely that you would change this.</li>
+	<li>ProjectMode - &quot;OneRepo&quot; or &quot;OneRepoPerUser&quot; - Defaults to OneRepo
+	<ul>
+		<li>OneRepo - Use a single content repository for all editors of the website. Useful in local mode, since that likely syncs somewhere else, but also useful if hosting with just one user.</li>
+		<li>OneRepoPerUser - Use a set of content directories for each user of the website. These are synchronized through a master repo and publised through a published repo. This is the reccomended mode for hosted websites, especially those with multiple users.</li>
+	</ul></li>
+	<li>OutputPath - The path to the root output folder.</li>
+</ul>
+<p>&nbsp;</p>

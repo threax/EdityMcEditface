@@ -29,9 +29,14 @@ namespace EdityMcEditface
 @"<?xml version=""1.0"" encoding=""UTF-8""?>
 <configuration>
   <system.webServer>
+    <defaultDocument>
+      <files>
+        <add value=""{0}/index.html""/>
+      </files>
+    </defaultDocument>
     <rewrite>
       <rules>
-        <rule name=""RewriteToGuidDir"" stopProcessing=""true"">
+        <rule name=""RewriteToGuidDir"">
           <match url=""^(.*)$"" ignoreCase=""false"" />
           <conditions logicalGrouping=""MatchAll"" >
             <add input=""{{REQUEST_FILENAME}}"" matchType=""IsFile"" ignoreCase=""false"" negate=""true"" />

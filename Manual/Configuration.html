@@ -42,14 +42,7 @@
 	<li><strong>Compiler </strong>- &quot;Direct&quot; or &quot;RoundRobin&quot; - Defaults to Direct
 	<ul>
 		<li><strong>Direct </strong>- Directly compile the website to the OutputPath. OutputPath will be deleted each time a new compile occures. This is best for local mode where you will upload the website output somewhere as a separate step.</li>
-		<li><strong>RoundRobin </strong>- Outputs the site into a randomly created subfolder of OutputPath. When the compilation is complete the compiler will attempt to update the virtual directory in IIS to the new randomly created folder and will then delete the old output. This ensures that the sites stay online even during a compile. A few of the variables in this configuration file only take effect when the RoundRobin compiler is used:
-		<ul>
-			<li><strong>SiteName </strong>- The name of the website in IIS, used to modify the current virtual directory to the new output.</li>
-			<li><strong>AppHostConfigPath </strong>- The path to applicationHost.config for IIS. This way the virtual directories for the websites can be modified as needed.
-			<ul>
-				<li>Note this currently means that you have to give this app write permission. Another method using web.config url rewrites to go into the correct directory is being investigated that will not require permissions in system folders.</li>
-			</ul></li>
-		</ul></li>
+		<li><strong>RoundRobin </strong>- Outputs the site into a randomly created subfolder of OutputPath. When the compilation is complete a web.config will be generated in the root with rewrite rules to point to the new instance. This keeps the content online even during a recompile.</li>
 	</ul></li>
 	<li><strong>ProjectPath </strong>- The path to the root project folder.</li>
 	<li><strong>BackupFilePath </strong>- The path that &quot;backup&quot; files come out of. This is the directory that Edity will use to serve up the files that it needs for a&nbsp;project that are not included in your local project. This is things like the default layout, templates, editors and content files like css and javascript that make the editor work. It is extremely unlikely that you would change this.</li>

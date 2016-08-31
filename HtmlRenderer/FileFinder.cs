@@ -392,6 +392,19 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         /// <summary>
+        /// Determine if a path is valid for writing and not protected. The file does not have to exist.
+        /// </summary>
+        /// <param name="path">The path to check.</param>
+        /// <returns>True if the path can be written, false otherwise.</returns>
+        public bool isValidWritablePath(String path)
+        {
+            //Attempt some normalization
+            path = TrimStartingPathChars(path);
+            var fullPath = Path.GetFullPath(Path.Combine(projectPath, path));
+            return fullPath.StartsWith(projectPath + Path.DirectorySeparatorChar) || fullPath == projectPath;
+        }
+
+        /// <summary>
         /// Get the page file with the given extension that exists in the same folder as hostFile,
         /// the linkFile will be returned with the correct path so you can easily stay in web
         /// server instead of file system scope.

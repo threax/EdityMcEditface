@@ -19,10 +19,12 @@ namespace EdityMcEditface.Controllers
     public class GitController : Controller
     {
         private Repository repo;
+        private FileFinder fileFinder;
 
-        public GitController(Repository repo)
+        public GitController(Repository repo, FileFinder fileFinder)
         {
             this.repo = repo;
+            this.fileFinder = fileFinder;
         }
 
         protected override void Dispose(bool disposing)
@@ -34,9 +36,7 @@ namespace EdityMcEditface.Controllers
         [HttpGet]
         public IEnumerable<UncommittedChange> UncommittedChanges()
         {
-            var status = repo.RetrieveStatus();
-
-            return status.Where(s => s.State != FileStatus.Ignored).Select(s =>
+            return QueryChanges(repo.RetrieveStatus()).Select(s =>
             {
                 return new UncommittedChange(s.State)
                 {
@@ -82,8 +82,13 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpGet("{*file}")]
-        public DiffInfo UncommittedDiff([FromServices] FileFinder fileFinder, String file)
+        public DiffInfo UncommittedDiff(String file)
         {
+            if (!isWritablePath(file))
+            {
+                throw new ErrorResultException($"Cannot access file '{file}'");
+            }
+
             var diff = new DiffInfo();
 
             //Original File
@@ -126,6 +131,11 @@ namespace EdityMcEditface.Controllers
         [HttpGet("{*file}")]
         public int HistoryCount(String file)
         {
+            if (!isWritablePath(file))
+            {
+                throw new ErrorResultException($"Cannot access file '{file}'");
+            }
+
             var fileInfo = new TargetFileInfo(file);
 
             return repo.Commits.QueryBy(fileInfo.DerivedFileName).Count();
@@ -144,8 +154,13 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpGet("{*file}")]
-        public MergeInfo MergeInfo([FromServices] FileFinder fileFinder, String file)
+        public MergeInfo MergeInfo(String file)
         {
+            if (!isWritablePath(file))
+            {
+                throw new ErrorResultException($"Cannot access file '{file}'");
+            }
+
             var targetFileInfo = new TargetFileInfo(file);
 
             using (var stream = new StreamReader(fileFinder.readFile(targetFileInfo.DerivedFileName)))
@@ -157,6 +172,11 @@ namespace EdityMcEditface.Controllers
         [HttpGet("{*file}")]
         public IEnumerable<History> History(String file, [FromQuery]int page = 0, [FromQuery]int count = 25)
         {
+            if (!isWritablePath(file))
+            {
+                throw new ErrorResultException($"Cannot access file '{file}'");
+            }
+
             var fileInfo = new TargetFileInfo(file);
 
             var historyCommits = repo.Commits.QueryBy(fileInfo.DerivedFileName).Skip(page * count).Take(count);
@@ -176,6 +196,11 @@ namespace EdityMcEditface.Controllers
         [HttpGet("{sha}/{*file}")]
         public FileStreamResult FileVersion(String sha, String file)
         {
+            if (!isWritablePath(file))
+            {
+                throw new ErrorResultException($"Cannot access file '{file}'");
+            }
+
             var contentTypeProvider = new FileExtensionContentTypeProvider();
             String contentType;
             if (contentTypeProvider.TryGetContentType(file, out contentType))
@@ -203,7 +228,10 @@ namespace EdityMcEditface.Controllers
 
             if (status.IsDirty)
             {
-                repo.Stage("*");
+                foreach(var path in QueryChanges(status).Select(s => s.FilePath))
+                {
+                    repo.Stage(path);
+                }
                 repo.Commit(newCommit.Message, signature, signature);
             }
         }
@@ -250,8 +278,13 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost("{*file}")]
-        public async Task Resolve([FromServices] FileFinder fileFinder, String file)
+        public async Task Resolve(String file)
         {
+            if (!isWritablePath(file))
+            {
+                throw new ErrorResultException($"Cannot access file '{file}'");
+            }
+
             if (repo.Index.Conflicts.Any(s => file == s.Ancestor.Path))
             {
                 throw new ErrorResultException($"No conflicts to resolve for {file}.");
@@ -267,8 +300,13 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost("{*file}")]
-        public async Task Revert([FromServices] FileFinder fileFinder, String file)
+        public async Task Revert(String file)
         {
+            if (!isWritablePath(file))
+            {
+                throw new ErrorResultException($"Cannot access file '{file}'");
+            }
+
             //Original File
             var historyCommits = repo.Commits.QueryBy(file);
             var latestCommit = historyCommits.FirstOrDefault();
@@ -289,6 +327,16 @@ namespace EdityMcEditface.Controllers
                     }
                 }
             }
+        }
+
+        private IEnumerable<StatusEntry> QueryChanges(RepositoryStatus status)
+        {
+            return status.Where(s => s.State != FileStatus.Ignored && isWritablePath(s.FilePath));
+        }
+
+        private bool isWritablePath(String path)
+        {
+            return fileFinder.isValidWritablePath(Path.Combine(repo.Info.WorkingDirectory, path));
         }
     }
 }

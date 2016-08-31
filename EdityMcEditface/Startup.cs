@@ -147,7 +147,7 @@ namespace EdityMcEditface
                 var userInfo = s.GetRequiredService<AuthUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
                 var projectFolder = projectFinder.GetUserProjectPath(userInfo.User);
-                return new Repository(projectFolder);
+                return new Repository(Repository.Discover(projectFolder));
             });
 
             services.AddTransient<Signature, Signature>(s =>

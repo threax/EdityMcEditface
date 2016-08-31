@@ -110,7 +110,8 @@ namespace EdityMcEditface.Controllers
             //Changed file
             var targetFileInfo = new TargetFileInfo(file);
 
-            using (var stream = new StreamReader(fileFinder.readFile(targetFileInfo.DerivedFileName)))
+            var repoPath = Path.Combine(repo.Info.WorkingDirectory, targetFileInfo.DerivedFileName);
+            using (var stream = new StreamReader(fileFinder.readFile(fileFinder.getProjectRelativePath(repoPath))))
             {
                 diff.Changed = stream.ReadToEnd().Replace("\r", "");
             }
@@ -163,7 +164,8 @@ namespace EdityMcEditface.Controllers
 
             var targetFileInfo = new TargetFileInfo(file);
 
-            using (var stream = new StreamReader(fileFinder.readFile(targetFileInfo.DerivedFileName)))
+            var repoPath = Path.Combine(repo.Info.WorkingDirectory, targetFileInfo.DerivedFileName);
+            using (var stream = new StreamReader(fileFinder.readFile(fileFinder.getProjectRelativePath(repoPath))))
             {
                 return new MergeInfo(stream);
             }
@@ -291,7 +293,8 @@ namespace EdityMcEditface.Controllers
             }
 
             TargetFileInfo fileInfo = new TargetFileInfo(file);
-            using (Stream stream = fileFinder.writeFile(fileInfo.OriginalFileName))
+            var repoPath = Path.Combine(repo.Info.WorkingDirectory, fileInfo.DerivedFileName);
+            using (var stream = fileFinder.writeFile(fileFinder.getProjectRelativePath(repoPath)))
             {
                 await this.Request.Form.Files.First().CopyToAsync(stream);
             }
@@ -317,8 +320,8 @@ namespace EdityMcEditface.Controllers
                 {
                     //Changed file
                     var targetFileInfo = new TargetFileInfo(file);
-
-                    using (var dest = fileFinder.writeFile(targetFileInfo.DerivedFileName))
+                    var repoPath = Path.Combine(repo.Info.WorkingDirectory, targetFileInfo.DerivedFileName);
+                    using (var dest = fileFinder.writeFile(fileFinder.getProjectRelativePath(repoPath)))
                     {
                         using (var source = blob.GetContentStream())
                         {

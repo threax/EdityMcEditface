@@ -48,7 +48,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// <param name="file"></param>
         public void eraseProjectFile(string file)
         {
-            var fullPath = getFullProjectPath(file);
+            var fullPath = normalizeProjectPath(file);
             if (File.Exists(fullPath))
             {
                 File.Delete(fullPath);
@@ -62,7 +62,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// <param name="file"></param>
         public void erasePage(string file)
         {
-            var fullPath = getFullProjectPath(file);
+            var fullPath = normalizeProjectPath(file);
             if (File.Exists(fullPath))
             {
                 var jsFile = getPageFile(fullPath, fullPath, ".js");
@@ -118,7 +118,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns>A stream to the requested file.</returns>
         public Stream writeFile(String file)
         {
-            var savePath = getFullProjectPath(file);
+            var savePath = normalizeProjectPath(file);
             String directory = Path.GetDirectoryName(savePath);
             if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
@@ -134,7 +134,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// <param name="file">The name of the file to delete.</param>
         public void deleteFile(String file)
         {
-            file = getFullProjectPath(file);
+            file = normalizeProjectPath(file);
             if (File.Exists(file))
             {
                 File.Delete(file);
@@ -147,7 +147,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// <param name="folder">The name of the folder to delete.</param>
         public void deleteFolder(String folder)
         {
-            folder = getFullProjectPath(folder);
+            folder = normalizeProjectPath(folder);
             if (Directory.Exists(folder))
             {
                 //Do a couple trys
@@ -178,7 +178,7 @@ namespace EdityMcEditface.HtmlRenderer
             get
             {
                 IEnumerable<Template> query = null;
-                var templatePath = getFullProjectPath("edity/templates");
+                var templatePath = normalizeProjectPath("edity/templates");
                 if (Directory.Exists(templatePath))
                 {
                     query = Directory.EnumerateFiles(templatePath).Select(t => new Template()
@@ -188,7 +188,7 @@ namespace EdityMcEditface.HtmlRenderer
                 }
                 else
                 {
-                    templatePath = getBackupPath("edity/templates");
+                    templatePath = normalizeBackupPath("edity/templates");
                     if (Directory.Exists(templatePath))
                     {
                         query = Directory.EnumerateFiles(templatePath).Select(t => new Template()
@@ -217,8 +217,8 @@ namespace EdityMcEditface.HtmlRenderer
                 else
                 {
                     //Copy all files from normal and backup location
-                    copyFolderContents(getFullProjectPath(file), outDir, file);
-                    copyFolderContents(getBackupPath(file), outDir, file);
+                    copyFolderContents(normalizeProjectPath(file), outDir, file);
+                    copyFolderContents(normalizeBackupPath(file), outDir, file);
                 }
             }
         }
@@ -235,11 +235,11 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 if (!String.IsNullOrEmpty(page.PageCssPath))
                 {
-                    copyFileIfNotExists(getFullProjectPath(page.PageCssPath), safePathCombine(outDir, page.PageCssPath));
+                    copyFileIfNotExists(normalizeProjectPath(page.PageCssPath), safePathCombine(outDir, page.PageCssPath));
                 }
                 if (!String.IsNullOrEmpty(page.PageScriptPath))
                 {
-                    copyFileIfNotExists(getFullProjectPath(page.PageScriptPath), safePathCombine(outDir, page.PageScriptPath));
+                    copyFileIfNotExists(normalizeProjectPath(page.PageScriptPath), safePathCombine(outDir, page.PageScriptPath));
                 }
                 foreach (var content in pageStack.LinkedContentFiles)
                 {
@@ -254,14 +254,14 @@ namespace EdityMcEditface.HtmlRenderer
 
         public IEnumerable<String> enumerateFiles(String path)
         {
-            var fullPath = getFullProjectPath(path);
+            var fullPath = normalizeProjectPath(path);
             var removeLength = projectPath.Length;
             return Directory.EnumerateFiles(fullPath).Select(s => s.Substring(removeLength));
         }
 
         public IEnumerable<String> enumerateDirectories(String path)
         {
-            var fullPath = getFullProjectPath(path);
+            var fullPath = normalizeProjectPath(path);
             var removeLength = projectPath.Length;
             return Directory.EnumerateDirectories(fullPath).Select(s => s.Substring(removeLength));
         }
@@ -302,7 +302,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns></returns>
         public PageStackItem loadPageStackContent(String path)
         {
-            var realPath = getFullProjectPath(path);
+            var realPath = normalizeProjectPath(path);
             if (realPath == null)
             {
                 throw new FileNotFoundException($"Cannot find page stack file {path}", path);
@@ -324,13 +324,13 @@ namespace EdityMcEditface.HtmlRenderer
         {
             usedBackup = false;
 
-            var realFile = getFullProjectPath(file);
+            var realFile = normalizeProjectPath(file);
             if (File.Exists(realFile))
             {
                 return realFile;
             }
 
-            string backupFileLoc = getBackupPath(file);
+            string backupFileLoc = normalizeBackupPath(file);
             if (File.Exists(backupFileLoc))
             {
                 usedBackup = true;
@@ -360,7 +360,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns>The PageDefinition for the page. Will be a default instance if the file does not exist.</returns>
         public PageDefinition getProjectPageDefinition(TargetFileInfo fileInfo)
         {
-            return getPageDefinition(getFullProjectPath(fileInfo.HtmlFile));
+            return getPageDefinition(normalizeProjectPath(fileInfo.HtmlFile));
         }
 
         private PageDefinition getPageDefinition(String file)
@@ -398,10 +398,21 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns>True if the path can be written, false otherwise.</returns>
         public bool isValidWritablePath(String path)
         {
-            //Attempt some normalization
-            path = TrimStartingPathChars(path);
-            var fullPath = Path.GetFullPath(Path.Combine(projectPath, path));
-            return fullPath.StartsWith(projectPath + Path.DirectorySeparatorChar) || fullPath == projectPath;
+            bool inside;
+            normalizeProjectPath(path, out inside);
+            return inside;
+        }
+
+        /// <summary>
+        /// Get the path passed in relative to the project path. This can be used to get the in project part
+        /// of a path from a path relative to a parent directory that is outside the project. If the path
+        /// is not in the project path a NotSupportedException is thrown.
+        /// </summary>
+        /// <param name="path">The path to lookup.</param>
+        /// <returns></returns>
+        public String getProjectRelativePath(String path)
+        {
+            return normalizeProjectPath(path).Substring(projectPath.Length + 1);
         }
 
         /// <summary>
@@ -490,44 +501,6 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         /// <summary>
-        /// Get the full path of path in the project directory. Will throw a NotSupportedException if the path is not in the project folder.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private String getFullProjectPath(String path)
-        {
-            path = TrimStartingPathChars(path);
-            var fullPath = Path.GetFullPath(Path.Combine(projectPath, path));
-            if (fullPath.StartsWith(projectPath + Path.DirectorySeparatorChar) || fullPath == projectPath)
-            {
-                return fullPath;
-            }
-            else
-            {
-                throw new NotSupportedException($"Cannot load file from directory outside of {projectPath}");
-            }
-        }
-
-        /// <summary>
-        /// Get the backup file path. Will throw a NotSupportedException if the path is not in the backup folder.
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        private string getBackupPath(string file)
-        {
-            file = TrimStartingPathChars(file);
-            var fullPath = Path.GetFullPath(Path.Combine(backupPath, file));
-            if (fullPath.StartsWith(backupPath + Path.DirectorySeparatorChar))
-            {
-                return fullPath;
-            }
-            else
-            {
-                throw new NotSupportedException($"Cannot load file from directory outside of {backupPath}");
-            }
-        }
-
-        /// <summary>
         /// Find the full real file path if the file exists or null if it does not.
         /// file name.
         /// </summary>
@@ -556,7 +529,7 @@ namespace EdityMcEditface.HtmlRenderer
                 //Also load the backup file and merge it in
                 //This does load twice if the backup loc is the project loc, but that won't be common
                 //and if so can check for it here.
-                file = getBackupPath(projectFilePath);
+                file = normalizeBackupPath(projectFilePath);
                 using (var reader = new StreamReader(System.IO.File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
                 {
                     projectStr = reader.ReadToEnd();
@@ -582,6 +555,68 @@ namespace EdityMcEditface.HtmlRenderer
                     PageCssPath = getPageFile(realPath, path, "css"),
                 };
             }
+        }
+
+        /// <summary>
+        /// Get the full path of path in the project directory. Will throw a NotSupportedException if the path is not in the project folder.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private String normalizeProjectPath(String path)
+        {
+            bool inside;
+            var fullPath = normalizeProjectPath(path, out inside);
+            if (!inside)
+            {
+                throw new NotSupportedException($"Cannot load file from directory outside of {projectPath}");
+            }
+            return fullPath;
+        }
+
+        /// <summary>
+        /// Normalize a project path, this will fill out withinPath to be true if the path is inside the project path and
+        /// false if not.
+        /// </summary>
+        /// <param name="path">The path to check.</param>
+        /// <param name="withinPath">True if path is inside backupPath.</param>
+        /// <returns>The fully expanded path string.</returns>
+        private String normalizeProjectPath(String path, out bool withinPath)
+        {
+            path = TrimStartingPathChars(path);
+            var fullPath = Path.GetFullPath(Path.Combine(projectPath, path));
+            withinPath = fullPath.StartsWith(projectPath + Path.DirectorySeparatorChar) || fullPath == projectPath;
+            return fullPath;
+        }
+
+        /// <summary>
+        /// Get the backup file path. Will throw a NotSupportedException if the path is not in the backup folder.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        private String normalizeBackupPath(String path)
+        {
+            bool inside;
+            var fullPath = normalizeBackupPath(path, out inside);
+            if (!inside)
+            {
+                throw new NotSupportedException($"Cannot load file from directory outside of {backupPath}");
+            }
+            return fullPath;
+        }
+
+        /// <summary>
+        /// Normalize a backup path, this will fill out withinPath to be true if the path is inside the backup path and
+        /// false if not.
+        /// </summary>
+        /// <param name="path">The path to check.</param>
+        /// <param name="withinPath">True if path is inside backupPath.</param>
+        /// <returns>The fully expanded path string.</returns>
+        private String normalizeBackupPath(String path, out bool withinPath)
+        {
+            path = TrimStartingPathChars(path);
+            var fullPath = Path.GetFullPath(Path.Combine(backupPath, path));
+            withinPath = fullPath.StartsWith(backupPath + Path.DirectorySeparatorChar) || fullPath == backupPath;
+            return fullPath;
         }
     }
 }

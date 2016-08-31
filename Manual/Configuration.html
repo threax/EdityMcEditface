@@ -18,14 +18,12 @@
 <p>This file is the default Asp.net Core configuration file. In addition to the standard settings for logging and site configuration provided by that file you can create an additional section called EditySettings that looks like the following:</p>
 <pre style="margin: 0px; line-height: 125%;"><span style="background-color: rgb(255, 240, 240);">&quot;EditySettings&quot;</span><span style="color: rgb(255, 0, 0); background-color: rgb(255, 170, 170);">:</span> {
     <span style="color: rgb(0, 119, 0);">&quot;ReadFromCurrentDirectory&quot;</span>: <span style="color: rgb(0, 136, 0); font-weight: bold;">false</span>,
-    <span style="color: rgb(0, 119, 0);">&quot;UsersFile&quot;</span>: <span style="background-color: rgb(255, 240, 240);">&quot;Config/users.json&quot;</span>,
-    <span style="color: rgb(0, 119, 0);">&quot;RolesFile&quot;</span>: <span style="background-color: rgb(255, 240, 240);">&quot;Config/roles.json&quot;</span>
+    <span style="color: rgb(0, 119, 0);">&quot;UsersFile&quot;</span>: <span style="background-color: rgb(255, 240, 240);">&quot;Config/users.json&quot;</span>
   }</pre>
 <p>The meanings of each variable are as follows:</p>
 <ul>
 	<li><strong>ReadFromCurrentDirectory </strong>- Determines if the server settings, which are in another file, can be read from the current working directory or must be read from the application directory. In hosted mode you should make this false and in local mode it sould be true.</li>
 	<li><strong>UsersFile </strong>- The location of the file used to store user configuration info.</li>
-	<li><strong>RolesFile </strong>- The location of the file used to store role configuration info.</li>
 </ul>
 <h3>edityserver.json</h3>
 <p>This file lives in the Config folder within the project root. It determines the settings for the cms itself. This is done separately from appsettings.json to help support local mode. A typical file will look like the following:</p>

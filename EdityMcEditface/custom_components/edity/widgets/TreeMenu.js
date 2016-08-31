@@ -173,13 +173,14 @@ jsns.define("edity.widgets.treemenu.controller", [
                 childItemsModel.setData(folder.children, function (folderComponent, data) {
                     var id = data.menuItemId;
                     var menuCacheInfo = getMenuCacheInfo(id);
+                    var childToggle = folderComponent.getToggle('children');
 
                     var listener = {
                         toggleMenuItem: function (evt) {
                             evt.preventDefault();
 
                             buildMenu(folderComponent, menuCacheInfo, data);
-                            toggleMenu(menuCacheInfo, folderComponent.getToggle('children'));
+                            toggleMenu(menuCacheInfo, childToggle);
                         }
                     };
                     if (editMode) {

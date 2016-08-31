@@ -10,7 +10,5 @@ namespace EdityMcEditface.Models.Config
         public bool ReadFromCurrentDirectory { get; set; }
 
         public String UsersFile { get; set; }
-
-        public String RolesFile { get; set; }
     }
 }

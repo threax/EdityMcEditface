@@ -59,7 +59,6 @@ namespace EdityMcEditface
                 {
                     { "EditySettings:ReadFromCurrentDirectory", "false" },
                     { "EditySettings:UsersFile", Path.Combine(siteRootPath, "Config/users.json") },
-                    { "EditySettings:RolesFile", Path.Combine(siteRootPath, "Config/roles.json") }
                 })
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
@@ -162,7 +161,7 @@ namespace EdityMcEditface
                 o.Cookies.ApplicationCookie.AuthenticationScheme = "Cookies";
             })
            .AddNoSqlAuthorization<NoSqlUser, NoSqlRole>()
-           .AddJsonSerializers<NoSqlUser, NoSqlRole>(EditySettings.UsersFile, EditySettings.RolesFile);
+           .AddJsonSerializers<NoSqlUser, NoSqlRole>(EditySettings.UsersFile, Roles.Create);
 
             switch (EdityServerConfiguration["Compiler"])
             {

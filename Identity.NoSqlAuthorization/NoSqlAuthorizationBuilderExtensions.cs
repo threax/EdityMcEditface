@@ -45,5 +45,73 @@ namespace Identity.NoSqlAuthorization
 
             return builder;
         }
+
+        public static IdentityBuilder AddJsonSerializers<TUser, TRole>(this IdentityBuilder builder, String usersFile, IAuthSerializer<TRole> roleSerializer)
+            where TUser : NoSqlUser
+            where TRole : NoSqlRole
+        {
+            builder.Services.AddScoped(typeof(IAuthSerializer<TUser>), (sp) =>
+            {
+                return new JsonSimpleSerializer<TUser>(usersFile);
+            });
+
+            builder.Services.AddScoped(typeof(IAuthSerializer<TRole>), (sp) =>
+            {
+                return roleSerializer;
+            });
+
+            return builder;
+        }
+
+        public static IdentityBuilder AddJsonSerializers<TUser, TRole>(this IdentityBuilder builder, String usersFile, Func<IEnumerable<TRole>> roleProvider)
+            where TUser : NoSqlUser
+            where TRole : NoSqlRole
+        {
+            builder.Services.AddScoped(typeof(IAuthSerializer<TUser>), (sp) =>
+            {
+                return new JsonSimpleSerializer<TUser>(usersFile);
+            });
+
+            builder.Services.AddScoped(typeof(IAuthSerializer<TRole>), (sp) =>
+            {
+                return new InMemoryStaticAuthSerializer<TRole>(roleProvider);
+            });
+
+            return builder;
+        }
+
+        public static IdentityBuilder AddSerializers<TUser, TRole>(this IdentityBuilder builder, IAuthSerializer<TUser> userSerializer, IAuthSerializer<TRole> roleSerializer)
+            where TUser : NoSqlUser
+            where TRole : NoSqlRole
+        {
+            builder.Services.AddScoped(typeof(IAuthSerializer<TUser>), (sp) =>
+            {
+                return userSerializer;
+            });
+
+            builder.Services.AddScoped(typeof(IAuthSerializer<TRole>), (sp) =>
+            {
+                return roleSerializer;
+            });
+
+            return builder;
+        }
+
+        public static IdentityBuilder AddSerializers<TUser, TRole>(this IdentityBuilder builder, Func<IEnumerable<TUser>> userProvider, Func<IEnumerable<TRole>> roleProvider)
+            where TUser : NoSqlUser
+            where TRole : NoSqlRole
+        {
+            builder.Services.AddScoped(typeof(IAuthSerializer<TUser>), (sp) =>
+            {
+                return new InMemoryStaticAuthSerializer<TUser>(userProvider);
+            });
+
+            builder.Services.AddScoped(typeof(IAuthSerializer<TRole>), (sp) =>
+            {
+                return new InMemoryStaticAuthSerializer<TRole>(roleProvider);
+            });
+
+            return builder;
+        }
     }
 }

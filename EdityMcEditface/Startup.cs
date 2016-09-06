@@ -24,6 +24,7 @@ using Swashbuckle.Swagger.Model;
 using Identity.NoSqlAuthorization;
 using EdityMcEditface.Models.Config;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.FileProviders;
 
 namespace EdityMcEditface
 {

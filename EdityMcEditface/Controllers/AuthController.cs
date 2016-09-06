@@ -1,8 +1,11 @@
 ﻿using EdityMcEditface.ErrorHandling;
+using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.Models.Auth;
 using Identity.NoSqlAuthorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.Controllers
 {
+    [Authorize]
     [Route("edity/[controller]/[action]")]
     public class AuthController : Controller
     {
@@ -65,16 +69,31 @@ namespace EdityMcEditface.Controllers
         //}
 
         [HttpGet]
-        public async Task<IActionResult> LogIn(String returnUrl)
+        [AllowAnonymous]
+        public IActionResult LogIn([FromServices] FileFinder fileFinder, String returnUrl)
         {
-            var result = await signInManager.PasswordSignInAsync("Anon", "Password@43", false, false);
+            var templateEnvironment = new TemplateEnvironment(Request.Path, fileFinder.Project);
+            var dr = new HtmlDocumentRenderer(templateEnvironment);
+            var pageStack = new PageStack(templateEnvironment, fileFinder);
+            pageStack.pushLayout("login.html");
+            var document = dr.getDocument(pageStack.Pages);
+            return Content(document.DocumentNode.OuterHtml, new MediaTypeHeaderValue("text/html"));
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [AutoValidate("Invalid Login")]
+        public async Task<IActionResult> LogIn([FromBody] LoginModel loginModel)
+        {
+            var result = await signInManager.PasswordSignInAsync(loginModel.UserName, loginModel.Password, false, false);
             if (result.Succeeded)
             {
-                return SafeRedirect(returnUrl);
+                return StatusCode(200);
+                //return SafeRedirect(returnUrl);
             }
             else
             {
-                throw new ErrorResultException("Invalid login");
+                throw new ErrorResultException("Invalid login", System.Net.HttpStatusCode.BadRequest);
             }
         }
 

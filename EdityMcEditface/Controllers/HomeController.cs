@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace EdityMcEditface.NetCore.Controllers
 {
     [Authorize(Roles=Roles.EditPages)]
-    //[Authorize]
     public class HomeController : Controller
     {
         private FileFinder fileFinder;
@@ -31,6 +30,7 @@ namespace EdityMcEditface.NetCore.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index(String file)
         {
             targetFileInfo = new TargetFileInfo(file);
@@ -41,17 +41,29 @@ namespace EdityMcEditface.NetCore.Controllers
             switch (targetFileInfo.Extension)
             {
                 case ".html":
+                    if (!User.IsInRole(Roles.EditPages))
+                    {
+                        return StatusCode((int)HttpStatusCode.Unauthorized);
+                    }
                     if (targetFileInfo.IsProjectFile)
                     {
                         return new FileStreamResult(fileFinder.readFile(targetFileInfo.HtmlFile), "text/html");
                     }
                     return Redirect(targetFileInfo.NoHtmlRedirect);
                 case "":
+                    if (!User.IsInRole(Roles.EditPages))
+                    {
+                        return StatusCode((int)HttpStatusCode.Unauthorized);
+                    }
                     return buildAsEditor(pageStack);
                 default:
                     var cleanExtension = targetFileInfo.Extension.TrimStart('.') + ".html";
                     if (fileFinder.doesLayoutExist(cleanExtension))
                     {
+                        if (!User.IsInRole(Roles.EditPages))
+                        {
+                            return StatusCode((int)HttpStatusCode.Unauthorized);
+                        }
                         return buildAsPage(pageStack, cleanExtension);
                     }
                     return returnFile(file);

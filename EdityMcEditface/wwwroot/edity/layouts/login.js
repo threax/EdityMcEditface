@@ -20,6 +20,7 @@ function (exports, module, http, controller, uri) {
             .then(function (res) {
                 var queryObj = uri.getQueryObject();
                 var url = uri.parseUri(queryObj.returnurl);
+                //Use only relative part to make sure we stay on the same domain
                 window.location.href = url.relative;
             })
             .catch(function (err) {

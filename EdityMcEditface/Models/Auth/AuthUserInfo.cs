@@ -16,7 +16,15 @@ namespace EdityMcEditface.Models.Auth
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public String User
+        public ClaimsPrincipal ClaimsPrincipal
+        {
+            get
+            {
+                return _httpContextAccessor.HttpContext.User;
+            }
+        }
+
+        public String UserName
         {
             get
             {

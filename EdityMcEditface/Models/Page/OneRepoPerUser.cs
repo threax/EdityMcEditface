@@ -20,6 +20,10 @@ namespace EdityMcEditface.Models.Page
 
         public String GetUserProjectPath(String user)
         {
+            if(user == null)
+            {
+                user = "null-reserved-user";
+            }
             var repoPath = Path.Combine(projectFolder, "UserRepos", user);
             if (!Directory.Exists(repoPath))
             {

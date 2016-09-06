@@ -25,6 +25,7 @@ using Identity.NoSqlAuthorization;
 using EdityMcEditface.Models.Config;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Identity;
 
 namespace EdityMcEditface
 {
@@ -139,7 +140,7 @@ namespace EdityMcEditface
             {
                 var userInfo = s.GetRequiredService<AuthUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
-                var projectFolder = projectFinder.GetUserProjectPath(userInfo.User);
+                var projectFolder = projectFinder.GetUserProjectPath(userInfo.UserName);
                 return new FileFinder(projectFolder, projectFinder.BackupPath);
             });
 
@@ -147,22 +148,26 @@ namespace EdityMcEditface
             {
                 var userInfo = s.GetRequiredService<AuthUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
-                var projectFolder = projectFinder.GetUserProjectPath(userInfo.User);
+                var projectFolder = projectFinder.GetUserProjectPath(userInfo.UserName);
                 return new Repository(Repository.Discover(projectFolder));
             });
 
             services.AddTransient<Signature, Signature>(s =>
             {
                 var userInfo = s.GetRequiredService<AuthUserInfo>();
-                return new Signature(userInfo.User, userInfo.User + "@spcollege.edu", DateTime.Now);
+                var userManager = s.GetRequiredService<UserManager<EdityNoSqlUser>>();
+                var userTask = userManager.GetUserAsync(userInfo.ClaimsPrincipal);
+                userTask.Wait();
+                var user = userTask.Result;
+                return new Signature(user.DisplayName, user.Email, DateTime.Now);
             });
 
-            services.AddIdentity<NoSqlUser, NoSqlRole>(o =>
+            services.AddIdentity<EdityNoSqlUser, NoSqlRole>(o =>
             {
                 o.Cookies.ApplicationCookie.AuthenticationScheme = "Cookies";
             })
-           .AddNoSqlAuthorization<NoSqlUser, NoSqlRole>()
-           .AddJsonSerializers<NoSqlUser, NoSqlRole>(EditySettings.UsersFile, Roles.Create);
+           .AddNoSqlAuthorization<EdityNoSqlUser, NoSqlRole>()
+           .AddJsonSerializers<EdityNoSqlUser, NoSqlRole>(EditySettings.UsersFile, Roles.Create);
 
             switch (EdityServerConfiguration["Compiler"])
             {

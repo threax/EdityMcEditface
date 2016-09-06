@@ -19,11 +19,11 @@ namespace EdityMcEditface.Controllers
     [Route("edity/[controller]/[action]")]
     public class AuthController : Controller
     {
-        private UserManager<NoSqlUser> userManager;
-        private SignInManager<NoSqlUser> signInManager;
+        private UserManager<EdityNoSqlUser> userManager;
+        private SignInManager<EdityNoSqlUser> signInManager;
         private RoleManager<NoSqlRole> roleManager;
 
-        public AuthController(UserManager<NoSqlUser> userManager, SignInManager<NoSqlUser> signInManager, RoleManager<NoSqlRole> roleManager)
+        public AuthController(UserManager<EdityNoSqlUser> userManager, SignInManager<EdityNoSqlUser> signInManager, RoleManager<NoSqlRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;

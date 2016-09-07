@@ -269,7 +269,8 @@ namespace EdityMcEditface
                 LoginPath = new PathString("/edity/Auth/LogIn/"),
                 AccessDeniedPath = new PathString("/edity/Auth/AccessDenied/"),
                 AutomaticAuthenticate = true,
-                AutomaticChallenge = true
+                AutomaticChallenge = true,
+                CookieSecure = env.IsDevelopment() ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always
             });
 
             app.UseMvc(routes =>

@@ -97,11 +97,11 @@ namespace EdityMcEditface.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> LogOut(String returnUrl)
+        [HttpPost]
+        public async Task<IActionResult> LogOut()
         {
             await signInManager.SignOutAsync();
-            return SafeRedirect(returnUrl);
+            return StatusCode(200);
         }
 
         private IActionResult SafeRedirect(string returnUrl)
@@ -123,6 +123,45 @@ namespace EdityMcEditface.Controllers
             }
 
             return Redirect(returnUrl);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [AutoValidate("Invalid Registration Data")]
+        public async Task<IActionResult> Register([FromBody] RegisterModel loginModel)
+        {
+            var user = new EdityNoSqlUser()
+            {
+                Name = loginModel.UserName,
+                DisplayName = loginModel.DisplayName,
+                Email = loginModel.Email
+            };
+
+            var idResult = await userManager.CreateAsync(user, loginModel.Password);
+            if (idResult.Succeeded)
+            {
+                var claims = new[] {
+                    new Claim(ClaimTypes.Role, Roles.EditPages),
+                    new Claim(ClaimTypes.Role, Roles.Compile),
+                    new Claim(ClaimTypes.Role, Roles.UploadAnything),
+                    new Claim(ClaimTypes.Role, Roles.Shutdown),
+                };
+
+                idResult = await userManager.AddClaimsAsync(user, claims);
+                if (idResult.Succeeded)
+                {
+                    await signInManager.SignInAsync(user, false);
+                    return StatusCode(200);
+                }
+                else
+                {
+                    throw new ErrorResultException("Error registering new user, cannot add claims.");
+                }
+            }
+            else
+            {
+                throw new ErrorResultException("Error registering new user, cannot create user.");
+            }
         }
     }
 }

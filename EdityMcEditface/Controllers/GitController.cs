@@ -219,6 +219,7 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public void Commit([FromServices]Signature signature, [FromBody]NewCommit newCommit)
         {
             if (!repo.Index.IsFullyMerged)
@@ -239,6 +240,7 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public void Pull([FromServices]Signature signature)
         {
             if (UncommittedChanges().Any())
@@ -262,6 +264,7 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public void Push()
         {
             if (UncommittedChanges().Any())
@@ -280,6 +283,7 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost("{*file}")]
+        [ValidateAntiForgeryToken]
         public async Task Resolve(String file)
         {
             if (!isWritablePath(file))
@@ -303,6 +307,7 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost("{*file}")]
+        [ValidateAntiForgeryToken]
         public async Task Revert(String file)
         {
             if (!isWritablePath(file))

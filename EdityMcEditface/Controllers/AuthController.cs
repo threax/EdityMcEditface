@@ -2,7 +2,9 @@
 using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.Models.Auth;
 using Identity.NoSqlAuthorization;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -30,44 +32,6 @@ namespace EdityMcEditface.Controllers
             this.roleManager = roleManager;
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> CreateUnsafeDefaultUser()
-        //{
-        //    //temp, create the user first
-        //    var user = new NoSqlUser()
-        //    {
-        //        Name = "Anon",
-        //        Email = "anon@spcollege.edu"
-        //    };
-        //    await userManager.CreateAsync(user, "Password@43");
-
-        //    var claims = new[] {
-        //            new Claim(ClaimTypes.Role, Roles.EditPages),
-        //            new Claim(ClaimTypes.Role, Roles.Compile),
-        //            new Claim(ClaimTypes.Role, Roles.UploadAnything),
-        //            new Claim(ClaimTypes.Role, Roles.Shutdown),
-        //        };
-
-        //    await userManager.AddClaimsAsync(user, claims);
-
-        //    var roles = new[] {
-        //            Roles.EditPages,
-        //            Roles.Compile,
-        //            Roles.UploadAnything,
-        //            Roles.Shutdown,
-        //        };
-        //    await userManager.AddToRolesAsync(user, roles);
-
-        //    foreach (var role in roles)
-        //    {
-        //        var ourRole = new NoSqlRole(role);
-        //        await roleManager.CreateAsync(ourRole);
-        //        await roleManager.UpdateAsync(ourRole);
-        //    }
-        //    //end temp
-        //    return SafeRedirect("/");
-        //}
-
         [HttpGet]
         [AllowAnonymous]
         public IActionResult LogIn([FromServices] FileFinder fileFinder, String returnUrl)
@@ -88,8 +52,7 @@ namespace EdityMcEditface.Controllers
             var result = await signInManager.PasswordSignInAsync(loginModel.UserName, loginModel.Password, false, false);
             if (result.Succeeded)
             {
-                return StatusCode(200);
-                //return SafeRedirect(returnUrl);
+                return Redirect("/edity/Auth/GetAntiforgeryToken");
             }
             else
             {
@@ -97,32 +60,21 @@ namespace EdityMcEditface.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> LogOut()
+        [HttpGet]
+        public IActionResult GetAntiforgeryToken([FromServices] IAntiforgery antiforgery)
         {
-            await signInManager.SignOutAsync();
+            var tokens = antiforgery.GetAndStoreTokens(HttpContext);
+            HttpContext.Response.Cookies.Append(tokens.HeaderName, tokens.RequestToken, new CookieOptions() { HttpOnly = false });
             return StatusCode(200);
         }
 
-        private IActionResult SafeRedirect(string returnUrl)
+        [HttpPost]
+        public async Task<IActionResult> LogOut([FromServices] IAntiforgery antiforgery)
         {
-            //See if we have anything
-            if (String.IsNullOrEmpty(returnUrl))
-            {
-                returnUrl = "~/";
-            }
-
-            //Make sure they aren't trying to redirect to another website
-            try
-            {
-                Uri uri = new Uri(returnUrl, UriKind.Relative);
-            }
-            catch(UriFormatException)
-            {
-                returnUrl = "~/";
-            }
-
-            return Redirect(returnUrl);
+            await signInManager.SignOutAsync();
+            var tokens = antiforgery.GetAndStoreTokens(HttpContext);
+            HttpContext.Response.Cookies.Delete(tokens.HeaderName);
+            return StatusCode(200);
         }
 
         [HttpPost]

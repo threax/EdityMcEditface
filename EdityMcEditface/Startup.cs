@@ -203,6 +203,8 @@ namespace EdityMcEditface
                     break;
             }
 
+            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+
             // Add framework services.
             services.AddMvc(o =>
             {
@@ -263,7 +265,7 @@ namespace EdityMcEditface
                 app.UseSwaggerUi();
             }
 
-            app.UseIdentity();
+            //app.UseIdentity();
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {
                 AuthenticationScheme = "Cookies",

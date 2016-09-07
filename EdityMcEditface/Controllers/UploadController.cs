@@ -40,6 +40,7 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost("edity/upload/{*file}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
@@ -51,6 +52,7 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpDelete("edity/upload/{*file}")]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);

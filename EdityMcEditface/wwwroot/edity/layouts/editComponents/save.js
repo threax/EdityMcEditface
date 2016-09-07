@@ -13,6 +13,11 @@ function (exports, module, navmenu, pageService, saveService) {
         saveService.saveStartedEvent.add(load, load.on);
         saveService.saveCompletedEvent.add(load, load.off);
         saveService.saveErrorEvent.add(load, load.off);
+        saveService.saveErrorEvent.add(this, saveError);
+
+        function saveError() {
+            alert('Error saving changes. Please try again later.')
+        }
 
         function save(evt) {
             evt.preventDefault();

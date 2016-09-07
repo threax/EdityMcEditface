@@ -35,8 +35,9 @@ jsns.define("edity.PageService", [
             var content = exports.getHtml();
             var blob = new Blob([content], { type: "text/html" });
             return http.upload('/edity/Page/' + window.location.pathname, blob)
-            .catch(function (data) {
+            .catch(function (err) {
                 needsSave = true;
+                throw err;
             });
         }
     }

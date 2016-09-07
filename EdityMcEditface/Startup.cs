@@ -263,6 +263,7 @@ namespace EdityMcEditface
                 app.UseSwaggerUi();
             }
 
+            app.UseIdentity();
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {
                 AuthenticationScheme = "Cookies",

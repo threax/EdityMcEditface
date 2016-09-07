@@ -50,6 +50,12 @@
       ],
       "hasMin": true
     },
+    "HtmlRapierConfig": {
+      "js": [
+        { "file": "/lib/edity/config.js" }
+      ],
+      "dependencies": [ "HtmlRapier" ]
+    },
     "TreeMenu": {
       "js": [
         {

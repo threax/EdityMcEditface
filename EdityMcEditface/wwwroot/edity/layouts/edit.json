@@ -1,5 +1,5 @@
 ﻿{
-  "linkedContent": [ "transitions", "bootstrap", "HtmlRapier", "edityLoading" ],
+  "linkedContent": [ "HtmlRapierConfig", "transitions", "bootstrap", "HtmlRapier", "edityLoading" ],
   "vars": {
     "title": "Untitled"
   }

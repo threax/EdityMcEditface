@@ -52,7 +52,7 @@ namespace EdityMcEditface.Controllers
             var result = await signInManager.PasswordSignInAsync(loginModel.UserName, loginModel.Password, false, false);
             if (result.Succeeded)
             {
-                return Redirect("/edity/Auth/GetAntiforgeryToken");
+                return StatusCode(200);
             }
             else
             {
@@ -60,12 +60,16 @@ namespace EdityMcEditface.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult GetAntiforgeryToken([FromServices] IAntiforgery antiforgery)
+        [HttpPost]
+        public AntiforgeryToken AntiforgeryToken([FromServices] IAntiforgery antiforgery)
         {
             var tokens = antiforgery.GetAndStoreTokens(HttpContext);
             HttpContext.Response.Cookies.Append(tokens.HeaderName, tokens.RequestToken, new CookieOptions() { HttpOnly = false });
-            return StatusCode(200);
+            return new AntiforgeryToken()
+            {
+                HeaderName = tokens.HeaderName,
+                RequestToken = tokens.RequestToken
+            };
         }
 
         [HttpPost]

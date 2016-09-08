@@ -3,5 +3,5 @@
 jsns.run([
     "hr.anticsrf"
 ], function (exports, module, anticsrf) {
-    anticsrf.activate("");
+    anticsrf.getToken("/edity/Auth/AntiforgeryToken");
 });

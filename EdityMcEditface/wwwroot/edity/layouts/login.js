@@ -17,7 +17,7 @@ function (exports, module, http, controller, uri) {
             errorToggle.off();
             var data = loginModel.getData();
             http.post('/edity/Auth/LogIn', data)
-            .then(function (res) {
+            .then(function (data) {
                 var queryObj = uri.getQueryObject();
                 var url = uri.parseUri(queryObj.returnurl);
                 //Use only relative part to make sure we stay on the same domain

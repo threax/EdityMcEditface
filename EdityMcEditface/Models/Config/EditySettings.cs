@@ -10,5 +10,9 @@ namespace EdityMcEditface.Models.Config
         public bool ReadFromCurrentDirectory { get; set; }
 
         public String UsersFile { get; set; }
+
+        public bool DetailedErrors { get; set; }
+
+        public bool SecureCookies { get; set; }
     }
 }

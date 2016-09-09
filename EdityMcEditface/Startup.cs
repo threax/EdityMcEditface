@@ -61,6 +61,8 @@ namespace EdityMcEditface
                 {
                     { "EditySettings:ReadFromCurrentDirectory", "false" },
                     { "EditySettings:UsersFile", Path.Combine(siteRootPath, "Config/users.json") },
+                    { "EditySettings:DetailedErrors", env.IsEnvironment("Development").ToString() },
+                    { "EditySettings:SecureCookies", (!env.IsEnvironment("Development")).ToString() }
                 })
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
@@ -208,7 +210,7 @@ namespace EdityMcEditface
             // Add framework services.
             services.AddMvc(o =>
             {
-                o.Filters.Add(new ExceptionToJsonFilterAttribute(env.IsEnvironment("Development")));
+                o.Filters.Add(new ExceptionToJsonFilterAttribute(EditySettings.DetailedErrors));
             })
             .AddJsonOptions(o =>
             {
@@ -273,7 +275,7 @@ namespace EdityMcEditface
                 AccessDeniedPath = new PathString("/edity/Auth/AccessDenied/"),
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
-                CookieSecure = env.IsDevelopment() ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always
+                CookieSecure = EditySettings.SecureCookies ? CookieSecurePolicy.Always : CookieSecurePolicy.SameAsRequest
             });
 
             app.UseMvc(routes =>

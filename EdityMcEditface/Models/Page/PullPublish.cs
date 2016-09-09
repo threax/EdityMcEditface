@@ -30,16 +30,18 @@ namespace EdityMcEditface.Models.Page
             }
             if (!Repository.IsValid(publishRepoPath))
             {
-                Repository.Clone(Path.Combine(masterRepoPath, "Master"), publishRepoPath);
+                Repository.Clone(masterRepoPath, publishRepoPath);
             }
             else
             {
-                Repository repo = new Repository(publishRepoPath);
-                var result = repo.Network.Pull(new Signature("PublishAgent", "PublishAgent@notaperson.com", DateTime.Now), new PullOptions());
-                switch (result.Status)
+                using (Repository repo = new Repository(publishRepoPath))
                 {
-                    case MergeStatus.Conflicts:
-                        throw new Exception("Pull from source resulted in conflicts, cannot publish. The publish repo will need to be fixed manually.");
+                    var result = repo.Network.Pull(new Signature("PublishAgent", "PublishAgent@notaperson.com", DateTime.Now), new PullOptions());
+                    switch (result.Status)
+                    {
+                        case MergeStatus.Conflicts:
+                            throw new Exception("Pull from source resulted in conflicts, cannot publish. The publish repo will need to be fixed manually.");
+                    }
                 }
             }
         }

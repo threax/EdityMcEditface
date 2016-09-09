@@ -32,28 +32,41 @@ namespace EdityMcEditface.Controllers
         [HttpGet("Status")]
         public CompilerStatus Status([FromServices] ProjectFinder projectFinder)
         {
-            if (projectFinder.PublishedProjectPath != projectFinder.MasterRepoPath)
+            var publishRepoPath = projectFinder.PublishedProjectPath;
+            var masterRepoPath = projectFinder.MasterRepoPath;
+
+            if (publishRepoPath != masterRepoPath)
             {
-                var repo = new Repository(projectFinder.PublishedProjectPath);
-
-                repo.Fetch("origin");
-
-                var head = repo.Head.Commits.First();
-                var tracked = repo.Head.TrackedBranch.Commits.First();
-                var divergence = repo.ObjectDatabase.CalculateHistoryDivergence(head, tracked);
-
-                var behindCommits = repo.Commits.QueryBy(new CommitFilter()
+                if (!Directory.Exists(publishRepoPath))
                 {
-                    SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time,
-                    IncludeReachableFrom = divergence.Another,
-                    ExcludeReachableFrom = divergence.CommonAncestor
-                });
-
-                return new CompilerStatus()
+                    Directory.CreateDirectory(publishRepoPath);
+                }
+                if (!Repository.IsValid(publishRepoPath))
                 {
-                    BehindBy = divergence.BehindBy.GetValueOrDefault(),
-                    BehindHistory = behindCommits.Select(c => new History(c))
-                };
+                    Repository.Clone(masterRepoPath, publishRepoPath);
+                }
+
+                using (var repo = new Repository(publishRepoPath))
+                {
+                    repo.Fetch("origin");
+
+                    var head = repo.Head.Commits.First();
+                    var tracked = repo.Head.TrackedBranch.Commits.First();
+                    var divergence = repo.ObjectDatabase.CalculateHistoryDivergence(head, tracked);
+
+                    var behindCommits = repo.Commits.QueryBy(new CommitFilter()
+                    {
+                        SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time,
+                        IncludeReachableFrom = divergence.Another,
+                        ExcludeReachableFrom = divergence.CommonAncestor
+                    });
+
+                    return new CompilerStatus()
+                    {
+                        BehindBy = divergence.BehindBy.GetValueOrDefault(),
+                        BehindHistory = behindCommits.Select(c => new History(c))
+                    };
+                }
             }
 
             return new CompilerStatus()

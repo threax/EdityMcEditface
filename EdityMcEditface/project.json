@@ -53,7 +53,8 @@
       "Views",
       "appsettings.json",
       "web.config",
-      "NativeBinaries"
+      "NativeBinaries",
+      "Config"
     ]
   },
 

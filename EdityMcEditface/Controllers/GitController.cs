@@ -291,7 +291,7 @@ namespace EdityMcEditface.Controllers
                 throw new ErrorResultException($"Cannot access file '{file}'");
             }
 
-            if (repo.Index.Conflicts.Any(s => file == s.Ancestor.Path))
+            if (!repo.Index.Conflicts.Any(s => file == s.Ancestor.Path))
             {
                 throw new ErrorResultException($"No conflicts to resolve for {file}.");
             }

@@ -20,7 +20,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         public RoundRobinSiteBuilder(SiteBuilderSettings settings, RoundRobinDeployer deployer)
         {
             this.deployer = deployer;
-            baseOutputFolder = settings.OutDir;
+            baseOutputFolder = Path.GetFullPath(settings.OutDir);
             outputFullPath = Path.GetFullPath(Path.Combine(baseOutputFolder, Guid.NewGuid().ToString()));
             settings.OutDir = outputFullPath;
             this.settings = settings;

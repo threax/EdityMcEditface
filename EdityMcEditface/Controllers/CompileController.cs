@@ -64,7 +64,7 @@ namespace EdityMcEditface.Controllers
                     return new CompilerStatus()
                     {
                         BehindBy = divergence.BehindBy.GetValueOrDefault(),
-                        BehindHistory = behindCommits.Select(c => new History(c))
+                        BehindHistory = behindCommits.Select(c => new History(c)).ToList()
                     };
                 }
             }

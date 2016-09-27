@@ -17,8 +17,9 @@
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0",
     "Microsoft.Extensions.Configuration.CommandLine": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
-    "Identity.NoSqlAuthorization": "1.0.0-*",
-    "Microsoft.AspNetCore.Antiforgery": "1.0.0"
+    "Identity.NoSqlAuthorization": "1.0.1-*",
+    "Microsoft.AspNetCore.Antiforgery": "1.0.0",
+    "ExceptionErrorHandler": "1.0.0-*"
   },
 
   "tools": {

@@ -9,7 +9,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.ErrorHandling
+namespace ExceptionErrorHandler
 {
     /// <summary>
     /// This filter checks for the exceptions thrown by the attributes defined in this system

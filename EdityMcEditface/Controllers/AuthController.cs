@@ -1,4 +1,4 @@
-﻿using EdityMcEditface.ErrorHandling;
+﻿using ExceptionErrorHandler;
 using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.Models.Auth;
 using Identity.NoSqlAuthorization;

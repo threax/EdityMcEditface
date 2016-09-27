@@ -1,4 +1,4 @@
-﻿using EdityMcEditface.ErrorHandling;
+﻿using ExceptionErrorHandler;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;

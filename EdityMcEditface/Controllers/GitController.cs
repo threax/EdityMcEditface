@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using System.IO;
 using EdityMcEditface.Models.Git;
 using Microsoft.AspNetCore.Authorization;
-using EdityMcEditface.ErrorHandling;
+using ExceptionErrorHandler;
 using EdityMcEditface.HtmlRenderer;
 using System.Net;
 

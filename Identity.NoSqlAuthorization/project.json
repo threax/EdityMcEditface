@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.0.0-*",
+  "version": "1.0.1-*",
 
   "dependencies": {
     "Microsoft.AspNetCore.Identity": "1.0.0",
@@ -16,5 +16,10 @@
     "net452": {
 
     }
+  },
+  "scripts": {
+    "postcompile": [
+      "dotnet pack --no-build --configuration %compile:Configuration%"
+    ]
   }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.ErrorHandling
+namespace ExceptionErrorHandler
 {
     /// <summary>
     /// This class represents an error result. It is mostly used to provide a strongly

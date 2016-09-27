@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.ErrorHandling
+namespace ExceptionErrorHandler
 {
     public class ErrorResultException : Exception
     {

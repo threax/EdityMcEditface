@@ -210,7 +210,7 @@ namespace EdityMcEditface
             // Add framework services.
             services.AddMvc(o =>
             {
-                o.Filters.Add(new ExceptionToJsonFilterAttribute(EditySettings.DetailedErrors));
+                o.UseExceptionErrorFilters(EditySettings.DetailedErrors);
             })
             .AddJsonOptions(o =>
             {

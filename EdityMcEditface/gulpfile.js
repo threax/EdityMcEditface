@@ -89,7 +89,8 @@ gulp.task("default", function () {
                "./node_modules/ckeditor/plugins/widget/**/*",
                "./node_modules/ckeditor/plugins/lineutils/**/*",
                "./node_modules/ckeditor/plugins/notification/**/*",
-               "./node_modules/ckeditor/plugins/image/**/*", ],
+               "./node_modules/ckeditor/plugins/image/**/*", 
+               "./node_modules/jsns/jsns.min.js"],
         baseName: './node_modules',
         dest: libDir
     });

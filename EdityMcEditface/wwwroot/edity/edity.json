@@ -1,6 +1,9 @@
 ﻿{
   "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
   "contentMap": {
+    "jsns": {
+      "js": [ { "file": "/lib/jsns/jsns.min.js" } ]
+    },
     "transitions": {
       "css": [ "/lib/edity/css/fade.css" ]
     },
@@ -48,7 +51,10 @@
       "js": [
         { "file": "/lib/HtmlRapier/HtmlRapier.js" }
       ],
-      "hasMin": true
+      "hasMin": true,
+      "dependencies": [
+        "jsns"
+      ]
     },
     "HtmlRapierConfig": {
       "js": [

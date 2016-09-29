@@ -14,6 +14,8 @@ var uglifycss = require('gulp-uglifycss');
 var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
 
+var htmlRapierBuild = require(__dirname + '/custom_components/HtmlRapier/build');
+
 var webroot = "./wwwroot/";
 
 var paths = {
@@ -110,31 +112,7 @@ gulp.task("default", function () {
         dest: libDir
     });
 
-    var htmlRapierLibs = [
-        "./custom_components/HtmlRapier/src/jsns.js",
-        "./custom_components/HtmlRapier/src/polyfill.js",
-        "./custom_components/HtmlRapier/src/**/*.js",
-        "./custom_components/HtmlRapier/plugin/**/*",
-        "./custom_components/HtmlRapier/widgets/**/*",
-        "./custom_components/HtmlRapier/data/**/*",
-        "!**/*.intellisense.js"
-    ]
-
-    //Minify htmlRapier, need to specify the load order for jsns to be first
-    var htmlRapierCompile = {
-        libs: htmlRapierLibs,
-        output: "HtmlRapier",
-        dest: "./custom_components/HtmlRapier",
-        //base: './custom_components/HtmlRapier',
-        sourceRoot: __dirname + "/custom_components/HtmlRapier/src/"
-    };
-
-    minifyJs(htmlRapierCompile);
-    concatJs(htmlRapierCompile);
-
-    htmlRapierCompile.dest = "./wwwroot/lib/HtmlRapier";
-    minifyJs(htmlRapierCompile);
-    concatJs(htmlRapierCompile);
+    htmlRapierBuild(__dirname, __dirname + "/wwwroot/lib/HtmlRapier");
 
     compileLess({
         files: [

@@ -1,3 +1,6 @@
 [submodule "EdityMcEditface/custom_components/HtmlRapier"]
 	path = EdityMcEditface/custom_components/HtmlRapier
 	url = https://github.com/threax/HtmlRapier.git
+[submodule "EdityMcEditface/custom_components/htmlrapierwidgets"]
+	path = EdityMcEditface/custom_components/htmlrapierwidgets
+	url = https://github.com/threax/htmlrapierwidgets.git

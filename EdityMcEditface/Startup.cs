@@ -164,12 +164,12 @@ namespace EdityMcEditface
                 return new Signature(user.DisplayName, user.Email, DateTime.Now);
             });
 
-            services.AddIdentity<EdityNoSqlUser, NoSqlRole>(o =>
-            {
-                o.Cookies.ApplicationCookie.AuthenticationScheme = "Cookies";
-            })
-           .AddNoSqlAuthorization<EdityNoSqlUser, NoSqlRole>()
-           .AddJsonSerializers<EdityNoSqlUser, NoSqlRole>(EditySettings.UsersFile, Roles.Create);
+           // services.AddIdentity<EdityNoSqlUser, NoSqlRole>(o =>
+           // {
+           //     o.Cookies.ApplicationCookie.AuthenticationScheme = "Cookies";
+           // })
+           //.AddNoSqlAuthorization<EdityNoSqlUser, NoSqlRole>()
+           //.AddJsonSerializers<EdityNoSqlUser, NoSqlRole>(EditySettings.UsersFile, Roles.Create);
 
             switch (EdityServerConfiguration["Compiler"])
             {
@@ -268,15 +268,15 @@ namespace EdityMcEditface
             }
 
             //app.UseIdentity();
-            app.UseCookieAuthentication(new CookieAuthenticationOptions()
-            {
-                AuthenticationScheme = "Cookies",
-                LoginPath = new PathString("/edity/Auth/LogIn/"),
-                AccessDeniedPath = new PathString("/edity/Auth/AccessDenied/"),
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                CookieSecure = EditySettings.SecureCookies ? CookieSecurePolicy.Always : CookieSecurePolicy.SameAsRequest
-            });
+            //app.UseCookieAuthentication(new CookieAuthenticationOptions()
+            //{
+            //    AuthenticationScheme = "Cookies",
+            //    LoginPath = new PathString("/edity/Auth/LogIn/"),
+            //    AccessDeniedPath = new PathString("/edity/Auth/AccessDenied/"),
+            //    AutomaticAuthenticate = true,
+            //    AutomaticChallenge = true,
+            //    CookieSecure = EditySettings.SecureCookies ? CookieSecurePolicy.Always : CookieSecurePolicy.SameAsRequest
+            //});
 
             app.UseMvc(routes =>
             {

@@ -90,7 +90,7 @@ gulp.task("default", function () {
                "./node_modules/ckeditor/plugins/lineutils/**/*",
                "./node_modules/ckeditor/plugins/notification/**/*",
                "./node_modules/ckeditor/plugins/image/**/*", 
-               "./node_modules/jsns/jsns.min.js"],
+        ],//"./node_modules/jsns/jsns.min.js"
         baseName: './node_modules',
         dest: libDir
     });
@@ -107,6 +107,7 @@ gulp.task("default", function () {
             "./custom_components/ckeditor/**/*",
             "./custom_components/edity/**/*",
             "./custom_components/codemirror/**/*",
+            "./custom_components/jsns/jsns.js",
             "!**/*.intellisense.js",
             "!**/*.less"],
         baseName: './custom_components',

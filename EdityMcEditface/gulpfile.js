@@ -15,6 +15,7 @@ var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
 
 var htmlRapierBuild = require(__dirname + '/custom_components/HtmlRapier/build');
+var htmlRapierWidgetsBuild = require(__dirname + '/custom_components/HtmlRapierWidgets/build');
 
 var webroot = "./wwwroot/";
 
@@ -115,6 +116,7 @@ gulp.task("default", function () {
     });
 
     htmlRapierBuild(__dirname, __dirname + "/wwwroot/lib/HtmlRapier");
+    htmlRapierWidgetsBuild(__dirname, __dirname + "/wwwroot/lib/HtmlRapierWidgets");
 
     compileLess({
         files: [

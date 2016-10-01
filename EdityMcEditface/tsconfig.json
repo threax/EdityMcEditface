@@ -4,11 +4,20 @@
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
-    "target": "es5"
+    "target": "es5",
+    "outDir": "wwwroot/lib",
+    "module": "amd",
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "*",
+        "custom_components/HtmlRapier/src/*"
+      ]
+    }
   },
   "exclude": [
     "node_modules",
     "wwwroot"
   ],
-  "compileOnSave": false
+  "compileOnSave": true
 }

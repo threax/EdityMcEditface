@@ -15,7 +15,7 @@ var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
 
 var htmlRapierBuild = require(__dirname + '/custom_components/HtmlRapier/build');
-var compileTs = htmlRapierBuild.prototype.compileTs;
+var compileJsnsTs = htmlRapierBuild.prototype.compileJsnsTs;
 
 var htmlRapierWidgetsBuild = require(__dirname + '/custom_components/HtmlRapierWidgets/build');
 
@@ -137,7 +137,7 @@ gulp.task("default", function () {
         importPaths: path.join(__dirname),
     });
 
-    compileTs({
+    compileJsnsTs({
         libs: [
             __dirname + "/custom_components/edity/**/*.ts",
             "!**/*.intellisense.js"

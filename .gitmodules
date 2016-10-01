@@ -4,6 +4,3 @@
 [submodule "EdityMcEditface/custom_components/htmlrapierwidgets"]
 	path = EdityMcEditface/custom_components/htmlrapierwidgets
 	url = https://github.com/threax/htmlrapierwidgets.git
-[submodule "EdityMcEditface/custom_components/jsns"]
-	path = EdityMcEditface/custom_components/jsns
-	url = https://github.com/threax/jsns.git

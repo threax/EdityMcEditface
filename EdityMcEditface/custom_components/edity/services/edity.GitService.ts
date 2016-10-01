@@ -2,7 +2,7 @@
 
 import * as http from 'hr.http';
 import { EventHandler } from 'hr.eventhandler';
-import * as PagedData from 'hr.data.paged';
+import { PagedData } from 'hr.data.paged';
 
 var host = "";
 

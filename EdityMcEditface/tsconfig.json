@@ -11,7 +11,8 @@
     "paths": {
       "*": [
         "*",
-        "custom_components/HtmlRapier/src/*"
+        "custom_components/HtmlRapier/src/*",
+        "custom_components/HtmlRapierWidgets/src/*"
       ]
     }
   },

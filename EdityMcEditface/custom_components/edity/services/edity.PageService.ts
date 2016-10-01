@@ -1,45 +1,39 @@
 ﻿"use strict";
 
-jsns.define("edity.PageService", [
-    "edity.SaveService",
-    "hr.http"
-], function (exports, module, saveService, http) {
-    var sourceAccessor;
-    var needsSave = false;
+import * as http from 'hr.http';
+import * as saveService from 'edity.SaveService';
 
-    function setHtml(value) {
-        sourceAccessor.setHtml(value);
-        sourceUpdated();
-    }
-    exports.setHtml = setHtml;
+var sourceAccessor;
+var needsSave = false;
 
-    function getHtml() {
-        return sourceAccessor.getHtml();
-    }
-    exports.getHtml = getHtml;
+export function setHtml(value) {
+    sourceAccessor.setHtml(value);
+    sourceUpdated();
+}
 
-    function setSourceAccessor(value) {
-        sourceAccessor = value;
-    }
-    exports.setSourceAccessor = setSourceAccessor;
+export function getHtml() {
+    return sourceAccessor.getHtml();
+}
 
-    function sourceUpdated() {
-        saveService.requestSave();
-        needsSave = true;
-    }
-    exports.sourceUpdated = sourceUpdated;
+export function setSourceAccessor(value) {
+    sourceAccessor = value;
+}
 
-    function doSave() {
-        if (needsSave) {
-            needsSave = false;
-            var content = exports.getHtml();
-            var blob = new Blob([content], { type: "text/html" });
-            return http.upload('/edity/Page/' + window.location.pathname, blob)
+export function sourceUpdated() {
+    saveService.requestSave();
+    needsSave = true;
+}
+
+function doSave() {
+    if (needsSave) {
+        needsSave = false;
+        var content = getHtml();
+        var blob = new Blob([content], { type: "text/html" });
+        return http.upload('/edity/Page/' + window.location.pathname, blob)
             .catch(function (err) {
                 needsSave = true;
                 throw err;
             });
-        }
     }
-    saveService.saveEvent.add(this, doSave);
-});
+}
+saveService.saveEvent.add(this, doSave);

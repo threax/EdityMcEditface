@@ -252,3 +252,4 @@ paket-files/
 *.sln.iml
 /EdityMcEditface/bower_components
 /EdityMcEditface/wwwroot/lib
+/EdityMcEditface/custom_components/bootstrap.native/modules

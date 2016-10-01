@@ -19,6 +19,7 @@ var compileLess = require('threax-gulp-tk/less.js');
 var copyFiles = require('threax-gulp-tk/copy.js');
 
 var htmlRapierWidgetsBuild = require(__dirname + '/custom_components/HtmlRapierWidgets/build');
+var bootstrapNativeBuild = require(__dirname + '/custom_components/bootstrap.native/build');
 
 var webroot = "./wwwroot/";
 
@@ -64,7 +65,6 @@ gulp.task("default", function () {
         libs: ["./node_modules/jquery/dist/**/*",
                "./node_modules/bootstrap/dist/**/*",
                "!./node_modules/bootstrap/dist/css/**/*",
-               "./node_modules/bootstrap.native/dist/**/*",
                "./node_modules/codemirror/lib/**/*",
                "./node_modules/codemirror/mode/xml/**/*",
                "./node_modules/codemirror/mode/javascript/**/*",
@@ -122,6 +122,7 @@ gulp.task("default", function () {
 
     htmlRapierBuild(__dirname, __dirname + "/wwwroot/lib/HtmlRapier");
     htmlRapierWidgetsBuild(__dirname, __dirname + "/wwwroot/lib/HtmlRapierWidgets");
+    bootstrapNativeBuild(__dirname + '/node_modules/bootstrap.native', __dirname + '/wwwroot/lib/bootstrap.native')
 
     compileLess({
         files: [

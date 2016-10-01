@@ -17,7 +17,7 @@
     "gulp-util": "~3.0.7",
     "rimraf": "2.2.8",
     "typescript": "^2.0.3",
-    "threax-gulp-tk": "threax/threax-gulp-tk"
+    "threax-gulp-tk": "^1.2.0"
   },
   "dependencies": {
     "bootstrap": "~3.3.6",
@@ -25,6 +25,6 @@
     "ckeditor": "~4.5.10",
     "ckeditor-youtube-plugin": "^2.1.1",
     "codemirror": "~5.17.0",
-    "jsns": "^1.2.0"
+    "jsns": "^1.2.1"
   }
 }

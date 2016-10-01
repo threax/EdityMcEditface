@@ -2,14 +2,14 @@
   "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
   "contentMap": {
     "jsns": {
-      "js": [ { "file": "/lib/jsns/jsns.js" } ]
+      "js": [ { "file": "/lib/jsns/jsns.min.js" } ]
     },
     "transitions": {
       "css": [ "/lib/edity/css/fade.css" ]
     },
     "bootstrap-native": {
-      "js": [ { "file": "/lib/bootstrap.native/dist/bootstrap-native.min.js" } ],
-      "dependencies": [ "transitions" ]
+      "js": [ { "file": "/lib/bootstrap.native/bootstrap.native.min.js" } ],
+      "dependencies": [ "transitions", "jsns" ]
     },
     "bootstrap": {
       "css": [ "/lib/bootstrap/dist/css/bootstrap-custom.css" ],
@@ -75,19 +75,19 @@
       "dependencies": [ "HtmlRapier" ]
     },
     "GitService": {
-      "js": [ { "file": "/lib/edity/services/GitService.js" } ],
+      "js": [ { "file": "/lib/edity/services/edity.GitService.js" } ],
       "dependencies": [ "HtmlRapier" ]
     },
     "CompileService": {
-      "js": [ { "file": "/lib/edity/services/CompileService.js" } ],
+      "js": [ { "file": "/lib/edity/services/edity.CompileService.js" } ],
       "dependencies": [ "HtmlRapier" ]
     },
     "SaveService": {
-      "js": [ { "file": "/lib/edity/services/SaveService.js" } ],
+      "js": [ { "file": "/lib/edity/services/edity.SaveService.js" } ],
       "dependencies": [ "HtmlRapier" ]
     },
     "PageService": {
-      "js": [ { "file": "/lib/edity/services/PageService.js" } ],
+      "js": [ { "file": "/lib/edity/services/edity.PageService.js" } ],
       "dependencies": [ "SaveService", "HtmlRapier" ]
     }
   },

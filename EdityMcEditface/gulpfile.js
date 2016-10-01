@@ -14,9 +14,9 @@ var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
 
 var htmlRapierBuild = require(__dirname + '/custom_components/HtmlRapier/build');
-var compileJsnsTs = require('./custom_components/threax-gulp-tk/typescript.js');
-var compileLess = require('./custom_components/threax-gulp-tk/less.js');
-var copyFiles = require('./custom_components/threax-gulp-tk/copy.js');
+var compileJsnsTs = require('threax-gulp-tk/typescript.js');
+var compileLess = require('threax-gulp-tk/less.js');
+var copyFiles = require('threax-gulp-tk/copy.js');
 
 var htmlRapierWidgetsBuild = require(__dirname + '/custom_components/HtmlRapierWidgets/build');
 
@@ -93,8 +93,9 @@ gulp.task("default", function () {
                "./node_modules/ckeditor/plugins/widget/**/*",
                "./node_modules/ckeditor/plugins/lineutils/**/*",
                "./node_modules/ckeditor/plugins/notification/**/*",
+               "./node_modules/jsns/jsns.min.js",
                "./node_modules/ckeditor/plugins/image/**/*", 
-        ],//"./node_modules/jsns/jsns.min.js"
+        ],
         baseName: './node_modules',
         dest: libDir
     });
@@ -112,7 +113,7 @@ gulp.task("default", function () {
             "./custom_components/edity/**/*",
             "!./custom_components/edity/services/**/*",
             "./custom_components/codemirror/**/*",
-            "./custom_components/jsns/jsns.min.js",
+            //"./custom_components/jsns/jsns.min.js",
             "!**/*.intellisense.js",
             "!**/*.less"],
         baseName: './custom_components',

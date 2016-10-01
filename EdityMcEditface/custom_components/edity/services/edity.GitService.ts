@@ -1,92 +1,78 @@
 ﻿"use strict";
 
-jsns.define("edity.GitService", [
-    "hr.http",
-    "hr.eventhandler",
-    "hr.data.paged",
-], function (exports, module, http, EventHandler, PagedData) {
-    var host = "";
+import * as http from 'hr.http';
+import { EventHandler } from 'hr.eventhandler';
+import * as PagedData from 'hr.data.paged';
 
-    function setHost(url) {
-        host = url;
-    }
-    exports.setHost = setHost;
+var host = "";
 
-    function syncInfo() {
-        return http.get(host + '/edity/Git/SyncInfo');
-    }
-    exports.syncInfo = syncInfo;
+export function setHost(url) {
+    host = url;
+}
 
-    function uncommittedChanges() {
-        return http.get(host + '/edity/Git/UncommittedChanges');
-    }
-    exports.uncommittedChanges = uncommittedChanges;
+export function syncInfo() {
+    return http.get(host + '/edity/Git/SyncInfo');
+}
 
-    function commit(data) {
-        return http.post(host + '/edity/Git/Commit', data);
-    }
-    exports.commit = commit;
+export function uncommittedChanges() {
+    return http.get(host + '/edity/Git/UncommittedChanges');
+}
 
-    function uncommittedDiff(file) {
-        return http.get(host + '/edity/Git/UncommittedDiff/' + file);
-    }
-    exports.uncommittedDiff = uncommittedDiff;
+export function commit(data) {
+    return http.post(host + '/edity/Git/Commit', data);
+}
 
-    function mergeInfo(file) {
-        return http.get(host + '/edity/Git/MergeInfo/' + file);
-    }
-    exports.mergeInfo = mergeInfo;
+export function uncommittedDiff(file) {
+    return http.get(host + '/edity/Git/UncommittedDiff/' + file);
+}
 
-    function historyCount(file) {
-        return http.get(host + '/edity/Git/HistoryCount/' + file);
-    }
-    exports.historyCount = historyCount;
+export function mergeInfo(file) {
+    return http.get(host + '/edity/Git/MergeInfo/' + file);
+}
 
-    function createHistoryPager(file, count) {
-        return new PagedData(host + '/edity/Git/History/' + file, count);
-    }
-    exports.createHistoryPager = createHistoryPager;
+export function historyCount(file) {
+    return http.get(host + '/edity/Git/HistoryCount/' + file);
+}
 
-    function resolve(file, content) {
-        var blob = new Blob([content], { type: "text/html" });
-        return http.upload(host + '/edity/Git/Resolve/' + file, blob);
-    }
-    exports.resolve = resolve;
+export function createHistoryPager(file, count) {
+    return new PagedData(host + '/edity/Git/History/' + file, count);
+}
 
-    function pull() {
-        return http.post(host + '/edity/Git/Pull');
-    }
-    exports.pull = pull;
+export function resolve(file, content) {
+    var blob = new Blob([content], { type: "text/html" });
+    return http.upload(host + '/edity/Git/Resolve/' + file, blob);
+}
 
-    function push() {
-        return http.post(host + '/edity/Git/Push');
-    }
-    exports.push = push;
+export function pull() {
+    return http.post(host + '/edity/Git/Pull');
+}
 
-    var revertStarted = new EventHandler();
-    var revertCompleted = new EventHandler();
+export function push() {
+    return http.post(host + '/edity/Git/Push');
+}
 
-    function revert(file) {
-        revertStarted.fire();
-        return http.post(host + '/edity/Git/Revert/' + file)
+var revertStartedHandler = new EventHandler();
+var revertCompletedHandler = new EventHandler();
+
+export function revert(file) {
+    revertStartedHandler.fire();
+    return http.post(host + '/edity/Git/Revert/' + file)
         .then(function (data) {
-            revertCompleted.fire(true);
+            revertCompletedHandler.fire(true);
         })
         .catch(function (data) {
-            revertCompleted.fire(false);
+            revertCompletedHandler.fire(false);
         });
-    }
-    exports.revert = revert;
-    exports.revertStarted = revertStarted.modifier;
-    exports.revertCompleted = revertCompleted.modifier;
+}
 
-    //Commit variant detection and sync
-    var determineCommitVariantEvent = new EventHandler();
+export const revertStarted = revertStartedHandler.modifier;
+export const revertCompleted = revertCompletedHandler.modifier;
 
-    function fireDetermineCommitVariant(data) {
-        return determineCommitVariantEvent.fire(data);
-    }
+//Commit variant detection and sync
+var determineCommitVariantEventHandler = new EventHandler();
 
-    exports.determineCommitVariantEvent = determineCommitVariantEvent.modifier;
-    exports.fireDetermineCommitVariant = fireDetermineCommitVariant;
-});
+export function fireDetermineCommitVariant(data) {
+    return determineCommitVariantEventHandler.fire(data);
+}
+
+export const determineCommitVariantEvent = determineCommitVariantEventHandler.modifier;

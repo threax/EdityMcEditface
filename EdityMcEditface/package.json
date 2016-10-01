@@ -4,9 +4,9 @@
   "private": true,
   "devDependencies": {
     "gulp": "3.9.1",
-    "gulp-build-shortcuts": "threax/gulp-build-shortcuts",
     "gulp-concat": "2.5.2",
     "gulp-cssmin": "0.1.7",
+    "gulp-inject-string": "~1.1.0",
     "gulp-less": "^3.1.0",
     "gulp-plumber": "~1.1.0",
     "gulp-rename": "~1.2.2",
@@ -17,7 +17,7 @@
     "gulp-util": "~3.0.7",
     "rimraf": "2.2.8",
     "typescript": "^2.0.3",
-    "gulp-inject-string": "~1.1.0"
+    "threax-gulp-tk": "threax/threax-gulp-tk"
   },
   "dependencies": {
     "bootstrap": "~3.3.6",
@@ -25,6 +25,6 @@
     "ckeditor": "~4.5.10",
     "ckeditor-youtube-plugin": "^2.1.1",
     "codemirror": "~5.17.0",
-    "jsns": "^1.0.0"
+    "jsns": "^1.2.0"
   }
 }

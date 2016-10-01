@@ -139,7 +139,7 @@ gulp.task("default", function () {
         dest: libDir + '/edity',
         importPaths: path.join(__dirname),
     });
-
+    
     compileJsnsTs({
         libs: [
             __dirname + "/custom_components/edity/**/*.ts",

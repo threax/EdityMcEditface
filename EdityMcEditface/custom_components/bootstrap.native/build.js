@@ -19,6 +19,7 @@ function compile(sourceDir, destDir) {
 
     compileJavascript({
         libs: [
+            sourceDir + "/utils.js",
             __dirname + "/modules/**/*.js",
             __dirname + "/plugin.js",
         ],
@@ -31,7 +32,7 @@ function compile(sourceDir, destDir) {
 }
 
 function quickModule(moduleName, sourceFile, sourceDir) {
-    return jsnsModuleify({
+    var settings = {
         moduleName: moduleName,
         libs: [
             sourceDir + '/' + sourceFile
@@ -39,7 +40,9 @@ function quickModule(moduleName, sourceFile, sourceDir) {
         output: sourceFile,
         dest: __dirname + "/modules/",
         sourceRoot: sourceDir + '\\',
-    });
+    };
+
+    return jsnsModuleify(settings);
 }
 
 module.exports = compile;

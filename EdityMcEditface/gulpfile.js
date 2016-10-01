@@ -1,5 +1,4 @@
-﻿/// <binding Clean='clean' ProjectOpened='watchers' />
-"use strict";
+﻿"use strict";
 
 var gulp = require("gulp"),
     rimraf = require("rimraf"),
@@ -15,7 +14,9 @@ var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
 
 var htmlRapierBuild = require(__dirname + '/custom_components/HtmlRapier/build');
-var compileJsnsTs = htmlRapierBuild.prototype.compileJsnsTs;
+var compileJsnsTs = require('./custom_components/threax-gulp-tk/typescript.js');
+var compileLess = require('./custom_components/threax-gulp-tk/less.js');
+var copyFiles = require('./custom_components/threax-gulp-tk/copy.js');
 
 var htmlRapierWidgetsBuild = require(__dirname + '/custom_components/HtmlRapierWidgets/build');
 
@@ -148,48 +149,3 @@ gulp.task("default", function () {
         sourceRoot: __dirname + "/custom_components/"
     });
 });
-
-var watchFiles = ['./custom_components/**/*.js', '!./custom_components/HtmlRapier/HtmlRapier.js', '!./custom_components/HtmlRapier/HtmlRapier.min.js', './custom_components/**/*.less'];
-gulp.task('watchers', function () {
-    gulp.watch(watchFiles, ['default']);
-});
-
-function copyFiles(settings) {
-    gulp.src(settings.libs, { base: settings.baseName })
-        .pipe(gulp.dest(settings.dest));
-}
-
-function minifyJs(settings) {
-    return gulp.src(settings.libs, { base: settings.base })
-        .pipe(sourcemaps.init())
-        .pipe(concat(settings.output + '.js'))
-        .pipe(uglify())
-        .pipe(rename(settings.output + '.min.js'))
-        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: settings.sourceRoot }))
-        .pipe(gulp.dest(settings.dest));
-};
-
-function concatJs(settings) {
-    return gulp.src(settings.libs, { base: settings.base })
-        .pipe(sourcemaps.init())
-        .pipe(concat(settings.output + '.js'))
-        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: settings.sourceRoot }))
-        .pipe(gulp.dest(settings.dest));
-};
-
-function compileLess(settings) {
-    return gulp.src(settings.files, { base: settings.baseName })
-           .pipe(plumber(function (error) {
-               gutil.log(gutil.colors.red(error.message));
-               gutil.beep();
-               this.emit('end');
-           }))
-           .pipe(less({
-               paths: settings.importPaths
-           }))
-           .pipe(uglifycss({
-               "maxLineLen": 80,
-               "uglyComments": true
-           }))
-           .pipe(gulp.dest(settings.dest));
-}

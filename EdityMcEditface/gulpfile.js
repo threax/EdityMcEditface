@@ -15,6 +15,8 @@ var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
 
 var htmlRapierBuild = require(__dirname + '/custom_components/HtmlRapier/build');
+var compileTs = htmlRapierBuild.prototype.compileTs;
+
 var htmlRapierWidgetsBuild = require(__dirname + '/custom_components/HtmlRapierWidgets/build');
 
 var webroot = "./wwwroot/";
@@ -107,8 +109,9 @@ gulp.task("default", function () {
             "./custom_components/diff_match_patch/**/*",
             "./custom_components/ckeditor/**/*",
             "./custom_components/edity/**/*",
+            "!./custom_components/edity/services/**/*",
             "./custom_components/codemirror/**/*",
-            "./custom_components/jsns/jsns.js",
+            "./custom_components/jsns/jsns.min.js",
             "!**/*.intellisense.js",
             "!**/*.less"],
         baseName: './custom_components',
@@ -132,6 +135,17 @@ gulp.task("default", function () {
         ],
         dest: libDir + '/edity',
         importPaths: path.join(__dirname),
+    });
+
+    compileTs({
+        libs: [
+            __dirname + "/custom_components/edity/**/*.ts",
+            "!**/*.intellisense.js"
+        ],
+        runners: false,
+        output: "services",
+        dest: libDir + '/edity',
+        sourceRoot: __dirname + "/custom_components/"
     });
 });
 

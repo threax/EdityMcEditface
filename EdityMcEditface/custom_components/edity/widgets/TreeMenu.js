@@ -3,8 +3,8 @@
 jsns.define("edity.widgets.treemenu.editorSync", [
     "hr.lateboundeventhandler"
 ], function (exports, module, LateBoundEvent) {
-    var itemAdded = new LateBoundEvent();
-    var createRootNodeControls = new LateBoundEvent();
+    var itemAdded = new LateBoundEvent.LateBoundEventHandler();
+    var createRootNodeControls = new LateBoundEvent.LateBoundEventHandler();
 
     function fireItemAdded(saveUrl, itemData, bindListenerCb) {
         itemAdded.fire(saveUrl, itemData, bindListenerCb);
@@ -35,10 +35,7 @@ jsns.define("edity.widgets.treemenu.controller", [
     "hr.controller",
     "edity.widgets.treemenu.editorSync"
 ], function (exports, module, storage, http, controller, editorSync) {
-    /**
-     * This function builds a controller that handles a tree menu on the page.
-     * @param {type} bindings
-     */
+    
     function TreeMenuController(bindings) {
         var rootModel = bindings.getModel('children');
         var config = bindings.getConfig();

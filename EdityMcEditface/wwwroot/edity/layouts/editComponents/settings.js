@@ -37,7 +37,7 @@ function (exports, module, controller, FormLifecycle, storage, http, navmenu) {
     }
 
     function PageSettingsController(bindings) {
-        var formLifecycle = new FormLifecycle(bindings);
+        var formLifecycle = new FormLifecycle.FormLifecycle(bindings);
         var dialog = bindings.getToggle('dialog');
 
         function deletePage(evt) {

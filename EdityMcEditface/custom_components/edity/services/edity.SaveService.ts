@@ -21,14 +21,14 @@ export const saveEvent = saveEventHandler.modifier;
 function doSave() {
     outstandingSaveRequest = false;
     allowSave = false;
-    saveStartedEvent.fire();
+    saveStartedEventHandler.fire();
     saveEvent.fire()
         .then(function (data) {
-            saveCompletedEvent.fire();
+            saveCompletedEventHandler.fire();
             finishSave();
         })
         .catch(function (data) {
-            saveErrorEvent.fire();
+            saveErrorEventHandler.fire();
             finishSave();
         });
 }

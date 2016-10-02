@@ -17,7 +17,8 @@
     "gulp-util": "~3.0.7",
     "rimraf": "2.2.8",
     "typescript": "^2.0.3",
-    "threax-gulp-tk": "^1.2.0"
+    "threax-gulp-tk": "^1.2.1",
+    "run-sequence": "^1.2.2"
   },
   "dependencies": {
     "bootstrap": "~3.3.6",

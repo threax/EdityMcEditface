@@ -42,21 +42,9 @@ gulp.task("clean:css", function (cb) {
 
 gulp.task("clean", ["clean:js", "clean:css"]);
 
-gulp.task("min:js", function () {
-    return gulp.src([paths.js, "!" + paths.minJs], { base: "." })
-        .pipe(concat(paths.concatJsDest))
-        .pipe(uglify())
-        .pipe(gulp.dest("."));
+gulp.task("build:bootstrap.native", function () {
+    return bootstrapNativeBuild(__dirname + '/node_modules/bootstrap.native', __dirname + '/wwwroot/lib/bootstrap.native')
 });
-
-gulp.task("min:css", function () {
-    return gulp.src([paths.css, "!" + paths.minCss])
-        .pipe(concat(paths.concatCssDest))
-        .pipe(cssmin())
-        .pipe(gulp.dest("."));
-});
-
-gulp.task("min", ["min:js", "min:css"]);
 
 gulp.task("default", function () {
     var libDir = webroot + "lib/";

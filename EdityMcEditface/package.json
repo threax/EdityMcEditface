@@ -25,7 +25,7 @@
     "ckeditor": "~4.5.10",
     "ckeditor-youtube-plugin": "^2.1.1",
     "codemirror": "~5.17.0",
-    "jsns": "^1.2.3",
+    "jsns": "^1.2.4",
     "bootstrap.native": "threax/bootstrap.native"
   }
 }

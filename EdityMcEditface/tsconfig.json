@@ -13,6 +13,10 @@
         "*",
         "custom_components/HtmlRapier/src/*",
         "custom_components/HtmlRapierWidgets/src/*"
+      ],
+      "hr.bootstrap.*": [
+        "custom_components/HtmlRapier.Bootstrap/lib/*",
+        "custom_components/HtmlRapier.Bootstrap/*"
       ]
     }
   },

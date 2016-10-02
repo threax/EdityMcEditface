@@ -139,6 +139,6 @@ gulp.task("default", function () {
         runners: false,
         output: "services",
         dest: libDir + '/edity',
-        sourceRoot: __dirname + "/custom_components/"
+        sourceRoot: __dirname + "/custom_components/edity/"
     });
 });

@@ -22,7 +22,7 @@ function doSave() {
     outstandingSaveRequest = false;
     allowSave = false;
     saveStartedEventHandler.fire();
-    saveEvent.fire()
+    saveEventHandler.fire()
         .then(function (data) {
             saveCompletedEventHandler.fire();
             finishSave();

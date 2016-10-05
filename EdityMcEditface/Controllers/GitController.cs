@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.StaticFiles;
 using System.IO;
 using EdityMcEditface.Models.Git;
 using Microsoft.AspNetCore.Authorization;
-using ExceptionErrorHandler;
 using EdityMcEditface.HtmlRenderer;
 using System.Net;
+using Threax.AspNetCore.ExceptionToJson;
 
 namespace EdityMcEditface.Controllers
 {

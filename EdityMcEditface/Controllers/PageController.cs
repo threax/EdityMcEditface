@@ -1,5 +1,4 @@
-﻿using ExceptionErrorHandler;
-using EdityMcEditface.HtmlRenderer;
+﻿using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.Models.CKEditor;
 using EdityMcEditface.Models.Page;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -44,7 +44,7 @@ namespace EdityMcEditface.Controllers
 
         [HttpPost("[action]/{*file}")]
         [AutoValidate("Cannot update page settings.")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public void Settings(String file, [FromBody]PageSettings settings)
         {
             TargetFileInfo targetFile = new TargetFileInfo(file);
@@ -54,7 +54,7 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost("{*file}")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
@@ -70,7 +70,7 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpDelete("{*file}")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Delete(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
@@ -89,7 +89,7 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost("[action]/{*pageUrl}")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<ImageUploadResponse> Asset(String pageUrl)
         {
             ImageUploadResponse imageResponse = new ImageUploadResponse();

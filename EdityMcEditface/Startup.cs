@@ -15,7 +15,6 @@ using Newtonsoft.Json.Converters;
 using Swashbuckle.SwaggerGen.Generator;
 using LibGit2Sharp;
 using EdityMcEditface.Models.Compiler;
-using ExceptionErrorHandler;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
 using Microsoft.AspNetCore.Http;
 using EdityMcEditface.Models.Auth;

@@ -1,5 +1,4 @@
-﻿using ExceptionErrorHandler;
-using EdityMcEditface.HtmlRenderer;
+﻿using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.Models.Auth;
 using Identity.NoSqlAuthorization;
 using Microsoft.AspNetCore.Antiforgery;
@@ -14,6 +13,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using Threax.AspNetCore.ExceptionToJson;
 
 namespace EdityMcEditface.Controllers
 {

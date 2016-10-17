@@ -13,14 +13,13 @@ var uglifycss = require('gulp-uglifycss');
 var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
 
-var htmlRapierBuild = require(__dirname + '/custom_components/HtmlRapier/build');
+var htmlRapierBuild = require(__dirname + '/node_modules/htmlrapier/build');
 var compileJsnsTs = require('threax-gulp-tk/typescript.js');
 var compileLess = require('threax-gulp-tk/less.js');
 var copyFiles = require('threax-gulp-tk/copy.js');
 
-var htmlRapierWidgetsBuild = require(__dirname + '/custom_components/HtmlRapierWidgets/build');
-var bootstrapNativeBuild = require(__dirname + '/custom_components/bootstrap.native/build');
-var htmlRapierBootstrapBuild = require(__dirname + '/custom_components/HtmlRapier.Bootstrap/build');
+var htmlRapierWidgetsBuild = require(__dirname + '/node_modules/htmlrapier.widgets/build');
+var htmlRapierBootstrapBuild = require(__dirname + '/node_modules/htmlrapier.bootstrap/build');
 
 
 var webroot = "./wwwroot/";
@@ -112,7 +111,6 @@ gulp.task("default", function () {
 
     htmlRapierBuild(__dirname, __dirname + "/wwwroot/lib");
     htmlRapierWidgetsBuild(__dirname, __dirname + "/wwwroot/lib");
-    //bootstrapNativeBuild(__dirname + '/node_modules/bootstrap.native', __dirname + '/wwwroot/lib/bootstrap.native');
     htmlRapierBootstrapBuild(__dirname, __dirname + '/wwwroot/lib');
 
     compileLess({

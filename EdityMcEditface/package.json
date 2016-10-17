@@ -26,6 +26,8 @@
     "ckeditor-youtube-plugin": "^2.1.1",
     "codemirror": "~5.17.0",
     "jsns": "^1.2.4",
-    "bootstrap.native": "threax/bootstrap.native"
+    "htmlrapier": "^1.0.0",
+    "htmlrapier.bootstrap": "^1.0.2",
+    "htmlrapier.widgets": "^1.0.0"
   }
 }

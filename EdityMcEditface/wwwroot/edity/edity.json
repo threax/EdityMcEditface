@@ -8,7 +8,7 @@
       "css": [ "/lib/edity/css/fade.css" ]
     },
     "bootstrap-native": {
-      "js": [ { "file": "/lib/htmlrapier.bootstrap.min.js" } ],
+      "js": [ { "file": "/lib/HtmlRapierBootstrap.js" } ],
       "dependencies": [ "transitions", "jsns", "HtmlRapier" ]
     },
     "bootstrap": {
@@ -50,11 +50,11 @@
     "HtmlRapier": {
       "js": [
         {
-          "file": "/lib/HtmlRapier.min.js",
+          "file": "/lib/HtmlRapier.js",
           "async": true
         },
         {
-          "file": "/lib/HtmlRapierWidgets.min.js",
+          "file": "/lib/HtmlRapierWidgets.js",
           "async": true
         }
       ],

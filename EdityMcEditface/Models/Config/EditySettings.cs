@@ -14,5 +14,7 @@ namespace EdityMcEditface.Models.Config
         public bool DetailedErrors { get; set; }
 
         public bool SecureCookies { get; set; }
+
+        public bool NoAuth { get; set; } = false;
     }
 }

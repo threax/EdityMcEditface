@@ -25,6 +25,9 @@ using EdityMcEditface.Models.Config;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace EdityMcEditface
 {
@@ -276,6 +279,50 @@ namespace EdityMcEditface
             //    AutomaticChallenge = true,
             //    CookieSecure = EditySettings.SecureCookies ? CookieSecurePolicy.Always : CookieSecurePolicy.SameAsRequest
             //});
+
+            if (EditySettings.NoAuth)
+            {
+                app.UseCookieAuthentication(new CookieAuthenticationOptions()
+                {
+                    AuthenticationScheme = "Automatic",
+                    Events = new CookieAuthenticationEvents()
+                    {
+                        OnValidatePrincipal = c =>
+                        {
+                            var claims = new List<Claim>()
+                            {
+                            new Claim("name", "nouser"),
+                            new Claim("role", Roles.Compile),
+                            new Claim("role", Roles.EditPages),
+                            new Claim("role", Roles.Shutdown),
+                            new Claim("role", Roles.UploadAnything),
+                            };
+
+                            var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, "auth", "name", "role"));
+
+                            c.ReplacePrincipal(principal);
+
+                            return Task.FromResult(0);
+                        },
+                        OnRedirectToLogin = async c =>
+                        {
+                            var claims = new List<Claim>()
+                            {
+                            new Claim("name", "nouser"),
+                            new Claim("role", Roles.Compile),
+                            new Claim("role", Roles.EditPages),
+                            new Claim("role", Roles.Shutdown),
+                            new Claim("role", Roles.UploadAnything),
+                            };
+
+                            var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, "auth", "name", "role"));
+
+                            await c.HttpContext.Authentication.SignInAsync("Automatic", principal);
+                            c.RedirectUri = c.HttpContext.Request.GetDisplayUrl();
+                        }
+                    }
+                });
+            }
 
             app.UseMvc(routes =>
             {

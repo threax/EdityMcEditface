@@ -13,12 +13,14 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using Threax.AspNetCore.ExceptionToJson;
 
+#if LOCAL_RUN_ENABLED
+
 namespace EdityMcEditface.Controllers
 {
     [Authorize]
-    public class AuthController : Controller
+    public class NoAuthController : Controller
     {
-        public AuthController()
+        public NoAuthController()
         {
             
         }
@@ -88,3 +90,5 @@ namespace EdityMcEditface.Controllers
         }
     }
 }
+
+#endif

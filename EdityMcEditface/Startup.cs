@@ -256,28 +256,27 @@ namespace EdityMcEditface
                 app.UseSwaggerUi();
             }
 
-            if (EditySettings.NoAuth)
+            app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {
-                app.UseCookieAuthentication(new CookieAuthenticationOptions()
-                {
-                    AuthenticationScheme = "Cookies",
-                    AutomaticAuthenticate = true,
-                    AutomaticChallenge = true,
-                    LoginPath = "/edity/auth/login",
-                    LogoutPath = "/edity/auth/logout"
-                });
-            }
+                AuthenticationScheme = "Cookies",
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                LoginPath = "/edity/auth/login",
+                LogoutPath = "/edity/auth/logout"
+            });
 
             app.UseMvc(routes =>
             {
+#if LOCAL_RUN_ENABLED
                 if (EditySettings.NoAuth)
                 {
                     routes.MapRoute(
                         name: "NoAuthAuth",
                         template: "edity/auth/{action}",
-                        defaults: new { controller = "Auth" }
+                        defaults: new { controller = "NoAuth" }
                     );
                 }
+#endif
 
                 routes.MapRoute(
                     name: "default",

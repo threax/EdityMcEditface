@@ -20,11 +20,9 @@ using Microsoft.AspNetCore.Http;
 using EdityMcEditface.Models.Auth;
 using EdityMcEditface.Models.Page;
 using Swashbuckle.Swagger.Model;
-using Identity.NoSqlAuthorization;
 using EdityMcEditface.Models.Config;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -159,19 +157,8 @@ namespace EdityMcEditface
             services.AddTransient<Signature, Signature>(s =>
             {
                 var userInfo = s.GetRequiredService<AuthUserInfo>();
-                var userManager = s.GetRequiredService<UserManager<EdityNoSqlUser>>();
-                var userTask = userManager.GetUserAsync(userInfo.ClaimsPrincipal);
-                userTask.Wait();
-                var user = userTask.Result;
-                return new Signature(user.DisplayName, user.Email, DateTime.Now);
+                return new Signature(userInfo.UserName, userInfo.UserName + "@nowhere.com", DateTime.Now);
             });
-
-           // services.AddIdentity<EdityNoSqlUser, NoSqlRole>(o =>
-           // {
-           //     o.Cookies.ApplicationCookie.AuthenticationScheme = "Cookies";
-           // })
-           //.AddNoSqlAuthorization<EdityNoSqlUser, NoSqlRole>()
-           //.AddJsonSerializers<EdityNoSqlUser, NoSqlRole>(EditySettings.UsersFile, Roles.Create);
 
             switch (EdityServerConfiguration["Compiler"])
             {
@@ -269,63 +256,29 @@ namespace EdityMcEditface
                 app.UseSwaggerUi();
             }
 
-            //app.UseIdentity();
-            //app.UseCookieAuthentication(new CookieAuthenticationOptions()
-            //{
-            //    AuthenticationScheme = "Cookies",
-            //    LoginPath = new PathString("/edity/Auth/LogIn/"),
-            //    AccessDeniedPath = new PathString("/edity/Auth/AccessDenied/"),
-            //    AutomaticAuthenticate = true,
-            //    AutomaticChallenge = true,
-            //    CookieSecure = EditySettings.SecureCookies ? CookieSecurePolicy.Always : CookieSecurePolicy.SameAsRequest
-            //});
-
             if (EditySettings.NoAuth)
             {
                 app.UseCookieAuthentication(new CookieAuthenticationOptions()
                 {
-                    AuthenticationScheme = "Automatic",
-                    Events = new CookieAuthenticationEvents()
-                    {
-                        OnValidatePrincipal = c =>
-                        {
-                            var claims = new List<Claim>()
-                            {
-                            new Claim("name", "nouser"),
-                            new Claim("role", Roles.Compile),
-                            new Claim("role", Roles.EditPages),
-                            new Claim("role", Roles.Shutdown),
-                            new Claim("role", Roles.UploadAnything),
-                            };
-
-                            var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, "auth", "name", "role"));
-
-                            c.ReplacePrincipal(principal);
-
-                            return Task.FromResult(0);
-                        },
-                        OnRedirectToLogin = async c =>
-                        {
-                            var claims = new List<Claim>()
-                            {
-                            new Claim("name", "nouser"),
-                            new Claim("role", Roles.Compile),
-                            new Claim("role", Roles.EditPages),
-                            new Claim("role", Roles.Shutdown),
-                            new Claim("role", Roles.UploadAnything),
-                            };
-
-                            var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, "auth", "name", "role"));
-
-                            await c.HttpContext.Authentication.SignInAsync("Automatic", principal);
-                            c.RedirectUri = c.HttpContext.Request.GetDisplayUrl();
-                        }
-                    }
+                    AuthenticationScheme = "Cookies",
+                    AutomaticAuthenticate = true,
+                    AutomaticChallenge = true,
+                    LoginPath = "/edity/auth/login",
+                    LogoutPath = "/edity/auth/logout"
                 });
             }
 
             app.UseMvc(routes =>
             {
+                if (EditySettings.NoAuth)
+                {
+                    routes.MapRoute(
+                        name: "NoAuthAuth",
+                        template: "edity/auth/{action}",
+                        defaults: new { controller = "Auth" }
+                    );
+                }
+
                 routes.MapRoute(
                     name: "default",
                     template: "{*file}",

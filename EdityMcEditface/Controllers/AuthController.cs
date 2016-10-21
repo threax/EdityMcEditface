@@ -1,10 +1,8 @@
 ﻿using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.Models.Auth;
-using Identity.NoSqlAuthorization;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using System;
@@ -18,46 +16,34 @@ using Threax.AspNetCore.ExceptionToJson;
 namespace EdityMcEditface.Controllers
 {
     [Authorize]
-    [Route("edity/[controller]/[action]")]
     public class AuthController : Controller
     {
-        private UserManager<EdityNoSqlUser> userManager;
-        private SignInManager<EdityNoSqlUser> signInManager;
-        private RoleManager<NoSqlRole> roleManager;
-
-        public AuthController(UserManager<EdityNoSqlUser> userManager, SignInManager<EdityNoSqlUser> signInManager, RoleManager<NoSqlRole> roleManager)
+        public AuthController()
         {
-            this.userManager = userManager;
-            this.signInManager = signInManager;
-            this.roleManager = roleManager;
+            
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult LogIn([FromServices] FileFinder fileFinder, String returnUrl)
+        public async Task<IActionResult> LogIn(String returnUrl)
         {
-            var templateEnvironment = new TemplateEnvironment(Request.Path, fileFinder.Project);
-            var dr = new HtmlDocumentRenderer(templateEnvironment);
-            var pageStack = new PageStack(templateEnvironment, fileFinder);
-            pageStack.pushLayout("login.html");
-            var document = dr.getDocument(pageStack.Pages);
-            return Content(document.DocumentNode.OuterHtml, new MediaTypeHeaderValue("text/html"));
+
+            var identity = new ClaimsIdentity(AllClaims(), "Cookies", "name", "role");
+            await HttpContext.Authentication.SignInAsync("Cookies", new ClaimsPrincipal(identity));
+            
+
+            return SafeRedirect(ref returnUrl);
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [AutoValidate("Invalid Login")]
-        public async Task<IActionResult> LogIn([FromBody] LoginModel loginModel)
+        private IEnumerable<Claim> AllClaims()
         {
-            var result = await signInManager.PasswordSignInAsync(loginModel.UserName, loginModel.Password, false, false);
-            if (result.Succeeded)
-            {
-                return StatusCode(200);
-            }
-            else
-            {
-                throw new ErrorResultException("Invalid login", System.Net.HttpStatusCode.BadRequest);
-            }
+            yield return new Claim("name", "OnlyUser");
+            yield return new Claim("role", Roles.EditPages);
+            yield return new Claim("role", Roles.Compile);
+            yield return new Claim("role", Roles.UploadAnything);
+#if LOCAL_RUN_ENABLED
+            yield return new Claim("role", Roles.Shutdown);
+#endif
         }
 
         [HttpPost]
@@ -73,51 +59,32 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LogOut([FromServices] IAntiforgery antiforgery)
+        public async Task<IActionResult> LogOut([FromServices] IAntiforgery antiforgery, String returnUrl)
         {
-            await signInManager.SignOutAsync();
-            var tokens = antiforgery.GetAndStoreTokens(HttpContext);
-            HttpContext.Response.Cookies.Delete(tokens.HeaderName);
-            return StatusCode(200);
+            await HttpContext.Authentication.SignOutAsync("Cookies");
+
+            return SafeRedirect(ref returnUrl);
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [AutoValidate("Invalid Registration Data")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel loginModel)
+        private IActionResult SafeRedirect(ref string returnUrl)
         {
-            var user = new EdityNoSqlUser()
+            //See if we have anything
+            if (String.IsNullOrEmpty(returnUrl))
             {
-                Name = loginModel.UserName,
-                DisplayName = loginModel.DisplayName,
-                Email = loginModel.Email
-            };
-
-            var idResult = await userManager.CreateAsync(user, loginModel.Password);
-            if (idResult.Succeeded)
-            {
-                var claims = new[] {
-                    new Claim(ClaimTypes.Role, Roles.EditPages),
-                    new Claim(ClaimTypes.Role, Roles.Compile),
-                    new Claim(ClaimTypes.Role, Roles.UploadAnything),
-                    new Claim(ClaimTypes.Role, Roles.Shutdown),
-                };
-
-                idResult = await userManager.AddClaimsAsync(user, claims);
-                if (idResult.Succeeded)
-                {
-                    await signInManager.SignInAsync(user, false);
-                    return StatusCode(200);
-                }
-                else
-                {
-                    throw new ErrorResultException("Error registering new user, cannot add claims.");
-                }
+                returnUrl = "~/";
             }
-            else
+
+            //Make sure they aren't trying to redirect to another website
+            try
             {
-                throw new ErrorResultException("Error registering new user, cannot create user.");
+                Uri uri = new Uri(returnUrl, UriKind.Relative);
             }
+            catch (UriFormatException)
+            {
+                returnUrl = "~/";
+            }
+
+            return Redirect(returnUrl);
         }
     }
 }

@@ -63,12 +63,6 @@
         "jsns"
       ]
     },
-    "HtmlRapierConfig": {
-      "js": [
-        { "file": "/lib/edity/config.js" }
-      ],
-      "dependencies": [ "HtmlRapier" ]
-    },
     "TreeMenu": {
       "js": [
         {
@@ -78,21 +72,21 @@
       ],
       "dependencies": [ "HtmlRapier" ]
     },
-    "GitService": {
-      "js": [ { "file": "/lib/edity/services/edity.GitService.js" } ],
+    "Services": {
+      "js": [ { "file": "/lib/ClientLibs.js" } ],
       "dependencies": [ "HtmlRapier" ]
+    },
+    "GitService": {
+      "dependencies": [ "Services" ]
     },
     "CompileService": {
-      "js": [ { "file": "/lib/edity/services/edity.CompileService.js" } ],
-      "dependencies": [ "HtmlRapier" ]
+      "dependencies": [ "Services" ]
     },
     "SaveService": {
-      "js": [ { "file": "/lib/edity/services/edity.SaveService.js" } ],
-      "dependencies": [ "HtmlRapier" ]
+      "dependencies": [ "Services" ]
     },
     "PageService": {
-      "js": [ { "file": "/lib/edity/services/edity.PageService.js" } ],
-      "dependencies": [ "SaveService", "HtmlRapier" ]
+      "dependencies": [ "Services" ]
     }
   },
   "vars": {

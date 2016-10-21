@@ -17,7 +17,7 @@
     },
     "EdityMcEditface": {
       "commandName": "Project",
-      "commandLineArgs": "--workingDirOff=\"custom_components\\HtmlRapier\\docs\" --workingDirOff=\"C:\\Development\\EdityTestDir\\repos\\mycourses-support\" --workingDir=\"C:\\Development\\EdityMcEditface\\EdityMcEditface\\custom_components\\HtmlRapier\\docs\"",
+      "commandLineArgs": "--workingDirOff=\"custom_components\\HtmlRapier\\docs\" --workingDirOff=\"C:\\Development\\EdityTestDir\\repos\\mycourses-support\" --workingDirOff=\"C:\\Development\\EdityMcEditface\\EdityMcEditface\\custom_components\\HtmlRapier\\docs\" --workingDirOff=\"C:\\Development\\AspNetCoreFrameworkDocs\"",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/",
       "environmentVariables": {

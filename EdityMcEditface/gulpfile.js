@@ -14,7 +14,7 @@ var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
 
 var htmlRapierBuild = require(__dirname + '/node_modules/htmlrapier/build');
-var compileJsnsTs = require('threax-gulp-tk/typescript.js');
+var compileTypescript = require('threax-gulp-tk/typescript.js');
 var compileLess = require('threax-gulp-tk/less.js');
 var copyFiles = require('threax-gulp-tk/copy.js');
 
@@ -47,7 +47,19 @@ gulp.task("build:bootstrap.native", function () {
     return bootstrapNativeBuild(__dirname + '/node_modules/bootstrap.native', __dirname + '/wwwroot/lib/bootstrap.native')
 });
 
-gulp.task("default", function () {
+gulp.task("default", function (sharedSettings) {
+    if (sharedSettings === undefined) {
+        sharedSettings = {};
+    }
+
+    if (sharedSettings.minify === undefined) {
+        sharedSettings.minify = true;
+    }
+
+    if (sharedSettings.concat === undefined) {
+        sharedSettings.concat = true;
+    }
+
     var libDir = webroot + "lib/";
 
     copyFiles({
@@ -100,7 +112,7 @@ gulp.task("default", function () {
             "./custom_components/diff_match_patch/**/*",
             "./custom_components/ckeditor/**/*",
             "./custom_components/edity/**/*",
-            "!./custom_components/edity/services/**/*",
+            "!./custom_components/edity/**/*.less",
             "./custom_components/codemirror/**/*",
             //"./custom_components/jsns/jsns.min.js",
             "!**/*.intellisense.js",
@@ -129,14 +141,28 @@ gulp.task("default", function () {
         importPaths: path.join(__dirname),
     });
     
-    compileJsnsTs({
+    //compileJsnsTs({
+    //    libs: [
+    //        __dirname + "/custom_components/edity/**/*.ts",
+    //        "!**/*.intellisense.js"
+    //    ],
+    //    runners: false,
+    //    output: "services",
+    //    dest: libDir + '/edity',
+    //    sourceRoot: __dirname + "/custom_components/edity/"
+    //});
+
+    //Client Side ts
+    compileTypescript({
         libs: [
-            __dirname + "/custom_components/edity/**/*.ts",
-            "!**/*.intellisense.js"
+            __dirname + "/ClientLibs/**/*.ts",
         ],
-        runners: false,
-        output: "services",
-        dest: libDir + '/edity',
-        sourceRoot: __dirname + "/custom_components/edity/"
+        runners: ["edity.config"],
+        dest: libDir,
+        sourceRoot: __dirname + "/ClientLibs/",
+        namespace: "edity",
+        output: "ClientLibs",
+        concat: sharedSettings.concat,
+        minify: sharedSettings.minify
     });
 });

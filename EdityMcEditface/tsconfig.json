@@ -9,14 +9,19 @@
     "module": "amd",
     "baseUrl": ".",
     "paths": {
-      "*": [
-        "*",
-        "custom_components/HtmlRapier/src/*",
-        "custom_components/HtmlRapierWidgets/src/*"
+      "hr.*": [
+        "node_modules/HtmlRapier/src/*",
+        "node_modules/htmlrapier.json-editor/*"
+      ],
+      "hr.widgets.*": [
+        "node_modules/HtmlRapier.Widgets/src/*"
       ],
       "hr.bootstrap.*": [
-        "custom_components/HtmlRapier.Bootstrap/lib/*",
-        "custom_components/HtmlRapier.Bootstrap/*"
+        "node_modules/HtmlRapier.Bootstrap/lib/*",
+        "node_modules/HtmlRapier.Bootstrap/*"
+      ],
+      "edity.*": [
+        "custom_components/edity/*"
       ]
     }
   },

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 import * as http from 'hr.http';
-import * as saveService from 'edity.SaveService';
+import * as saveService from 'clientlibs.SaveService';
 
 var sourceAccessor;
 var needsSave = false;

@@ -12,20 +12,19 @@ using EdityMcEditface.HtmlRenderer;
 using System.IO;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
-using Swashbuckle.SwaggerGen.Generator;
 using LibGit2Sharp;
 using EdityMcEditface.Models.Compiler;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
 using Microsoft.AspNetCore.Http;
 using EdityMcEditface.Models.Auth;
 using EdityMcEditface.Models.Page;
-using Swashbuckle.Swagger.Model;
 using EdityMcEditface.Models.Config;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http.Extensions;
+using Swashbuckle.Swagger.Model;
 
 namespace EdityMcEditface
 {
@@ -33,6 +32,14 @@ namespace EdityMcEditface
     {
         public static String EditySettingsRoot { get; set; }
         public static String EditySettingsFile { get; set; } = "Config/edityserver.json";
+
+        private Info info = new Info
+        {
+            Version = "v1",
+            Title = "Edity McEdiface API",
+            Description = "The API for Edity McEdiface",
+            TermsOfService = "None"
+        };
 
         private String runningFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         private IHostingEnvironment env;
@@ -71,7 +78,7 @@ namespace EdityMcEditface
 
             EditySettings = new EditySettings();
             ConfigurationBinder.Bind(Configuration.GetSection("EditySettings"), EditySettings);
-            
+
 
             if (EditySettingsRoot == null)
             {
@@ -84,7 +91,7 @@ namespace EdityMcEditface
 
             var defaultProjectPath = Directory.GetCurrentDirectory();
             //Check to see if this is our running folder, if so go into wwwroot
-            if(String.Compare(defaultProjectPath, siteRootPath.TrimEnd('/', '\\')) == 0)
+            if (String.Compare(defaultProjectPath, siteRootPath.TrimEnd('/', '\\')) == 0)
             {
                 defaultProjectPath = Path.Combine(defaultProjectPath, "wwwroot");
             }
@@ -209,23 +216,7 @@ namespace EdityMcEditface
 
             if (env.IsEnvironment("Development"))
             {
-                services.AddSwaggerGen();
-                services.ConfigureSwaggerGen(options =>
-                {
-                    options.SingleApiVersion(new Info
-                    {
-                        Version = "v1",
-                        Title = "Edity McEdiface API",
-                        Description = "The API for Edity McEdiface",
-                        TermsOfService = "None"
-                    });
-                    string pathToDoc = Path.Combine(runningFolder, "EdityMcEditface.xml");
-                    if (File.Exists(pathToDoc))
-                    {
-                        options.IncludeXmlComments(pathToDoc);
-                    }
-                    options.DescribeAllEnumsAsStrings();
-                });
+                services.AddConventionalSwagger(info);
             }
         }
 
@@ -252,8 +243,7 @@ namespace EdityMcEditface
 
             if (env.IsEnvironment("Development"))
             {
-                app.UseSwagger();
-                app.UseSwaggerUi();
+                app.UseConventionalSwagger(info);
             }
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions()

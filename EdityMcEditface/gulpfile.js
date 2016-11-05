@@ -11,7 +11,7 @@ var htmlRapierBuild = require(__dirname + '/node_modules/htmlrapier/build');
 var htmlRapierWidgetsBuild = require(__dirname + '/node_modules/htmlrapier.widgets/build');
 var htmlRapierBootstrapBuild = require(__dirname + '/node_modules/htmlrapier.bootstrap/build');
 
-var webroot = __dirname + "/wwwroot/";
+var webroot = __dirname + "/wwwroot";
 
 gulp.task("default",function () {
     build();
@@ -36,7 +36,7 @@ function build(sharedSettings) {
         sharedSettings.concat = true;
     }
 
-    var libDir = webroot + "lib/";
+    var libDir = webroot + "/lib";
 
     copyFiles({
         libs: ["./node_modules/jquery/dist/**/*",
@@ -80,7 +80,7 @@ function build(sharedSettings) {
     copyFiles({
         libs: ["./node_modules/ckeditor-youtube-plugin/youtube/**/*"],
         baseName: './node_modules/ckeditor-youtube-plugin',
-        dest: libDir + "ckeditor/plugins/"
+        dest: libDir + "/ckeditor/plugins/"
     });
 
     copyFiles({
@@ -131,14 +131,41 @@ function build(sharedSettings) {
     //Client Side ts
     compileTypescript({
         libs: [
-            __dirname + "/ClientLibs/**/*.ts",
+            __dirname + "/Client/Libs/**/*.ts",
         ],
         runners: ["edity.config"],
         dest: libDir,
-        sourceRoot: __dirname + "/ClientLibs/",
+        sourceRoot: __dirname + "/Client/Libs/",
         namespace: "edity",
         output: "ClientLibs",
         concat: sharedSettings.concat,
         minify: sharedSettings.minify
+    });
+
+    //Client side views
+    var viewBaseDir = webroot + "/edityAuto";
+
+    //Compile view typescript
+    compileTypescript({
+        libs: [
+            __dirname + "/Client/Views/**/*.ts",
+            "!**/*.intellisense.js"
+        ],
+        runners: true,
+        dest: viewBaseDir + '/layouts',
+        sourceRoot: __dirname + "/Client/Views"
+    });
+
+    //Copy view files
+    copyFiles({
+        libs: [
+            __dirname + "/Client/Views/**/*.html",
+            __dirname + "/Client/Views/**/*.js",
+            __dirname + "/Client/Views/**/*.json",
+            __dirname + "/Client/Views/**/*.css",
+            "!**/*.intellisense.js"
+        ],
+        baseName: __dirname + "/Client/Views",
+        dest: viewBaseDir + '/layouts',
     });
 };

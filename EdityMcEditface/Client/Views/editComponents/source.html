@@ -1,0 +1,23 @@
+﻿<!-- source Modal -->
+<template data-hr-component="EditSourceNavItem">
+    <li><a data-toggle="modal" data-target="#sourceModal" data-hr-on-click="edit">Edit Source</a></li>
+</template>
+<div class="modal fade" id="sourceModal" data-hr-controller="editSource" tabindex="-1" role="dialog" aria-labelledby="sourceModalLabel" data-hr-toggle="dialog">
+    <div class="modal-dialog sourceEditorModal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="sourceModalLabel">{{docLink}} Source</h4>
+            </div>
+            <form data-hr-on-submit="apply" data-hr-model="source">
+                <div class="modal-body">
+                    <textarea name="source" id="editSourceTextarea"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary">Apply Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{mainContent}}

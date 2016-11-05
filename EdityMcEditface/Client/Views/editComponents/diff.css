@@ -1,0 +1,7 @@
+﻿.diffModal{
+    width:90%;
+}
+
+.diffModal .CodeMirror-merge-r-chunk { background: #342d18; }
+
+.diffModal .CodeMirror-merge-l-chunk { background: #2e1e25; }

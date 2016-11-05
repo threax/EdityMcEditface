@@ -1,0 +1,58 @@
+﻿<template data-hr-component="MediaNavItem">
+    <li><a data-toggle="modal" data-target="#mediaModal" data-hr-on-click="loadMedia" data-hr-model="browse" data-hr-model-src="{{mediaBrowseDir}}">Media</a></li>
+</template>
+<div class="modal fade" id="mediaModal" data-hr-controller="media" tabindex="-1" role="dialog" aria-labelledby="mediaModalLabel" data-hr-toggle="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mediaModalLabel">Media</h4>
+                <button data-hr-toggle="upDir" data-hr-style-off="display:none;" type="button" class="btn btn-default" data-hr-on-click="upDirectory">Up</button>
+            </div>
+            <div class="modal-body" data-hr-toggle="load" data-hr-style-off="display:none;">
+                <div class="center">
+                    <div class="load-linebar center-block">
+                        <div class="rect1"></div>
+                        <div class="rect2"></div>
+                        <div class="rect3"></div>
+                        <div class="rect4"></div>
+                        <div class="rect5"></div>
+                    </div>
+                    <p>Working...</p>
+                </div>
+            </div>
+            <div data-hr-toggle="main" data-hr-style-off="display:none;">
+                <div class="modal-body">
+                    <ol class="filebrowser-directory-list" data-hr-model="directories" data-hr-model-src="/edity/list">
+                        <template>
+                            <li data-hr-on-click="changeDirectory">{{name}}</li>
+                        </template>
+                    </ol>
+                    <ol class="filebrowser-file-list" data-hr-model="files">
+                        <template>
+                            <li><a href="{{link}}" target="_blank">{{name}}</a></li>
+                        </template>
+                    </ol>
+                </div>
+                <div class="modal-footer">
+                    <form class="form-inline" data-hr-on-submit="upload" data-hr-model="upload" data-hr-model-src="edity/upload">
+                        <div class="form-group">
+                            <label for="file">Choose File</label>
+                            <input name="file" type="file" class="form-control" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                </div>
+            </div>
+            <div data-hr-toggle="fail" data-hr-style-off="display:none;">
+                <div class="modal-body">
+                    <p>Could not connect to server to load files.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-hr-on-click="tryAgain">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{mainContent}}

@@ -1,0 +1,74 @@
+﻿<template data-hr-component="SyncNavItem">
+    <li><a data-toggle="modal" data-target="#syncModal" data-hr-on-click="sync">Sync</a></li>
+</template>
+<div class="modal fade" id="syncModal" data-hr-controller="sync" tabindex="-1" role="dialog" aria-labelledby="syncModalLabel" data-hr-toggle="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="syncModalLabel">Sync</h4>
+            </div>
+            <div class="modal-body" data-hr-toggle="load" data-hr-style-off="display:none;">
+                <div class="center">
+                    <div class="load-linebar center-block">
+                        <div class="rect1"></div>
+                        <div class="rect2"></div>
+                        <div class="rect3"></div>
+                        <div class="rect4"></div>
+                        <div class="rect5"></div>
+                    </div>
+                    <p>Working...</p>
+                </div>
+            </div>
+            <div data-hr-toggle="main" data-hr-style-off="display:none;">
+                <div class="modal-body" data-hr-model="changes">
+                    <h4>Incoming Changes - {{behindBy}}</h4>
+                    <table class="table  table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Message</th>
+                                <th>Author</th>
+                                <th>When</th>
+                            </tr>
+                        </thead>
+                        <tbody data-hr-model="behindHistory" data-hr-model-component="syncModal.HistoryTable"></tbody>
+                    </table>
+                    <button type="button" class="btn btn-default" data-hr-on-click="pull">Pull</button>
+                    <h4>Outgoing Changes - {{aheadBy}}</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Message</th>
+                                <th>Author</th>
+                                <th>When</th>
+                            </tr>
+                        </thead>
+                        <tbody data-hr-model="aheadHistory" data-hr-model-component="syncModal.HistoryTable"></tbody>
+                    </table>
+                    <button type="button" class="btn btn-default" data-hr-on-click="push">Push</button>
+                    <template data-hr-component="syncModal.HistoryTable">
+                        <table>
+                            <tr>
+                                <td>{{message}}</td>
+                                <td>{{name}}</td>
+                                <td>{{when}}</td>
+                            </tr>
+                        </table>
+                    </template>
+                </div>
+            </div>
+            <div class="modal-body" data-hr-toggle="cantSync" data-hr-style-off="display:none;">
+                <p>Can't sync with uncommitted changes. Please commit first before trying to sync.</p>
+            </div>
+            <div class="modal-body" data-hr-toggle="error" data-hr-style-off="display:none;">
+                <p>Can't contact server. Please try again later.</p>
+            </div>
+            <div class="modal-body" data-hr-toggle="noChanges" data-hr-style-off="display:none;">
+                <p class="center">
+                    No changes to sync.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{{mainContent}}

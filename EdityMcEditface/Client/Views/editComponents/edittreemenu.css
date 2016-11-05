@@ -1,0 +1,18 @@
+﻿.treemenu-editor-folder > .treemenu-editor,
+.treemenu-editor-link > .treemenu-editor{
+    display:none;
+    float:right;
+}
+
+.treemenu-editor-folder:hover > .treemenu-editor,
+.treemenu-editor-link:hover > .treemenu-editor{
+    display:block;
+}
+
+.treemenu-editor > .treemenu-editor-rootcontrols{
+    display:none;
+}
+
+.treemenu-editor:hover > .treemenu-editor-rootcontrols{
+    display:block;
+}

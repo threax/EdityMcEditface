@@ -1,0 +1,7 @@
+﻿.mergeModal{
+    width:90%;
+}
+
+.mergeModal .CodeMirror-merge-r-chunk { background: #342d18; }
+
+.mergeModal .CodeMirror-merge-l-chunk { background: #2e1e25; }

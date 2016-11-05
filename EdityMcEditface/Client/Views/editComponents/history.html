@@ -1,0 +1,72 @@
+﻿<!-- commit Modal -->
+<template data-hr-component="HistoryNavItem">
+    <li><a data-toggle="modal" data-target="#historyModal" data-hr-on-click="history">History</a></li>
+</template>
+<div class="modal fade" id="historyModal" data-hr-controller="history" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" data-hr-toggle="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="historyModalLabel">History of {{title}}</h4>
+            </div>
+            <div class="modal-body" data-hr-toggle="load" data-hr-style-off="display:none;">
+                <div class="center">
+                    <div class="load-linebar center-block">
+                        <div class="rect1"></div>
+                        <div class="rect2"></div>
+                        <div class="rect3"></div>
+                        <div class="rect4"></div>
+                        <div class="rect5"></div>
+                    </div>
+                    <p>Working...</p>
+                </div>
+            </div>
+            <div class="modal-body" data-hr-toggle="main" data-hr-style-off="display:none;">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Message</th>
+                            <th>Author</th>
+                            <th>When</th>
+                        </tr>
+                    </thead>
+                    <tbody data-hr-model="history" data-hr-model-component="historyModal.HistoryTable"></tbody>
+                </table>
+                <template data-hr-component="historyModal.HistoryTable">
+                    <table>
+                        <tr>
+                            <td>{{message}}</td>
+                            <td>{{name}}</td>
+                            <td>{{when}}</td>
+                        </tr>
+                    </table>
+                </template>              
+                <ul class="pagination" data-hr-model="pageNumbers">
+                    <li>
+                        <a aria-label="Previous" data-hr-on-click="previousPage">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li data-hr-toggle="page0" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page0"><a>{{page0}}</a></li>
+                    <li data-hr-toggle="page1" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page1"><a>{{page1}}</a></li>
+                    <li data-hr-toggle="page2" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page2"><a>{{page2}}</a></li>
+                    <li data-hr-toggle="page3" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page3"><a>{{page3}}</a></li>
+                    <li data-hr-toggle="page4" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page4"><a>{{page4}}</a></li>
+                    <li data-hr-toggle="page5" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page5"><a>{{page5}}</a></li>
+                    <li data-hr-toggle="page6" data-hr-class-active="active" data-hr-style-off="display:none;" data-hr-on-click="page6"><a>{{page6}}</a></li>
+                    <li>
+                        <a aria-label="Next" data-hr-on-click="nextPage">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>      
+            </div>
+            <div class="modal-body" data-hr-toggle="error" data-hr-style-off="display:none;">
+                <p class="center">
+                    Cannot get history. Please try again later.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{{mainContent}}

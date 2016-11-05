@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{css}}
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Log In</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="col-md-12">
+            <form data-hr-on-submit="login" data-hr-controller="login" data-hr-model="login">
+                <div class="form-group">
+                    <label for="UserName">User Name</label>
+                    <input type="text" name="UserName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="Password">Password</label>
+                    <input type="password" name="Password" class="form-control" />
+                </div>
+                <div style="display:none;" data-hr-toggle="error" data-hr-model="error" data-hr-style-on="display:block;">
+                    Unable to log in. The error returned from the server is {{message}}.
+                </div>
+                <button type="submit" class="btn btn-default">Log In</button>
+            </form>
+        </div>
+    </div>
+    {{javascript}}
+</body>
+</html>

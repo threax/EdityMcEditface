@@ -1,53 +1,29 @@
 ﻿"use strict";
 
-var gulp = require("gulp"),
-    rimraf = require("rimraf"),
-    concat = require("gulp-concat"),
-    cssmin = require("gulp-cssmin"),
-    uglify = require("gulp-uglify"),
-    rename = require("gulp-rename"),
-    sourcemaps = require("gulp-sourcemaps");
-var less = require('gulp-less');
+var gulp = require("gulp");
 var path = require('path');
-var uglifycss = require('gulp-uglifycss');
-var gutil = require('gulp-util');
-var plumber = require('gulp-plumber');
 
-var htmlRapierBuild = require(__dirname + '/node_modules/htmlrapier/build');
 var compileTypescript = require('threax-gulp-tk/typescript.js');
 var compileLess = require('threax-gulp-tk/less.js');
 var copyFiles = require('threax-gulp-tk/copy.js');
 
+var htmlRapierBuild = require(__dirname + '/node_modules/htmlrapier/build');
 var htmlRapierWidgetsBuild = require(__dirname + '/node_modules/htmlrapier.widgets/build');
 var htmlRapierBootstrapBuild = require(__dirname + '/node_modules/htmlrapier.bootstrap/build');
 
+var webroot = __dirname + "/wwwroot/";
 
-var webroot = "./wwwroot/";
-
-var paths = {
-    js: webroot + "js/**/*.js",
-    minJs: webroot + "js/**/*.min.js",
-    css: webroot + "css/**/*.css",
-    minCss: webroot + "css/**/*.min.css",
-    concatJsDest: webroot + "js/site.min.js",
-    concatCssDest: webroot + "css/site.min.css"
-};
-
-gulp.task("clean:js", function (cb) {
-    rimraf(paths.concatJsDest, cb);
+gulp.task("default",function () {
+    build();
 });
 
-gulp.task("clean:css", function (cb) {
-    rimraf(paths.concatCssDest, cb);
+gulp.task("debug",function () {
+    build({
+        minify:false
+    });
 });
 
-gulp.task("clean", ["clean:js", "clean:css"]);
-
-gulp.task("build:bootstrap.native", function () {
-    return bootstrapNativeBuild(__dirname + '/node_modules/bootstrap.native', __dirname + '/wwwroot/lib/bootstrap.native')
-});
-
-gulp.task("default", function (sharedSettings) {
+function build(sharedSettings) {
     if (sharedSettings === undefined) {
         sharedSettings = {};
     }
@@ -94,7 +70,7 @@ gulp.task("default", function (sharedSettings) {
                "./node_modules/ckeditor/plugins/widget/**/*",
                "./node_modules/ckeditor/plugins/lineutils/**/*",
                "./node_modules/ckeditor/plugins/notification/**/*",
-               "./node_modules/jsns/jsns.min.js",
+               "./node_modules/jsns/jsns.js",
                "./node_modules/ckeditor/plugins/image/**/*", 
         ],
         baseName: './node_modules',
@@ -121,9 +97,9 @@ gulp.task("default", function (sharedSettings) {
         dest: libDir
     });
 
-    htmlRapierBuild(__dirname, __dirname + "/wwwroot/lib");
-    htmlRapierWidgetsBuild(__dirname, __dirname + "/wwwroot/lib");
-    htmlRapierBootstrapBuild(__dirname, __dirname + '/wwwroot/lib');
+    htmlRapierBuild(__dirname, libDir, sharedSettings);
+    htmlRapierWidgetsBuild(__dirname, libDir, sharedSettings);
+    htmlRapierBootstrapBuild(__dirname, libDir, sharedSettings);
 
     compileLess({
         files: [
@@ -165,4 +141,4 @@ gulp.task("default", function (sharedSettings) {
         concat: sharedSettings.concat,
         minify: sharedSettings.minify
     });
-});
+};

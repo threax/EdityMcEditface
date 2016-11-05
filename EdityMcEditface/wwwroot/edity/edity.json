@@ -2,7 +2,7 @@
   "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
   "contentMap": {
     "jsns": {
-      "js": [ { "file": "/lib/jsns/jsns.min.js" } ]
+      "js": [ { "file": "/lib/jsns/jsns.js" } ]
     },
     "transitions": {
       "css": [ "/lib/edity/css/fade.css" ]
@@ -49,6 +49,10 @@
     },
     "HtmlRapier": {
       "js": [
+        {
+          "file": "/lib/polyfill.js",
+          "async": false
+        },
         {
           "file": "/lib/HtmlRapier.js",
           "async": true

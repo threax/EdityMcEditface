@@ -3,31 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "devDependencies": {
-    "gulp": "3.9.1",
-    "gulp-concat": "2.5.2",
-    "gulp-cssmin": "0.1.7",
-    "gulp-inject-string": "~1.1.0",
-    "gulp-less": "^3.1.0",
-    "gulp-plumber": "~1.1.0",
-    "gulp-rename": "~1.2.2",
-    "gulp-sourcemaps": "~1.6.0",
-    "gulp-typescript": "^3.0.1",
-    "gulp-uglify": "1.2.0",
-    "gulp-uglifycss": "^1.0.6",
-    "gulp-util": "~3.0.7",
-    "rimraf": "2.2.8",
-    "typescript": "^2.0.3",
-    "threax-gulp-tk": "^1.2.1",
-    "run-sequence": "^1.2.2"
+    "threax-gulp-tk": "^2.2.0"
   },
   "dependencies": {
     "bootstrap": "~3.3.6",
     "ckeditor": "~4.5.10",
     "ckeditor-youtube-plugin": "^2.1.1",
     "codemirror": "~5.17.0",
-    "jsns": "^1.2.4",
-    "htmlrapier": "^1.0.0",
-    "htmlrapier.bootstrap": "^1.0.2",
-    "htmlrapier.widgets": "^1.0.0"
+    "jsns": "^2.0.0",
+    "htmlrapier": "^2.2.2",
+    "htmlrapier.bootstrap": "^2.2.0",
+    "htmlrapier.widgets": "^2.1.0"
   }
 }

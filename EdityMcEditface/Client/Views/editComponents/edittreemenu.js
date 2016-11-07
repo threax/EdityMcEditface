@@ -5,7 +5,7 @@ jsns.run([
     "hr.toggles",
     "hr.http",
     "edity.widgets.treemenu.editorSync",
-    "edity.SaveService"
+    "clientlibs.SaveService"
 ], function (exports, module, controller, toggles, http, editorSync, saveService) {
 
     var treeMenuEditors = {};

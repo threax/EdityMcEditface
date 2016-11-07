@@ -12,7 +12,7 @@ function determineCommitVariant(data) {
     var listenerVariant = GitService.fireDetermineCommitVariant(data);
     if (listenerVariant) {
         currentRowCreatedCallback = listenerVariant[0].rowCreated;
-        return listenerVariant[0].variant; 
+        return listenerVariant[0].variant;
     }
     return data.state;
 }
@@ -24,74 +24,90 @@ function commitRowCreated(bindings, data) {
     }
 }
 
-function CommitController(commitDialog) {
-    var commitModel = commitDialog.getModel('commit');
-    var dialog = commitDialog.getToggle('dialog');
+class NavButtonController {
+    constructor(bindings) {
 
-    var main = commitDialog.getToggle('main');
-    var load = commitDialog.getToggle('load');
-    var error = commitDialog.getToggle('error');
-    var noChanges = commitDialog.getToggle('noChanges');
-    var toggleGroup = new toggles.Group(main, load, error, noChanges);
-    var changedFiles = commitDialog.getModel('changedFiles');
+    }
 
-    function updateUncommittedFiles() {
+    commit() {
+        commitController.startCommit();
+    }
+}
+
+var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
+editMenu.add("CommitNavItem", NavButtonController);
+
+class CommitController {
+    private commitModel;
+    private dialog;
+
+    private main;
+    private load;
+    private error;
+    private noChanges;
+    private toggleGroup;
+    private changedFiles;
+
+    constructor(commitDialog) {
+        this.commitModel = commitDialog.getModel('commit');
+        this.dialog = commitDialog.getToggle('dialog');
+
+        this.main = commitDialog.getToggle('main');
+        this.load = commitDialog.getToggle('load');
+        this.error = commitDialog.getToggle('error');
+        this.noChanges = commitDialog.getToggle('noChanges');
+        this.toggleGroup = new toggles.Group(this.main, this.load, this.error, this.noChanges);
+        this.changedFiles = commitDialog.getModel('changedFiles');
+
+        GitService.revertStarted.add(this, () => this.toggleGroup.activate(this.load));
+
+        GitService.revertCompleted.add(this, (success) => {
+            if (success) {
+                this.updateUncommittedFiles();
+            }
+            else {
+                this.toggleGroup.activate(this.error);
+            }
+        });
+    }
+
+    private updateUncommittedFiles() {
         GitService.uncommittedChanges()
-            .then(function (data:any[]) {
+            .then((data: any[]) => {
                 if (data.length > 0) {
-                    toggleGroup.activate(main);
-                    changedFiles.setData(data, commitRowCreated, determineCommitVariant);
+                    this.toggleGroup.activate(this.main);
+                    this.changedFiles.setData(data, commitRowCreated, determineCommitVariant);
                 }
                 else {
-                    toggleGroup.activate(noChanges);
+                    this.toggleGroup.activate(this.noChanges);
                 }
             })
-            .catch(function (data) {
-                toggleGroup.activate(error);
+            .catch((data) => {
+                this.toggleGroup.activate(this.error);
             });
     }
 
-    GitService.revertStarted.add(this, function () {
-        toggleGroup.activate(load);
-    });
-
-    GitService.revertCompleted.add(this, function (success) {
-        if (success) {
-            updateUncommittedFiles();
-        }
-        else {
-            toggleGroup.activate(error);
-        }
-    });
-
-    function commit(evt) {
+    commit(evt) {
         evt.preventDefault();
-        toggleGroup.activate(load);
-        var data = commitModel.getData();
+        this.toggleGroup.activate(this.load);
+        var data = this.commitModel.getData();
         GitService.commit(data)
-            .then(function (resultData) {
-                toggleGroup.activate(main);
-                commitModel.clear();
-                dialog.off();
+            .then((resultData) => {
+                this.toggleGroup.activate(this.main);
+                this.commitModel.clear();
+                this.dialog.off();
             })
-            .catch(function (errorData) {
-                toggleGroup.activate(main);
+            .catch((errorData) => {
+                this.toggleGroup.activate(this.main);
                 alert('Error Committing');
             });
     }
-    this.commit = commit;
 
-    function NavButtonController(created) {
-        function commit() {
-            toggleGroup.activate(load);
-            dialog.on();
-            updateUncommittedFiles();
-        }
-        this.commit = commit;
+    startCommit() {
+        this.toggleGroup.activate(this.load);
+        this.dialog.on();
+        this.updateUncommittedFiles();
     }
-
-    var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
-    editMenu.add("CommitNavItem", NavButtonController);
 }
 
-controller.create("commit", CommitController, null);
+var commitController = controller.create<CommitController, void, void>("commit", CommitController)[0];

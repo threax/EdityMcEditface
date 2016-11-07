@@ -5,7 +5,7 @@ jsns.run([
     "hr.http",
     "hr.controller",
     "hr.widgets.navmenu",
-    "edity.GitService"
+    "clientlibs.GitService"
 ],
 function (exports, module, storage, http, controller, navmenu, GitService) {
     var revertConfirmation;

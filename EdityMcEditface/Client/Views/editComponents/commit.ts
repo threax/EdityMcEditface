@@ -37,7 +37,7 @@ function CommitController(commitDialog) {
 
     function updateUncommittedFiles() {
         GitService.uncommittedChanges()
-            .then(function (data) {
+            .then(function (data:any[]) {
                 if (data.length > 0) {
                     toggleGroup.activate(main);
                     changedFiles.setData(data, commitRowCreated, determineCommitVariant);

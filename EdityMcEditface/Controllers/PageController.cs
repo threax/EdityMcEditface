@@ -44,7 +44,6 @@ namespace EdityMcEditface.Controllers
 
         [HttpPost("[action]/{*file}")]
         [AutoValidate("Cannot update page settings.")]
-        [ValidateAntiForgeryToken]
         public void Settings(String file, [FromBody]PageSettings settings)
         {
             TargetFileInfo targetFile = new TargetFileInfo(file);
@@ -54,7 +53,6 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost("{*file}")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
@@ -70,7 +68,6 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpDelete("{*file}")]
-        [ValidateAntiForgeryToken]
         public IActionResult Delete(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
@@ -89,7 +86,6 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost("[action]/{*pageUrl}")]
-        [ValidateAntiForgeryToken]
         public async Task<ImageUploadResponse> Asset(String pageUrl)
         {
             ImageUploadResponse imageResponse = new ImageUploadResponse();

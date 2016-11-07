@@ -201,8 +201,6 @@ namespace EdityMcEditface
                     break;
             }
 
-            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
-
             // Add framework services.
             services.AddMvc(o =>
             {

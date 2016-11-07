@@ -153,7 +153,7 @@ function build(sharedSettings) {
         ],
         runners: true,
         dest: viewBaseDir + '/layouts',
-        sourceRoot: __dirname + "/Client/Views"
+        sourceRoot: __dirname + "/Client/Views/"
     });
 
     //Copy view files

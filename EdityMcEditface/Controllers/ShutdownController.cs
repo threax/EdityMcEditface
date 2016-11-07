@@ -19,7 +19,6 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public void Index()
         {
             Process.GetCurrentProcess().Kill();

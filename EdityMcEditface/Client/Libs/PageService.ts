@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-import * as http from 'hr.http';
+import * as uploader from 'clientlibs.uploader';
 import * as saveService from 'clientlibs.SaveService';
 
 var sourceAccessor;
@@ -29,7 +29,7 @@ function doSave() {
         needsSave = false;
         var content = getHtml();
         var blob = new Blob([content], { type: "text/html" });
-        return http.upload('/edity/Page/' + window.location.pathname, blob)
+        return uploader.upload('/edity/Page/' + window.location.pathname, blob)
             .catch(function (err) {
                 needsSave = true;
                 throw err;

@@ -77,7 +77,6 @@ namespace EdityMcEditface.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<CompilerResult> Index()
         {
             Stopwatch sw = new Stopwatch();

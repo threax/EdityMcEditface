@@ -1,6 +1,7 @@
 ﻿"use strict";
 
 import * as http from 'hr.http';
+import * as uploader from 'clientlibs.uploader';
 import { EventHandler } from 'hr.eventhandler';
 import { PagedData } from 'hr.widgets.pageddata';
 
@@ -40,7 +41,7 @@ export function createHistoryPager(file, count) {
 
 export function resolve(file, content) {
     var blob = new Blob([content], { type: "text/html" });
-    return http.upload(host + '/edity/Git/Resolve/' + file, blob);
+    return uploader.upload(host + '/edity/Git/Resolve/' + file, blob);
 }
 
 export function pull() {

@@ -4,19 +4,22 @@ import * as http from 'hr.http';
 import * as uploader from 'clientlibs.uploader';
 import { EventHandler } from 'hr.eventhandler';
 import { PagedData } from 'hr.widgets.pageddata';
+import { CacheBuster } from 'hr.cachebuster';
+import { WindowFetch } from 'hr.windowfetch';
 
 var host = "";
+var cacheBuster = new CacheBuster(new WindowFetch());
 
 export function setHost(url) {
     host = url;
 }
 
 export function syncInfo() {
-    return http.get(host + '/edity/Git/SyncInfo');
+    return http.get(host + '/edity/Git/SyncInfo', cacheBuster);
 }
 
 export function uncommittedChanges() {
-    return http.get(host + '/edity/Git/UncommittedChanges');
+    return http.get(host + '/edity/Git/UncommittedChanges', cacheBuster);
 }
 
 export function commit(data) {
@@ -24,15 +27,15 @@ export function commit(data) {
 }
 
 export function uncommittedDiff(file) {
-    return http.get(host + '/edity/Git/UncommittedDiff/' + file);
+    return http.get(host + '/edity/Git/UncommittedDiff/' + file, cacheBuster);
 }
 
 export function mergeInfo(file) {
-    return http.get(host + '/edity/Git/MergeInfo/' + file);
+    return http.get(host + '/edity/Git/MergeInfo/' + file, cacheBuster);
 }
 
 export function historyCount(file) {
-    return http.get(host + '/edity/Git/HistoryCount/' + file);
+    return http.get(host + '/edity/Git/HistoryCount/' + file, cacheBuster);
 }
 
 export function createHistoryPager(file, count) {

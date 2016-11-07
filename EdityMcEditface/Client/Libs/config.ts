@@ -1,5 +1,5 @@
 ﻿"use strict";
 
-import * as anticsrf from 'hr.anticsrf';
+//import * as anticsrf from 'hr.anticsrf';
 
-anticsrf.getToken("/edity/Auth/AntiforgeryToken");
+//anticsrf.getToken("/edity/Auth/AntiforgeryToken");

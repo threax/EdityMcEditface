@@ -94,4 +94,4 @@ function CommitController(commitDialog) {
     editMenu.add("CommitNavItem", NavButtonController);
 }
 
-controller.create("commit", CommitController);
+controller.create("commit", CommitController, null);

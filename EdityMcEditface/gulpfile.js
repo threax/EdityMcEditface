@@ -136,7 +136,7 @@ function build(sharedSettings) {
         runners: ["edity.config"],
         dest: libDir,
         sourceRoot: __dirname + "/Client/Libs/",
-        namespace: "edity",
+        namespace: "clientlibs",
         output: "ClientLibs",
         concat: sharedSettings.concat,
         minify: sharedSettings.minify
@@ -158,35 +158,35 @@ function build(sharedSettings) {
 
     //Copy view files
     //Not working currently, converts everything to ascii for some reason, lots of version changes for node and gulp incliding 7 and 4 respectivly did not fix
-    //copyFiles({
-    //    libs: [
-    //        __dirname + "/Client/Views/**/*.html",
-    //        __dirname + "/Client/Views/**/*.js",
-    //        __dirname + "/Client/Views/**/*.json",
-    //        __dirname + "/Client/Views/**/*.css",
-    //        "!**/*.intellisense.js"
-    //    ],
-    //    baseName: __dirname + "/Client/Views",
-    //    dest: viewBaseDir + '/layouts'
-    //});
+    copyFiles({
+        libs: [
+            __dirname + "/Client/Views/**/*.html",
+            __dirname + "/Client/Views/**/*.js",
+            __dirname + "/Client/Views/**/*.json",
+            __dirname + "/Client/Views/**/*.css",
+            "!**/*.intellisense.js"
+        ],
+        baseName: __dirname + "/Client/Views",
+        dest: viewBaseDir + '/layouts'
+    });
 
-    //copyFiles({
-    //    libs: [
-    //        __dirname + "/Client/Templates/**/*.html",
-    //        __dirname + "/Client/Templates/**/*.js",
-    //        __dirname + "/Client/Templates/**/*.json",
-    //        __dirname + "/Client/Templates/**/*.css",
-    //        "!**/*.intellisense.js"
-    //    ],
-    //    baseName: __dirname + "/Client/Views",
-    //    dest: viewBaseDir + '/templates'
-    //});
+    copyFiles({
+        libs: [
+            __dirname + "/Client/Templates/**/*.html",
+            __dirname + "/Client/Templates/**/*.js",
+            __dirname + "/Client/Templates/**/*.json",
+            __dirname + "/Client/Templates/**/*.css",
+            "!**/*.intellisense.js"
+        ],
+        baseName: __dirname + "/Client/Views",
+        dest: viewBaseDir + '/templates'
+    });
 
-    //copyFiles({
-    //    libs: [
-    //        __dirname + "/edity.json"
-    //    ],
-    //    baseName: __dirname,
-    //    dest: viewBaseDir
-    //});
+    copyFiles({
+        libs: [
+            __dirname + "/edity.json"
+        ],
+        baseName: __dirname,
+        dest: viewBaseDir
+    });
 };

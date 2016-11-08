@@ -46,10 +46,10 @@ namespace EdityMcEditface.Controllers
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpGet("{*file}")]
+        [Produces("text/html")]
         public FileStreamResult GetContent(String file)
         {
-            file = Path.GetFullPath("\\edity\\templates\\" + file);
-            var template = fileFinder.Templates.First(i => Path.GetFullPath(i.Path) == file);
+            var template = fileFinder.Templates.First(i => i.Path == file);
             return returnFile(Path.ChangeExtension(template.Path, "html"));
         }
 

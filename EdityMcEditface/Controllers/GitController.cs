@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using EdityMcEditface.HtmlRenderer;
 using System.Net;
 using Threax.AspNetCore.ExceptionToJson;
+using Microsoft.AspNetCore.Http;
 
 namespace EdityMcEditface.Controllers
 {
@@ -353,9 +354,10 @@ namespace EdityMcEditface.Controllers
         /// Resolve the conflicts on the file.
         /// </summary>
         /// <param name="file">The file to resolve.</param>
+        /// <param name="content">The file content.</param>
         /// <returns></returns>
         [HttpPost("{*file}")]
-        public async Task Resolve(String file)
+        public async Task Resolve(String file, IFormFile content)
         {
             if (!IsWritablePath(file))
             {
@@ -371,7 +373,7 @@ namespace EdityMcEditface.Controllers
             var repoPath = Path.Combine(repo.Info.WorkingDirectory, fileInfo.DerivedFileName);
             using (var stream = fileFinder.writeFile(fileFinder.getProjectRelativePath(repoPath)))
             {
-                await this.Request.Form.Files.First().CopyToAsync(stream);
+                await content.CopyToAsync(stream);
             }
 
             repo.Index.Add(file);

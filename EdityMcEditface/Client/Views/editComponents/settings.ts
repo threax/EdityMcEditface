@@ -3,7 +3,7 @@
 import * as controller from "hr.controller";
 import * as FormLifecycle from "clientlibs.FormLifecycle";
 import * as storage from "hr.storage";
-import { Client } from "clientlibs.EdityClient";
+import { PageClient } from "clientlibs.EdityClient";
 import * as navmenu from "hr.widgets.navmenu";
 
 class DeletePageConfirmationController {
@@ -11,20 +11,20 @@ class DeletePageConfirmationController {
     private model;
     private uploadUrl;
     private currentUrl;
-    private client;
+    private client: PageClient;
 
     constructor(bindings) {
         this.dialog = bindings.getToggle('dialog');
         this.model = bindings.getModel("info");
         this.uploadUrl = this.model.getSrc();
         this.currentUrl;
-        this.client = new Client();
+        this.client = new PageClient();
     }
 
     deletePage(evt) {
         evt.preventDefault();
         evt.stopPropagation();
-        this.client.edityPageByFileDelete(this.currentUrl, null);
+        this.client.delete(this.currentUrl, null);
         this.currentUrl = null;
         this.dialog.off();
     }

@@ -9,6 +9,8 @@ using System.Net;
 using Microsoft.AspNetCore.StaticFiles;
 using EdityMcEditface.Models.CKEditor;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using EdityMcEditface.Models.Upload;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -38,34 +40,35 @@ namespace EdityMcEditface.Controllers
         /// <param name="dir">The directory to list the files under.</param>
         /// <returns>A list of files under dir.</returns>
         [HttpGet("{*file}")]
-        public IActionResult ListFiles(String dir)
+        public FileList ListFiles(String dir)
         {
             if(dir == null)
             {
                 dir = "";
             }
 
-            return Json(new
+            return new FileList
             {
-                directories = fileFinder.enumerateDirectories(dir),
-                files = fileFinder.enumerateFiles(dir)
-            });
+                Directories = fileFinder.enumerateDirectories(dir),
+                Files = fileFinder.enumerateFiles(dir),
+                Path = dir
+            };
         }
 
         /// <summary>
         /// Uplaod a new file.
         /// </summary>
         /// <param name="file">The file name of the uploaded file.</param>
+        /// <param name="content">The file content.</param>
         /// <returns></returns>
         [HttpPost("{*file}")]
-        public async Task<IActionResult> Upload(String file)
+        public async Task Upload(String file, IFormFile content)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
             using (Stream stream = fileFinder.writeFile(fileInfo.DerivedFileName))
             {
-                await this.Request.Form.Files.First().CopyToAsync(stream);
+                await content.CopyToAsync(stream);
             }
-            return StatusCode((int)HttpStatusCode.OK);
         }
 
         /// <summary>
@@ -74,7 +77,7 @@ namespace EdityMcEditface.Controllers
         /// <param name="file">The file to delete.</param>
         /// <returns></returns>
         [HttpDelete("{*file}")]
-        public IActionResult Delete(String file)
+        public void Delete(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
             if (fileInfo.PointsToHtmlFile)
@@ -85,7 +88,6 @@ namespace EdityMcEditface.Controllers
             {
                 fileFinder.eraseProjectFile(fileInfo.DerivedFileName);
             }
-            return StatusCode((int)HttpStatusCode.OK);
         }
     }
 }

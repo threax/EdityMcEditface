@@ -107,8 +107,8 @@ namespace EdityMcEditface.Controllers
         /// </summary>
         /// <param name="file">The file to get a diff for.</param>
         /// <returns>The file's diff info.</returns>
-        [HttpGet("{*file}")]
-        public DiffInfo UncommittedDiff(String file)
+        [HttpGet]
+        public DiffInfo UncommittedDiff([FromQuery] String file)
         {
             if (!IsWritablePath(file))
             {
@@ -166,8 +166,8 @@ namespace EdityMcEditface.Controllers
         /// </summary>
         /// <param name="file">The file to lookup.</param>
         /// <returns>The number of history entries for the file.</returns>
-        [HttpGet("{*file}")]
-        public int RepoHistoryCount(String file)
+        [HttpGet]
+        public int RepoHistoryCount([FromQuery] String file)
         {
             if (!IsWritablePath(file))
             {
@@ -200,8 +200,8 @@ namespace EdityMcEditface.Controllers
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        [HttpGet("{*file}")]
-        public MergeInfo MergeInfo(String file)
+        [HttpGet]
+        public MergeInfo MergeInfo([FromQuery] String file)
         {
             if (!IsWritablePath(file))
             {
@@ -224,8 +224,8 @@ namespace EdityMcEditface.Controllers
         /// <param name="page">The page to lookup, defaults to 0.</param>
         /// <param name="count">The number of pages to return, defaults to 25.</param>
         /// <returns>The history of the file.</returns>
-        [HttpGet("{*file}")]
-        public IEnumerable<History> FileHistory(String file, [FromQuery]int page = 0, [FromQuery]int count = 25)
+        [HttpGet]
+        public IEnumerable<History> FileHistory([FromQuery] String file, [FromQuery]int page = 0, [FromQuery]int count = 25)
         {
             if (!IsWritablePath(file))
             {
@@ -254,8 +254,8 @@ namespace EdityMcEditface.Controllers
         /// <param name="sha">The sha to lookup.</param>
         /// <param name="file">The file.</param>
         /// <returns>The file for the given sha version.</returns>
-        [HttpGet("{sha}/{*file}")]
-        public FileStreamResult FileVersion(String sha, String file)
+        [HttpGet]
+        public FileStreamResult FileVersion([FromQuery] String sha, [FromQuery] String file)
         {
             if (!IsWritablePath(file))
             {
@@ -356,8 +356,8 @@ namespace EdityMcEditface.Controllers
         /// <param name="file">The file to resolve.</param>
         /// <param name="content">The file content.</param>
         /// <returns></returns>
-        [HttpPost("{*file}")]
-        public async Task Resolve(String file, IFormFile content)
+        [HttpPost]
+        public async Task Resolve([FromQuery] String file, IFormFile content)
         {
             if (!IsWritablePath(file))
             {
@@ -384,8 +384,8 @@ namespace EdityMcEditface.Controllers
         /// </summary>
         /// <param name="file">The file to revert.</param>
         /// <returns></returns>
-        [HttpPost("{*file}")]
-        public async Task Revert(String file)
+        [HttpPost]
+        public async Task Revert([FromQuery] String file)
         {
             if (!IsWritablePath(file))
             {

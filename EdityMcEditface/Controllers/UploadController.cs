@@ -39,8 +39,8 @@ namespace EdityMcEditface.Controllers
         /// </summary>
         /// <param name="dir">The directory to list the files under.</param>
         /// <returns>A list of files under dir.</returns>
-        [HttpGet("{*file}")]
-        public FileList ListFiles(String dir)
+        [HttpGet]
+        public FileList ListFiles([FromQuery] String dir)
         {
             if(dir == null)
             {
@@ -61,8 +61,8 @@ namespace EdityMcEditface.Controllers
         /// <param name="file">The file name of the uploaded file.</param>
         /// <param name="content">The file content.</param>
         /// <returns></returns>
-        [HttpPost("{*file}")]
-        public async Task Upload(String file, IFormFile content)
+        [HttpPost]
+        public async Task Upload([FromQuery] String file, IFormFile content)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
             using (Stream stream = fileFinder.writeFile(fileInfo.DerivedFileName))
@@ -76,8 +76,8 @@ namespace EdityMcEditface.Controllers
         /// </summary>
         /// <param name="file">The file to delete.</param>
         /// <returns></returns>
-        [HttpDelete("{*file}")]
-        public void Delete(String file)
+        [HttpDelete]
+        public void Delete([FromQuery] String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
             if (fileInfo.PointsToHtmlFile)

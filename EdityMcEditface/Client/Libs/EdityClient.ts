@@ -216,12 +216,10 @@ export class GitClient {
      * @return Success
      */
     uncommittedDiff(file: string, bearer: string): Promise<DiffInfo> {
-        let url_ = this.baseUrl + "/edity/Git/UncommittedDiff/{file}";
+        let url_ = this.baseUrl + "/edity/Git/UncommittedDiff?";
 
-        if (file === undefined || file === null)
-            throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file));
-
+        if (file !== undefined)
+            url_ += "file=" + encodeURIComponent("" + file) + "&";
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
@@ -305,12 +303,10 @@ export class GitClient {
      * @return Success
      */
     repoHistoryCount(file: string, bearer: string): Promise<number> {
-        let url_ = this.baseUrl + "/edity/Git/RepoHistoryCount/{file}";
+        let url_ = this.baseUrl + "/edity/Git/RepoHistoryCount?";
 
-        if (file === undefined || file === null)
-            throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file));
-
+        if (file !== undefined)
+            url_ += "file=" + encodeURIComponent("" + file) + "&";
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
@@ -387,12 +383,10 @@ export class GitClient {
      * @return Success
      */
     mergeInfo(file: string, bearer: string): Promise<MergeInfo> {
-        let url_ = this.baseUrl + "/edity/Git/MergeInfo/{file}";
+        let url_ = this.baseUrl + "/edity/Git/MergeInfo?";
 
-        if (file === undefined || file === null)
-            throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file));
-
+        if (file !== undefined)
+            url_ += "file=" + encodeURIComponent("" + file) + "&";
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
@@ -433,12 +427,10 @@ export class GitClient {
      * @return Success
      */
     fileHistory(file: string, page: number, count: number, bearer: string): Promise<History[]> {
-        let url_ = this.baseUrl + "/edity/Git/FileHistory/{file}?";
+        let url_ = this.baseUrl + "/edity/Git/FileHistory?";
 
-        if (file === undefined || file === null)
-            throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file));
-
+        if (file !== undefined)
+            url_ += "file=" + encodeURIComponent("" + file) + "&";
         if (page !== undefined)
             url_ += "page=" + encodeURIComponent("" + page) + "&";
         if (count !== undefined)
@@ -482,15 +474,12 @@ export class GitClient {
      * @return Success
      */
     fileVersion(sha: string, file: string, bearer: string): Promise<any> {
-        let url_ = this.baseUrl + "/edity/Git/FileVersion/{sha}/{file}";
+        let url_ = this.baseUrl + "/edity/Git/FileVersion?";
 
-        if (sha === undefined || sha === null)
-            throw new Error("The parameter 'sha' must be defined.");
-        url_ = url_.replace("{sha}", encodeURIComponent("" + sha));
-        if (file === undefined || file === null)
-            throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file));
-
+        if (sha !== undefined)
+            url_ += "sha=" + encodeURIComponent("" + sha) + "&";
+        if (file !== undefined)
+            url_ += "file=" + encodeURIComponent("" + file) + "&";
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
@@ -644,12 +633,10 @@ export class GitClient {
      * @return Success
      */
     resolve(file: string, content: FileParameter, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Git/Resolve/{file}";
+        let url_ = this.baseUrl + "/edity/Git/Resolve?";
 
-        if (file === undefined || file === null)
-            throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file));
-
+        if (file !== undefined)
+            url_ += "file=" + encodeURIComponent("" + file) + "&";
         const content_ = new FormData();
         if (content !== null)
             content_.append("content", content.data, content.fileName ? content.fileName : "content");
@@ -688,12 +675,10 @@ export class GitClient {
      * @return Success
      */
     revert(file: string, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Git/Revert/{file}";
+        let url_ = this.baseUrl + "/edity/Git/Revert?";
 
-        if (file === undefined || file === null)
-            throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file));
-
+        if (file !== undefined)
+            url_ += "file=" + encodeURIComponent("" + file) + "&";
         const content_ = "";
         return this.http.fetch(url_, {
             body: content_,
@@ -1030,7 +1015,7 @@ export class ShutdownClient {
     }
 }
 
-export class TemplateClientBase {
+export class TemplateClient {
     private static jsonMimeType = "application/json";
     private baseUrl: string;
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
@@ -1041,18 +1026,10 @@ export class TemplateClientBase {
         this.http = http ? http : window;
     }
 
-    protected transformOptions(options: RequestInit) {
-        return options;
-    }
-
-    protected transformResult(url: string, response: Response, processor: (response: Response) => any) {
-        return processor(response);
-    }
-
     parseResult<T>(response: Response, data: string, jsonParseReviver: (key: string, value: any) => any): T | string {
         var result: T | string;
         var contentHeader = response.headers.get('content-type');
-        if (contentHeader && contentHeader.length >= TemplateClientBase.jsonMimeType.length && contentHeader.substring(0, TemplateClientBase.jsonMimeType.length) === TemplateClientBase.jsonMimeType) {
+        if (contentHeader && contentHeader.length >= TemplateClient.jsonMimeType.length && contentHeader.substring(0, TemplateClient.jsonMimeType.length) === TemplateClient.jsonMimeType) {
             result = data === "" ? null : <T>JSON.parse(data, jsonParseReviver);
         }
         else {
@@ -1068,14 +1045,14 @@ export class TemplateClientBase {
     listAll(bearer: string): Promise<Template[]> {
         let url_ = this.baseUrl + "/edity/Template/ListAll";
 
-        return this.http.fetch(url_, this.transformOptions({
+        return this.http.fetch(url_, {
             method: "GET",
             headers: {
                 "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
-        })).then((response) => {
-            return this.transformResult(url_, response, (response) => this.processListAll(response));
+        }).then((response) => {
+            return this.processListAll(response);
         });
     }
 
@@ -1105,20 +1082,18 @@ export class TemplateClientBase {
      * @return Success
      */
     getContent(file: string, bearer: string): Promise<any> {
-        let url_ = this.baseUrl + "/edity/Template/GetContent/{file}";
+        let url_ = this.baseUrl + "/edity/Template/GetContent?";
 
-        if (file === undefined || file === null)
-            throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file));
-
-        return this.http.fetch(url_, this.transformOptions({
+        if (file !== undefined)
+            url_ += "file=" + encodeURIComponent("" + file) + "&";
+        return this.http.fetch(url_, {
             method: "GET",
             headers: {
                 "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
-        })).then((response) => {
-            return this.transformResult(url_, response, (response) => this.processGetContent(response));
+        }).then((response) => {
+            return this.processGetContent(response);
         });
     }
 
@@ -1141,44 +1116,6 @@ export class TemplateClientBase {
                     throw new Error("error_no_callback_for_the_received_http_status");
                 }
         });
-    }
-}
-
-export class TemplateClient extends TemplateClientBase {
-
-    /**
-     * This is the best I've figured out to do so far, override the transformResult for the
-     * get template content function and skip the json parse.
-     * @param {type} url
-     * @param {type} response
-     * @param {type} processor
-     * @returns
-     */
-    protected transformResult(url: string, response: Response, processor: (response: Response) => any) {
-        var testUrl = '/edity/Template/GetContent/';
-
-        if (url.length >= testUrl.length && url.substr(0, testUrl.length) === testUrl) {
-            return response.text().then((data) => {
-                const status = response.status.toString();
-
-                if (status === "200") {
-                    let result200: any = null;
-                    result200 = data === "" ? null : data;
-                    return result200;
-                }
-                else
-                    if (status === "500") {
-                        let result500: ExceptionResult = null;
-                        result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                        throw result500;
-                    }
-                    else {
-                        throw new Error("error_no_callback_for_the_received_http_status");
-                    }
-            });
-        }
-
-        return processor(response);
     }
 }
 
@@ -1210,12 +1147,8 @@ export class UploadClient {
      * @dir The directory to list the files under.
      * @return Success
      */
-    listFiles(dir: string, file: string, bearer: string): Promise<FileList> {
-        let url_ = this.baseUrl + "/edity/Upload/ListFiles/{file}?";
-
-        if (file === undefined || file === null)
-            throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file));
+    listFiles(dir: string, bearer: string): Promise<FileList> {
+        let url_ = this.baseUrl + "/edity/Upload/ListFiles?";
 
         if (dir !== undefined)
             url_ += "dir=" + encodeURIComponent("" + dir) + "&";
@@ -1257,12 +1190,10 @@ export class UploadClient {
      * @return Success
      */
     upload(file: string, content: FileParameter, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Upload/Upload/{file}";
+        let url_ = this.baseUrl + "/edity/Upload/Upload?";
 
-        if (file === undefined || file === null)
-            throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file));
-
+        if (file !== undefined)
+            url_ += "file=" + encodeURIComponent("" + file) + "&";
         const content_ = new FormData();
         if (content !== null)
             content_.append("content", content.data, content.fileName ? content.fileName : "content");
@@ -1301,12 +1232,10 @@ export class UploadClient {
      * @return Success
      */
     delete(file: string, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Upload/Delete/{file}";
+        let url_ = this.baseUrl + "/edity/Upload/Delete?";
 
-        if (file === undefined || file === null)
-            throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file));
-
+        if (file !== undefined)
+            url_ += "file=" + encodeURIComponent("" + file) + "&";
         const content_ = "";
         return this.http.fetch(url_, {
             body: content_,

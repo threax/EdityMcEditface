@@ -15,7 +15,10 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.Controllers
 {
-    [Route("edity/[controller]")]
+    /// <summary>
+    /// This controller handles properties of a page.
+    /// </summary>
+    [Route("edity/[controller]/[action]/{*file}")]
     [Authorize(Roles = Roles.EditPages)]
     public class PageController : Controller
     {
@@ -26,8 +29,13 @@ namespace EdityMcEditface.Controllers
             this.fileFinder = fileFinder;
         }
 
-        [HttpGet("[action]/{*file}")]
-        public PageSettings Settings(String file)
+        /// <summary>
+        /// Get the current page settings.
+        /// </summary>
+        /// <param name="file">The name of the file to lookup.</param>
+        /// <returns>The PageSettings for the file.</returns>
+        [HttpGet]
+        public PageSettings GetSettings(String file)
         {
             TargetFileInfo targetFile = new TargetFileInfo(file);
             var definition = fileFinder.getProjectPageDefinition(targetFile);
@@ -42,9 +50,14 @@ namespace EdityMcEditface.Controllers
             };
         }
 
-        [HttpPost("[action]/{*file}")]
+        /// <summary>
+        /// Update the settings for the page.
+        /// </summary>
+        /// <param name="file">The file who's pages to upload.</param>
+        /// <param name="settings">The page settings to set.</param>
+        [HttpPut]
         [AutoValidate("Cannot update page settings.")]
-        public void Settings(String file, [FromBody]PageSettings settings)
+        public void UpdateSettings(String file, [FromBody]PageSettings settings)
         {
             TargetFileInfo targetFile = new TargetFileInfo(file);
             var definition = fileFinder.getProjectPageDefinition(targetFile);
@@ -52,8 +65,12 @@ namespace EdityMcEditface.Controllers
             fileFinder.savePageDefinition(definition, targetFile);
         }
 
-        [HttpPost("{*file}")]
-        public async Task<IActionResult> Index(String file)
+        /// <summary>
+        /// Save a page.
+        /// </summary>
+        /// <param name="file">The file to save.</param>
+        [HttpPut]
+        public async Task Save(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
             if (fileInfo.IsProjectFile)
@@ -64,11 +81,14 @@ namespace EdityMcEditface.Controllers
             {
                 await this.Request.Form.Files.First().CopyToAsync(stream);
             }
-            return StatusCode((int)HttpStatusCode.OK);
         }
 
-        [HttpDelete("{*file}")]
-        public IActionResult Delete(String file)
+        /// <summary>
+        /// Delete a page.
+        /// </summary>
+        /// <param name="file">The name of the page to delete.</param>
+        [HttpDelete]
+        public void Delete(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
             if (fileInfo.IsProjectFile)
@@ -81,25 +101,28 @@ namespace EdityMcEditface.Controllers
             fileFinder.deleteFile(fileInfo.FileNoExtension + ".css");
             fileFinder.deleteFile(fileInfo.FileNoExtension + ".js");
             fileFinder.deleteFolder(getUploadFolder(fileInfo));
-
-            return StatusCode((int)HttpStatusCode.OK);
         }
 
-        [HttpPost("[action]/{*pageUrl}")]
-        public async Task<ImageUploadResponse> Asset(String pageUrl)
+        /// <summary>
+        /// Add an asset to a page.
+        /// </summary>
+        /// <param name="file">The page to add the asset to.</param>
+        /// <returns>The ImageUplaodResponse with the result.</returns>
+        [HttpPost]
+        public async Task<ImageUploadResponse> AddAsset(String file)
         {
             ImageUploadResponse imageResponse = new ImageUploadResponse();
 
             try
             {
-                TargetFileInfo fileInfo = new TargetFileInfo(pageUrl);
+                TargetFileInfo fileInfo = new TargetFileInfo(file);
                 string autoFileFolder = getUploadFolder(fileInfo);
-                var file = this.Request.Form.Files.First();
-                var autoFileFile = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                var formFile = this.Request.Form.Files.First();
+                var autoFileFile = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
                 var autoPath = Path.Combine(autoFileFolder, autoFileFile);
                 using (Stream stream = fileFinder.writeFile(autoPath))
                 {
-                    await file.CopyToAsync(stream);
+                    await formFile.CopyToAsync(stream);
                 }
 
                 imageResponse.Uploaded = 1;
@@ -119,6 +142,11 @@ namespace EdityMcEditface.Controllers
             return imageResponse;
         }
 
+        /// <summary>
+        /// Helper funciton to get the upload folder.
+        /// </summary>
+        /// <param name="fileInfo">The file info to use.</param>
+        /// <returns>The upload folder for the given file.</returns>
         private static string getUploadFolder(TargetFileInfo fileInfo)
         {
             return Path.Combine("AutoUploadedImages", fileInfo.FileNoExtension);

@@ -5,10 +5,10 @@
 // </auto-generated>
 //----------------------
 
-export class Client {
-    private baseUrl: string; 
+export class CompileClient {
+    private baseUrl: string;
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-	protected jsonParseReviver: (key: string, value: any) => any = undefined; 
+    protected jsonParseReviver: (key: string, value: any) => any = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
         this.baseUrl = baseUrl ? baseUrl : "";
@@ -16,1120 +16,1198 @@ export class Client {
     }
 
     /**
+     * Get the current status of the compiler.
      * @return Success
      */
-    edityCompileStatusGet(bearer: string): Promise<CompilerStatus> {
-        let url_ = this.baseUrl + "/edity/Compile/Status"; 
+    status(bearer: string): Promise<CompilerStatus> {
+        let url_ = this.baseUrl + "/edity/Compile/Status";
 
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityCompileStatusGet(response);
+            return this.processStatus(response);
         });
     }
 
-    private processEdityCompileStatusGet(response: Response) {
+    private processStatus(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
-                let result200: CompilerStatus = null; 
+                let result200: CompilerStatus = null;
                 result200 = data === "" ? null : <CompilerStatus>JSON.parse(data, this.jsonParseReviver);
-                return result200; 
+                return result200;
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Run the compiler.
      * @return Success
      */
-    edityCompilePost(bearer: string): Promise<CompilerResult> {
-        let url_ = this.baseUrl + "/edity/Compile"; 
+    compile(bearer: string): Promise<CompilerResult> {
+        let url_ = this.baseUrl + "/edity/Compile/Compile";
 
         const content_ = "";
         return this.http.fetch(url_, {
-			body: content_,
+            body: content_,
             method: "POST",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityCompilePost(response);
+            return this.processCompile(response);
         });
     }
 
-    private processEdityCompilePost(response: Response) {
+    private processCompile(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
-                let result200: CompilerResult = null; 
+                let result200: CompilerResult = null;
                 result200 = data === "" ? null : <CompilerResult>JSON.parse(data, this.jsonParseReviver);
-                return result200; 
+                return result200;
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
+    }
+}
+
+export class GitClient {
+    private baseUrl: string;
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    protected jsonParseReviver: (key: string, value: any) => any = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.baseUrl = baseUrl ? baseUrl : "";
+        this.http = http ? http : window;
     }
 
     /**
+     * Get the uncommitted changes.
      * @return Success
      */
-    edityGitUncommittedChangesGet(bearer: string): Promise<UncommittedChange[]> {
-        let url_ = this.baseUrl + "/edity/Git/UncommittedChanges"; 
+    uncommittedChanges(bearer: string): Promise<UncommittedChange[]> {
+        let url_ = this.baseUrl + "/edity/Git/UncommittedChanges";
 
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitUncommittedChangesGet(response);
+            return this.processUncommittedChanges(response);
         });
     }
 
-    private processEdityGitUncommittedChangesGet(response: Response) {
+    private processUncommittedChanges(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
-                let result200: UncommittedChange[] = null; 
+                let result200: UncommittedChange[] = null;
                 result200 = data === "" ? null : <UncommittedChange[]>JSON.parse(data, this.jsonParseReviver);
-                return result200; 
+                return result200;
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Get the files that need to be synced.
      * @return Success
      */
-    edityGitSyncInfoGet(bearer: string): Promise<SyncInfo> {
-        let url_ = this.baseUrl + "/edity/Git/SyncInfo"; 
+    syncInfo(bearer: string): Promise<SyncInfo> {
+        let url_ = this.baseUrl + "/edity/Git/SyncInfo";
 
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitSyncInfoGet(response);
+            return this.processSyncInfo(response);
         });
     }
 
-    private processEdityGitSyncInfoGet(response: Response) {
+    private processSyncInfo(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
-                let result200: SyncInfo = null; 
+                let result200: SyncInfo = null;
                 result200 = data === "" ? null : <SyncInfo>JSON.parse(data, this.jsonParseReviver);
-                return result200; 
+                return result200;
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Get the diff of the file between its original and modified version.
+     * @file The file to get a diff for.
      * @return Success
      */
-    edityGitUncommittedDiffByFileGet(file: string, bearer: string): Promise<DiffInfo> {
-        let url_ = this.baseUrl + "/edity/Git/UncommittedDiff/{file}"; 
+    uncommittedDiff(file: string, bearer: string): Promise<DiffInfo> {
+        let url_ = this.baseUrl + "/edity/Git/UncommittedDiff/{file}";
 
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitUncommittedDiffByFileGet(response);
+            return this.processUncommittedDiff(response);
         });
     }
 
-    private processEdityGitUncommittedDiffByFileGet(response: Response) {
+    private processUncommittedDiff(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
-                let result200: DiffInfo = null; 
+                let result200: DiffInfo = null;
                 result200 = data === "" ? null : <DiffInfo>JSON.parse(data, this.jsonParseReviver);
-                return result200; 
+                return result200;
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Get the history of the entire repo.
+     * @page The page to lookup, defaults to 0.
+     * @count The number of pages to return, defaults to 25.
      * @return Success
      */
-    edityGitHistoryGet(page: number, count: number, bearer: string): Promise<History[]> {
-        let url_ = this.baseUrl + "/edity/Git/History?"; 
+    repoHistory(page: number, count: number, bearer: string): Promise<History[]> {
+        let url_ = this.baseUrl + "/edity/Git/RepoHistory?";
 
         if (page !== undefined)
-            url_ += "page=" + encodeURIComponent("" + page) + "&"; 
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
         if (count !== undefined)
-            url_ += "count=" + encodeURIComponent("" + count) + "&"; 
+            url_ += "count=" + encodeURIComponent("" + count) + "&";
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitHistoryGet(response);
+            return this.processRepoHistory(response);
         });
     }
 
-    private processEdityGitHistoryGet(response: Response) {
+    private processRepoHistory(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
-                let result200: History[] = null; 
+                let result200: History[] = null;
                 result200 = data === "" ? null : <History[]>JSON.parse(data, this.jsonParseReviver);
-                return result200; 
+                return result200;
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Get the number of history entries for the entire repo.
+     * @file The file to lookup.
      * @return Success
      */
-    edityGitHistoryCountByFileGet(file: string, bearer: string): Promise<number> {
-        let url_ = this.baseUrl + "/edity/Git/HistoryCount/{file}"; 
+    repoHistoryCount(file: string, bearer: string): Promise<number> {
+        let url_ = this.baseUrl + "/edity/Git/RepoHistoryCount/{file}";
 
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitHistoryCountByFileGet(response);
+            return this.processRepoHistoryCount(response);
         });
     }
 
-    private processEdityGitHistoryCountByFileGet(response: Response) {
+    private processRepoHistoryCount(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
-                let result200: number = null; 
+                let result200: number = null;
                 result200 = data === "" ? null : <number>JSON.parse(data, this.jsonParseReviver);
-                return result200; 
+                return result200;
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * The conflicts in the current working directory.
      * @return Success
      */
-    edityGitConflictsGet(bearer: string): Promise<ConflictInfo[]> {
-        let url_ = this.baseUrl + "/edity/Git/Conflicts"; 
+    conflicts(bearer: string): Promise<ConflictInfo[]> {
+        let url_ = this.baseUrl + "/edity/Git/Conflicts";
 
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitConflictsGet(response);
+            return this.processConflicts(response);
         });
     }
 
-    private processEdityGitConflictsGet(response: Response) {
+    private processConflicts(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
-                let result200: ConflictInfo[] = null; 
+                let result200: ConflictInfo[] = null;
                 result200 = data === "" ? null : <ConflictInfo[]>JSON.parse(data, this.jsonParseReviver);
-                return result200; 
+                return result200;
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Get the info for a merge for a file.
      * @return Success
      */
-    edityGitMergeInfoByFileGet(file: string, bearer: string): Promise<MergeInfo> {
-        let url_ = this.baseUrl + "/edity/Git/MergeInfo/{file}"; 
+    mergeInfo(file: string, bearer: string): Promise<MergeInfo> {
+        let url_ = this.baseUrl + "/edity/Git/MergeInfo/{file}";
 
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitMergeInfoByFileGet(response);
+            return this.processMergeInfo(response);
         });
     }
 
-    private processEdityGitMergeInfoByFileGet(response: Response) {
+    private processMergeInfo(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
-                let result200: MergeInfo = null; 
+                let result200: MergeInfo = null;
                 result200 = data === "" ? null : <MergeInfo>JSON.parse(data, this.jsonParseReviver);
-                return result200; 
+                return result200;
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Ge the history of a file.
+     * @file The file to lookup.
+     * @page The page to lookup, defaults to 0.
+     * @count The number of pages to return, defaults to 25.
      * @return Success
      */
-    edityGitHistoryByFileGet(file: string, page: number, count: number, bearer: string): Promise<History[]> {
-        let url_ = this.baseUrl + "/edity/Git/History/{file}?"; 
+    fileHistory(file: string, page: number, count: number, bearer: string): Promise<History[]> {
+        let url_ = this.baseUrl + "/edity/Git/FileHistory/{file}?";
 
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         if (page !== undefined)
-            url_ += "page=" + encodeURIComponent("" + page) + "&"; 
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
         if (count !== undefined)
-            url_ += "count=" + encodeURIComponent("" + count) + "&"; 
+            url_ += "count=" + encodeURIComponent("" + count) + "&";
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitHistoryByFileGet(response);
+            return this.processFileHistory(response);
         });
     }
 
-    private processEdityGitHistoryByFileGet(response: Response) {
+    private processFileHistory(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
-                let result200: History[] = null; 
+                let result200: History[] = null;
                 result200 = data === "" ? null : <History[]>JSON.parse(data, this.jsonParseReviver);
-                return result200; 
+                return result200;
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Get a particluar file version.
+     * @sha The sha to lookup.
+     * @file The file.
      * @return Success
      */
-    edityGitFileVersionByShaByFileGet(sha: string, file: string, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Git/FileVersion/{sha}/{file}"; 
+    fileVersion(sha: string, file: string, bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Git/FileVersion/{sha}/{file}";
 
         if (sha === undefined || sha === null)
             throw new Error("The parameter 'sha' must be defined.");
-        url_ = url_.replace("{sha}", encodeURIComponent("" + sha)); 
+        url_ = url_.replace("{sha}", encodeURIComponent("" + sha));
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitFileVersionByShaByFileGet(response);
+            return this.processFileVersion(response);
         });
     }
 
-    private processEdityGitFileVersionByShaByFileGet(response: Response) {
+    private processFileVersion(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Commit the current working directory.
+     * @newCommit The new commit object.
      * @return Success
      */
-    edityGitCommitPost(newCommit: NewCommit, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Git/Commit"; 
+    commit(newCommit: NewCommit, bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Git/Commit";
 
         const content_ = JSON.stringify(newCommit);
         return this.http.fetch(url_, {
-			body: content_,
+            body: content_,
             method: "POST",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitCommitPost(response);
+            return this.processCommit(response);
         });
     }
 
-    private processEdityGitCommitPost(response: Response) {
+    private processCommit(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Pull in changes from the origin repo.
      * @return Success
      */
-    edityGitPullPost(bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Git/Pull"; 
+    pull(bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Git/Pull";
 
         const content_ = "";
         return this.http.fetch(url_, {
-			body: content_,
+            body: content_,
             method: "POST",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitPullPost(response);
+            return this.processPull(response);
         });
     }
 
-    private processEdityGitPullPost(response: Response) {
+    private processPull(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Push changes to the origin repo.
      * @return Success
      */
-    edityGitPushPost(bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Git/Push"; 
+    push(bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Git/Push";
 
         const content_ = "";
         return this.http.fetch(url_, {
-			body: content_,
+            body: content_,
             method: "POST",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitPushPost(response);
+            return this.processPush(response);
         });
     }
 
-    private processEdityGitPushPost(response: Response) {
+    private processPush(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Resolve the conflicts on the file.
+     * @file The file to resolve.
      * @return Success
      */
-    edityGitResolveByFilePost(file: string, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Git/Resolve/{file}"; 
+    resolve(file: string, bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Git/Resolve/{file}";
 
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         const content_ = "";
         return this.http.fetch(url_, {
-			body: content_,
+            body: content_,
             method: "POST",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitResolveByFilePost(response);
+            return this.processResolve(response);
         });
     }
 
-    private processEdityGitResolveByFilePost(response: Response) {
+    private processResolve(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Revert a file to its unmodified version.
+     * @file The file to revert.
      * @return Success
      */
-    edityGitRevertByFilePost(file: string, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Git/Revert/{file}"; 
+    revert(file: string, bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Git/Revert/{file}";
 
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         const content_ = "";
         return this.http.fetch(url_, {
-			body: content_,
+            body: content_,
             method: "POST",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityGitRevertByFilePost(response);
+            return this.processRevert(response);
         });
     }
 
-    private processEdityGitRevertByFilePost(response: Response) {
+    private processRevert(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
+    }
+}
+
+export class PageClient {
+    private baseUrl: string;
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    protected jsonParseReviver: (key: string, value: any) => any = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.baseUrl = baseUrl ? baseUrl : "";
+        this.http = http ? http : window;
     }
 
     /**
+     * Get the current page settings.
+     * @file The name of the file to lookup.
      * @return Success
      */
-    edityPreviewByFileGet(file: string, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/preview/{file}"; 
+    getSettings(file: string, bearer: string): Promise<PageSettings> {
+        let url_ = this.baseUrl + "/edity/Page/GetSettings/{file}";
 
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityPreviewByFileGet(response);
+            return this.processGetSettings(response);
         });
     }
 
-    private processEdityPreviewByFileGet(response: Response) {
+    private processGetSettings(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
-            }
-            else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
-        });
-    }
-
-    /**
-     * @return Success
-     */
-    edityPageSettingsByFileGet(file: string, bearer: string): Promise<PageSettings> {
-        let url_ = this.baseUrl + "/edity/Page/Settings/{file}"; 
-
-        if (file === undefined || file === null)
-            throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
-
-        return this.http.fetch(url_, {
-            method: "GET",
-            headers: {
-                "bearer": bearer, 
-                "Content-Type": "application/json; charset=UTF-8"
-            }
-        }).then((response) => {
-            return this.processEdityPageSettingsByFileGet(response);
-        });
-    }
-
-    private processEdityPageSettingsByFileGet(response: Response) {
-        return response.text().then((data) => {
-            const status = response.status.toString(); 
-
-            if (status === "200") {
-                let result200: PageSettings = null; 
+                let result200: PageSettings = null;
                 result200 = data === "" ? null : <PageSettings>JSON.parse(data, this.jsonParseReviver);
-                return result200; 
+                return result200;
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Update the settings for the page.
+     * @file The file who's pages to upload.
+     * @settings The page settings to set.
      * @return Success
      */
-    edityPageSettingsByFilePost(file: string, settings: PageSettings, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Page/Settings/{file}"; 
+    updateSettings(file: string, settings: PageSettings, bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Page/UpdateSettings/{file}";
 
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         const content_ = JSON.stringify(settings);
         return this.http.fetch(url_, {
-			body: content_,
-            method: "POST",
+            body: content_,
+            method: "PUT",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityPageSettingsByFilePost(response);
+            return this.processUpdateSettings(response);
         });
     }
 
-    private processEdityPageSettingsByFilePost(response: Response) {
+    private processUpdateSettings(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
             }
             else
-            if (status === "400") {
-                let result400: ModelStateErrorResult = null; 
-                result400 = data === "" ? null : <ModelStateErrorResult>JSON.parse(data, this.jsonParseReviver);
-                throw result400; 
-            }
-            else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "400") {
+                    let result400: ModelStateErrorResult = null;
+                    result400 = data === "" ? null : <ModelStateErrorResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result400;
+                }
+                else
+                    if (status === "500") {
+                        let result500: ExceptionResult = null;
+                        result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                        throw result500;
+                    }
+                    else {
+                        throw new Error("error_no_callback_for_the_received_http_status");
+                    }
         });
     }
 
     /**
+     * Save a page.
+     * @file The file to save.
      * @return Success
      */
-    edityPageByFilePost(file: string, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Page/{file}"; 
+    save(file: string, bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Page/Save/{file}";
 
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         const content_ = "";
         return this.http.fetch(url_, {
-			body: content_,
-            method: "POST",
+            body: content_,
+            method: "PUT",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityPageByFilePost(response);
+            return this.processSave(response);
         });
     }
 
-    private processEdityPageByFilePost(response: Response) {
+    private processSave(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Delete a page.
+     * @file The name of the page to delete.
      * @return Success
      */
-    edityPageByFileDelete(file: string, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Page/{file}"; 
+    delete(file: string, bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Page/Delete/{file}";
 
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         const content_ = "";
         return this.http.fetch(url_, {
-			body: content_,
+            body: content_,
             method: "DELETE",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityPageByFileDelete(response);
+            return this.processDelete(response);
         });
     }
 
-    private processEdityPageByFileDelete(response: Response) {
+    private processDelete(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Add an asset to a page.
+     * @file The page to add the asset to.
      * @return Success
      */
-    edityPageAssetByPageUrlPost(pageUrl: string, bearer: string): Promise<ImageUploadResponse> {
-        let url_ = this.baseUrl + "/edity/Page/Asset/{pageUrl}"; 
+    addAsset(file: string, bearer: string): Promise<ImageUploadResponse> {
+        let url_ = this.baseUrl + "/edity/Page/AddAsset/{file}";
 
-        if (pageUrl === undefined || pageUrl === null)
-            throw new Error("The parameter 'pageUrl' must be defined.");
-        url_ = url_.replace("{pageUrl}", encodeURIComponent("" + pageUrl)); 
+        if (file === undefined || file === null)
+            throw new Error("The parameter 'file' must be defined.");
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         const content_ = "";
         return this.http.fetch(url_, {
-			body: content_,
+            body: content_,
             method: "POST",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityPageAssetByPageUrlPost(response);
+            return this.processAddAsset(response);
         });
     }
 
-    private processEdityPageAssetByPageUrlPost(response: Response) {
+    private processAddAsset(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
-                let result200: ImageUploadResponse = null; 
+                let result200: ImageUploadResponse = null;
                 result200 = data === "" ? null : <ImageUploadResponse>JSON.parse(data, this.jsonParseReviver);
-                return result200; 
+                return result200;
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
+    }
+}
+
+export class ShutdownClient {
+    private baseUrl: string;
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    protected jsonParseReviver: (key: string, value: any) => any = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.baseUrl = baseUrl ? baseUrl : "";
+        this.http = http ? http : window;
     }
 
     /**
+     * Stop the Edity McEditface process.
      * @return Success
      */
-    edityShutdownPost(bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/Shutdown"; 
+    shutdown(bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Shutdown/Shutdown";
 
         const content_ = "";
         return this.http.fetch(url_, {
-			body: content_,
+            body: content_,
             method: "POST",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityShutdownPost(response);
+            return this.processShutdown(response);
         });
     }
 
-    private processEdityShutdownPost(response: Response) {
+    private processShutdown(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
+    }
+}
+
+export class TemplateClient {
+    private baseUrl: string;
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    protected jsonParseReviver: (key: string, value: any) => any = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.baseUrl = baseUrl ? baseUrl : "";
+        this.http = http ? http : window;
     }
 
     /**
+     * Get all the templates in the system.
      * @return Success
      */
-    edityTemplatesGet(bearer: string): Promise<Template[]> {
-        let url_ = this.baseUrl + "/edity/templates"; 
+    listAll(bearer: string): Promise<Template[]> {
+        let url_ = this.baseUrl + "/edity/Template/ListAll";
 
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityTemplatesGet(response);
+            return this.processListAll(response);
         });
     }
 
-    private processEdityTemplatesGet(response: Response) {
+    private processListAll(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
-                let result200: Template[] = null; 
+                let result200: Template[] = null;
                 result200 = data === "" ? null : <Template[]>JSON.parse(data, this.jsonParseReviver);
-                return result200; 
+                return result200;
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Get a single template's content.
      * @return Success
      */
-    edityListByFileGet(file: string, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/list/{file}"; 
+    getContent(file: string, bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Template/GetContent/{file}";
 
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         return this.http.fetch(url_, {
             method: "GET",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityListByFileGet(response);
+            return this.processGetContent(response);
         });
     }
 
-    private processEdityListByFileGet(response: Response) {
+    private processGetContent(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
+        });
+    }
+}
+
+export class UploadClient {
+    private baseUrl: string;
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    protected jsonParseReviver: (key: string, value: any) => any = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.baseUrl = baseUrl ? baseUrl : "";
+        this.http = http ? http : window;
+    }
+
+    /**
+     * List the files in dir.
+     * @dir The directory to list the files under.
+     * @return Success
+     */
+    listFiles(dir: string, file: string, bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Upload/ListFiles/{file}?";
+
+        if (file === undefined || file === null)
+            throw new Error("The parameter 'file' must be defined.");
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
+
+        if (dir !== undefined)
+            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
+        return this.http.fetch(url_, {
+            method: "GET",
+            headers: {
+                "bearer": bearer,
+                "Content-Type": "application/json; charset=UTF-8"
+            }
+        }).then((response) => {
+            return this.processListFiles(response);
+        });
+    }
+
+    private processListFiles(response: Response) {
+        return response.text().then((data) => {
+            const status = response.status.toString();
+
+            if (status === "200") {
             }
             else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Uplaod a new file.
+     * @file The file name of the uploaded file.
      * @return Success
      */
-    edityUploadByFilePost(file: string, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/upload/{file}"; 
+    upload(file: string, bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Upload/Upload/{file}";
 
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         const content_ = "";
         return this.http.fetch(url_, {
-			body: content_,
+            body: content_,
             method: "POST",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityUploadByFilePost(response);
+            return this.processUpload(response);
         });
     }
 
-    private processEdityUploadByFilePost(response: Response) {
+    private processUpload(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 
     /**
+     * Delete a file.
+     * @file The file to delete.
      * @return Success
      */
-    edityUploadByFileDelete(file: string, bearer: string): Promise<void> {
-        let url_ = this.baseUrl + "/edity/upload/{file}"; 
+    delete(file: string, bearer: string): Promise<void> {
+        let url_ = this.baseUrl + "/edity/Upload/Delete/{file}";
 
         if (file === undefined || file === null)
             throw new Error("The parameter 'file' must be defined.");
-        url_ = url_.replace("{file}", encodeURIComponent("" + file)); 
+        url_ = url_.replace("{file}", encodeURIComponent("" + file));
 
         const content_ = "";
         return this.http.fetch(url_, {
-			body: content_,
+            body: content_,
             method: "DELETE",
             headers: {
-                "bearer": bearer, 
+                "bearer": bearer,
                 "Content-Type": "application/json; charset=UTF-8"
             }
         }).then((response) => {
-            return this.processEdityUploadByFileDelete(response);
+            return this.processDelete(response);
         });
     }
 
-    private processEdityUploadByFileDelete(response: Response) {
+    private processDelete(response: Response) {
         return response.text().then((data) => {
-            const status = response.status.toString(); 
+            const status = response.status.toString();
 
             if (status === "200") {
             }
             else
-            if (status === "500") {
-                let result500: ExceptionResult = null; 
-                result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
-                throw result500; 
-            }
-            else
-            {
-                throw new Error("error_no_callback_for_the_received_http_status"); 
-            }
+                if (status === "500") {
+                    let result500: ExceptionResult = null;
+                    result500 = data === "" ? null : <ExceptionResult>JSON.parse(data, this.jsonParseReviver);
+                    throw result500;
+                }
+                else {
+                    throw new Error("error_no_callback_for_the_received_http_status");
+                }
         });
     }
 }
@@ -1193,14 +1271,18 @@ export interface PageSettings {
 }
 
 export interface ModelStateErrorResult {
-    errors: { [key: string] : string; };
+    errors: { [key: string]: string; };
     message: string;
 }
 
 export interface ImageUploadResponse {
+    /** Set to 1 for uploaded or 0 for not uploaded */
     uploaded: number;
+    /** The name of the saved file */
     fileName: string;
+    /** The url to the saved file */
     url: string;
+    /** A message to display */
     message: string;
 }
 
@@ -1209,13 +1291,13 @@ export interface Template {
 }
 
 export enum UncommittedChangeState {
-    Nonexistent = <any>"Nonexistent", 
-    Unaltered = <any>"Unaltered", 
-    Added = <any>"Added", 
-    Removed = <any>"Removed", 
-    Renamed = <any>"Renamed", 
-    Modified = <any>"Modified", 
-    Unreadable = <any>"Unreadable", 
-    Ignored = <any>"Ignored", 
-    Conflicted = <any>"Conflicted", 
+    Nonexistent = <any>"Nonexistent",
+    Unaltered = <any>"Unaltered",
+    Added = <any>"Added",
+    Removed = <any>"Removed",
+    Renamed = <any>"Renamed",
+    Modified = <any>"Modified",
+    Unreadable = <any>"Unreadable",
+    Ignored = <any>"Ignored",
+    Conflicted = <any>"Conflicted",
 }

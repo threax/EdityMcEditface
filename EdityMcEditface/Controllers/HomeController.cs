@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace EdityMcEditface.NetCore.Controllers
 {
     [Authorize(Roles=Roles.EditPages)]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
     {
         private FileFinder fileFinder;

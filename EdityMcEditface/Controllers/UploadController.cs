@@ -14,33 +14,51 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace EdityMcEditface.Controllers
 {
+    /// <summary>
+    /// This controller handles file uploads.
+    /// </summary>
     [Authorize(Roles = Roles.UploadAnything)]
+    [Route("edity/[controller]/[action]")]
     public class UploadController : Controller
     {
         private FileFinder fileFinder;
 
+        /// <summary>
+        /// Controller.
+        /// </summary>
+        /// <param name="fileFinder"></param>
         public UploadController(FileFinder fileFinder)
         {
             this.fileFinder = fileFinder;
         }
 
-        [HttpGet("edity/list/{*file}")]
-        public IActionResult ListFiles(String file)
+        /// <summary>
+        /// List the files in dir.
+        /// </summary>
+        /// <param name="dir">The directory to list the files under.</param>
+        /// <returns>A list of files under dir.</returns>
+        [HttpGet("{*file}")]
+        public IActionResult ListFiles(String dir)
         {
-            if(file == null)
+            if(dir == null)
             {
-                file = "";
+                dir = "";
             }
 
             return Json(new
             {
-                directories = fileFinder.enumerateDirectories(file),
-                files = fileFinder.enumerateFiles(file)
+                directories = fileFinder.enumerateDirectories(dir),
+                files = fileFinder.enumerateFiles(dir)
             });
         }
 
-        [HttpPost("edity/upload/{*file}")]
-        public async Task<IActionResult> Index(String file)
+        /// <summary>
+        /// Uplaod a new file.
+        /// </summary>
+        /// <param name="file">The file name of the uploaded file.</param>
+        /// <returns></returns>
+        [HttpPost("{*file}")]
+        public async Task<IActionResult> Upload(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
             using (Stream stream = fileFinder.writeFile(fileInfo.DerivedFileName))
@@ -50,7 +68,12 @@ namespace EdityMcEditface.Controllers
             return StatusCode((int)HttpStatusCode.OK);
         }
 
-        [HttpDelete("edity/upload/{*file}")]
+        /// <summary>
+        /// Delete a file.
+        /// </summary>
+        /// <param name="file">The file to delete.</param>
+        /// <returns></returns>
+        [HttpDelete("{*file}")]
         public IActionResult Delete(String file)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);

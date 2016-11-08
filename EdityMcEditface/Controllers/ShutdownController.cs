@@ -9,17 +9,27 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.Controllers
 {
-    [Route("edity/[controller]")]
+    /// <summary>
+    /// This controller will shutdown Edity McEditface, this only works if the program was
+    /// compiled with LOCAL_RUN_ENABLED.
+    /// </summary>
+    [Route("edity/[controller]/[action]")]
     [Authorize(Roles = Roles.Shutdown)]
     public class ShutdownController : Controller
     {
+        /// <summary>
+        /// Consturctor
+        /// </summary>
         public ShutdownController()
         {
             
         }
 
+        /// <summary>
+        /// Stop the Edity McEditface process.
+        /// </summary>
         [HttpPost]
-        public void Index()
+        public void Shutdown()
         {
             Process.GetCurrentProcess().Kill();
         }

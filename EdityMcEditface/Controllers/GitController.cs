@@ -14,6 +14,9 @@ using Threax.AspNetCore.ExceptionToJson;
 
 namespace EdityMcEditface.Controllers
 {
+    /// <summary>
+    /// This api interacts with the git repo.
+    /// </summary>
     [Route("edity/[controller]/[action]")]
     [Authorize(Roles = Roles.EditPages)]
     public class GitController : Controller
@@ -21,18 +24,31 @@ namespace EdityMcEditface.Controllers
         private Repository repo;
         private FileFinder fileFinder;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="repo"></param>
+        /// <param name="fileFinder"></param>
         public GitController(Repository repo, FileFinder fileFinder)
         {
             this.repo = repo;
             this.fileFinder = fileFinder;
         }
 
+        /// <summary>
+        /// Dispose function.
+        /// </summary>
+        /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
             this.repo.Dispose();
             base.Dispose(disposing);
         }
 
+        /// <summary>
+        /// Get the uncommitted changes.
+        /// </summary>
+        /// <returns>The uncommitted changes.</returns>
         [HttpGet]
         public IEnumerable<UncommittedChange> UncommittedChanges()
         {
@@ -45,6 +61,10 @@ namespace EdityMcEditface.Controllers
             });
         }
 
+        /// <summary>
+        /// Get the files that need to be synced.
+        /// </summary>
+        /// <returns>A SyncInfo with the info.</returns>
         [HttpGet]
         public async Task<SyncInfo> SyncInfo()
         {
@@ -81,10 +101,15 @@ namespace EdityMcEditface.Controllers
             });
         }
 
+        /// <summary>
+        /// Get the diff of the file between its original and modified version.
+        /// </summary>
+        /// <param name="file">The file to get a diff for.</param>
+        /// <returns>The file's diff info.</returns>
         [HttpGet("{*file}")]
         public DiffInfo UncommittedDiff(String file)
         {
-            if (!isWritablePath(file))
+            if (!IsWritablePath(file))
             {
                 throw new ErrorResultException($"Cannot access file '{file}'");
             }
@@ -119,8 +144,14 @@ namespace EdityMcEditface.Controllers
             return diff;
         }
 
+        /// <summary>
+        /// Get the history of the entire repo.
+        /// </summary>
+        /// <param name="page">The page to lookup, defaults to 0.</param>
+        /// <param name="count">The number of pages to return, defaults to 25.</param>
+        /// <returns>The history of the page.</returns>
         [HttpGet]
-        public IEnumerable<History> History([FromQuery]int page = 0, [FromQuery]int count = 25)
+        public IEnumerable<History> RepoHistory([FromQuery]int page = 0, [FromQuery]int count = 25)
         {
             var historyCommits = repo.Commits.Skip(page * count).Take(count);
             foreach (var logEntry in historyCommits)
@@ -129,10 +160,15 @@ namespace EdityMcEditface.Controllers
             }
         }
 
+        /// <summary>
+        /// Get the number of history entries for the entire repo.
+        /// </summary>
+        /// <param name="file">The file to lookup.</param>
+        /// <returns>The number of history entries for the file.</returns>
         [HttpGet("{*file}")]
-        public int HistoryCount(String file)
+        public int RepoHistoryCount(String file)
         {
-            if (!isWritablePath(file))
+            if (!IsWritablePath(file))
             {
                 throw new ErrorResultException($"Cannot access file '{file}'");
             }
@@ -142,6 +178,10 @@ namespace EdityMcEditface.Controllers
             return repo.Commits.QueryBy(fileInfo.DerivedFileName).Count();
         }
 
+        /// <summary>
+        /// The conflicts in the current working directory.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<ConflictInfo> Conflicts()
         {
@@ -154,10 +194,15 @@ namespace EdityMcEditface.Controllers
             });
         }
 
+        /// <summary>
+        /// Get the info for a merge for a file.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         [HttpGet("{*file}")]
         public MergeInfo MergeInfo(String file)
         {
-            if (!isWritablePath(file))
+            if (!IsWritablePath(file))
             {
                 throw new ErrorResultException($"Cannot access file '{file}'");
             }
@@ -171,10 +216,17 @@ namespace EdityMcEditface.Controllers
             }
         }
 
+        /// <summary>
+        /// Ge the history of a file.
+        /// </summary>
+        /// <param name="file">The file to lookup.</param>
+        /// <param name="page">The page to lookup, defaults to 0.</param>
+        /// <param name="count">The number of pages to return, defaults to 25.</param>
+        /// <returns>The history of the file.</returns>
         [HttpGet("{*file}")]
-        public IEnumerable<History> History(String file, [FromQuery]int page = 0, [FromQuery]int count = 25)
+        public IEnumerable<History> FileHistory(String file, [FromQuery]int page = 0, [FromQuery]int count = 25)
         {
-            if (!isWritablePath(file))
+            if (!IsWritablePath(file))
             {
                 throw new ErrorResultException($"Cannot access file '{file}'");
             }
@@ -195,10 +247,16 @@ namespace EdityMcEditface.Controllers
             }
         }
 
+        /// <summary>
+        /// Get a particluar file version.
+        /// </summary>
+        /// <param name="sha">The sha to lookup.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>The file for the given sha version.</returns>
         [HttpGet("{sha}/{*file}")]
         public FileStreamResult FileVersion(String sha, String file)
         {
-            if (!isWritablePath(file))
+            if (!IsWritablePath(file))
             {
                 throw new ErrorResultException($"Cannot access file '{file}'");
             }
@@ -218,6 +276,11 @@ namespace EdityMcEditface.Controllers
             }
         }
 
+        /// <summary>
+        /// Commit the current working directory.
+        /// </summary>
+        /// <param name="signature">The user signature, from services.</param>
+        /// <param name="newCommit">The new commit object.</param>
         [HttpPost]
         public void Commit([FromServices]Signature signature, [FromBody]NewCommit newCommit)
         {
@@ -238,6 +301,10 @@ namespace EdityMcEditface.Controllers
             }
         }
 
+        /// <summary>
+        /// Pull in changes from the origin repo.
+        /// </summary>
+        /// <param name="signature">The signature to use, from services.</param>
         [HttpPost]
         public void Pull([FromServices]Signature signature)
         {
@@ -261,6 +328,9 @@ namespace EdityMcEditface.Controllers
             }
         }
 
+        /// <summary>
+        /// Push changes to the origin repo.
+        /// </summary>
         [HttpPost]
         public void Push()
         {
@@ -279,10 +349,15 @@ namespace EdityMcEditface.Controllers
             }
         }
 
+        /// <summary>
+        /// Resolve the conflicts on the file.
+        /// </summary>
+        /// <param name="file">The file to resolve.</param>
+        /// <returns></returns>
         [HttpPost("{*file}")]
         public async Task Resolve(String file)
         {
-            if (!isWritablePath(file))
+            if (!IsWritablePath(file))
             {
                 throw new ErrorResultException($"Cannot access file '{file}'");
             }
@@ -302,10 +377,15 @@ namespace EdityMcEditface.Controllers
             repo.Index.Add(file);
         }
 
+        /// <summary>
+        /// Revert a file to its unmodified version.
+        /// </summary>
+        /// <param name="file">The file to revert.</param>
+        /// <returns></returns>
         [HttpPost("{*file}")]
         public async Task Revert(String file)
         {
-            if (!isWritablePath(file))
+            if (!IsWritablePath(file))
             {
                 throw new ErrorResultException($"Cannot access file '{file}'");
             }
@@ -332,12 +412,22 @@ namespace EdityMcEditface.Controllers
             }
         }
 
+        /// <summary>
+        /// Helper function to query changes in the git repo.
+        /// </summary>
+        /// <param name="status">The status of the repository.</param>
+        /// <returns></returns>
         private IEnumerable<StatusEntry> QueryChanges(RepositoryStatus status)
         {
-            return status.Where(s => s.State != FileStatus.Ignored && isWritablePath(s.FilePath));
+            return status.Where(s => s.State != FileStatus.Ignored && IsWritablePath(s.FilePath));
         }
 
-        private bool isWritablePath(String path)
+        /// <summary>
+        /// Make sure the path is writable.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private bool IsWritablePath(String path)
         {
             return fileFinder.isValidWritablePath(Path.Combine(repo.Info.WorkingDirectory, path));
         }

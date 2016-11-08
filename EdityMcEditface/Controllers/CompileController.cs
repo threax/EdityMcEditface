@@ -16,20 +16,33 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.Controllers
 {
-    [Route("edity/[controller]")]
+    /// <summary>
+    /// This controller compiles the static website.
+    /// </summary>
+    [Route("edity/[controller]/[action]")]
     [Authorize(Roles=Roles.Compile)]
     public class CompileController : Controller
     {
         private SiteBuilder builder;
         private WorkQueue workQueue;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="workQueue"></param>
         public CompileController(SiteBuilder builder, WorkQueue workQueue)
         {
             this.builder = builder;
             this.workQueue = workQueue;
         }
 
-        [HttpGet("Status")]
+        /// <summary>
+        /// Get the current status of the compiler.
+        /// </summary>
+        /// <param name="projectFinder">The project finder.</param>
+        /// <returns></returns>
+        [HttpGet]
         public CompilerStatus Status([FromServices] ProjectFinder projectFinder)
         {
             var publishRepoPath = projectFinder.PublishedProjectPath;
@@ -76,8 +89,12 @@ namespace EdityMcEditface.Controllers
             };
         }
 
+        /// <summary>
+        /// Run the compiler.
+        /// </summary>
+        /// <returns>The time statistics when the compilation is complete.</returns>
         [HttpPost]
-        public async Task<CompilerResult> Index()
+        public async Task<CompilerResult> Compile()
         {
             Stopwatch sw = new Stopwatch();
 

@@ -17,14 +17,26 @@ using Threax.AspNetCore.ExceptionToJson;
 
 namespace EdityMcEditface.Controllers
 {
+    /// <summary>
+    /// This controller will automatically log in a user when they hit the login function.
+    /// This only works if LOCAL_RUN_ENABLED was enabled when the program was compiled.
+    /// </summary>
     [Authorize]
     public class NoAuthController : Controller
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public NoAuthController()
         {
             
         }
 
+        /// <summary>
+        /// Log in
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> LogIn(String returnUrl)
@@ -37,6 +49,10 @@ namespace EdityMcEditface.Controllers
             return SafeRedirect(ref returnUrl);
         }
 
+        /// <summary>
+        /// The claims for the user logging in.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerable<Claim> AllClaims()
         {
             yield return new Claim("name", "OnlyUser");
@@ -48,6 +64,11 @@ namespace EdityMcEditface.Controllers
 #endif
         }
 
+        /// <summary>
+        /// Get the antiforgery token.
+        /// </summary>
+        /// <param name="antiforgery"></param>
+        /// <returns></returns>
         [HttpPost]
         public AntiforgeryToken AntiforgeryToken([FromServices] IAntiforgery antiforgery)
         {
@@ -60,6 +81,12 @@ namespace EdityMcEditface.Controllers
             };
         }
 
+        /// <summary>
+        /// Log out.
+        /// </summary>
+        /// <param name="antiforgery"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> LogOut([FromServices] IAntiforgery antiforgery, String returnUrl)
         {

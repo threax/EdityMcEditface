@@ -1,10 +1,12 @@
 ﻿"use strict";
 
-import * as uploader from 'clientlibs.uploader';
+import * as edityClient from 'clientlibs.EdityClient';
 import * as saveService from 'clientlibs.SaveService';
+import * as pageStart from 'clientlibs.PageStart';
 
 var sourceAccessor;
 var needsSave = false;
+var client: edityClient.PageClient;
 
 export function setHtml(value) {
     sourceAccessor.setHtml(value);
@@ -29,11 +31,15 @@ function doSave() {
         needsSave = false;
         var content = getHtml();
         var blob = new Blob([content], { type: "text/html" });
-        return uploader.upload('/edity/Page/' + window.location.pathname, blob)
+        return client.save(window.location.pathname, { fileName: window.location.pathname, data: blob }, null)
             .catch(function (err) {
                 needsSave = true;
                 throw err;
             });
     }
 }
-saveService.saveEvent.add(this, doSave);
+
+pageStart.init().then((config) => {
+    client = new edityClient.PageClient(config.BaseUrl, config.Fetcher);
+    saveService.saveEvent.add(this, doSave);
+});

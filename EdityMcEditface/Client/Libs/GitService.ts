@@ -23,32 +23,26 @@ export function setHost(url) {
 
 export function syncInfo() {
     return client.syncInfo(null);
-    //return http.get(host + '/edity/Git/SyncInfo', cacheBuster);
 }
 
 export function uncommittedChanges() {
     return client.uncommittedChanges(null);
-    //return http.get(host + '/edity/Git/UncommittedChanges', cacheBuster);
 }
 
 export function commit(data: edityClient.NewCommit) {
     return client.commit(data, null);
-    //return http.post(host + '/edity/Git/Commit', data);
 }
 
 export function uncommittedDiff(file:string) {
     return client.uncommittedDiff(file, null);
-    //return http.get(host + '/edity/Git/UncommittedDiff/' + file, cacheBuster);
 }
 
 export function mergeInfo(file:string) {
     return client.mergeInfo(file, null);
-    //return http.get(host + '/edity/Git/MergeInfo/' + file, cacheBuster);
 }
 
-export function historyCount(file, page, count) {
-    client.fileHistory(file, page, count, null);
-    //return http.get(host + '/edity/Git/HistoryCount/' + file, cacheBuster);
+export function historyCount(file) {
+    return client.repoHistoryCount(file, null);
 }
 
 export function createHistoryPager(file, count) {
@@ -57,17 +51,15 @@ export function createHistoryPager(file, count) {
 
 export function resolve(file, content) {
     var blob = new Blob([content], { type: "text/html" });
-    return uploader.upload(host + '/edity/Git/Resolve/' + file, blob);
+    return client.resolve(file, { data: blob, fileName: file }, null);
 }
 
 export function pull() {
     return client.pull(null);
-    //return http.post(host + '/edity/Git/Pull');
 }
 
 export function push() {
     return client.push(null);
-    //return http.post(host + '/edity/Git/Push');
 }
 
 var revertStartedHandler = new EventHandler();

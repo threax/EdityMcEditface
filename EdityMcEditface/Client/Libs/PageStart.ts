@@ -3,6 +3,7 @@ import { AccessTokenManager } from 'hr.accesstokens';
 import { Fetcher } from 'hr.fetcher';
 import { CacheBuster } from 'hr.cachebuster';
 import { WindowFetch } from 'hr.windowfetch';
+import { WithCredentialsFetcher } from 'clientlibs.WithCredentialsFetcher';
 
 export class PageStart {
     //Configuration
@@ -11,7 +12,7 @@ export class PageStart {
     //Page Start
     constructor() {
         bootstrap.activate();
-        this.fetcher = new CacheBuster(new WindowFetch());
+        this.fetcher = new WithCredentialsFetcher(new CacheBuster(new WindowFetch()));
     }
 
     get Fetcher(): Fetcher {

@@ -1,6 +1,5 @@
 ﻿"use strict";
 
-import * as http from "hr.http";
 import * as uploader from "clientlibs.uploader";
 import * as storage from "hr.storage";
 import * as BindingCollection from "hr.bindingcollection";
@@ -8,6 +7,8 @@ import * as toggles from "hr.toggles";
 import * as Iterable from "hr.iterable";
 import * as controller from "hr.controller";
 import * as navmenu from "hr.widgets.navmenu";
+import * as EdityClient from 'clientlibs.EdityClient';
+import * as PageStart from 'clientlibs.PageStart';
 
 function getFileName(path) {
     return path.replace(/^.*?([^\\\/]*)$/, '$1');
@@ -15,10 +16,8 @@ function getFileName(path) {
 
 /**
  * Create a file browser
- * @param {BindingCollection} bindings
- * @param {FileBrowserSettings} [settings]
  */
-function FileBrowser(bindings) {
+function FileBrowser(bindings, uploadClient: EdityClient.UploadClient) {
     var parentFolders = [];
     var currentFolder = undefined;
 
@@ -60,7 +59,7 @@ function FileBrowser(bindings) {
 
     function loadCurrentFolder() {
         toggleGroup.activate(load);
-        http.get(listFilesUrl + currentFolder)
+        uploadClient.listFiles(currentFolder, null)
             .then(getFilesSuccess)
             .catch(getFilesFail);
     }
@@ -105,27 +104,26 @@ function FileBrowser(bindings) {
 };
 
 class NavButtonController {
-    bindings: controller.BindingCollection;
+    private bindings: controller.BindingCollection;
+    private mediaControllerInstance: MediaController;
 
-    constructor(bindings) {
+    constructor(bindings, mediaControllerInstance: MediaController) {
         this.bindings = bindings;
+        this.mediaControllerInstance = mediaControllerInstance;
     }
 
     loadMedia() {
-        mediaControllerInstance.loadMedia(this.bindings.getModel("browse").getSrc());
+        this.mediaControllerInstance.loadMedia(this.bindings.getModel("browse").getSrc());
     }
 }
-
-var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
-editMenu.add("MediaNavItem", NavButtonController);
 
 class MediaController {
     private fileBrowser;
     private uploadModel;
     private dialog;
 
-    constructor(bindings) {
-        this.fileBrowser = new FileBrowser(bindings);
+    constructor(bindings: controller.BindingCollection, context: PageStart.PageStart) {
+        this.fileBrowser = new FileBrowser(bindings, new EdityClient.UploadClient(context.BaseUrl, context.Fetcher));
         this.uploadModel = bindings.getModel('upload');
         this.dialog = bindings.getToggle('dialog');
     }
@@ -151,4 +149,9 @@ class MediaController {
     }
 }
 
-var mediaControllerInstance = controller.create<MediaController, void, void>("media", MediaController)[0];
+PageStart.init().then((config) => {
+    var mediaControllerInstance = controller.create<MediaController, PageStart.PageStart, void>("media", MediaController, config)[0];
+
+    var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
+    editMenu.add("MediaNavItem", NavButtonController, mediaControllerInstance);
+});

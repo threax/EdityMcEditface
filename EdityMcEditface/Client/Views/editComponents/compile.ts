@@ -1,11 +1,11 @@
 ﻿"use strict";
 
 import * as storage from "hr.storage";
-import * as http from "hr.http";
 import * as controller from "hr.controller";
 import * as toggles from "hr.toggles";
 import * as navmenu from "hr.widgets.navmenu";
-import * as CompileService from "clientlibs.CompileService";
+import * as EdityClient from 'clientlibs.EdityClient';
+import * as PageStart from 'clientlibs.PageStart';
 
 class NavButtonController {
     compile(evt) {
@@ -27,8 +27,9 @@ class CompileController {
     private changesModel;
     private infoModel;
     private dialogToggle;
+    private compileClient: EdityClient.CompileClient;
 
-    constructor(bindings: controller.BindingCollection) {
+    constructor(bindings: controller.BindingCollection, context: PageStart.PageStart) {
         this.start = bindings.getToggle("start");
         this.success = bindings.getToggle("success");
         this.fail = bindings.getToggle("fail");
@@ -38,12 +39,13 @@ class CompileController {
         this.changesModel = bindings.getModel("changes");
         this.infoModel = bindings.getModel('info');
         this.dialogToggle = bindings.getToggle('dialog');
+        this.compileClient = new EdityClient.CompileClient(context.BaseUrl, context.Fetcher);
     }
 
     runCompiler(evt) {
         evt.preventDefault();
         this.toggleGroup.activate(this.compiling);
-        http.post('/edity/Compile', {})
+        this.compileClient.compile(null)
             .then((data) => {
                 this.resultsModel.setData(data);
                 this.toggleGroup.activate(this.success);
@@ -56,7 +58,7 @@ class CompileController {
     startCompile() {
         this.toggleGroup.activate(this.compiling);
         this.dialogToggle.on();
-        CompileService.getStatus()
+        this.compileClient.status(null)
             .then((data: any) => {
                 this.infoModel.setData(data);
                 this.changesModel.setData(data.behindHistory);
@@ -68,4 +70,8 @@ class CompileController {
     }
 }
 
-var compileController = controller.create<CompileController, void, void>('compile', CompileController)[0];
+var compileController;
+
+PageStart.init().then((config) => {
+    compileController = controller.create<CompileController, PageStart.PageStart, void>('compile', CompileController, config)[0];
+});

@@ -3,7 +3,7 @@
 import * as edityClient from 'clientlibs.EdityClient';
 import * as uploader from 'clientlibs.uploader';
 import { EventHandler } from 'hr.eventhandler';
-import { PagedData } from 'hr.widgets.pageddata';
+import { PagedClientData } from 'hr.widgets.pageddata';
 import { CacheBuster } from 'hr.cachebuster';
 import { WindowFetch } from 'hr.windowfetch';
 import * as pageStart from 'clientlibs.PageStart';
@@ -46,7 +46,11 @@ export function historyCount(file) {
 }
 
 export function createHistoryPager(file, count) {
-    return new PagedData(host + '/edity/Git/History/' + file, count);
+    return new PagedClientData<edityClient.History[]>((current, resultsPerPage) => getDataPage(file, current, resultsPerPage), count);
+}
+
+function getDataPage(file, current, resultsPerPage): Promise<edityClient.History[]> {
+    return client.fileHistory(file, current, resultsPerPage, null);
 }
 
 export function resolve(file, content) {

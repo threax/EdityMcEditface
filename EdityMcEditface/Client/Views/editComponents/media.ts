@@ -1,6 +1,5 @@
 ﻿"use strict";
 
-import * as uploader from "clientlibs.uploader";
 import * as storage from "hr.storage";
 import * as BindingCollection from "hr.bindingcollection";
 import * as toggles from "hr.toggles";
@@ -121,9 +120,11 @@ class MediaController {
     private fileBrowser;
     private uploadModel;
     private dialog;
+    private uploadClient: EdityClient.UploadClient;
 
     constructor(bindings: controller.BindingCollection, context: PageStart.PageStart) {
-        this.fileBrowser = new FileBrowser(bindings, new EdityClient.UploadClient(context.BaseUrl, context.Fetcher));
+        this.uploadClient = new EdityClient.UploadClient(context.BaseUrl, context.Fetcher);
+        this.fileBrowser = new FileBrowser(bindings, this.uploadClient);
         this.uploadModel = bindings.getModel('upload');
         this.dialog = bindings.getToggle('dialog');
     }
@@ -132,13 +133,14 @@ class MediaController {
         evt.preventDefault();
 
         var formData = new FormData();
-        var filename = this.uploadModel.getData()["file"];
+        var file = this.uploadModel.getData()["file"][0];
+        var filename = file.name;
         filename = getFileName(filename);
-        uploader.upload(this.uploadModel.getSrc() + this.fileBrowser.getCurrentDirectory() + '/' + filename, formData)
-            .then(function (data) {
+        this.uploadClient.upload(this.fileBrowser.getCurrentDirectory() + '/' + filename, { data: file, fileName: filename }, null)
+            .then((data) => {
                 this.fileBrowser.refresh();
             })
-            .catch(function (data) {
+            .catch((data) => {
                 alert("File Upload Failed");
             });
     }

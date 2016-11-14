@@ -70,7 +70,7 @@
     "TreeMenu": {
       "js": [
         {
-          "file": "/lib/edity/widgets/TreeMenu.js",
+          "file": "/lib/Widgets/TreeMenu.js",
           "async": true
         }
       ],

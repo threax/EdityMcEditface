@@ -3,7 +3,7 @@
 import * as controller from "hr.controller";
 import * as toggles from "hr.toggles";
 import * as http from "hr.http";
-import * as editorSync from "edity.widgets.TreeMenuEditorSync";
+import * as TreeMenu from "edity.widgets.TreeMenu";
 import * as saveService from "clientlibs.SaveService";
 import * as EdityClient from 'clientlibs.EdityClient';
 
@@ -377,7 +377,7 @@ function itemIter(items, skipItem) {
         var item = null;
         if (i < items.length) {
             item = items[i++];
-            while (item != null && (item === skipItem || !editorSync.isFolder(item))) {
+            while (item != null && (item === skipItem || !TreeMenu.isFolder(item))) {
                 if (i < items.length) {
                     item = items[i++];
                 }
@@ -404,55 +404,60 @@ function moveToChild(evt, menuData, itemData, updateCb) {
     });
 }
 
-function fireItemAdded(saveUrl, itemData, bindListenerCb) {
+function fireItemAdded(args: TreeMenu.ItemAddedArgs) {
     createControllers();
-    var treeEditor = treeMenuEditors[saveUrl];
+    var treeEditor = treeMenuEditors[args.saveUrl];
 
     if (!treeEditor) {
-        throw new Error('Cannot find tree menu editor for "' + saveUrl + '" did you create the root controller?');
+        throw new Error('Cannot find tree menu editor for "' + args.saveUrl + '" did you create the root controller?');
     }
 
-    bindListenerCb({
+    args.bindListenerCb({
         moveUp: function (evt) {
-            moveUp(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
+            moveUp(evt, treeEditor.getMenuData(), args.itemData, treeEditor.update);
         },
 
         moveDown: function (evt) {
-            moveDown(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
+            moveDown(evt, treeEditor.getMenuData(), args.itemData, treeEditor.update);
         },
 
         addItem: function (evt) {
-            addItem(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
+            addItem(evt, treeEditor.getMenuData(), args.itemData, treeEditor.update);
         },
 
         editItem: function (evt) {
-            editItem(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
+            editItem(evt, treeEditor.getMenuData(), args.itemData, treeEditor.update);
         },
 
         deleteItem: function (evt) {
-            deleteItem(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
+            deleteItem(evt, treeEditor.getMenuData(), args.itemData, treeEditor.update);
         },
 
         moveToParent: function (evt) {
-            moveToParent(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
+            moveToParent(evt, treeEditor.getMenuData(), args.itemData, treeEditor.update);
         },
 
         moveToChild: function (evt) {
-            moveToChild(evt, treeEditor.getMenuData(), itemData, treeEditor.update);
+            moveToChild(evt, treeEditor.getMenuData(), args.itemData, treeEditor.update);
         }
     });
 }
 
-function createRootNodeControls(controllerElementName, menuData, updateCb, saveUrl, parentBindings) {
-    var treeMenuEditor = treeMenuEditors[saveUrl];
+function createRootNodeControls(args: TreeMenu.CreateRootNodeControlsArgs) {
+    var treeMenuEditor = treeMenuEditors[args.saveUrl];
     if (treeMenuEditor === undefined) {
-        treeMenuEditor = new TreeMenuEditor(menuData, updateCb, saveUrl);
-        treeMenuEditors[saveUrl] = treeMenuEditor;
+        treeMenuEditor = new TreeMenuEditor(args.menuData, args.updateCb, args.saveUrl);
+        treeMenuEditors[args.saveUrl] = treeMenuEditor;
     }
-    controller.create(controllerElementName, <any>RootNodeControls, treeMenuEditor, parentBindings);
+    controller.create(args.controllerElementName, <any>RootNodeControls, treeMenuEditor, args.parentBindings);
 }
 
-editorSync.setEditorListener({
-    itemAdded: fireItemAdded,
-    createRootNodeControls: createRootNodeControls
-});
+TreeMenu.GetInstances().forEach(listenToTreeMenu);
+TreeMenu.GetInstanceAdded().add(listenToTreeMenu)
+
+function listenToTreeMenu(menu: TreeMenu.TreeMenuController) {
+    menu.EditorSync.setEditorListener({
+        itemAdded: fireItemAdded,
+        createRootNodeControls: createRootNodeControls
+    }, true);
+}

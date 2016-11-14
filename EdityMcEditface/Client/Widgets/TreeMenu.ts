@@ -3,7 +3,60 @@
 import * as storage from "hr.storage";
 import * as http from "hr.http";
 import * as controller from "hr.controller";
-import * as editorSync from "edity.widgets.TreeMenuEditorSync";
+import * as EventDispatcher from 'hr.eventdispatcher';
+import * as ObservableList from 'hr.observablelist';
+
+export interface ItemAddedArgs {
+    saveUrl: string;
+    itemData;
+    bindListenerCb;
+}
+
+export interface CreateRootNodeControlsArgs {
+    controllerElementName: string;
+    menuData: any;
+    updateCb: () => void;
+    saveUrl: string;
+    parentBindings: controller.BindingCollection;
+}
+
+export interface TreeMenuEditorSyncObserver {
+    createRootNodeControls: (arg: CreateRootNodeControlsArgs) => void;
+    itemAdded: (arg: ItemAddedArgs) => void;
+}
+
+class TreeMenuEditorSync {
+    private rootNodeControls = new ObservableList.ObservableList<CreateRootNodeControlsArgs>();
+    private items = new ObservableList.ObservableList<ItemAddedArgs>();
+
+    fireItemAdded(saveUrl: string, itemData: any, bindListenerCb: any) {
+        this.items.add({ saveUrl: saveUrl, itemData: itemData, bindListenerCb: bindListenerCb });
+    }
+
+    fireCreateRootNodeControls(controllerElementName: string, menuData: any, updateCb: any, saveUrl: string, parentBindings: any) {
+        this.rootNodeControls.add({ controllerElementName: controllerElementName, menuData: menuData, updateCb: updateCb, saveUrl: saveUrl, parentBindings: parentBindings });
+    }
+
+    setEditorListener(value: TreeMenuEditorSyncObserver, fireExisingEvents?: boolean) {
+        //Important order, need to create root nodes first
+        this.rootNodeControls.itemAdded.add((arg) => value.createRootNodeControls(arg));
+        this.items.itemAdded.add((arg) => value.itemAdded(arg));
+
+        if (fireExisingEvents) {
+            this.rootNodeControls.iter.forEach((i) => {
+                value.createRootNodeControls(i);
+            });
+
+            this.items.iter.forEach((i) => {
+                value.itemAdded(i);
+            });
+        }
+    }
+}
+
+export function isFolder(menuItem) {
+    return !menuItem.hasOwnProperty("link");
+}
 
 interface TreeMenuSessionData {
     version;
@@ -11,167 +64,195 @@ interface TreeMenuSessionData {
     data;
 };
 
-function TreeMenuController(bindings) {
-    var rootModel = bindings.getModel('children');
-    var config = bindings.getConfig();
-    var editMode = config["treemenu-editmode"] === 'true';
-    var version = config["treemenu-version"];
+var treeMenuInstances = new ObservableList.ObservableList<TreeMenuController>();
 
-    var ajaxurl = rootModel.getSrc();
-    var getNextId = (function () {
+export function GetInstances() {
+    return treeMenuInstances.iter;
+}
+
+export function GetInstanceAdded() {
+    return treeMenuInstances.itemAdded;
+}
+
+export class TreeMenuController {
+    private bindings: controller.BindingCollection;
+    private rootModel;
+    private config;
+    private editMode;
+    private version;
+    private editorSync = new TreeMenuEditorSync();
+
+    private ajaxurl;
+    private getNextId = (function () {
         var i = -1;
         return function () {
             return ++i;
         }
     })();
 
-    var menuStorageId = 'treemenu-cache-' + ajaxurl;
-    var sessionData: TreeMenuSessionData = storage.getSessionObject(menuStorageId, null);
-    var menuCache = null;
-    var menuData = null;
-    var createdItems = {
-    };
-    window.onbeforeunload = function (e) {
-        if (editMode) {
-            removeParents(menuData);
-        }
-        storage.storeObjectInSession<TreeMenuSessionData>(menuStorageId, {
-            cache: menuCache,
-            data: menuData,
-            version: version
-        });
-    };
+    private menuStorageId;
+    private sessionData: TreeMenuSessionData;
+    private menuCache = null;
+    private menuData = null;
+    private createdItems = {};
 
-    if (sessionData === null || sessionData.version !== version) {
-        //No data, get it
-        menuCache = {
-        };
-        http.get(ajaxurl)
-            .then(function (data) {
-                initialSetup(data);
+    constructor(bindings: controller.BindingCollection) {
+        this.bindings = bindings;
+        treeMenuInstances.add(this);
+
+        this.rootModel = bindings.getModel('children');
+        this.config = bindings.getConfig();
+        this.editMode = this.config["treemenu-editmode"] === 'true';
+        this.version = this.config["treemenu-version"];
+        this.ajaxurl = this.rootModel.getSrc();
+        this.menuStorageId = 'treemenu-cache-' + this.ajaxurl;
+        this.sessionData = storage.getSessionObject(this.menuStorageId, null);
+
+        window.onbeforeunload = (e) => {
+            if (this.editMode) {
+                this.removeParents(this.menuData);
+            }
+            storage.storeObjectInSession<TreeMenuSessionData>(this.menuStorageId, {
+                cache: this.menuCache,
+                data: this.menuData,
+                version: this.version
             });
-    }
-    else {
-        //Use what we had
-        menuCache = sessionData.cache;
-        initialSetup(sessionData.data);
-    }
+        };
 
-    function initialSetup(data) {
-        menuData = data;
-        if (menuData !== null) {
-            if (data['menuItemId'] === undefined) {
-                createIds(data);
-            }
-
-            if (editMode) {
-                findParents(data, null);
-                editorSync.fireCreateRootNodeControls("treeMenuEditRoot", menuData, rebuildMenu, ajaxurl, bindings); //This isn't really right, will create controllers for all tree menus on the page, need to single out somehow
-            }
-
-            var menuCacheInfo = getMenuCacheInfo(data.menuItemId);
-            buildMenu(bindings, menuCacheInfo, menuData, false);
+        if (this.sessionData === null || this.sessionData.version !== this.version) {
+            //No data, get it
+            this.menuCache = {
+            };
+            http.get(this.ajaxurl)
+                .then((data) => {
+                    this.initialSetup(data);
+                });
+        }
+        else {
+            //Use what we had
+            this.menuCache = this.sessionData.cache;
+            this.initialSetup(this.sessionData.data);
         }
     }
 
-    function rebuildMenu() {
-        createdItems = {
-        };
-        var childModel = bindings.getModel('children');
-        childModel.setData([]);
-        var menuCacheInfo = getMenuCacheInfo(menuData.menuItemId);
-        buildMenu(bindings, menuCacheInfo, menuData, false);
+    initialSetup(data) {
+        this.menuData = data;
+        if (this.menuData !== null) {
+            if (data['menuItemId'] === undefined) {
+                this.createIds(data);
+            }
+
+            if (this.editMode) {
+                this.findParents(data, null);
+                this.editorSync.fireCreateRootNodeControls("treeMenuEditRoot", this.menuData, () => this.rebuildMenu(), this.ajaxurl, this.bindings); //This isn't really right, will create controllers for all tree menus on the page, need to single out somehow
+            }
+
+            var menuCacheInfo = this.getMenuCacheInfo(data.menuItemId);
+            this.buildMenu(this.bindings, menuCacheInfo, this.menuData, false);
+        }
     }
 
-    function createIds(data) {
-        if (editorSync.isFolder(data)) {
-            data.menuItemId = getNextId();
+    get EditorSync() {
+        return this.editorSync;
+    }
+
+    private rebuildMenu() {
+        this.createdItems = {};
+        var childModel = this.bindings.getModel('children');
+        childModel.setData([]);
+        var menuCacheInfo = this.getMenuCacheInfo(this.menuData.menuItemId);
+        this.buildMenu(this.bindings, menuCacheInfo, this.menuData, false);
+    }
+
+    private createIds(data) {
+        if (isFolder(data)) {
+            data.menuItemId = this.getNextId();
             var children = data.children;
             for (var i = 0; i < children.length; ++i) {
                 //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
-                createIds(children[i]);
+                this.createIds(children[i]);
             }
         }
     }
 
-    function findParents(data, parent) {
+    private findParents(data, parent) {
         data.parent = parent;
         var children = data.children;
         if (children) {
             for (var i = 0; i < children.length; ++i) {
                 //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
-                findParents(children[i], data);
+                this.findParents(children[i], data);
             }
         }
     }
 
-    function removeParents(data) {
+    private removeParents(data) {
         delete data.parent;
         var children = data.children;
         if (children) {
             for (var i = 0; i < children.length; ++i) {
                 //Recursion, I don't care, how nested is your menu that you run out of stack space here? Can a user really use that?
-                removeParents(children[i]);
+                this.removeParents(children[i]);
             }
         }
     }
 
-    function getMenuCacheInfo(parentCategoryId) {
-        if (!menuCache.hasOwnProperty(parentCategoryId)) {
-            menuCache[parentCategoryId] = {
+    private getMenuCacheInfo(parentCategoryId) {
+        if (!this.menuCache.hasOwnProperty(parentCategoryId)) {
+            this.menuCache[parentCategoryId] = {
                 expanded: false,
                 id: parentCategoryId
             };
         }
-        return menuCache[parentCategoryId];
+        return this.menuCache[parentCategoryId];
     }
 
-    function buildMenu(parentBindings, menuCacheInfo, folder, autoHide?: boolean) {
+    private buildMenu(parentBindings, menuCacheInfo, folder, autoHide?: boolean) {
         if (autoHide === undefined) {
             autoHide = true;
         }
 
-        if (!createdItems[menuCacheInfo.id]) {
+        if (!this.createdItems[menuCacheInfo.id]) {
             var parentModel = parentBindings.getModel('children');
             var list = null;
             parentModel.setData({
             }, function (created) {
                 list = created;
             });
-            createdItems[menuCacheInfo.id] = true;
+            this.createdItems[menuCacheInfo.id] = true;
 
             var childItemsModel = list.getModel('childItems');
 
-            childItemsModel.setData(folder.children, function (folderComponent, data) {
+            childItemsModel.setData(folder.children, (folderComponent, data) => {
                 var id = data.menuItemId;
-                var menuCacheInfo = getMenuCacheInfo(id);
+                var menuCacheInfo = this.getMenuCacheInfo(id);
                 var childToggle = folderComponent.getToggle('children');
 
                 var listener = {
-                    toggleMenuItem: function (evt) {
+                    toggleMenuItem: (evt) => {
                         evt.preventDefault();
 
-                        buildMenu(folderComponent, menuCacheInfo, data);
-                        toggleMenu(menuCacheInfo, childToggle);
+                        this.buildMenu(folderComponent, menuCacheInfo, data);
+                        this.toggleMenu(menuCacheInfo, childToggle);
                     }
                 };
-                if (editMode) {
-                    editorSync.fireItemAdded(ajaxurl, data, function (editListener) { folderComponent.setListener(editListener); });
+                if (this.editMode) {
+                    this.editorSync.fireItemAdded(this.ajaxurl, data, (editListener) => { folderComponent.setListener(editListener); });
                 }
                 folderComponent.setListener(listener);
 
                 if (menuCacheInfo.expanded) {
-                    buildMenu(folderComponent, menuCacheInfo, data, autoHide);
+                    this.buildMenu(folderComponent, menuCacheInfo, data, autoHide);
                 }
-            }, function (row) {
-                if (!editorSync.isFolder(row)) {
+            }, (row) => {
+                if (!isFolder(row)) {
                     return "link";
                 }
             });
         }
     }
 
-    function toggleMenu(menuCacheInfo, toggle, transitionTime?: number) {
+    private toggleMenu(menuCacheInfo, toggle, transitionTime?: number) {
         if (transitionTime === undefined) {
             transitionTime = 200;
         }
@@ -187,6 +268,4 @@ function TreeMenuController(bindings) {
     }
 }
 
-exports.TreeMenuController = TreeMenuController;
-
-controller.create("treeMenu", treemenu.TreeMenuController);
+controller.create<TreeMenuController, void, void>("treeMenu", TreeMenuController);

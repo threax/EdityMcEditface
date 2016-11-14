@@ -166,7 +166,6 @@ function build(sharedSettings) {
         dest: libDir + '/Widgets',
         sourceRoot: __dirname + "/Client/Widgets/",
         namespace: "edity.widgets",
-        //output: "EdityWidgets",
         concat: false,
         minify: sharedSettings.minify
     });

@@ -6,6 +6,7 @@ import * as http from "hr.http";
 import * as TreeMenu from "edity.widgets.TreeMenu";
 import * as saveService from "clientlibs.SaveService";
 import * as EdityClient from 'clientlibs.EdityClient';
+import * as PageStart from 'clientlibs.PageStart';
 
 var treeMenuEditors = {};
 var uploadClient: EdityClient.UploadClient;
@@ -452,12 +453,15 @@ function createRootNodeControls(args: TreeMenu.CreateRootNodeControlsArgs) {
     controller.create(args.controllerElementName, <any>RootNodeControls, treeMenuEditor, args.parentBindings);
 }
 
-TreeMenu.GetInstances().forEach(listenToTreeMenu);
-TreeMenu.GetInstanceAdded().add(listenToTreeMenu)
-
 function listenToTreeMenu(menu: TreeMenu.TreeMenuController) {
     menu.EditorSync.setEditorListener({
         itemAdded: fireItemAdded,
         createRootNodeControls: createRootNodeControls
     }, true);
 }
+
+PageStart.init().then((config) => {
+    TreeMenu.GetInstances().forEach(listenToTreeMenu);
+    TreeMenu.GetInstanceAdded().add(listenToTreeMenu);
+    uploadClient = new EdityClient.UploadClient(config.BaseUrl, config.Fetcher);
+});

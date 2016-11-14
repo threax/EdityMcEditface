@@ -156,6 +156,21 @@ function build(sharedSettings) {
         sourceRoot: __dirname + "/Client/Views/"
     });
 
+    //Compile widget typescript
+    compileTypescript({
+        libs: [
+            __dirname + "/Client/Widgets/**/*.ts",
+            "!**/*.intellisense.js"
+        ],
+        runners: false,
+        dest: libDir + '/Widgets',
+        sourceRoot: __dirname + "/Client/Widgets/",
+        namespace: "edity.widgets",
+        //output: "EdityWidgets",
+        concat: false,
+        minify: sharedSettings.minify
+    });
+
     //Copy view files
     //Not working currently, converts everything to ascii for some reason, lots of version changes for node and gulp incliding 7 and 4 respectivly did not fix
     copyFiles({

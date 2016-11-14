@@ -22,6 +22,9 @@
       ],
       "clientlibs.*": [
         "Client/Libs/*"
+      ],
+      "edity.widgets.*": [
+        "Client/Widgets/*"
       ]
     }
   },

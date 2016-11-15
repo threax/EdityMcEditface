@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using System.Security.Cryptography;
+using System.IO;
 
 namespace EdityMcEditface.HtmlRenderer.Transforms
 {
@@ -26,11 +27,18 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                     var file = HtmlRapierQueries.getModelSrc(controllerNode);
                     if (file != null)
                     {
-                        using (var stream = fileFinder.readFile(file))
+                        try
                         {
-                            byte[] checksum = sha.ComputeHash(stream);
-                            var hash = BitConverter.ToString(checksum).Replace("-", String.Empty);
-                            controllerNode.SetAttributeValue("data-hr-config-treemenu-version", hash);
+                            using (var stream = fileFinder.readFile(file))
+                            {
+                                byte[] checksum = sha.ComputeHash(stream);
+                                var hash = BitConverter.ToString(checksum).Replace("-", String.Empty);
+                                controllerNode.SetAttributeValue("data-hr-config-treemenu-version", hash);
+                            }
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            //Ignored, just means we don't write a hash
                         }
                     }
                 }

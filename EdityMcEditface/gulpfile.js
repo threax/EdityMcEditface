@@ -37,18 +37,75 @@ function build(sharedSettings) {
     }
 
     var libDir = webroot + "/lib";
+    var viewBaseDir = webroot + "/edity";
+    var editylibDir = viewBaseDir + "/lib";
+
+    //Shared client side
+    copyFiles({
+        libs: ["./node_modules/jsns/jsns.js",
+        ],
+        baseName: './node_modules/jsns',
+        dest: libDir
+    });
+
+    htmlRapierBuild(__dirname, libDir, sharedSettings);
+    htmlRapierWidgetsBuild(__dirname, libDir, sharedSettings);
+    htmlRapierBootstrapBuild(__dirname, libDir, sharedSettings);
+
+    compileLess({
+        files: [
+        __dirname + '/Client/bootstrap/bootstrap-custom.less'
+        ],
+        dest: libDir + '/bootstrap/dist/css',
+        importPaths: path.join(__dirname),
+    });
 
     copyFiles({
-        libs: ["./node_modules/jquery/dist/**/*",
-               "./node_modules/bootstrap/dist/**/*",
+        libs: ["./node_modules/bootstrap/dist/**/*",
                "!./node_modules/bootstrap/dist/css/**/*",
-               "./node_modules/codemirror/lib/**/*",
+               "!./node_modules/bootstrap/dist/js/**/*"
+        ],
+        baseName: './node_modules',
+        dest: libDir
+    });
+
+    compileLess({
+        files: [
+        __dirname + '/Client/edity/**/*.less'
+        ],
+        dest: libDir + '/edity',
+        importPaths: path.join(__dirname),
+    });
+
+    //Compile widget typescript
+    compileTypescript({
+        libs: [
+            __dirname + "/Client/Widgets/**/*.ts",
+            "!**/*.intellisense.js"
+        ],
+        runners: false,
+        dest: libDir + '/Widgets',
+        sourceRoot: __dirname + "/Client/Widgets/",
+        namespace: "edity.widgets",
+        concat: false,
+        minify: sharedSettings.minify
+    });
+
+    //Edity Editor Client Side
+    copyFiles({
+        libs: ["./node_modules/codemirror/lib/**/*",
                "./node_modules/codemirror/mode/xml/**/*",
                "./node_modules/codemirror/mode/javascript/**/*",
                "./node_modules/codemirror/mode/css/**/*",
                "./node_modules/codemirror/mode/htmlmixed/**/*",
-               "./node_modules/codemirror/addon/merge/**/*",
-               "./node_modules/ckeditor/ckeditor.js",
+               "./node_modules/codemirror/addon/merge/**/*" 
+        ],
+        baseName: './node_modules',
+        dest: editylibDir
+    });
+
+    copyFiles({
+        libs: ["./node_modules/ckeditor/ckeditor.js",
                "./node_modules/ckeditor/contents.css",
                "./node_modules/ckeditor/skins/moono/**/*",
                "./node_modules/ckeditor/lang/en.js",
@@ -70,54 +127,28 @@ function build(sharedSettings) {
                "./node_modules/ckeditor/plugins/widget/**/*",
                "./node_modules/ckeditor/plugins/lineutils/**/*",
                "./node_modules/ckeditor/plugins/notification/**/*",
-               "./node_modules/jsns/jsns.js",
-               "./node_modules/ckeditor/plugins/image/**/*", 
+               "./node_modules/ckeditor/plugins/image/**/*",
         ],
         baseName: './node_modules',
-        dest: libDir
+        dest: editylibDir
     });
 
     copyFiles({
         libs: ["./node_modules/ckeditor-youtube-plugin/youtube/**/*"],
         baseName: './node_modules/ckeditor-youtube-plugin',
-        dest: libDir + "/ckeditor/plugins/"
+        dest: editylibDir + "/ckeditor/plugins/"
     });
 
     copyFiles({
         libs: [
             "./Client/diff_match_patch/**/*",
             "./Client/ckeditor/**/*",
-            "./Client/edity/**/*",
-            "!./Client/edity/**/*.less",
             "./Client/codemirror/**/*",
             "!**/*.intellisense.js",
             "!**/*.less"],
         baseName: './Client',
-        dest: libDir
+        dest: editylibDir
     });
-
-    htmlRapierBuild(__dirname, libDir, sharedSettings);
-    htmlRapierWidgetsBuild(__dirname, libDir, sharedSettings);
-    htmlRapierBootstrapBuild(__dirname, libDir, sharedSettings);
-
-    compileLess({
-        files: [
-        __dirname + '/Client/bootstrap/bootstrap-custom.less'
-        ],
-        dest: libDir + '/bootstrap/dist/css',
-        importPaths: path.join(__dirname),
-    });
-
-    compileLess({
-        files: [
-        __dirname + '/Client/edity/**/*.less'
-        ],
-        dest: libDir + '/edity',
-        importPaths: path.join(__dirname),
-    });
-
-    //Client side
-    var viewBaseDir = webroot + "/edity";
 
     //Editor Core ts
     compileTypescript({
@@ -125,7 +156,7 @@ function build(sharedSettings) {
             __dirname + "/Client/EditorCore/**/*.ts",
         ],
         runners: ["edity.config"],
-        dest: viewBaseDir,
+        dest: editylibDir,
         sourceRoot: __dirname + "/Client/EditorCore/",
         namespace: "edity.editorcore",
         output: "EditorCore",
@@ -142,20 +173,6 @@ function build(sharedSettings) {
         runners: true,
         dest: viewBaseDir + '/layouts',
         sourceRoot: __dirname + "/Client/Views/"
-    });
-
-    //Compile widget typescript
-    compileTypescript({
-        libs: [
-            __dirname + "/Client/Widgets/**/*.ts",
-            "!**/*.intellisense.js"
-        ],
-        runners: false,
-        dest: libDir + '/Widgets',
-        sourceRoot: __dirname + "/Client/Widgets/",
-        namespace: "edity.widgets",
-        concat: false,
-        minify: sharedSettings.minify
     });
 
     //Copy view files

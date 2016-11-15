@@ -3,7 +3,7 @@
 import * as controller from "hr.controller";
 import * as toggles from "hr.toggles";
 import * as http from "hr.http";
-import * as TreeMenu from "edity.widgets.TreeMenu";
+import * as TreeMenu from "hr.treemenu.TreeMenu";
 import * as saveService from "edity.editorcore.SaveService";
 import * as EdityClient from 'edity.editorcore.EdityClient';
 import * as PageStart from 'edity.editorcore.PageStart';
@@ -19,7 +19,6 @@ function TreeMenuEditor(menuData, updateCb, saveUrl) {
             hasChanges = false;
             var blob = new Blob([JSON.stringify(menuData, menuJsonSerializeReplacer, 4)], { type: "application/json" });
             return uploadClient.upload(saveUrl, { data: blob, fileName: saveUrl }, null)
-                //return http.upload('/edity/upload' + saveUrl, blob)
                 .catch(function (data) {
                     hasChanges = true;
                 });

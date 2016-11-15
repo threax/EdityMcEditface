@@ -20,6 +20,9 @@
         "node_modules/HtmlRapier.Bootstrap/lib/*",
         "node_modules/HtmlRapier.Bootstrap/*"
       ],
+      "hr.treemenu.*": [
+        "node_modules/HtmlRapier.TreeMenu/src/*"
+      ],
       "edity.editorcore.*": [
         "Client/EditorCore/*"
       ],

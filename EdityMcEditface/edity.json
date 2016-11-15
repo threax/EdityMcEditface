@@ -67,15 +67,6 @@
         "jsns"
       ]
     },
-    "TreeMenu": {
-      "js": [
-        {
-          "file": "/lib/Widgets/TreeMenu.js",
-          "async": true
-        }
-      ],
-      "dependencies": [ "HtmlRapier" ]
-    },
     "Services": {
       "js": [ { "file": "/edity/lib/EditorCore.js" } ],
       "dependencies": [ "HtmlRapier" ]

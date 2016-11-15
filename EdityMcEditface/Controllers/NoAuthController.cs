@@ -1,5 +1,6 @@
 ﻿using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.Models.Auth;
+using EdityMcEditface.Models.Config;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -39,10 +40,10 @@ namespace EdityMcEditface.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> LogIn(String returnUrl)
+        public async Task<IActionResult> LogIn([FromServices] EditySettings settings, String returnUrl)
         {
 
-            var identity = new ClaimsIdentity(AllClaims(), "Cookies", "name", "role");
+            var identity = new ClaimsIdentity(AllClaims(settings), "Cookies", "name", "role");
             await HttpContext.Authentication.SignInAsync("Cookies", new ClaimsPrincipal(identity));
             
 
@@ -53,9 +54,9 @@ namespace EdityMcEditface.Controllers
         /// The claims for the user logging in.
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<Claim> AllClaims()
+        private IEnumerable<Claim> AllClaims(EditySettings settings)
         {
-            yield return new Claim("name", "OnlyUser");
+            yield return new Claim("name", settings.NoAuthUser);
             yield return new Claim("role", Roles.EditPages);
             yield return new Claim("role", Roles.Compile);
             yield return new Claim("role", Roles.UploadAnything);

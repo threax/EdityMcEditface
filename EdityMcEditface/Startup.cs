@@ -67,9 +67,9 @@ namespace EdityMcEditface
                 .AddInMemoryCollection(new Dictionary<String, String>
                 {
                     { "EditySettings:ReadFromCurrentDirectory", "false" },
-                    { "EditySettings:UsersFile", Path.Combine(siteRootPath, "Config/users.json") },
+                    { "EditySettings:NoAuth", "false" },
+                    { "EditySettings:NoAuthUser", "OnlyUser" },
                     { "EditySettings:DetailedErrors", env.IsEnvironment("Development").ToString() },
-                    { "EditySettings:SecureCookies", (!env.IsEnvironment("Development")).ToString() }
                 })
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
@@ -127,6 +127,8 @@ namespace EdityMcEditface
             services.AddSingleton<WorkQueue, WorkQueue>();
 
             services.AddScoped<AuthUserInfo>();
+
+            services.AddSingleton<EditySettings>(s => EditySettings);
 
             switch (EdityServerConfiguration["ProjectMode"])
             {

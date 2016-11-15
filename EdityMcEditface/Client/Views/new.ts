@@ -1,12 +1,12 @@
 ﻿"use strict";
 
 import * as http from "hr.http";
-import * as uploader from "clientlibs.uploader";
+import * as uploader from "edity.editorcore.uploader";
 import * as component from "hr.components";
 import * as domQuery from "hr.domquery";
 import * as controller from "hr.controller";
-import { init, PageStart } from 'clientlibs.PageStart';
-import { TemplateClient, Template, PageClient } from "clientlibs.EdityClient";
+import { init, PageStart } from 'edity.editorcore.PageStart';
+import { TemplateClient, Template, PageClient } from "edity.editorcore.EdityClient";
 
 interface TemplateItemControllerSettings {
     config: NewPageControllerConfig;

@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-import * as edityClient from 'clientlibs.EdityClient';
-import * as saveService from 'clientlibs.SaveService';
-import * as pageStart from 'clientlibs.PageStart';
+import * as edityClient from 'edity.editorcore.EdityClient';
+import * as saveService from 'edity.editorcore.SaveService';
+import * as pageStart from 'edity.editorcore.PageStart';
 
 var sourceAccessor;
 var needsSave = false;

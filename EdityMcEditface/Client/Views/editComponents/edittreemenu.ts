@@ -4,9 +4,9 @@ import * as controller from "hr.controller";
 import * as toggles from "hr.toggles";
 import * as http from "hr.http";
 import * as TreeMenu from "edity.widgets.TreeMenu";
-import * as saveService from "clientlibs.SaveService";
-import * as EdityClient from 'clientlibs.EdityClient';
-import * as PageStart from 'clientlibs.PageStart';
+import * as saveService from "edity.editorcore.SaveService";
+import * as EdityClient from 'edity.editorcore.EdityClient';
+import * as PageStart from 'edity.editorcore.PageStart';
 
 var treeMenuEditors = {};
 var uploadClient: EdityClient.UploadClient;

@@ -1,9 +1,9 @@
 ﻿"use strict";
 
 import * as controller from "hr.controller";
-import * as FormLifecycle from "clientlibs.FormLifecycle";
+import * as FormLifecycle from "edity.editorcore.FormLifecycle";
 import * as storage from "hr.storage";
-import { PageClient } from "clientlibs.EdityClient";
+import { PageClient } from "edity.editorcore.EdityClient";
 import * as navmenu from "hr.widgets.navmenu";
 
 class DeletePageConfirmationController {

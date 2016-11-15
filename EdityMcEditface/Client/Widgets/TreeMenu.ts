@@ -75,6 +75,10 @@ export function GetInstanceAdded() {
 }
 
 export class TreeMenuController {
+    static GetBuilder() {
+        return new controller.ControllerBuilder<TreeMenuController, void, void>(TreeMenuController);
+    }
+
     private bindings: controller.BindingCollection;
     private rootModel;
     private config;
@@ -267,5 +271,3 @@ export class TreeMenuController {
         }
     }
 }
-
-controller.create<TreeMenuController, void, void>("treeMenu", TreeMenuController);

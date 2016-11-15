@@ -1,12 +1,12 @@
 ﻿"use strict";
 
-import * as edityClient from 'clientlibs.EdityClient';
-import * as uploader from 'clientlibs.uploader';
+import * as edityClient from 'edity.editorcore.EdityClient';
+import * as uploader from 'edity.editorcore.uploader';
 import { EventHandler } from 'hr.eventhandler';
 import { PagedClientData } from 'hr.widgets.pageddata';
 import { CacheBuster } from 'hr.cachebuster';
 import { WindowFetch } from 'hr.windowfetch';
-import * as pageStart from 'clientlibs.PageStart';
+import * as pageStart from 'edity.editorcore.PageStart';
 
 var host = "";
 var cacheBuster = new CacheBuster(new WindowFetch());

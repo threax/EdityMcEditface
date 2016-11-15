@@ -6,7 +6,7 @@ import * as controller from "hr.controller";
 import * as navmenu from "hr.widgets.navmenu";
 import * as toggles from "hr.toggles";
 import * as Iterable from "hr.iterable";
-import * as GitService from "clientlibs.GitService";
+import * as GitService from "edity.editorcore.GitService";
 
 class SyncController {
     private commitModel;

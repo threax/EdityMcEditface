@@ -1,10 +1,10 @@
 ﻿"use strict";
 
 import * as storage from "hr.storage";
-import * as uploader from "clientlibs.uploader";
+import * as uploader from "edity.editorcore.uploader";
 import * as controller from "hr.controller";
 import * as navmenu from "hr.widgets.navmenu";
-import * as GitService from "clientlibs.GitService";
+import * as GitService from "edity.editorcore.GitService";
 
 var revertConfirmation;
 var CodeMirror = (<any>window).CodeMirror;

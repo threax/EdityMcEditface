@@ -5,7 +5,7 @@ import * as domQuery from "hr.domquery";
 import * as storage from "hr.storage";
 import * as controller from "hr.controller";
 import * as navmenu from "hr.widgets.navmenu";
-import * as pageService from "clientlibs.PageService";
+import * as pageService from "edity.editorcore.PageService";
 
 var CodeMirror = (<any>window).CodeMirror;
 

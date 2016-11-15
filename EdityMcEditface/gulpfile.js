@@ -90,7 +90,6 @@ function build(sharedSettings) {
             "./custom_components/edity/**/*",
             "!./custom_components/edity/**/*.less",
             "./custom_components/codemirror/**/*",
-            //"./custom_components/jsns/jsns.min.js",
             "!**/*.intellisense.js",
             "!**/*.less"],
         baseName: './custom_components',
@@ -116,34 +115,23 @@ function build(sharedSettings) {
         dest: libDir + '/edity',
         importPaths: path.join(__dirname),
     });
-    
-    //compileJsnsTs({
-    //    libs: [
-    //        __dirname + "/custom_components/edity/**/*.ts",
-    //        "!**/*.intellisense.js"
-    //    ],
-    //    runners: false,
-    //    output: "services",
-    //    dest: libDir + '/edity',
-    //    sourceRoot: __dirname + "/custom_components/edity/"
-    //});
 
-    //Client Side ts
+    //Client side
+    var viewBaseDir = webroot + "/edity";
+
+    //Editor Core ts
     compileTypescript({
         libs: [
-            __dirname + "/Client/Libs/**/*.ts",
+            __dirname + "/Client/EditorCore/**/*.ts",
         ],
         runners: ["edity.config"],
-        dest: libDir,
-        sourceRoot: __dirname + "/Client/Libs/",
-        namespace: "clientlibs",
-        output: "ClientLibs",
+        dest: viewBaseDir,
+        sourceRoot: __dirname + "/Client/EditorCore/",
+        namespace: "edity.editorcore",
+        output: "EditorCore",
         concat: sharedSettings.concat,
         minify: sharedSettings.minify
     });
-
-    //Client side views
-    var viewBaseDir = webroot + "/edity";
 
     //Compile view typescript
     compileTypescript({

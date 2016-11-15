@@ -4,7 +4,7 @@ import * as storage from "hr.storage";
 import * as controller from "hr.controller";
 import * as navmenu from "hr.widgets.navmenu";
 import * as toggles from "hr.toggles";
-import * as GitService from "clientlibs.GitService";
+import * as GitService from "edity.editorcore.GitService";
 
 var currentRowCreatedCallback;
 

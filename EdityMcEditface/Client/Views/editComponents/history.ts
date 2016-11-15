@@ -5,7 +5,7 @@ import * as navmenu from "hr.widgets.navmenu";
 import * as toggles from "hr.toggles";
 import * as PageNumbers from "hr.widgets.pagenumbers";
 import * as Iterable from "hr.iterable";
-import * as GitService from "clientlibs.GitService";
+import * as GitService from "edity.editorcore.GitService";
 
 class NavButtonController {
     private controller: HistoryController;

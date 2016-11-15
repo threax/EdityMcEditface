@@ -77,7 +77,7 @@
       "dependencies": [ "HtmlRapier" ]
     },
     "Services": {
-      "js": [ { "file": "/lib/ClientLibs.js" } ],
+      "js": [ { "file": "/edity/EditorCore.js" } ],
       "dependencies": [ "HtmlRapier" ]
     },
     "GitService": {

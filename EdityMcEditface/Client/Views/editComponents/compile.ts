@@ -4,8 +4,8 @@ import * as storage from "hr.storage";
 import * as controller from "hr.controller";
 import * as toggles from "hr.toggles";
 import * as navmenu from "hr.widgets.navmenu";
-import * as EdityClient from 'clientlibs.EdityClient';
-import * as PageStart from 'clientlibs.PageStart';
+import * as EdityClient from 'edity.editorcore.EdityClient';
+import * as PageStart from 'edity.editorcore.PageStart';
 
 class NavButtonController {
     compile(evt) {

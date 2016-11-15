@@ -20,8 +20,8 @@
         "node_modules/HtmlRapier.Bootstrap/lib/*",
         "node_modules/HtmlRapier.Bootstrap/*"
       ],
-      "clientlibs.*": [
-        "Client/Libs/*"
+      "edity.editorcore.*": [
+        "Client/EditorCore/*"
       ],
       "edity.widgets.*": [
         "Client/Widgets/*"

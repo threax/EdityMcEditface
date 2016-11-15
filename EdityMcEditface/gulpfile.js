@@ -85,14 +85,14 @@ function build(sharedSettings) {
 
     copyFiles({
         libs: [
-            "./custom_components/diff_match_patch/**/*",
-            "./custom_components/ckeditor/**/*",
-            "./custom_components/edity/**/*",
-            "!./custom_components/edity/**/*.less",
-            "./custom_components/codemirror/**/*",
+            "./Client/diff_match_patch/**/*",
+            "./Client/ckeditor/**/*",
+            "./Client/edity/**/*",
+            "!./Client/edity/**/*.less",
+            "./Client/codemirror/**/*",
             "!**/*.intellisense.js",
             "!**/*.less"],
-        baseName: './custom_components',
+        baseName: './Client',
         dest: libDir
     });
 
@@ -102,7 +102,7 @@ function build(sharedSettings) {
 
     compileLess({
         files: [
-        __dirname + '/custom_components/bootstrap/bootstrap-custom.less'
+        __dirname + '/Client/bootstrap/bootstrap-custom.less'
         ],
         dest: libDir + '/bootstrap/dist/css',
         importPaths: path.join(__dirname),
@@ -110,7 +110,7 @@ function build(sharedSettings) {
 
     compileLess({
         files: [
-        __dirname + '/custom_components/edity/**/*.less'
+        __dirname + '/Client/edity/**/*.less'
         ],
         dest: libDir + '/edity',
         importPaths: path.join(__dirname),

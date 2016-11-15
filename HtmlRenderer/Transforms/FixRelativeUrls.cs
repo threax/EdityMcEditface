@@ -19,6 +19,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
         {
             replaceUrlInAttributes("href", document);
             replaceUrlInAttributes("src", document);
+            replaceUrlInAttributes("data-hr-model-src", document);
         }
 
         private void replaceUrlInAttributes(String attr, HtmlDocument document)

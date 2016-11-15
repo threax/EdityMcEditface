@@ -109,10 +109,10 @@ namespace EdityMcEditface.Controllers
         /// Add an asset to a page.
         /// </summary>
         /// <param name="page">The page to add the asset to.</param>
-        /// <param name="content">The file content.</param>
+        /// <param name="upload">The file content.</param>
         /// <returns>The ImageUplaodResponse with the result.</returns>
         [HttpPost]
-        public async Task<ImageUploadResponse> AddAsset([FromQuery] String page, IFormFile content)
+        public async Task<ImageUploadResponse> AddAsset([FromQuery] String page, IFormFile upload)
         {
             ImageUploadResponse imageResponse = new ImageUploadResponse();
 
@@ -120,11 +120,11 @@ namespace EdityMcEditface.Controllers
             {
                 TargetFileInfo fileInfo = new TargetFileInfo(page);
                 string autoFileFolder = getUploadFolder(fileInfo);
-                var autoFileFile = Guid.NewGuid().ToString() + Path.GetExtension(content.FileName);
+                var autoFileFile = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
                 var autoPath = Path.Combine(autoFileFolder, autoFileFile);
                 using (Stream stream = fileFinder.writeFile(autoPath))
                 {
-                    await content.CopyToAsync(stream);
+                    await upload.CopyToAsync(stream);
                 }
 
                 imageResponse.Uploaded = 1;

@@ -912,14 +912,14 @@ export class PageClient {
      * @page The page to add the asset to.
      * @return Success
      */
-    addAsset(page: string, content: FileParameter, bearer: string): Promise<ImageUploadResponse> {
+    addAsset(page: string, upload: FileParameter, bearer: string): Promise<ImageUploadResponse> {
         let url_ = this.baseUrl + "/edity/Page/AddAsset?";
 
         if (page !== undefined)
             url_ += "page=" + encodeURIComponent("" + page) + "&";
         const content_ = new FormData();
-        if (content !== null)
-            content_.append("content", content.data, content.fileName ? content.fileName : "content");
+        if (upload !== null)
+            content_.append("upload", upload.data, upload.fileName ? upload.fileName : "upload");
         return this.http.fetch(url_, {
             body: content_,
             method: "POST",

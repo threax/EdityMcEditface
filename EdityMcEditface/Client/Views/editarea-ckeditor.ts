@@ -32,7 +32,7 @@ CKEDITOR.editorConfig = function (config) {
 
     config.allowedContent = true;
     config.extraPlugins = 'colorbutton,youtube,uploadimage,widgetbootstrap';
-    config.imageUploadUrl = '/edity/Page/Asset/' + window.location.pathname;
+    config.imageUploadUrl = '/edity/Page/AddAsset?page=' + window.location.pathname;
 };
 
 CKEDITOR.on('instanceReady', function (ev) {

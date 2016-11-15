@@ -7,6 +7,7 @@ import * as TreeMenu from "hr.treemenu.TreeMenu";
 import * as saveService from "edity.editorcore.SaveService";
 import * as EdityClient from 'edity.editorcore.EdityClient';
 import * as PageStart from 'edity.editorcore.PageStart';
+import * as Iter from 'hr.iterable';
 
 var treeMenuEditors = {};
 var uploadClient: EdityClient.UploadClient;
@@ -371,30 +372,13 @@ function moveToParent(evt, menuData, itemData, updateCb) {
     }
 }
 
-function itemIter(items, skipItem) {
-    var i = 0;
-    return function () {
-        var item = null;
-        if (i < items.length) {
-            item = items[i++];
-            while (item != null && (item === skipItem || !TreeMenu.isFolder(item))) {
-                if (i < items.length) {
-                    item = items[i++];
-                }
-                else {
-                    item = null;
-                }
-            }
-        }
-        return item;
-    }
-}
-
 function moveToChild(evt, menuData, itemData, updateCb) {
     evt.preventDefault();
     evt.stopPropagation();
 
-    chooseMenuItem.chooseItem("Nest " + itemData.name + " under...", itemIter(itemData.parent.children, itemData), function (selectedItem) {
+    var itemIter = new Iter.Iterable(itemData.parent.children).where(w => w !== itemData && w.link === undefined);
+
+    chooseMenuItem.chooseItem("Nest " + itemData.name + " under...", itemIter, function (selectedItem) {
         var result = deleteMenuItem(itemData);
         if (result) {
             selectedItem.children.push(itemData);

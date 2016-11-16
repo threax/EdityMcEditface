@@ -243,7 +243,7 @@ function AddTreeMenuItemController(bindings) {
 }
 
 function menuJsonSerializeReplacer(key, value) {
-    if (key === 'parent' || key === 'menuItemId') {
+    if (key === 'parent' || key === 'menuItemId' || key === 'urlRoot') {
         return undefined;
     }
     return value;

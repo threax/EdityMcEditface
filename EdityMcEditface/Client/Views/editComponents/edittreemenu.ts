@@ -12,7 +12,7 @@ import * as Iter from 'hr.iterable';
 var treeMenuEditors = {};
 var uploadClient: EdityClient.UploadClient;
 
-function TreeMenuEditor(menuData, updateCb, saveUrl) {
+function TreeMenuEditor(menuData, updateCb, saveUrl, urlRoot) {
     var hasChanges = false;
 
     function save() {
@@ -38,6 +38,11 @@ function TreeMenuEditor(menuData, updateCb, saveUrl) {
         return menuData;
     }
     this.getMenuData = getMenuData;
+
+    function getUrlRoot() {
+        return urlRoot;
+    }
+    this.getUrlRoot = getUrlRoot;
 }
 
 var editTreeMenuItem = null;
@@ -135,6 +140,7 @@ function AddTreeMenuItemController(bindings) {
 
     var currentParent = null;
     var currentCallback = null;
+    var currentUrlRoot = null;
 
     var questionModel = bindings.getModel('question');
     var createFolderModel = bindings.getModel('createFolder');
@@ -151,9 +157,10 @@ function AddTreeMenuItemController(bindings) {
 
     toggleGroup.activate(questionToggle);
 
-    function createNewItem(parent, createdCallback) {
+    function createNewItem(parent, urlRoot, createdCallback) {
         currentParent = parent;
         currentCallback = createdCallback;
+        currentUrlRoot = urlRoot;
         questionModel.setData(parent);
         toggleGroup.activate(questionToggle);
         dialog.on();
@@ -202,7 +209,8 @@ function AddTreeMenuItemController(bindings) {
         var newItem = {
             name: linkData.name,
             link: linkData.link,
-            parent: currentParent
+            parent: currentParent,
+            urlRoot: currentUrlRoot
         };
         currentParent.children.push(newItem);
         finishAdd(newItem);
@@ -253,7 +261,7 @@ function RootNodeControls(bindings, context) {
     function addItem(evt) {
         evt.preventDefault();
         evt.stopPropagation();
-        addTreeMenuItem.createNewItem(context.getMenuData(), context.update);
+        addTreeMenuItem.createNewItem(context.getMenuData(), context.getUrlRoot(), context.update);
     }
     this.addItem = addItem;
 }
@@ -331,10 +339,10 @@ function moveDown(evt, menuData, itemData, updateCb) {
     }
 }
 
-function addItem(evt, menuData, itemData, updateCb) {
+function addItem(evt, menuData, itemData, urlRoot, updateCb) {
     evt.preventDefault();
     evt.stopPropagation();
-    addTreeMenuItem.createNewItem(itemData, function () {
+    addTreeMenuItem.createNewItem(itemData, urlRoot, function () {
         updateCb();
     });
 }
@@ -406,7 +414,7 @@ function fireItemAdded(args: TreeMenu.ItemAddedArgs) {
         },
 
         addItem: function (evt) {
-            addItem(evt, treeEditor.getMenuData(), args.itemData, treeEditor.update);
+            addItem(evt, treeEditor.getMenuData(), args.itemData, treeEditor.getUrlRoot(), treeEditor.update);
         },
 
         editItem: function (evt) {
@@ -430,7 +438,7 @@ function fireItemAdded(args: TreeMenu.ItemAddedArgs) {
 function createRootNodeControls(args: TreeMenu.CreateRootNodeControlsArgs) {
     var treeMenuEditor = treeMenuEditors[args.saveUrl];
     if (treeMenuEditor === undefined) {
-        treeMenuEditor = new TreeMenuEditor(args.menuData, args.updateCb, args.saveUrl);
+        treeMenuEditor = new TreeMenuEditor(args.menuData, args.updateCb, args.saveUrl, args.urlRoot);
         treeMenuEditors[args.saveUrl] = treeMenuEditor;
     }
     controller.create(args.controllerElementName, <any>RootNodeControls, treeMenuEditor, args.parentBindings);

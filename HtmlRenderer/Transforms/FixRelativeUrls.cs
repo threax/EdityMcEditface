@@ -20,6 +20,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
             replaceUrlInAttributes("href", document);
             replaceUrlInAttributes("src", document);
             replaceUrlInAttributes("data-hr-model-src", document);
+            replaceUrlInAttributes("data-hr-config-urlroot", document);
         }
 
         private void replaceUrlInAttributes(String attr, HtmlDocument document)
@@ -27,7 +28,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
             foreach (var node in document.DocumentNode.Select($"[{attr}]"))
             {
                 var path = node.GetAttributeValue(attr, "");
-                if (path[0] == '\\' || path[0] == '/')
+                if (path.Length == 0 || path[0] == '\\' || path[0] == '/')
                 {
                     node.SetAttributeValue(attr, baseUrl + path);
                 }

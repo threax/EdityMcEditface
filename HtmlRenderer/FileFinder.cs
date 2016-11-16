@@ -207,7 +207,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// <param name="outDir"></param>
         public void copyProjectContent(String outDir)
         {
-            foreach (var file in Project.AdditionalContent)
+            foreach (var file in Project.AdditionalContent.Concat(new string[]{ "AutoUploads" }))
             {
                 var realFile = findRealFile(file);
                 if (File.Exists(realFile))

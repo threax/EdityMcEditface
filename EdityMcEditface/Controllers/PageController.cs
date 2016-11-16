@@ -102,7 +102,6 @@ namespace EdityMcEditface.Controllers
             fileFinder.deleteFile(fileInfo.FileNoExtension + ".json");
             fileFinder.deleteFile(fileInfo.FileNoExtension + ".css");
             fileFinder.deleteFile(fileInfo.FileNoExtension + ".js");
-            fileFinder.deleteFolder(getUploadFolder(fileInfo));
         }
 
         /// <summary>
@@ -119,7 +118,7 @@ namespace EdityMcEditface.Controllers
             try
             {
                 TargetFileInfo fileInfo = new TargetFileInfo(page);
-                string autoFileFolder = getUploadFolder(fileInfo);
+                string autoFileFolder = "AutoUploads";
                 var autoFileFile = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
                 var autoPath = Path.Combine(autoFileFolder, autoFileFile);
                 using (Stream stream = fileFinder.writeFile(autoPath))
@@ -142,16 +141,6 @@ namespace EdityMcEditface.Controllers
             }
 
             return imageResponse;
-        }
-
-        /// <summary>
-        /// Helper funciton to get the upload folder.
-        /// </summary>
-        /// <param name="fileInfo">The file info to use.</param>
-        /// <returns>The upload folder for the given file.</returns>
-        private static string getUploadFolder(TargetFileInfo fileInfo)
-        {
-            return Path.Combine("AutoUploadedImages", fileInfo.FileNoExtension);
         }
     }
 }

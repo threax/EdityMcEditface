@@ -14,86 +14,86 @@
 // website requirements and design properly.
 
 CKEDITOR.stylesSet.add('default', [
-	/* Block Styles */
+    /* Block Styles */
 
-	// These styles are already available in the "Format" combo ("format" plugin),
-	// so they are not needed here by default. You may enable them to avoid
-	// placing the "Format" combo in the toolbar, maintaining the same features.
-	/*
-	{ name: 'Paragraph',		element: 'p' },
-	{ name: 'Heading 1',		element: 'h1' },
-	{ name: 'Heading 2',		element: 'h2' },
-	{ name: 'Heading 3',		element: 'h3' },
-	{ name: 'Heading 4',		element: 'h4' },
-	{ name: 'Heading 5',		element: 'h5' },
-	{ name: 'Heading 6',		element: 'h6' },
-	{ name: 'Preformatted Text',element: 'pre' },
-	{ name: 'Address',			element: 'address' },
-	*/
+    // These styles are already available in the "Format" combo ("format" plugin),
+    // so they are not needed here by default. You may enable them to avoid
+    // placing the "Format" combo in the toolbar, maintaining the same features.
+    /*
+    { name: 'Paragraph',		element: 'p' },
+    { name: 'Heading 1',		element: 'h1' },
+    { name: 'Heading 2',		element: 'h2' },
+    { name: 'Heading 3',		element: 'h3' },
+    { name: 'Heading 4',		element: 'h4' },
+    { name: 'Heading 5',		element: 'h5' },
+    { name: 'Heading 6',		element: 'h6' },
+    { name: 'Preformatted Text',element: 'pre' },
+    { name: 'Address',			element: 'address' },
+    */
     { name: 'Alert Success', element: 'div', attributes: { 'class': 'alert alert-success', role: 'alert' } },
     { name: 'Alert Info', element: 'div', attributes: { 'class': 'alert alert-info', role: 'alert' } },
     { name: 'Alert Warning', element: 'div', attributes: { 'class': 'alert alert-warning', role: 'alert' } },
     { name: 'Alert Danger', element: 'div', attributes: { 'class': 'alert alert-danger', role: 'alert' } },
     { name: 'Panel', element: 'div', attributes: { 'class': 'panel' } },
     { name: 'Well', element: 'div', attributes: { 'class': 'well' } },
-	//{ name: 'Italic Title',		element: 'h2', styles: { 'font-style': 'italic' } },
-	//{ name: 'Subtitle',			element: 'h3', styles: { 'color': '#aaa', 'font-style': 'italic' } },
-	//{
-	//	name: 'Special Container',
-	//	element: 'div',
-	//	styles: {
-	//		padding: '5px 10px',
-	//		background: '#eee',
-	//		border: '1px solid #ccc'
-	//	}
-	//},
+    //{ name: 'Italic Title',		element: 'h2', styles: { 'font-style': 'italic' } },
+    //{ name: 'Subtitle',			element: 'h3', styles: { 'color': '#aaa', 'font-style': 'italic' } },
+    //{
+    //	name: 'Special Container',
+    //	element: 'div',
+    //	styles: {
+    //		padding: '5px 10px',
+    //		background: '#eee',
+    //		border: '1px solid #ccc'
+    //	}
+    //},
 
-	/* Inline Styles */
+    /* Inline Styles */
 
-	// These are core styles available as toolbar buttons. You may opt enabling
-	// some of them in the Styles combo, removing them from the toolbar.
-	// (This requires the "stylescombo" plugin)
-	/*
-	{ name: 'Strong',			element: 'strong', overrides: 'b' },
-	{ name: 'Emphasis',			element: 'em'	, overrides: 'i' },
-	{ name: 'Underline',		element: 'u' },
-	{ name: 'Strikethrough',	element: 'strike' },
-	{ name: 'Subscript',		element: 'sub' },
-	{ name: 'Superscript',		element: 'sup' },
-	*/
+    // These are core styles available as toolbar buttons. You may opt enabling
+    // some of them in the Styles combo, removing them from the toolbar.
+    // (This requires the "stylescombo" plugin)
+    /*
+    { name: 'Strong',			element: 'strong', overrides: 'b' },
+    { name: 'Emphasis',			element: 'em'	, overrides: 'i' },
+    { name: 'Underline',		element: 'u' },
+    { name: 'Strikethrough',	element: 'strike' },
+    { name: 'Subscript',		element: 'sub' },
+    { name: 'Superscript',		element: 'sup' },
+    */
 
-	//{ name: 'Marker',			element: 'span', attributes: { 'class': 'marker' } },
+    //{ name: 'Marker',			element: 'span', attributes: { 'class': 'marker' } },
     //
-	{ name: 'Big', element: 'big' },
-	{ name: 'Small', element: 'small' },
-	{ name: 'Typewriter', element: 'tt' },
+    { name: 'Big', element: 'big' },
+    { name: 'Small', element: 'small' },
+    { name: 'Typewriter', element: 'tt' },
 
-	{ name: 'Computer Code', element: 'code' },
-	{ name: 'Keyboard Phrase', element: 'kbd' },
-	{ name: 'Sample Text', element: 'samp' },
-	{ name: 'Variable', element: 'var' },
+    { name: 'Computer Code', element: 'code' },
+    { name: 'Keyboard Phrase', element: 'kbd' },
+    { name: 'Sample Text', element: 'samp' },
+    { name: 'Variable', element: 'var' },
 
-	{ name: 'Deleted Text', element: 'del' },
-	{ name: 'Inserted Text', element: 'ins' },
+    { name: 'Deleted Text', element: 'del' },
+    { name: 'Inserted Text', element: 'ins' },
 
-	{ name: 'Cited Work', element: 'cite' },
-	{ name: 'Inline Quotation', element: 'q' },
+    { name: 'Cited Work', element: 'cite' },
+    { name: 'Inline Quotation', element: 'q' },
     //
-	//{ name: 'Language: RTL',	element: 'span', attributes: { 'dir': 'rtl' } },
-	//{ name: 'Language: LTR',	element: 'span', attributes: { 'dir': 'ltr' } },
+    //{ name: 'Language: RTL',	element: 'span', attributes: { 'dir': 'rtl' } },
+    //{ name: 'Language: LTR',	element: 'span', attributes: { 'dir': 'ltr' } },
 
-	/* Object Styles */
+    /* Object Styles */
 
-	{
-	    name: 'Styled image (left)',
-	    element: 'img',
-	    attributes: { 'class': 'pull-left' }
-	},
+    {
+        name: 'Styled image (left)',
+        element: 'img',
+        attributes: { 'class': 'pull-left' }
+    },
 
-	{
-	    name: 'Styled image (right)',
-	    element: 'img',
-	    attributes: { 'class': 'pull-right' }
-	}
+    {
+        name: 'Styled image (right)',
+        element: 'img',
+        attributes: { 'class': 'pull-right' }
+    }
 ]);
 

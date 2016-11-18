@@ -31,7 +31,7 @@ CKEDITOR.editorConfig = function (config) {
     config.removeButtons = 'Underline,Subscript,Superscript,Scayt,Maximize,Source,About,Add alert box';
 
     config.allowedContent = true;
-    config.extraPlugins = 'colorbutton,youtube,uploadimage,widgetbootstrap';
+    config.extraPlugins = 'colorbutton,youtube,edityimageupload,widgetbootstrap';
     config.imageUploadUrl = '/edity/Page/AddAsset?page=' + window.location.pathname;
 };
 

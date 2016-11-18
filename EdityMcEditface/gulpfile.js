@@ -121,7 +121,6 @@ function build(sharedSettings) {
                "./node_modules/ckeditor/plugins/table/**/*",
                "./node_modules/ckeditor/plugins/pastefromword/**/*",
                "./node_modules/ckeditor/plugins/uploadwidget/**/*",
-               "./node_modules/ckeditor/plugins/uploadimage/**/*",
                "./node_modules/ckeditor/plugins/notificationaggregator/**/*",
                "./node_modules/ckeditor/plugins/filetools/**/*",
                "./node_modules/ckeditor/plugins/widget/**/*",

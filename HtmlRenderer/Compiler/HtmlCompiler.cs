@@ -58,7 +58,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             {
                 writer.Write(document.DocumentNode.OuterHtml);
             }
-            fileFinder.copyDependencyFiles(outDir, pageStack);
+            fileFinder.copyDependencyFiles(this.outDir, pageStack);
         }
 
         public void copyProjectContent()

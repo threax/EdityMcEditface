@@ -227,7 +227,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// Copy the dependency files for the current page stack.
         /// </summary>
         /// <param name="fileFinder"></param>
-        public void copyDependencyFiles(String outDir, PageStack pageStack)
+        public void copyDependencyFiles(String baseOutDir, PageStack pageStack)
         {
             HashSet<String> copiedContentFiles = new HashSet<string>();
 
@@ -235,17 +235,17 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 if (!String.IsNullOrEmpty(page.PageCssPath))
                 {
-                    copyFileIfNotExists(normalizeProjectPath(page.PageCssPath), safePathCombine(outDir, page.PageCssPath));
+                    copyFileIfNotExists(normalizeProjectPath(page.PageCssPath), safePathCombine(baseOutDir, page.PageCssPath));
                 }
                 if (!String.IsNullOrEmpty(page.PageScriptPath))
                 {
-                    copyFileIfNotExists(normalizeProjectPath(page.PageScriptPath), safePathCombine(outDir, page.PageScriptPath));
+                    copyFileIfNotExists(normalizeProjectPath(page.PageScriptPath), safePathCombine(baseOutDir, page.PageScriptPath));
                 }
                 foreach (var content in pageStack.LinkedContentFiles)
                 {
                     if (!copiedContentFiles.Contains(content) && isValidPhysicalFile(content))
                     {
-                        copyFileIfNotExists(findRealFile(content), safePathCombine(outDir, content));
+                        copyFileIfNotExists(findRealFile(content), safePathCombine(baseOutDir, content));
                     }
                     copiedContentFiles.Add(content);
                 }

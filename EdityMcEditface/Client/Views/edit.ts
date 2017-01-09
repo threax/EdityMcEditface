@@ -12,4 +12,4 @@ function itemAdded(item) {
 
 var menu = navmenu.getNavMenu("edit-nav-menu-items");
 menu.getItems().forEach(itemAdded);
-menu.itemAdded.add(null, itemAdded);
+menu.itemAdded.add(itemAdded);

@@ -10,13 +10,19 @@ interface INavMenuItem {
 
 var navMenus = {};
 
-function NavMenu() {
-    var menuItems = [];
+class NavMenu {
+    private menuItems: INavMenuItem[] = [];
+    private itemAddedEvent = new ActionEventDispatcher<INavMenuItem>();
 
-    var itemAdded = new ActionEventDispatcher<INavMenuItem>();
-    this.itemAdded = itemAdded.modifier;
+    constructor(){
+    
+    }
 
-    function add(name, controllerConstructor: any, context?:any) {
+    public get itemAdded() {
+        return this.itemAddedEvent.modifier;
+    }
+
+    public add(name, controllerConstructor?: any, context?:any) {
         if (controllerConstructor !== undefined) {
             controllerConstructor = controller.createOnCallback(controllerConstructor, context);
         }
@@ -24,18 +30,16 @@ function NavMenu() {
             name: name,
             created: controllerConstructor
         };
-        menuItems.push(item);
-        itemAdded.fire(item);
+        this.menuItems.push(item);
+        this.itemAddedEvent.fire(item);
     }
-    this.add = add;
 
-    function getItems() {
-        return menuItems;
+    public getItems() {
+        return this.menuItems;
     }
-    this.getItems = getItems;
 }
 
-export function getNavMenu(name) {
+export function getNavMenu(name: string): NavMenu {
     var menu = navMenus[name];
     if (menu === undefined) {
         navMenus[name] = menu = new NavMenu();

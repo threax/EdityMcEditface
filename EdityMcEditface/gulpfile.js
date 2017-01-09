@@ -10,6 +10,7 @@ var copyFiles = require('threax-gulp-tk/copy.js');
 var htmlRapierBuild = require(__dirname + '/node_modules/htmlrapier/build');
 var htmlRapierWidgetsBuild = require(__dirname + '/node_modules/htmlrapier.widgets/build');
 var htmlRapierBootstrapBuild = require(__dirname + '/node_modules/htmlrapier.bootstrap/build');
+var treeMenuBuild = require(__dirname + '/node_modules/htmlrapier.treemenu/build');
 
 var webroot = __dirname + "/wwwroot";
 
@@ -51,6 +52,7 @@ function build(sharedSettings) {
     htmlRapierBuild(__dirname, libDir, sharedSettings);
     htmlRapierWidgetsBuild(__dirname, libDir, sharedSettings);
     htmlRapierBootstrapBuild(__dirname, libDir, sharedSettings);
+    treeMenuBuild(__dirname, libDir, sharedSettings);
 
     compileLess({
         files: [

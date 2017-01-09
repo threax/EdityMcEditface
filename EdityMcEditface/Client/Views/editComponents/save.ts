@@ -4,6 +4,7 @@ import * as navmenu from "edity.editorcore.navmenu";
 import * as pageService from "edity.editorcore.PageService";
 import * as saveService from "edity.editorcore.SaveService";
 import * as controller from 'hr.controller';
+import * as PageStart from 'edity.editorcore.PageStart';
 
 class SaveController {
     private load: controller.OnOffToggle;
@@ -28,6 +29,8 @@ class SaveController {
     }
 }
 
-var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
-editMenu.add("SaveButton", SaveController);
-editMenu.add("PreviewButton");
+PageStart.init().then(config => {
+    var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
+    editMenu.add("SaveButton", SaveController);
+    editMenu.add("PreviewButton");
+});

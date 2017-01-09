@@ -50,7 +50,7 @@ class HistoryController {
 
         this.pageNumbers = new PageNumbers.PageNumbers(bindings.getModel('pageNumbers'), bindings);
         this.pageNumbers.resultsPerPage = this.pagedData.resultsPerPage;
-        this.pageNumbers.pageChangeRequested.add(this, this.pageChangeRequested);
+        this.pageNumbers.pageChangeRequested.add((pageNum) => this.pageChangeRequested(pageNum));
 
         //Add to nav menu
         var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
@@ -76,7 +76,7 @@ class HistoryController {
         this.toggleGroup.activate(this.error);
     }
 
-    private pageChangeRequested(pageNum) {
+    private pageChangeRequested(pageNum: number) {
         this.pagedData.currentPage = pageNum;
         this.pagedData.updateData();
     }

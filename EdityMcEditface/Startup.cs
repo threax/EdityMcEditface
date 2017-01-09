@@ -106,10 +106,9 @@ namespace EdityMcEditface
             EdityServerConfiguration = builder.Build();
 
             //Load plugin dlls from config.
-            var basePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             foreach (var plugin in EditySettings.Plugins)
             {
-                var file = Path.Combine(basePath, plugin);
+                var file = Path.Combine(runningFolder, plugin);
                 var assembly = Assembly.LoadFrom(file);
                 EdityPluginEntryPointAttribute entryPoint;
                 foreach(var attr in assembly.GetCustomAttributes())

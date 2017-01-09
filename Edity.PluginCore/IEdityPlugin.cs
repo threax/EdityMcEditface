@@ -17,9 +17,9 @@ namespace Edity.PluginCore
         /// site and the server.
         /// </summary>
         /// <param name="env">The hosting environment.</param>
-        /// <param name="config">The application configuration.</param>
-        /// <param name="serverConfig">The edity server configuration.</param>
-        void OnStartup(IHostingEnvironment env, IConfigurationRoot config, IConfigurationRoot serverConfig);
+        /// <param name="appConfig">The application configuration.</param>
+        /// <param name="projectConfig">The edity project configuration.</param>
+        void OnStartup(IHostingEnvironment env, IConfigurationRoot appConfig, IConfigurationRoot projectConfig);
 
         /// <summary>
         /// This function is called at the beginning of the ConfigureServices function on startup.

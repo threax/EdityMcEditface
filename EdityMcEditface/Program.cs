@@ -52,8 +52,8 @@ namespace EdityMcEditface
                 configPath = Path.GetFullPath(configPath);
                 if (File.Exists(configPath))
                 {
-                    Startup.EditySettingsFile = Path.GetFileName(configPath);
-                    Startup.EditySettingsRoot = Path.GetDirectoryName(configPath);
+                    Startup.EdityProjectSettingsFile = Path.GetFileName(configPath);
+                    Startup.EdityRoot = Path.GetDirectoryName(configPath);
                 }
             }
 

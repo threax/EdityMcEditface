@@ -15,7 +15,7 @@ namespace Edity.PluginCore
     /// </summary>
     public class EdityPlugin : IEdityPlugin
     {
-        public virtual void OnStartup(IHostingEnvironment env, IConfigurationRoot config, IConfigurationRoot serverConfig)
+        public virtual void OnStartup(IHostingEnvironment env, IConfigurationRoot appConfig, IConfigurationRoot projectConfig)
         {
 
         }

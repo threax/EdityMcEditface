@@ -22,8 +22,15 @@ namespace EdityMcEditface
 {
     public class Startup
     {
-        public static String EditySettingsRoot { get; set; }
-        public static String EditySettingsFile { get; set; } = "Config/edityserver.json";
+        /// <summary>
+        /// The root directory to look for a project.
+        /// </summary>
+        public static String EdityRoot { get; set; }
+
+        /// <summary>
+        /// The file for project settings shared across all users for an edity project.
+        /// </summary>
+        public static String EdityProjectSettingsFile { get; set; } = "Config/edityserver.json";
 
         private Info info = new Info
         {
@@ -73,12 +80,12 @@ namespace EdityMcEditface
             ConfigurationBinder.Bind(Configuration.GetSection("EditySettings"), EditySettings);
 
 
-            if (EditySettingsRoot == null)
+            if (EdityRoot == null)
             {
-                EditySettingsRoot = siteRootPath;
+                EdityRoot = siteRootPath;
                 if (EditySettings.ReadFromCurrentDirectory)
                 {
-                    EditySettingsRoot = Path.Combine(Directory.GetCurrentDirectory());
+                    EdityRoot = Path.Combine(Directory.GetCurrentDirectory());
                 }
             }
 
@@ -90,7 +97,7 @@ namespace EdityMcEditface
             }
 
             builder = new ConfigurationBuilder()
-            .SetBasePath(EditySettingsRoot)
+            .SetBasePath(EdityRoot)
             .AddInMemoryCollection(new Dictionary<String, String>
             {
                     { "ProjectMode", "SingleRepo" },
@@ -100,10 +107,10 @@ namespace EdityMcEditface
                     { "ProjectPath", defaultProjectPath },
                     { "BackupFilePath", Path.Combine(siteRootPath, "wwwroot") }
             })
-            .AddJsonFile(EditySettingsFile, optional: true, reloadOnChange: true)
-            .AddJsonFile($"{Path.GetFileNameWithoutExtension(EditySettingsFile)}.{env.EnvironmentName}.json", optional: true);
+            .AddJsonFile(EdityProjectSettingsFile, optional: true, reloadOnChange: true)
+            .AddJsonFile($"{Path.GetFileNameWithoutExtension(EdityProjectSettingsFile)}.{env.EnvironmentName}.json", optional: true);
 
-            EdityServerConfiguration = builder.Build();
+            EdityProjectConfiguration = builder.Build();
 
             //Load plugin dlls from config.
             foreach (var plugin in EditySettings.Plugins)
@@ -124,7 +131,7 @@ namespace EdityMcEditface
             //Initialize plugins.
             foreach(var plugin in plugins)
             {
-                plugin.OnStartup(env, Configuration, EdityServerConfiguration);
+                plugin.OnStartup(env, Configuration, EdityProjectConfiguration);
             }
         }
 
@@ -132,7 +139,7 @@ namespace EdityMcEditface
 
         public EditySettings EditySettings { get; set; }
 
-        public IConfigurationRoot EdityServerConfiguration { get; }
+        public IConfigurationRoot EdityProjectConfiguration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -150,19 +157,19 @@ namespace EdityMcEditface
 
             services.AddSingleton<EditySettings>(s => EditySettings);
 
-            switch (EdityServerConfiguration["ProjectMode"])
+            switch (EdityProjectConfiguration["ProjectMode"])
             {
                 case "SingleRepo":
                 default:
                     services.AddTransient<ProjectFinder, OneRepo>(s =>
                     {
-                        return new OneRepo(EdityServerConfiguration["ProjectPath"], EdityServerConfiguration["BackupFilePath"]);
+                        return new OneRepo(EdityProjectConfiguration["ProjectPath"], EdityProjectConfiguration["BackupFilePath"]);
                     });
                     break;
                 case "OneRepoPerUser":
                     services.AddTransient<ProjectFinder, OneRepoPerUser>(s =>
                     {
-                        return new OneRepoPerUser(EdityServerConfiguration["ProjectPath"], EdityServerConfiguration["BackupFilePath"]);
+                        return new OneRepoPerUser(EdityProjectConfiguration["ProjectPath"], EdityProjectConfiguration["BackupFilePath"]);
                     });
                     break;
             }
@@ -189,7 +196,7 @@ namespace EdityMcEditface
                 return new Signature(userInfo.UserName, userInfo.UserName + "@nowhere.com", DateTime.Now);
             });
 
-            switch (EdityServerConfiguration["Compiler"])
+            switch (EdityProjectConfiguration["Compiler"])
             {
                 case "RoundRobin":
                     services.AddTransient<SiteBuilder, RoundRobinSiteBuilder>(s =>
@@ -198,7 +205,7 @@ namespace EdityMcEditface
                         var settings = createSiteBuilderSettings(s);
                         var builder = new RoundRobinSiteBuilder(settings, new WebConfigRoundRobinDeployer());
 
-                        if (EdityServerConfiguration["ProjectMode"] == "OneRepoPerUser")
+                        if (EdityProjectConfiguration["ProjectMode"] == "OneRepoPerUser")
                         {
                             builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
                         }
@@ -213,7 +220,7 @@ namespace EdityMcEditface
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var builder = new DirectOutputSiteBuilder(createSiteBuilderSettings(s));
 
-                        if (EdityServerConfiguration["ProjectMode"] == "OneRepoPerUser")
+                        if (EdityProjectConfiguration["ProjectMode"] == "OneRepoPerUser")
                         {
                             builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
                         }
@@ -315,8 +322,8 @@ namespace EdityMcEditface
             {
                 InDir = projectFinder.PublishedProjectPath,
                 BackupPath = projectFinder.BackupPath,
-                OutDir = EdityServerConfiguration["OutputPath"],
-                SiteName = EdityServerConfiguration["SiteName"]
+                OutDir = EdityProjectConfiguration["OutputPath"],
+                SiteName = EdityProjectConfiguration["SiteName"]
             };
         }
     }

@@ -1,18 +1,17 @@
 ﻿"use strict";
 
-import {TimedTrigger} from 'hr.timedtrigger';
-import {EventHandler} from 'hr.eventhandler';
-import { PromiseEventHandler } from 'hr.promiseeventhandler';
+import { TimedTrigger } from 'hr.timedtrigger';
+import { ActionEventDispatcher, PromiseEventDispatcher } from 'hr.eventdispatcher';
 
 var allowSave = true;
 var saveAgainWhenSaveCompleted = false;
 var outstandingSaveRequest = false;
 
 var saveTrigger = new TimedTrigger(5000);
-var saveStartedEventHandler = new EventHandler();
-var saveCompletedEventHandler = new EventHandler();
-var saveErrorEventHandler = new EventHandler();
-var saveEventHandler = new PromiseEventHandler();
+var saveStartedEventHandler = new ActionEventDispatcher<void>();
+var saveCompletedEventHandler = new ActionEventDispatcher<void>();
+var saveErrorEventHandler = new ActionEventDispatcher<void>();
+var saveEventHandler = new PromiseEventDispatcher<void, void>();
 export const saveStartedEvent = saveStartedEventHandler.modifier;
 export const saveCompletedEvent = saveCompletedEventHandler.modifier;
 export const saveErrorEvent = saveErrorEventHandler.modifier;
@@ -21,23 +20,23 @@ export const saveEvent = saveEventHandler.modifier;
 function doSave() {
     outstandingSaveRequest = false;
     allowSave = false;
-    saveStartedEventHandler.fire();
-    saveEventHandler.fire()
+    saveStartedEventHandler.fire(null);
+    saveEventHandler.fire(null)
         .then(function (data) {
-            saveCompletedEventHandler.fire();
+            saveCompletedEventHandler.fire(null);
             finishSave();
         })
         .catch(function (data) {
-            saveErrorEventHandler.fire();
+            saveErrorEventHandler.fire(null);
             finishSave();
         });
 }
-saveTrigger.addListener(this, doSave);
+saveTrigger.addListener(doSave);
 
 export function requestSave() {
     if (allowSave) {
         outstandingSaveRequest = true;
-        saveTrigger.fire();
+        saveTrigger.fire(null);
     }
     else {
         saveAgainWhenSaveCompleted = true;

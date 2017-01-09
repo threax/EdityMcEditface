@@ -5,7 +5,7 @@ import * as BindingCollection from "hr.bindingcollection";
 import * as toggles from "hr.toggles";
 import * as Iterable from "hr.iterable";
 import * as controller from "hr.controller";
-import * as navmenu from "hr.widgets.navmenu";
+import * as navmenu from "edity.editorcore.navmenu";
 import * as EdityClient from 'edity.editorcore.EdityClient';
 import * as PageStart from 'edity.editorcore.PageStart';
 

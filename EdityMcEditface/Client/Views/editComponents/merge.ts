@@ -2,7 +2,7 @@
 
 import * as storage from "hr.storage";
 import * as controller from "hr.controller";
-import * as navmenu from "hr.widgets.navmenu";
+import * as navmenu from "edity.editorcore.navmenu";
 import * as GitService from "edity.editorcore.GitService";
 
 var CodeMirror = (<any>window).CodeMirror;
@@ -37,7 +37,7 @@ class MergeController {
         var dialog = bindings.getToggle('dialog');
         var mergeModel = bindings.getModel('merge');
 
-        GitService.determineCommitVariantEvent.add(this, this.mergeVariant);
+        GitService.determineCommitVariantEvent.add((d) => this.mergeVariant(d));
     }
 
     private mergeVariant(data) {

@@ -1,18 +1,21 @@
 ﻿"use strict";
 
-import * as navmenu from "hr.widgets.navmenu";
+import * as navmenu from "edity.editorcore.navmenu";
 import * as pageService from "edity.editorcore.PageService";
 import * as saveService from "edity.editorcore.SaveService";
+import * as controller from 'hr.controller';
 
 class SaveController {
-    constructor(bindings){
-        var load = bindings.getToggle("load");
-        load.off();
+    private load: controller.OnOffToggle;
 
-        saveService.saveStartedEvent.add(load, load.on);
-        saveService.saveCompletedEvent.add(load, load.off);
-        saveService.saveErrorEvent.add(load, load.off);
-        saveService.saveErrorEvent.add(this, this.saveError);
+    constructor(bindings: controller.BindingCollection){
+        this.load = bindings.getToggle("load");
+        this.load.off();
+
+        saveService.saveStartedEvent.add(() => this.load.on());
+        saveService.saveCompletedEvent.add(() => this.load.off());
+        saveService.saveErrorEvent.add(() => this.load.off());
+        saveService.saveErrorEvent.add(() => this.saveError());
     }
 
     private saveError() {

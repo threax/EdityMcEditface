@@ -2,8 +2,8 @@
 
 import * as edityClient from 'edity.editorcore.EdityClient';
 import * as uploader from 'edity.editorcore.uploader';
-import { EventHandler } from 'hr.eventhandler';
-import { PagedClientData } from 'hr.widgets.pageddata';
+import { ActionEventDispatcher } from 'hr.eventdispatcher';
+import { PagedClientData } from 'edity.editorcore.pageddata';
 import { CacheBuster } from 'hr.cachebuster';
 import { WindowFetch } from 'hr.windowfetch';
 import * as pageStart from 'edity.editorcore.PageStart';
@@ -66,11 +66,11 @@ export function push() {
     return client.push(null);
 }
 
-var revertStartedHandler = new EventHandler();
-var revertCompletedHandler = new EventHandler();
+var revertStartedHandler = new ActionEventDispatcher<void>();
+var revertCompletedHandler = new ActionEventDispatcher<boolean>();
 
 export function revert(file) {
-    revertStartedHandler.fire();
+    revertStartedHandler.fire(null);
     return client.revert(file, null)
         .then((data) => {
             revertCompletedHandler.fire(true);
@@ -84,7 +84,7 @@ export const revertStarted = revertStartedHandler.modifier;
 export const revertCompleted = revertCompletedHandler.modifier;
 
 //Commit variant detection and sync
-var determineCommitVariantEventHandler = new EventHandler();
+var determineCommitVariantEventHandler = new ActionEventDispatcher<any>();
 
 export function fireDetermineCommitVariant(data) {
     return determineCommitVariantEventHandler.fire(data);

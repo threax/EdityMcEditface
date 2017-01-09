@@ -3,7 +3,7 @@
 import * as storage from "hr.storage";
 import * as uploader from "edity.editorcore.uploader";
 import * as controller from "hr.controller";
-import * as navmenu from "hr.widgets.navmenu";
+import * as navmenu from "edity.editorcore.navmenu";
 import * as GitService from "edity.editorcore.GitService";
 
 var revertConfirmation;
@@ -74,7 +74,7 @@ class DiffController {
     private savePath;
 
     constructor(bindings) {
-        GitService.determineCommitVariantEvent.add(this, this.diffVariant)
+        GitService.determineCommitVariantEvent.add((d) => this.diffVariant(d))
 
         this.dialog = bindings.getToggle('dialog');
         this.diffModel = bindings.getModel('diff');

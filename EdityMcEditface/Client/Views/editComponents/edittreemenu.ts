@@ -25,7 +25,7 @@ function TreeMenuEditor(menuData, updateCb, saveUrl, urlRoot) {
                 });
         }
     }
-    saveService.saveEvent.add(this, save);
+    saveService.saveEvent.add((i) => { return save() });
 
     function update() {
         hasChanges = true;

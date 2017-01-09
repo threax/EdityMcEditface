@@ -2,7 +2,7 @@
 
 import * as component from "hr.components";
 import * as domQuery from "hr.domquery";
-import * as navmenu from "hr.widgets.navmenu";
+import * as navmenu from "edity.editorcore.navmenu";
 
 var navMenu = domQuery.first('[data-editor-navmenu]');
 

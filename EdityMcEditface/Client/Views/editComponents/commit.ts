@@ -2,7 +2,7 @@
 
 import * as storage from "hr.storage";
 import * as controller from "hr.controller";
-import * as navmenu from "hr.widgets.navmenu";
+import * as navmenu from "edity.editorcore.navmenu";
 import * as toggles from "hr.toggles";
 import * as GitService from "edity.editorcore.GitService";
 
@@ -59,9 +59,9 @@ class CommitController {
         this.toggleGroup = new toggles.Group(this.main, this.load, this.error, this.noChanges);
         this.changedFiles = commitDialog.getModel('changedFiles');
 
-        GitService.revertStarted.add(this, () => this.toggleGroup.activate(this.load));
+        GitService.revertStarted.add(() => this.toggleGroup.activate(this.load));
 
-        GitService.revertCompleted.add(this, (success) => {
+        GitService.revertCompleted.add((success) => {
             if (success) {
                 this.updateUncommittedFiles();
             }

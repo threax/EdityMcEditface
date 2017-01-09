@@ -52,7 +52,7 @@ interface NewPageControllerConfig {
 
 class NewPageController {
     constructor(bindings: controller.BindingCollection, context: PageStart) {
-        var templatesModel = bindings.getModel<Template[]>('templates');
+        var templatesModel = bindings.getModel<Template>('templates');
         var config = bindings.getConfig<NewPageControllerConfig>();
         var templateClient = new TemplateClient(context.BaseUrl, context.Fetcher);
         var pageClient = new PageClient(context.BaseUrl, context.Fetcher);

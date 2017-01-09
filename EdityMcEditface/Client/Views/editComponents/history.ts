@@ -1,9 +1,9 @@
 ﻿"use strict";
 
 import * as controller from "hr.controller";
-import * as navmenu from "hr.widgets.navmenu";
+import * as navmenu from "edity.editorcore.navmenu";
 import * as toggles from "hr.toggles";
-import * as PageNumbers from "hr.widgets.pagenumbers";
+import * as PageNumbers from "edity.editorcore.pagenumbers";
 import * as Iterable from "hr.iterable";
 import * as GitService from "edity.editorcore.GitService";
 
@@ -44,9 +44,9 @@ class HistoryController {
         this.historyModel = bindings.getModel('history');
 
         this.pagedData = GitService.createHistoryPager(window.location.pathname, 10);
-        this.pagedData.updating.add(this, this.dataUpdating);
-        this.pagedData.updated.add(this, this.dataUpdated);
-        this.pagedData.error.add(this, this.loadFailed);
+        this.pagedData.updating.add((i) => this.dataUpdating());
+        this.pagedData.updated.add((d) => this.dataUpdated(d));
+        this.pagedData.error.add((e) => this.loadFailed());
 
         this.pageNumbers = new PageNumbers.PageNumbers(bindings.getModel('pageNumbers'), bindings);
         this.pageNumbers.resultsPerPage = this.pagedData.resultsPerPage;

@@ -41,5 +41,5 @@ function doSave() {
 
 pageStart.init().then((config) => {
     client = new edityClient.PageClient(config.BaseUrl, config.Fetcher);
-    saveService.saveEvent.add(this, doSave);
+    saveService.saveEvent.add(doSave);
 });

@@ -18,7 +18,9 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Microsoft.AspNetCore.Antiforgery": "1.0.0",
     "Threax.AspNetCore.ExceptionToJson": "1.4.0",
-    "Threax.AspNetCore.Swashbuckle.Convention": "1.7.0"
+    "Threax.AspNetCore.Swashbuckle.Convention": "1.7.0",
+    "Edity.PluginCore": "1.0.0-*",
+    "Edity.NoAuth": "1.0.0-*"
   },
 
   "tools": {

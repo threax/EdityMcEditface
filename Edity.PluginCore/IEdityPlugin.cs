@@ -28,6 +28,12 @@ namespace Edity.PluginCore
         void ConfigureServicesStart(IServiceCollection services);
 
         /// <summary>
+        /// This function is called between ConfigureServicesStart and ConfigureServicesEnd as Mvc is being set up.
+        /// </summary>
+        /// <param name="builder">The mvc builder.</param>
+        void ConfigureMvc(IMvcBuilder builder);
+
+        /// <summary>
         /// This function is called at the end of the ConfigureServices function on startup.
         /// </summary>
         /// <param name="services">The service collection.</param>

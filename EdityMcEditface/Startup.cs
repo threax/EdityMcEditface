@@ -1,30 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using EdityMcEditface.NetCore.Controllers;
 using EdityMcEditface.HtmlRenderer;
 using System.IO;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using LibGit2Sharp;
-using EdityMcEditface.Models.Compiler;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
 using Microsoft.AspNetCore.Http;
-using EdityMcEditface.Models.Auth;
 using EdityMcEditface.Models.Page;
-using EdityMcEditface.Models.Config;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http.Extensions;
 using Swashbuckle.Swagger.Model;
+using Edity.PluginCore;
+using System.Reflection;
+using Edity.PluginCore.Config;
 
 namespace EdityMcEditface
 {
@@ -43,6 +35,7 @@ namespace EdityMcEditface
 
         private String runningFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         private IHostingEnvironment env;
+        private List<IEdityPlugin> plugins = new List<IEdityPlugin>();
 
         public Startup(IHostingEnvironment env)
         {
@@ -111,6 +104,29 @@ namespace EdityMcEditface
             .AddJsonFile($"{Path.GetFileNameWithoutExtension(EditySettingsFile)}.{env.EnvironmentName}.json", optional: true);
 
             EdityServerConfiguration = builder.Build();
+
+            //Load plugin dlls from config.
+            var basePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            foreach (var plugin in EditySettings.Plugins)
+            {
+                var file = Path.Combine(basePath, plugin);
+                var assembly = Assembly.LoadFrom(file);
+                EdityPluginEntryPointAttribute entryPoint;
+                foreach(var attr in assembly.GetCustomAttributes())
+                {
+                    entryPoint = attr as EdityPluginEntryPointAttribute;
+                    if(entryPoint != null)
+                    {
+                        plugins.AddRange(entryPoint.CreatePlugins());
+                    }
+                }
+            }
+
+            //Initialize plugins.
+            foreach(var plugin in plugins)
+            {
+                plugin.OnStartup(env, Configuration, EdityServerConfiguration);
+            }
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -122,6 +138,11 @@ namespace EdityMcEditface
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            foreach (var plugin in plugins)
+            {
+                plugin.ConfigureServicesStart(services);
+            }
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddSingleton<WorkQueue, WorkQueue>();
@@ -204,7 +225,7 @@ namespace EdityMcEditface
             }
 
             // Add framework services.
-            services.AddMvc(o =>
+            var mvcBuilder = services.AddMvc(o =>
             {
                 o.UseExceptionErrorFilters(EditySettings.DetailedErrors);
             })
@@ -214,15 +235,30 @@ namespace EdityMcEditface
                 o.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
 
+            foreach (var plugin in plugins)
+            {
+                plugin.ConfigureMvc(mvcBuilder);
+            }
+
             if (env.IsEnvironment("Development"))
             {
                 services.AddConventionalSwagger(info);
+            }
+
+            foreach (var plugin in plugins)
+            {
+                plugin.ConfigureServicesEnd(services);
             }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            foreach (var plugin in plugins)
+            {
+                plugin.ConfigureStart(app, env, loggerFactory);
+            }
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -246,15 +282,6 @@ namespace EdityMcEditface
                 app.UseConventionalSwagger(info);
             }
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions()
-            {
-                AuthenticationScheme = "Cookies",
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                LoginPath = "/edity/auth/login",
-                LogoutPath = "/edity/auth/logout"
-            });
-
             app.UseMvc(routes =>
             {
 #if LOCAL_RUN_ENABLED
@@ -274,6 +301,11 @@ namespace EdityMcEditface
                     defaults: new { controller = "Home", action = "Index" }
                 );
             });
+
+            foreach (var plugin in plugins)
+            {
+                plugin.ConfigureEnd(app, env, loggerFactory);
+            }
         }
 
         private SiteBuilderSettings createSiteBuilderSettings(IServiceProvider s)

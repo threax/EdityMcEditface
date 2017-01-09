@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.Models.Config
+namespace Edity.PluginCore.Config
 {
     /// <summary>
     /// The settings class.
@@ -29,5 +29,10 @@ namespace EdityMcEditface.Models.Config
         /// The user account name to use when using NoAuth
         /// </summary>
         public String NoAuthUser { get; set; } = "OnlyUser";
+
+        /// <summary>
+        /// A list of plugin assemblies to load. The plugin files must exist in the same folder as the main executable.
+        /// </summary>
+        public List<String> Plugins { get; set; } = new List<string>();
     }
 }

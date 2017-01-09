@@ -1,6 +1,5 @@
-﻿using EdityMcEditface.HtmlRenderer;
-using EdityMcEditface.Models.Auth;
-using EdityMcEditface.Models.Config;
+﻿using Edity.PluginCore.Auth;
+using Edity.PluginCore.Config;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,9 +11,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using Threax.AspNetCore.ExceptionToJson;
-
-#if LOCAL_RUN_ENABLED
 
 namespace EdityMcEditface.Controllers
 {
@@ -23,14 +19,14 @@ namespace EdityMcEditface.Controllers
     /// This only works if LOCAL_RUN_ENABLED was enabled when the program was compiled.
     /// </summary>
     [Authorize]
-    public class NoAuthController : Controller
+    public class NoAuthController : ControllerBase
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public NoAuthController()
         {
-            
+
         }
 
         /// <summary>
@@ -45,7 +41,7 @@ namespace EdityMcEditface.Controllers
 
             var identity = new ClaimsIdentity(AllClaims(settings), "Cookies", "name", "role");
             await HttpContext.Authentication.SignInAsync("Cookies", new ClaimsPrincipal(identity));
-            
+
 
             return SafeRedirect(ref returnUrl);
         }
@@ -60,9 +56,7 @@ namespace EdityMcEditface.Controllers
             yield return new Claim("role", Roles.EditPages);
             yield return new Claim("role", Roles.Compile);
             yield return new Claim("role", Roles.UploadAnything);
-#if LOCAL_RUN_ENABLED
             yield return new Claim("role", Roles.Shutdown);
-#endif
         }
 
         /// <summary>
@@ -118,5 +112,3 @@ namespace EdityMcEditface.Controllers
         }
     }
 }
-
-#endif

@@ -3,12 +3,12 @@
 
   "dependencies": {
     "Edity.PluginCore": "1.0.0-*",
+    "Microsoft.AspNetCore.Antiforgery": "1.0.0",
+    "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0",
     "NETStandard.Library": "1.6.0"
   },
 
   "frameworks": {
-    "netstandard1.6": {
-      "imports": "dnxcore50"
-    }
+    "net452": {}
   }
 }

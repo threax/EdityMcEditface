@@ -1,12 +1,4 @@
-﻿using EdityMcEditface.HtmlRenderer;
-using EdityMcEditface.Models.Auth;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace EdityMcEditface.Models.Page
 {

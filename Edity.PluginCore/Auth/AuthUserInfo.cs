@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.Models.Auth
+namespace Edity.PluginCore
 {
     public class AuthUserInfo
     {

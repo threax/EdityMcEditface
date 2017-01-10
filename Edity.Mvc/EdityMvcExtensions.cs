@@ -22,7 +22,7 @@ namespace Edity.Mvc
 {
     public static class EdityMvcExtensions
     {
-        public static void AddEdity(this IServiceCollection services, EditySettings EditySettings, ProjectConfiguration ProjectConfiguration)
+        public static void AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -30,21 +30,21 @@ namespace Edity.Mvc
 
             services.AddScoped<AuthUserInfo>();
 
-            services.AddSingleton<EditySettings>(s => EditySettings);
+            services.AddSingleton<EditySettings>(s => editySettings);
 
-            switch (ProjectConfiguration.ProjectMode)
+            switch (projectConfiguration.ProjectMode)
             {
                 case "SingleRepo":
                 default:
                     services.AddTransient<ProjectFinder, OneRepo>(s =>
                     {
-                        return new OneRepo(ProjectConfiguration.ProjectPath, ProjectConfiguration.BackupFilePath);
+                        return new OneRepo(projectConfiguration.ProjectPath, projectConfiguration.BackupFilePath);
                     });
                     break;
                 case "OneRepoPerUser":
                     services.AddTransient<ProjectFinder, OneRepoPerUser>(s =>
                     {
-                        return new OneRepoPerUser(ProjectConfiguration.ProjectPath, ProjectConfiguration.BackupFilePath);
+                        return new OneRepoPerUser(projectConfiguration.ProjectPath, projectConfiguration.BackupFilePath);
                     });
                     break;
             }
@@ -79,12 +79,12 @@ namespace Edity.Mvc
                 {
                     InDir = projectFinder.PublishedProjectPath,
                     BackupPath = projectFinder.BackupPath,
-                    OutDir = ProjectConfiguration.OutputPath,
-                    SiteName = ProjectConfiguration.SiteName
+                    OutDir = projectConfiguration.OutputPath,
+                    SiteName = projectConfiguration.SiteName
                 };
             });
 
-            switch (ProjectConfiguration.Compiler)
+            switch (projectConfiguration.Compiler)
             {
                 case "RoundRobin":
                     services.AddTransient<SiteBuilder, RoundRobinSiteBuilder>(s =>
@@ -93,7 +93,7 @@ namespace Edity.Mvc
                         var settings = s.GetRequiredService<SiteBuilderSettings>();
                         var builder = new RoundRobinSiteBuilder(settings, new EdityMcEditface.WebConfigRoundRobinDeployer());
 
-                        if (ProjectConfiguration.ProjectMode == "OneRepoPerUser")
+                        if (projectConfiguration.ProjectMode == "OneRepoPerUser")
                         {
                             builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
                         }
@@ -109,7 +109,7 @@ namespace Edity.Mvc
                         var settings = s.GetRequiredService<SiteBuilderSettings>();
                         var builder = new DirectOutputSiteBuilder(settings);
 
-                        if (ProjectConfiguration.ProjectMode == "OneRepoPerUser")
+                        if (projectConfiguration.ProjectMode == "OneRepoPerUser")
                         {
                             builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
                         }
@@ -122,7 +122,7 @@ namespace Edity.Mvc
             // Add framework services.
             var mvcBuilder = services.AddMvc(o =>
             {
-                o.UseExceptionErrorFilters(EditySettings.DetailedErrors);
+                o.UseExceptionErrorFilters(editySettings.DetailedErrors);
             })
             .AddJsonOptions(o =>
             {

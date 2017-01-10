@@ -110,7 +110,8 @@ namespace EdityMcEditface
             .AddJsonFile(EdityProjectSettingsFile, optional: true, reloadOnChange: true)
             .AddJsonFile($"{Path.GetFileNameWithoutExtension(EdityProjectSettingsFile)}.{env.EnvironmentName}.json", optional: true);
 
-            EdityProjectConfiguration = builder.Build();
+            var edityProjectConfiguration = builder.Build();
+            ConfigurationBinder.Bind(edityProjectConfiguration, ProjectConfiguration);
 
             //Load plugin dlls from config.
             foreach (var plugin in EditySettings.Plugins)
@@ -131,15 +132,15 @@ namespace EdityMcEditface
             //Initialize plugins.
             foreach(var plugin in plugins)
             {
-                plugin.OnStartup(env, Configuration, EdityProjectConfiguration);
+                plugin.OnStartup(env, Configuration, edityProjectConfiguration);
             }
         }
 
         public IConfigurationRoot Configuration { get; }
 
-        public EditySettings EditySettings { get; set; }
+        public EditySettings EditySettings { get; private set; }
 
-        public IConfigurationRoot EdityProjectConfiguration { get; }
+        public ProjectConfiguration ProjectConfiguration { get; private set; } = new ProjectConfiguration();
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -157,19 +158,19 @@ namespace EdityMcEditface
 
             services.AddSingleton<EditySettings>(s => EditySettings);
 
-            switch (EdityProjectConfiguration["ProjectMode"])
+            switch (ProjectConfiguration.ProjectMode)
             {
                 case "SingleRepo":
                 default:
                     services.AddTransient<ProjectFinder, OneRepo>(s =>
                     {
-                        return new OneRepo(EdityProjectConfiguration["ProjectPath"], EdityProjectConfiguration["BackupFilePath"]);
+                        return new OneRepo(ProjectConfiguration.ProjectPath, ProjectConfiguration.BackupFilePath);
                     });
                     break;
                 case "OneRepoPerUser":
                     services.AddTransient<ProjectFinder, OneRepoPerUser>(s =>
                     {
-                        return new OneRepoPerUser(EdityProjectConfiguration["ProjectPath"], EdityProjectConfiguration["BackupFilePath"]);
+                        return new OneRepoPerUser(ProjectConfiguration.ProjectPath, ProjectConfiguration.BackupFilePath);
                     });
                     break;
             }
@@ -196,7 +197,7 @@ namespace EdityMcEditface
                 return new Signature(userInfo.UserName, userInfo.UserName + "@nowhere.com", DateTime.Now);
             });
 
-            switch (EdityProjectConfiguration["Compiler"])
+            switch (ProjectConfiguration.Compiler)
             {
                 case "RoundRobin":
                     services.AddTransient<SiteBuilder, RoundRobinSiteBuilder>(s =>
@@ -205,7 +206,7 @@ namespace EdityMcEditface
                         var settings = createSiteBuilderSettings(s);
                         var builder = new RoundRobinSiteBuilder(settings, new WebConfigRoundRobinDeployer());
 
-                        if (EdityProjectConfiguration["ProjectMode"] == "OneRepoPerUser")
+                        if (ProjectConfiguration.ProjectMode == "OneRepoPerUser")
                         {
                             builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
                         }
@@ -220,7 +221,7 @@ namespace EdityMcEditface
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var builder = new DirectOutputSiteBuilder(createSiteBuilderSettings(s));
 
-                        if (EdityProjectConfiguration["ProjectMode"] == "OneRepoPerUser")
+                        if (ProjectConfiguration.ProjectMode == "OneRepoPerUser")
                         {
                             builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
                         }
@@ -322,8 +323,8 @@ namespace EdityMcEditface
             {
                 InDir = projectFinder.PublishedProjectPath,
                 BackupPath = projectFinder.BackupPath,
-                OutDir = EdityProjectConfiguration["OutputPath"],
-                SiteName = EdityProjectConfiguration["SiteName"]
+                OutDir = ProjectConfiguration.OutputPath,
+                SiteName = ProjectConfiguration.SiteName
             };
         }
     }

@@ -1,4 +1,5 @@
-﻿using Edity.PluginCore.Auth;
+﻿#if LOCAL_RUN_ENABLED
+using Edity.PluginCore.Auth;
 using Edity.PluginCore.Config;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
@@ -110,3 +111,4 @@ namespace EdityMcEditface.Controllers
         }
     }
 }
+#endif

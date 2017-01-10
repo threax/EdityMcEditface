@@ -159,31 +159,6 @@ namespace EdityMcEditface
             }
 
             app.UseEdity();
-
-//            app.UseStaticFiles(new StaticFileOptions()
-//            {
-//                ContentTypeProvider = new EdityContentTypeProvider()
-//            });
-
-//            app.UseMvc(routes =>
-//            {
-//#if LOCAL_RUN_ENABLED
-//                if (EditySettings.NoAuth)
-//                {
-//                    routes.MapRoute(
-//                        name: "NoAuthAuth",
-//                        template: "edity/auth/{action}",
-//                        defaults: new { controller = "NoAuth" }
-//                    );
-//                }
-//#endif
-
-//                routes.MapRoute(
-//                    name: "default",
-//                    template: "{*file}",
-//                    defaults: new { controller = "Home", action = "Index" }
-//                );
-//            });
         }
     }
 }

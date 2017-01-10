@@ -32,11 +32,13 @@ namespace SchemaGenerator
         {
             Type t = typeof(T);
 
-            var schema = JsonSchema4.FromType<T>(new NJsonSchema.Generation.JsonSchemaGeneratorSettings()
+            var task = JsonSchema4.FromTypeAsync<T>(new NJsonSchema.Generation.JsonSchemaGeneratorSettings()
             {
                 DefaultEnumHandling = EnumHandling.String,
                 DefaultPropertyNameHandling = PropertyNameHandling.CamelCase
             });
+            task.Wait();
+            var schema = task.Result;
             var schemaData = schema.ToJson();
             using (var writer = new StreamWriter(File.Open(t.Name + ".json", FileMode.Create, FileAccess.Write, FileShare.None)))
             {

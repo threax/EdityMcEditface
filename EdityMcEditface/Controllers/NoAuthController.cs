@@ -4,12 +4,9 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace EdityMcEditface.Controllers
@@ -19,6 +16,7 @@ namespace EdityMcEditface.Controllers
     /// This only works if LOCAL_RUN_ENABLED was enabled when the program was compiled.
     /// </summary>
     [Authorize]
+    [Route("edity/auth/[action]")]
     public class NoAuthController : ControllerBase
     {
         /// <summary>

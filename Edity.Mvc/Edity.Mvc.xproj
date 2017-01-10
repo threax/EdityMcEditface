@@ -7,8 +7,8 @@
 
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>1e63ddd8-c847-4af5-8465-16a707ab25e2</ProjectGuid>
-    <RootNamespace>Edity.PluginCore</RootNamespace>
+    <ProjectGuid>d8e4847c-e299-4589-b6e2-57c957a05729</ProjectGuid>
+    <RootNamespace>Edity.Mvc</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>

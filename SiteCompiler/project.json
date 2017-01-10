@@ -5,7 +5,7 @@
   },
 
   "dependencies": {
-    "HtmlRenderer": "1.0.0-*",
+    "Edity.HtmlRenderer": "1.0.0-*",
     "Microsoft.Extensions.Configuration.CommandLine": "1.1.0",
     "Newtonsoft.Json": "9.0.1"
   },

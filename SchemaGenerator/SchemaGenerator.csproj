@@ -52,19 +52,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\HtmlRenderer\Compiler\CompilerDefinition.cs">
+    <Compile Include="..\Edity.HtmlRenderer\Compiler\CompilerDefinition.cs">
       <Link>CompilerDefinition.cs</Link>
     </Compile>
-    <Compile Include="..\HtmlRenderer\EdityProject.cs">
+    <Compile Include="..\Edity.HtmlRenderer\EdityProject.cs">
       <Link>EdityProject.cs</Link>
     </Compile>
-    <Compile Include="..\HtmlRenderer\JavascriptEntry.cs">
+    <Compile Include="..\Edity.HtmlRenderer\JavascriptEntry.cs">
       <Link>JavascriptEntry.cs</Link>
     </Compile>
-    <Compile Include="..\HtmlRenderer\LinkedContentEntry.cs">
+    <Compile Include="..\Edity.HtmlRenderer\LinkedContentEntry.cs">
       <Link>LinkedContentEntry.cs</Link>
     </Compile>
-    <Compile Include="..\HtmlRenderer\PageDefinition.cs">
+    <Compile Include="..\Edity.HtmlRenderer\PageDefinition.cs">
       <Link>PageDefinition.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />

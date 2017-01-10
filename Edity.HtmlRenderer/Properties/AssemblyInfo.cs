@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("HtmlRenderer.NetCore")]
+[assembly: AssemblyProduct("Edity.HtmlRenderer")]
 [assembly: AssemblyTrademark("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1b0dcb7b-4307-4b59-a439-82ddcd0166a1")]
+[assembly: Guid("2aefad2e-30ca-4fa1-8bf2-77d9a1037fb5")]

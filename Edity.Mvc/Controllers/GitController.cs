@@ -357,7 +357,7 @@ namespace EdityMcEditface.Controllers
                 {
                     var p = Process.Start( new ProcessStartInfo() {
                         FileName = "git",
-                        Arguments = "gc --auto --prune=now",
+                        Arguments = "gc --auto",
                         CreateNoWindow = true
                     });
                     p.WaitForExit(300000); //Wait for 5 minutes, may need adjustment

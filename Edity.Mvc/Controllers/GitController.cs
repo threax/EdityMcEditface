@@ -12,6 +12,7 @@ using EdityMcEditface.HtmlRenderer;
 using System.Net;
 using Threax.AspNetCore.ExceptionToJson;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 
 namespace EdityMcEditface.Controllers
 {
@@ -333,7 +334,7 @@ namespace EdityMcEditface.Controllers
         /// Push changes to the origin repo.
         /// </summary>
         [HttpPost]
-        public void Push()
+        public async Task Push()
         {
             if (UncommittedChanges().Any())
             {
@@ -347,6 +348,24 @@ namespace EdityMcEditface.Controllers
             catch (LibGit2SharpException ex)
             {
                 throw new ErrorResultException(ex.Message);
+            }
+
+            //Garbage collect using git gc, if it is not installed this will silently fail
+            try
+            {
+                await Task.Run(() =>
+                {
+                    var p = Process.Start( new ProcessStartInfo() {
+                        FileName = "git",
+                        Arguments = "gc --auto --prune=now",
+                        CreateNoWindow = true
+                    });
+                    p.WaitForExit(300000); //Wait for 5 minutes, may need adjustment
+                });
+            }
+            catch (Exception)
+            {
+
             }
         }
 

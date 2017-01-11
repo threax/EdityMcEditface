@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.Models.Upload
+namespace EdityMcEditface.Mvc.Models.Upload
 {
     /// <summary>
     /// A list of files in a directory.

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using LibGit2Sharp;
 using Microsoft.AspNetCore.StaticFiles;
 using System.IO;
-using EdityMcEditface.Models.Git;
+using EdityMcEditface.Mvc.Models.Git;
 using Microsoft.AspNetCore.Authorization;
 using EdityMcEditface.HtmlRenderer;
 using System.Net;
@@ -14,7 +14,7 @@ using Threax.AspNetCore.ExceptionToJson;
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 
-namespace EdityMcEditface.Controllers
+namespace EdityMcEditface.Mvc.Controllers
 {
     /// <summary>
     /// This api interacts with the git repo.

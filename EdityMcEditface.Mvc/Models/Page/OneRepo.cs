@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.Models.Page
+namespace EdityMcEditface.Mvc.Models.Page
 {
     public class OneRepo : ProjectFinder
     {

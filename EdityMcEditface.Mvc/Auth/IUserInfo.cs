@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Edity.Mvc.Auth
+namespace EdityMcEditface.Mvc.Auth
 {
     /// <summary>
     /// This interface provides the user info to the rest of the system.

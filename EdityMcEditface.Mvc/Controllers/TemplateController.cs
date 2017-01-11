@@ -9,7 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.Controllers
+namespace EdityMcEditface.Mvc.Controllers
 {
     /// <summary>
     /// This api controls templates.

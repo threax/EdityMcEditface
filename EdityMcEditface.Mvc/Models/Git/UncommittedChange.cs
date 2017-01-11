@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LibGit2Sharp;
 
-namespace EdityMcEditface.Models.Git
+namespace EdityMcEditface.Mvc.Models.Git
 {
     /// <summary>
     /// A verision of FileStatus from git with ambiguity removed

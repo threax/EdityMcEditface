@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Edity.PluginCore.Auth
+namespace EdityMcEditface.Mvc.Auth
 {
     public class AntiforgeryToken
     {

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface
+namespace EdityMcEditface.Mvc
 {
     public class WebConfigRoundRobinDeployer : RoundRobinDeployer
     {

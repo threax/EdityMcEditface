@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using EdityMcEditface.NetCore.Controllers;
+using EdityMcEditface.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.Threading;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LibGit2Sharp;
 
-namespace EdityMcEditface.Models.Git
+namespace EdityMcEditface.Mvc.Models.Git
 {
     public class History
     {

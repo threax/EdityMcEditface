@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Edity.Mvc.Auth
+namespace EdityMcEditface.Mvc.Auth
 {
     /// <summary>
     /// A default user info that reads the user identity name and makes up an email.

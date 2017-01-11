@@ -1,6 +1,6 @@
 ﻿using EdityMcEditface.HtmlRenderer;
-using EdityMcEditface.Models.CKEditor;
-using EdityMcEditface.Models.Page;
+using EdityMcEditface.Mvc.Models.CKEditor;
+using EdityMcEditface.Mvc.Models.Page;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.Controllers
+namespace EdityMcEditface.Mvc.Controllers
 {
     /// <summary>
     /// This controller handles properties of a page.

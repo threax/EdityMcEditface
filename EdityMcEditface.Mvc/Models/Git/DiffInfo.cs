@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.Models.Git
+namespace EdityMcEditface.Mvc.Models.Git
 {
     public class DiffInfo
     {

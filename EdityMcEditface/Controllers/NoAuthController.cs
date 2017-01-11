@@ -1,6 +1,7 @@
 ﻿#if LOCAL_RUN_ENABLED
-using Edity.PluginCore.Auth;
-using Edity.PluginCore.Config;
+using EdityMcEditface.Mvc;
+using EdityMcEditface.Mvc.Auth;
+using EdityMcEditface.Mvc.Config;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

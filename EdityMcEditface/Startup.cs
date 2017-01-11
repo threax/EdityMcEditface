@@ -6,15 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IO;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json.Converters;
-using LibGit2Sharp;
-using Microsoft.AspNetCore.Http;
-using EdityMcEditface.Models.Page;
 using Swashbuckle.Swagger.Model;
-using Edity.PluginCore;
-using Edity.PluginCore.Config;
-using Edity.Mvc;
+using EdityMcEditface.Mvc.Config;
+using EdityMcEditface.Mvc;
 
 namespace EdityMcEditface
 {

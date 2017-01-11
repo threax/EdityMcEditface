@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.Models.Page
+namespace EdityMcEditface.Mvc.Models.Page
 {
     /// <summary>
     /// This build task ensures a publish repo exists and pulls in any updates.

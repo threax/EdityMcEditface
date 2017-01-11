@@ -7,14 +7,14 @@ using EdityMcEditface.HtmlRenderer;
 using System.IO;
 using System.Net;
 using Microsoft.AspNetCore.StaticFiles;
-using EdityMcEditface.Models.CKEditor;
+using EdityMcEditface.Mvc.Models.CKEditor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using EdityMcEditface.Models.Upload;
+using EdityMcEditface.Mvc.Models.Upload;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace EdityMcEditface.Controllers
+namespace EdityMcEditface.Mvc.Controllers
 {
     /// <summary>
     /// This controller handles file uploads.

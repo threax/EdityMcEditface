@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EdityMcEditface.Models.Page
+namespace EdityMcEditface.Mvc.Models.Page
 {
     public interface ProjectFinder
     {

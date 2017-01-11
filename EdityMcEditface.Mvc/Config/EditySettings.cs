@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Edity.PluginCore.Config
+namespace EdityMcEditface.Mvc.Config
 {
     /// <summary>
     /// The settings class.

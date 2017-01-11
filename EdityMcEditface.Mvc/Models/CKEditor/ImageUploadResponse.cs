@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.Models.CKEditor
+namespace EdityMcEditface.Mvc.Models.CKEditor
 {
     public class ImageUploadResponse
     {

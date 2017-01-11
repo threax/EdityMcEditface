@@ -1,20 +1,17 @@
 ﻿using EdityMcEditface.HtmlRenderer;
-using EdityMcEditface.HtmlRenderer.Compiler;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
-using EdityMcEditface.Models.Compiler;
-using EdityMcEditface.Models.Git;
-using EdityMcEditface.Models.Page;
+using EdityMcEditface.Mvc.Models.Compiler;
+using EdityMcEditface.Mvc.Models.Git;
+using EdityMcEditface.Mvc.Models.Page;
 using LibGit2Sharp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.Controllers
+namespace EdityMcEditface.Mvc.Controllers
 {
     /// <summary>
     /// This controller compiles the static website.

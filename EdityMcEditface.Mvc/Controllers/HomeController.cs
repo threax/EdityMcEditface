@@ -14,7 +14,7 @@ using Microsoft.Net.Http.Headers;
 using EdityMcEditface.HtmlRenderer.Transforms;
 using Microsoft.AspNetCore.Authorization;
 
-namespace EdityMcEditface.NetCore.Controllers
+namespace EdityMcEditface.Mvc.Controllers
 {
     [Authorize(Roles=Roles.EditPages)]
     [ApiExplorerSettings(IgnoreApi = true)]

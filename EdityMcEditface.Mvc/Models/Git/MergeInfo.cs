@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.Models.Git
+namespace EdityMcEditface.Mvc.Models.Git
 {
     public class MergeInfo
     {

@@ -1,10 +1,9 @@
-﻿using Edity.Mvc.Auth;
-using Edity.PluginCore;
-using Edity.PluginCore.Config;
+﻿using EdityMcEditface.Mvc.Auth;
+using EdityMcEditface.Mvc.Config;
 using EdityMcEditface;
 using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
-using EdityMcEditface.Models.Page;
+using EdityMcEditface.Mvc.Models.Page;
 using LibGit2Sharp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,7 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Edity.Mvc
+namespace EdityMcEditface.Mvc
 {
     public static class EdityMvcExtensions
     {
@@ -93,7 +92,7 @@ namespace Edity.Mvc
                     {
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var settings = s.GetRequiredService<SiteBuilderSettings>();
-                        var builder = new RoundRobinSiteBuilder(settings, new EdityMcEditface.WebConfigRoundRobinDeployer());
+                        var builder = new RoundRobinSiteBuilder(settings, new WebConfigRoundRobinDeployer());
 
                         if (projectConfiguration.ProjectMode == "OneRepoPerUser")
                         {

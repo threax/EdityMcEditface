@@ -132,7 +132,6 @@ namespace Edity.Mvc
             .AddEdityControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public static void UseEdity(this IApplicationBuilder app)
         {
             app.UseStaticFiles(new StaticFileOptions()

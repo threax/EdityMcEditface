@@ -7,8 +7,8 @@
 
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>2aefad2e-30ca-4fa1-8bf2-77d9a1037fb5</ProjectGuid>
-    <RootNamespace>Edity.HtmlRenderer</RootNamespace>
+    <ProjectGuid>6f6510d0-b13c-4982-9188-e1b8f64cd73f</ProjectGuid>
+    <RootNamespace>EdityMcEditface.HtmlRenderer</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>

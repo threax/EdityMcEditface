@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Edity.HtmlRenderer")]
+[assembly: AssemblyProduct("EdityMcEditface.HtmlRenderer")]
 [assembly: AssemblyTrademark("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("2aefad2e-30ca-4fa1-8bf2-77d9a1037fb5")]
+[assembly: Guid("6f6510d0-b13c-4982-9188-e1b8f64cd73f")]

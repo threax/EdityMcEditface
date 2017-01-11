@@ -1,4 +1,5 @@
-﻿using Edity.PluginCore;
+﻿using Edity.Mvc.Auth;
+using Edity.PluginCore;
 using Edity.PluginCore.Config;
 using EdityMcEditface;
 using EdityMcEditface.HtmlRenderer;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -28,7 +30,7 @@ namespace Edity.Mvc
 
             services.AddSingleton<WorkQueue, WorkQueue>();
 
-            services.AddScoped<AuthUserInfo>();
+            services.TryAddScoped<IUserInfo, DefaultUserInfo>();
 
             services.AddSingleton<EditySettings>(s => editySettings);
 
@@ -51,24 +53,24 @@ namespace Edity.Mvc
 
             services.AddTransient<FileFinder, FileFinder>(s =>
             {
-                var userInfo = s.GetRequiredService<AuthUserInfo>();
+                var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
-                var projectFolder = projectFinder.GetUserProjectPath(userInfo.UserName);
+                var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
                 return new FileFinder(projectFolder, projectFinder.BackupPath);
             });
 
             services.AddTransient<Repository, Repository>(s =>
             {
-                var userInfo = s.GetRequiredService<AuthUserInfo>();
+                var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
-                var projectFolder = projectFinder.GetUserProjectPath(userInfo.UserName);
+                var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
                 return new Repository(Repository.Discover(projectFolder));
             });
 
             services.AddTransient<Signature, Signature>(s =>
             {
-                var userInfo = s.GetRequiredService<AuthUserInfo>();
-                return new Signature(userInfo.UserName, userInfo.UserName + "@nowhere.com", DateTime.Now);
+                var userInfo = s.GetRequiredService<IUserInfo>();
+                return new Signature(userInfo.PrettyUserName, userInfo.Email, DateTime.Now);
             });
 
             services.AddTransient<SiteBuilderSettings, SiteBuilderSettings>(s =>

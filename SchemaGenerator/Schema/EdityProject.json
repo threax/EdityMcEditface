@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
-  "x-typeName": "EdityProject",
+  "title": "EdityProject",
   "additionalProperties": false,
   "properties": {
     "contentMap": {
@@ -10,54 +10,7 @@
         "object"
       ],
       "additionalProperties": {
-        "type": "object",
-        "x-typeName": "LinkedContentEntry",
-        "additionalProperties": false,
-        "properties": {
-          "hasMin": {
-            "type": "boolean"
-          },
-          "dependencies": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "items": {
-              "type": "string"
-            }
-          },
-          "css": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "items": {
-              "type": "string"
-            }
-          },
-          "js": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "items": {
-              "type": "object",
-              "x-typeName": "JavascriptEntry",
-              "additionalProperties": false,
-              "properties": {
-                "file": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                },
-                "async": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
+        "$ref": "#/definitions/LinkedContentEntry"
       }
     },
     "vars": {
@@ -93,39 +46,7 @@
         "null"
       ],
       "items": {
-        "type": "object",
-        "x-typeName": "CompilerDefinition",
-        "additionalProperties": false,
-        "properties": {
-          "type": {
-            "oneOf": [
-              {
-                "$ref": "#/definitions/CompilerTypes"
-              }
-            ]
-          },
-          "template": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "extension": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "settings": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "additionalProperties": {
-              "type": "string"
-            }
-          }
-        }
+        "$ref": "#/definitions/CompilerDefinition"
       }
     },
     "editComponents": {
@@ -139,9 +60,93 @@
     }
   },
   "definitions": {
+    "LinkedContentEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "hasMin": {
+          "type": "boolean"
+        },
+        "dependencies": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "css": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "js": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/JavascriptEntry"
+          }
+        }
+      }
+    },
+    "JavascriptEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "file": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "async": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CompilerDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/CompilerTypes"
+            }
+          ]
+        },
+        "template": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "extension": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "settings": {
+          "type": [
+            "null",
+            "object"
+          ],
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "CompilerTypes": {
       "type": "string",
-      "x-typeName": "CompilerTypes",
       "x-enumNames": [
         "Html",
         "Pdf",

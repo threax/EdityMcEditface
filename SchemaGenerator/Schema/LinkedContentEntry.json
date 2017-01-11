@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
-  "x-typeName": "LinkedContentEntry",
+  "title": "LinkedContentEntry",
   "additionalProperties": false,
   "properties": {
     "hasMin": {
@@ -31,19 +31,23 @@
         "null"
       ],
       "items": {
-        "type": "object",
-        "x-typeName": "JavascriptEntry",
-        "additionalProperties": false,
-        "properties": {
-          "file": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "async": {
-            "type": "boolean"
-          }
+        "$ref": "#/definitions/JavascriptEntry"
+      }
+    }
+  },
+  "definitions": {
+    "JavascriptEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "file": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "async": {
+          "type": "boolean"
         }
       }
     }

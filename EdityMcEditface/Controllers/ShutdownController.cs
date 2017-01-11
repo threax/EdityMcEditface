@@ -14,7 +14,7 @@ namespace EdityMcEditface.Controllers
     /// compiled with LOCAL_RUN_ENABLED.
     /// </summary>
     [Route("edity/[controller]/[action]")]
-    [Authorize(Roles = Roles.Shutdown)]
+    [Authorize(Roles = LocalEdityRoles.Shutdown)]
     public class ShutdownController : Controller
     {
         /// <summary>

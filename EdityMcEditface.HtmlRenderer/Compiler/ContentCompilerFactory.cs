@@ -13,14 +13,13 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
 
         }
 
-        public List<IContentCompiler> CreateCompilers(String inDir, String outDir, String backupPath, IEnumerable<CompilerDefinition> definition)
+        public List<IContentCompiler> CreateCompilers(IFileFinder fileFinder, String outDir, IEnumerable<CompilerDefinition> definition)
         {
-            return new List<IContentCompiler>(definition.Select(d => CreateCompiler(inDir, outDir, backupPath, d)));
+            return new List<IContentCompiler>(definition.Select(d => CreateCompiler(fileFinder, outDir, d)));
         }
 
-        public IContentCompiler CreateCompiler(String inDir, String outDir, String backupPath, CompilerDefinition definition)
+        public IContentCompiler CreateCompiler(IFileFinder fileFinder, String outDir, CompilerDefinition definition)
         {
-            var fileFinder = new FileFinder1(inDir, backupPath);
             switch (definition.Type)
             {
                 case CompilerTypes.Html:

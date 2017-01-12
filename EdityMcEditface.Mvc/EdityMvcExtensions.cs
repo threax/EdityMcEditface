@@ -96,7 +96,8 @@ namespace EdityMcEditface.Mvc
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var settings = s.GetRequiredService<SiteBuilderSettings>();
                         var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
-                        var builder = new RoundRobinSiteBuilder(settings, compilerFactory, new WebConfigRoundRobinDeployer());
+                        var fileFinder = s.GetRequiredService<IFileFinder>();
+                        var builder = new RoundRobinSiteBuilder(settings, compilerFactory, fileFinder, new WebConfigRoundRobinDeployer());
 
                         if (projectConfiguration.ProjectMode == "OneRepoPerUser")
                         {
@@ -113,7 +114,8 @@ namespace EdityMcEditface.Mvc
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var settings = s.GetRequiredService<SiteBuilderSettings>();
                         var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
-                        var builder = new DirectOutputSiteBuilder(settings, compilerFactory);
+                        var fileFinder = s.GetRequiredService<IFileFinder>();
+                        var builder = new DirectOutputSiteBuilder(settings, compilerFactory, fileFinder);
 
                         if (projectConfiguration.ProjectMode == "OneRepoPerUser")
                         {

@@ -14,11 +14,13 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         private List<BuildTask> preBuildTasks = new List<BuildTask>();
         private List<BuildTask> postBuildTasks = new List<BuildTask>();
         private IContentCompilerFactory contentCompilerFactory;
+        private IFileFinder fileFinder;
 
-        public DirectOutputSiteBuilder(SiteBuilderSettings settings, IContentCompilerFactory contentCompilerFactory)
+        public DirectOutputSiteBuilder(SiteBuilderSettings settings, IContentCompilerFactory contentCompilerFactory, IFileFinder fileFinder)
         {
             this.contentCompilerFactory = contentCompilerFactory;
             this.settings = settings;
+            this.fileFinder = fileFinder;
         }
 
         /// <summary>
@@ -61,9 +63,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 
             Directory.CreateDirectory(settings.OutDir);
 
-            var fileFinder = new FileFinder1(settings.InDir, settings.BackupPath);
-
-            var compilers = contentCompilerFactory.CreateCompilers(settings.InDir, settings.OutDir, settings.BackupPath, fileFinder.Project.Compilers);
+            var compilers = contentCompilerFactory.CreateCompilers(fileFinder, settings.OutDir, fileFinder.Project.Compilers);
 
             foreach (var file in Directory.EnumerateFiles(settings.InDir, "*.html", SearchOption.AllDirectories))
             {

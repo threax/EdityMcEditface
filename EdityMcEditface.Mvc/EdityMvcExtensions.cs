@@ -79,8 +79,6 @@ namespace EdityMcEditface.Mvc
 
                 return new SiteBuilderSettings()
                 {
-                    InDir = projectFinder.PublishedProjectPath,
-                    BackupPath = projectFinder.BackupPath,
                     OutDir = projectConfiguration.OutputPath,
                     SiteName = projectConfiguration.SiteName
                 };

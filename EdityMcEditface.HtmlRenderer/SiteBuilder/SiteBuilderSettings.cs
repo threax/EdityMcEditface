@@ -8,10 +8,6 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 {
     public class SiteBuilderSettings
     {
-        public String InDir { get; set; }
-
-        public String BackupPath { get; set; }
-
         public String OutDir { get; set; }
 
         public String EdityDir { get; set; } = "edity";

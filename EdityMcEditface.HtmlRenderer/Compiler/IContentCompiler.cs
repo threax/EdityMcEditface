@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer.Compiler
 {
-    public interface ContentCompiler
+    public interface IContentCompiler
     {
         void buildPage(string relativeFile);
         void copyProjectContent();

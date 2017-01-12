@@ -8,26 +8,23 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer.Compiler
 {
-    public class HtmlCompiler : ContentCompiler
+    public class HtmlCompiler : IContentCompiler
     {
-        private String inDir;
+        private IFileFinder fileFinder;
         private String outDir;
-        private String backupPath;
         private String layout;
         private String siteRoot;
 
-        public HtmlCompiler(String inDir, String outDir, String backupPath, String layout, Dictionary<String, String> settings)
+        public HtmlCompiler(IFileFinder fileFinder, String outDir, String layout, Dictionary<String, String> settings)
         {
-            this.inDir = inDir;
+            this.fileFinder = fileFinder;
             this.outDir = outDir;
-            this.backupPath = backupPath;
             this.layout = layout;
             settings.TryGetValue("siteRoot", out this.siteRoot);
         }
 
         public void buildPage(String relativeFile)
         {
-            var inFile = Path.Combine(inDir, relativeFile);
             var outFile = Path.Combine(this.outDir, relativeFile);
 
             if(OutputExtension != null)
@@ -35,7 +32,6 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
                 outFile = Path.ChangeExtension(outFile, OutputExtension);
             }
 
-            IFileFinder fileFinder = new FileFinder1(inDir, backupPath);
             TargetFileInfo fileInfo = new TargetFileInfo(relativeFile);
             TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
             PageStack pageStack = new PageStack(environment, fileFinder);
@@ -63,7 +59,6 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
 
         public void copyProjectContent()
         {
-            IFileFinder fileFinder = new FileFinder1(inDir, backupPath);
             fileFinder.copyProjectContent(outDir);
         }
 

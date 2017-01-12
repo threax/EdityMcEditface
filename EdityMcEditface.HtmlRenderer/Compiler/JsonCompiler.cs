@@ -11,24 +11,21 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer.Compiler
 {
-    public class JsonCompiler : ContentCompiler
+    public class JsonCompiler : IContentCompiler
     {
-        private String inDir;
+        private IFileFinder fileFinder;
         private String outDir;
-        private String backupPath;
         private String layout;
 
-        public JsonCompiler(String inDir, String outDir, String backupPath, String layout)
+        public JsonCompiler(IFileFinder fileFinder, String outDir, String layout)
         {
-            this.inDir = inDir;
+            this.fileFinder = fileFinder;
             this.outDir = outDir;
-            this.backupPath = backupPath;
             this.layout = layout;
         }
 
         public void buildPage(string relativeFile)
         {
-            var inFile = Path.Combine(inDir, relativeFile);
             var outFile = Path.Combine(this.outDir, relativeFile);
 
             var extension = "json";
@@ -38,7 +35,6 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             }
             outFile = Path.ChangeExtension(outFile, extension);
 
-            IFileFinder fileFinder = new FileFinder1(inDir, backupPath);
             TargetFileInfo fileInfo = new TargetFileInfo(relativeFile);
             TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
             PageStack pageStack = new PageStack(environment, fileFinder);

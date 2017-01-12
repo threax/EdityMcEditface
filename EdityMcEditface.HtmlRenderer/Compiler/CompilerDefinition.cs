@@ -8,7 +8,6 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
     public enum CompilerTypes
     {
         Html,
-        Pdf,
         Json,
     }
 

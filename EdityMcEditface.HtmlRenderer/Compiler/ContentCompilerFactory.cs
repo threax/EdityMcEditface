@@ -13,24 +13,23 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
 
         }
 
-        public List<ContentCompiler> CreateCompilers(String inDir, String outDir, String backupPath, IEnumerable<CompilerDefinition> definition)
+        public List<IContentCompiler> CreateCompilers(String inDir, String outDir, String backupPath, IEnumerable<CompilerDefinition> definition)
         {
-            return new List<ContentCompiler>(definition.Select(d => CreateCompiler(inDir, outDir, backupPath, d)));
+            return new List<IContentCompiler>(definition.Select(d => CreateCompiler(inDir, outDir, backupPath, d)));
         }
 
-        public ContentCompiler CreateCompiler(String inDir, String outDir, String backupPath, CompilerDefinition definition)
+        public IContentCompiler CreateCompiler(String inDir, String outDir, String backupPath, CompilerDefinition definition)
         {
+            var fileFinder = new FileFinder1(inDir, backupPath);
             switch (definition.Type)
             {
                 case CompilerTypes.Html:
-                    return new HtmlCompiler(inDir, outDir, backupPath, definition.Template, definition.Settings)
+                    return new HtmlCompiler(fileFinder, outDir, definition.Template, definition.Settings)
                     {
                         OutputExtension = definition.Extension
                     };
-                case CompilerTypes.Pdf:
-                    return new PdfCompiler(inDir, outDir, backupPath, definition.Template);
                 case CompilerTypes.Json:
-                    return new JsonCompiler(inDir, outDir, backupPath, definition.Template)
+                    return new JsonCompiler(fileFinder, outDir, definition.Template)
                     {
                         OutputExtension = definition.Extension
                     };

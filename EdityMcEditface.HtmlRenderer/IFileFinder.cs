@@ -12,18 +12,18 @@ namespace EdityMcEditface.HtmlRenderer
         void CopyProjectContent(string outDir);
         void DeleteFile(string file);
         void DeleteFolder(string folder);
-        bool doesLayoutExist(string layoutName);
+        bool DoesLayoutExist(string layoutName);
         IEnumerable<String> EnumerateContentDirectories(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly);
         IEnumerable<String> EnumerateContentFiles(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly);
-        void erasePage(string file);
-        void eraseProjectFile(string file);
-        PageDefinition getProjectPageDefinition(TargetFileInfo fileInfo);
-        string getProjectRelativePath(string path);
-        bool isValidWritablePath(string path);
-        PageStackItem loadPageStackContent(string path);
-        PageStackItem loadPageStackLayout(string path);
-        Stream readFile(string file);
-        void savePageDefinition(PageDefinition definition, TargetFileInfo fileInfo);
-        Stream writeFile(string file);
+        void ErasePage(string file);
+        void EraseProjectFile(string file);
+        PageDefinition GetProjectPageDefinition(TargetFileInfo fileInfo);
+        string GetProjectRelativePath(string path);
+        bool IsValidWritablePath(string path);
+        PageStackItem LoadPageStackContent(string path);
+        PageStackItem LoadPageStackLayout(string path);
+        Stream ReadFile(string file);
+        void SavePageDefinition(PageDefinition definition, TargetFileInfo fileInfo);
+        Stream WriteFile(string file);
     }
 }

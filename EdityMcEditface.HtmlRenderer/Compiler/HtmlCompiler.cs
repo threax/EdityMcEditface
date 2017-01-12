@@ -25,6 +25,8 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
 
         public void buildPage(String relativeFile)
         {
+            relativeFile = relativeFile.TrimStartingPathChars();
+
             var outFile = Path.Combine(this.outDir, relativeFile);
 
             if(OutputExtension != null)

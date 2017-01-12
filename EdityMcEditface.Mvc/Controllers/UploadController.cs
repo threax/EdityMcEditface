@@ -65,7 +65,7 @@ namespace EdityMcEditface.Mvc.Controllers
         public async Task Upload([FromQuery] String file, IFormFile content)
         {
             TargetFileInfo fileInfo = new TargetFileInfo(file);
-            using (Stream stream = fileFinder.writeFile(fileInfo.DerivedFileName))
+            using (Stream stream = fileFinder.WriteFile(fileInfo.DerivedFileName))
             {
                 await content.CopyToAsync(stream);
             }
@@ -82,11 +82,11 @@ namespace EdityMcEditface.Mvc.Controllers
             TargetFileInfo fileInfo = new TargetFileInfo(file);
             if (fileInfo.PointsToHtmlFile)
             {
-                fileFinder.erasePage(fileInfo.HtmlFile);
+                fileFinder.ErasePage(fileInfo.HtmlFile);
             }
             else
             {
-                fileFinder.eraseProjectFile(fileInfo.DerivedFileName);
+                fileFinder.EraseProjectFile(fileInfo.DerivedFileName);
             }
         }
     }

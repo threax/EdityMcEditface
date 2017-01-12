@@ -59,7 +59,7 @@ namespace EdityMcEditface.Mvc.Controllers
             String contentType;
             if (content.TryGetContentType(file, out contentType))
             {
-                return new FileStreamResult(fileFinder.readFile(file), contentType);
+                return new FileStreamResult(fileFinder.ReadFile(file), contentType);
             }
             throw new FileNotFoundException($"Cannot find file type for '{file}'", file);
         }

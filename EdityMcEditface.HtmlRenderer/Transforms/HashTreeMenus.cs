@@ -29,7 +29,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                     {
                         try
                         {
-                            using (var stream = fileFinder.readFile(file))
+                            using (var stream = fileFinder.ReadFile(file))
                             {
                                 byte[] checksum = sha.ComputeHash(stream);
                                 var hash = BitConverter.ToString(checksum).Replace("-", String.Empty);

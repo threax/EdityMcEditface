@@ -26,6 +26,8 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
 
         public void buildPage(string relativeFile)
         {
+            relativeFile = relativeFile.TrimStartingPathChars();
+
             var outFile = Path.Combine(this.outDir, relativeFile);
 
             var extension = "json";

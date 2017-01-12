@@ -138,7 +138,7 @@ namespace EdityMcEditface.Mvc.Controllers
             var targetFileInfo = new TargetFileInfo(file);
 
             var repoPath = Path.Combine(repo.Info.WorkingDirectory, targetFileInfo.DerivedFileName);
-            using (var stream = new StreamReader(fileFinder.readFile(fileFinder.getProjectRelativePath(repoPath))))
+            using (var stream = new StreamReader(fileFinder.ReadFile(fileFinder.GetProjectRelativePath(repoPath))))
             {
                 diff.Changed = stream.ReadToEnd().Replace("\r", "");
             }
@@ -212,7 +212,7 @@ namespace EdityMcEditface.Mvc.Controllers
             var targetFileInfo = new TargetFileInfo(file);
 
             var repoPath = Path.Combine(repo.Info.WorkingDirectory, targetFileInfo.DerivedFileName);
-            using (var stream = new StreamReader(fileFinder.readFile(fileFinder.getProjectRelativePath(repoPath))))
+            using (var stream = new StreamReader(fileFinder.ReadFile(fileFinder.GetProjectRelativePath(repoPath))))
             {
                 return new MergeInfo(stream);
             }
@@ -390,7 +390,7 @@ namespace EdityMcEditface.Mvc.Controllers
 
             TargetFileInfo fileInfo = new TargetFileInfo(file);
             var repoPath = Path.Combine(repo.Info.WorkingDirectory, fileInfo.DerivedFileName);
-            using (var stream = fileFinder.writeFile(fileFinder.getProjectRelativePath(repoPath)))
+            using (var stream = fileFinder.WriteFile(fileFinder.GetProjectRelativePath(repoPath)))
             {
                 await content.CopyToAsync(stream);
             }
@@ -422,7 +422,7 @@ namespace EdityMcEditface.Mvc.Controllers
                     //Changed file
                     var targetFileInfo = new TargetFileInfo(file);
                     var repoPath = Path.Combine(repo.Info.WorkingDirectory, targetFileInfo.DerivedFileName);
-                    using (var dest = fileFinder.writeFile(fileFinder.getProjectRelativePath(repoPath)))
+                    using (var dest = fileFinder.WriteFile(fileFinder.GetProjectRelativePath(repoPath)))
                     {
                         using (var source = blob.GetContentStream())
                         {
@@ -450,7 +450,7 @@ namespace EdityMcEditface.Mvc.Controllers
         /// <returns></returns>
         private bool IsWritablePath(String path)
         {
-            return fileFinder.isValidWritablePath(Path.Combine(repo.Info.WorkingDirectory, path));
+            return fileFinder.IsValidWritablePath(Path.Combine(repo.Info.WorkingDirectory, path));
         }
     }
 }

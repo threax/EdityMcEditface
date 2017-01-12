@@ -39,7 +39,7 @@ namespace EdityMcEditface.Mvc.Controllers
         public PageSettings GetSettings([FromQuery] String page)
         {
             TargetFileInfo targetFile = new TargetFileInfo(page);
-            var definition = fileFinder.getProjectPageDefinition(targetFile);
+            var definition = fileFinder.GetProjectPageDefinition(targetFile);
             String title;
             if(!definition.Vars.TryGetValue("title", out title))
             {
@@ -61,9 +61,9 @@ namespace EdityMcEditface.Mvc.Controllers
         public void UpdateSettings([FromQuery] String page, [FromBody]PageSettings settings)
         {
             TargetFileInfo targetFile = new TargetFileInfo(page);
-            var definition = fileFinder.getProjectPageDefinition(targetFile);
+            var definition = fileFinder.GetProjectPageDefinition(targetFile);
             definition.Vars["title"] = settings.Title;
-            fileFinder.savePageDefinition(definition, targetFile);
+            fileFinder.SavePageDefinition(definition, targetFile);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace EdityMcEditface.Mvc.Controllers
             {
                 throw new ValidationException("Cannot update project files with the save function.");
             }
-            using (Stream stream = fileFinder.writeFile(fileInfo.DerivedFileName))
+            using (Stream stream = fileFinder.WriteFile(fileInfo.DerivedFileName))
             {
                 await content.CopyToAsync(stream);
             }
@@ -121,7 +121,7 @@ namespace EdityMcEditface.Mvc.Controllers
                 string autoFileFolder = "AutoUploads";
                 var autoFileFile = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
                 var autoPath = Path.Combine(autoFileFolder, autoFileFile);
-                using (Stream stream = fileFinder.writeFile(autoPath))
+                using (Stream stream = fileFinder.WriteFile(autoPath))
                 {
                     await upload.CopyToAsync(stream);
                 }

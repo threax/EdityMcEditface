@@ -43,14 +43,14 @@ namespace EdityMcEditface.Mvc.Controllers
                 case ".html":
                     if (targetFileInfo.IsProjectFile)
                     {
-                        return new FileStreamResult(fileFinder.readFile(targetFileInfo.HtmlFile), "text/html");
+                        return new FileStreamResult(fileFinder.ReadFile(targetFileInfo.HtmlFile), "text/html");
                     }
                     return Redirect(targetFileInfo.NoHtmlRedirect);
                 case "":
                     return buildAsEditor(pageStack);
                 default:
                     var cleanExtension = targetFileInfo.Extension.TrimStart('.') + ".html";
-                    if (fileFinder.doesLayoutExist(cleanExtension))
+                    if (fileFinder.DoesLayoutExist(cleanExtension))
                     {
                         return buildAsPage(pageStack, cleanExtension);
                     }
@@ -72,14 +72,14 @@ namespace EdityMcEditface.Mvc.Controllers
                 case ".html":
                     if (targetFileInfo.IsProjectFile)
                     {
-                        return new FileStreamResult(fileFinder.readFile(targetFileInfo.HtmlFile), "text/html");
+                        return new FileStreamResult(fileFinder.ReadFile(targetFileInfo.HtmlFile), "text/html");
                     }
                     return Redirect(targetFileInfo.NoHtmlRedirect);
                 case "":
                     return buildAsPage(pageStack, "default.html");
                 default:
                     var cleanExtension = targetFileInfo.Extension.TrimStart('.') + ".html";
-                    if (fileFinder.doesLayoutExist(cleanExtension))
+                    if (fileFinder.DoesLayoutExist(cleanExtension))
                     {
                         return buildAsPage(pageStack, cleanExtension);
                     }
@@ -98,7 +98,7 @@ namespace EdityMcEditface.Mvc.Controllers
             String contentType;
             if (content.TryGetContentType(file, out contentType))
             {
-                return new FileStreamResult(fileFinder.readFile(file), contentType);
+                return new FileStreamResult(fileFinder.ReadFile(file), contentType);
             }
             throw new FileNotFoundException($"Cannot find file type for '{file}'", file);
         }

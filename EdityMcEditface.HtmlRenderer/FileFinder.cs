@@ -35,7 +35,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// Erase a file in the project. Does not erase files in the backup location.
         /// </summary>
         /// <param name="file"></param>
-        public void eraseProjectFile(string file)
+        public void EraseProjectFile(string file)
         {
             var fullPath = normalizeProjectPath(file);
             if (File.Exists(fullPath))
@@ -49,7 +49,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// Will erase all linked files, the .html, .json, .css and .js files.
         /// </summary>
         /// <param name="file"></param>
-        public void erasePage(string file)
+        public void ErasePage(string file)
         {
             var fullPath = normalizeProjectPath(file);
             if (File.Exists(fullPath))
@@ -78,7 +78,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// </summary>
         /// <param name="layoutName"></param>
         /// <returns></returns>
-        public bool doesLayoutExist(String layoutName)
+        public bool DoesLayoutExist(String layoutName)
         {
             var layoutPath = findRealFile(getLayoutFile(layoutName));
             return layoutPath != null;
@@ -89,7 +89,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// </summary>
         /// <param name="file">The file to read.</param>
         /// <returns>A stream to the requested file.</returns>
-        public Stream readFile(String file)
+        public Stream ReadFile(String file)
         {
             var realFile = findRealFile(file);
             if (realFile != null)
@@ -105,7 +105,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// </summary>
         /// <param name="file">The file to write to.</param>
         /// <returns>A stream to the requested file.</returns>
-        public Stream writeFile(String file)
+        public Stream WriteFile(String file)
         {
             var savePath = normalizeProjectPath(file);
             String directory = Path.GetDirectoryName(savePath);
@@ -268,7 +268,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// passed layout path automatically.
         /// </summary>
         /// <returns></returns>
-        public PageStackItem loadPageStackLayout(String path)
+        public PageStackItem LoadPageStackLayout(String path)
         {
             path = getLayoutFile(path);
             var realPath = findRealFile(path);
@@ -289,7 +289,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// folder, not the backup location.
         /// </summary>
         /// <returns></returns>
-        public PageStackItem loadPageStackContent(String path)
+        public PageStackItem LoadPageStackContent(String path)
         {
             var realPath = normalizeProjectPath(path);
             if (realPath == null)
@@ -347,7 +347,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// </summary>
         /// <param name="fileInfo">The file info to use to find the PageDefinition file.</param>
         /// <returns>The PageDefinition for the page. Will be a default instance if the file does not exist.</returns>
-        public PageDefinition getProjectPageDefinition(TargetFileInfo fileInfo)
+        public PageDefinition GetProjectPageDefinition(TargetFileInfo fileInfo)
         {
             return getPageDefinition(normalizeProjectPath(fileInfo.HtmlFile));
         }
@@ -371,10 +371,10 @@ namespace EdityMcEditface.HtmlRenderer
             return pageSettings;
         }
 
-        public void savePageDefinition(PageDefinition definition, TargetFileInfo fileInfo)
+        public void SavePageDefinition(PageDefinition definition, TargetFileInfo fileInfo)
         {
             var outputFile = getPageDefinitionFile(fileInfo.HtmlFile);
-            using (var outStream = new StreamWriter(writeFile(outputFile)))
+            using (var outStream = new StreamWriter(WriteFile(outputFile)))
             {
                 JsonWriter.Serialize(definition, outStream);
             }
@@ -385,7 +385,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// </summary>
         /// <param name="path">The path to check.</param>
         /// <returns>True if the path can be written, false otherwise.</returns>
-        public bool isValidWritablePath(String path)
+        public bool IsValidWritablePath(String path)
         {
             bool inside;
             normalizeProjectPath(path, out inside);
@@ -399,7 +399,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// </summary>
         /// <param name="path">The path to lookup.</param>
         /// <returns></returns>
-        public String getProjectRelativePath(String path)
+        public String GetProjectRelativePath(String path)
         {
             return normalizeProjectPath(path).Substring(projectPath.Length + 1);
         }

@@ -56,7 +56,7 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 if (ContentFile != null)
                 {
-                    var content = fileFinder.loadPageStackContent(ContentFile);
+                    var content = fileFinder.LoadPageStackContent(ContentFile);
                     if (ContentTransformer != null)
                     {
                         content.Content = ContentTransformer(content.Content);
@@ -65,7 +65,7 @@ namespace EdityMcEditface.HtmlRenderer
                 }
                 for (int i = layouts.Count - 1; i >= 0; --i)
                 {
-                    yield return fileFinder.loadPageStackLayout(layouts[i]);
+                    yield return fileFinder.LoadPageStackLayout(layouts[i]);
                 }
             }
         }

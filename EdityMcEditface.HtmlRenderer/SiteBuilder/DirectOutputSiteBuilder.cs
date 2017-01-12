@@ -59,13 +59,13 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 
             Directory.CreateDirectory(settings.OutDir);
 
-            var fileFinder = new FileFinder(settings.InDir, settings.BackupPath);
+            var fileFinder = new FileFinder1(settings.InDir, settings.BackupPath);
 
             var compilers = ContentCompilerFactory.CreateCompilers(settings.InDir, settings.OutDir, settings.BackupPath, fileFinder.Project.Compilers);
 
             foreach (var file in Directory.EnumerateFiles(settings.InDir, "*.html", SearchOption.AllDirectories))
             {
-                var relativeFile = FileFinder.TrimStartingPathChars(file.Substring(settings.InDir.Length));
+                var relativeFile = FileFinder1.TrimStartingPathChars(file.Substring(settings.InDir.Length));
                 if (!relativeFile.StartsWith(settings.EdityDir, StringComparison.OrdinalIgnoreCase))
                 {
                     foreach (var compiler in compilers)

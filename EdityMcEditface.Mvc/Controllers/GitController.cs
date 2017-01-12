@@ -24,14 +24,14 @@ namespace EdityMcEditface.Mvc.Controllers
     public class GitController : Controller
     {
         private Repository repo;
-        private FileFinder fileFinder;
+        private IFileFinder fileFinder;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="repo"></param>
         /// <param name="fileFinder"></param>
-        public GitController(Repository repo, FileFinder fileFinder)
+        public GitController(Repository repo, IFileFinder fileFinder)
         {
             this.repo = repo;
             this.fileFinder = fileFinder;

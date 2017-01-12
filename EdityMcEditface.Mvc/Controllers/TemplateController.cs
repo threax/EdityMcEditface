@@ -18,13 +18,13 @@ namespace EdityMcEditface.Mvc.Controllers
     [Route("edity/[controller]/[action]")]
     public class TemplateController : Controller
     {
-        private FileFinder fileFinder;
+        private IFileFinder fileFinder;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="fileFinder"></param>
-        public TemplateController(FileFinder fileFinder)
+        public TemplateController(IFileFinder fileFinder)
         {
             this.fileFinder = fileFinder;
         }

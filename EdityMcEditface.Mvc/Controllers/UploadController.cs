@@ -23,13 +23,13 @@ namespace EdityMcEditface.Mvc.Controllers
     [Route("edity/[controller]/[action]")]
     public class UploadController : Controller
     {
-        private FileFinder fileFinder;
+        private IFileFinder fileFinder;
 
         /// <summary>
         /// Controller.
         /// </summary>
         /// <param name="fileFinder"></param>
-        public UploadController(FileFinder fileFinder)
+        public UploadController(IFileFinder fileFinder)
         {
             this.fileFinder = fileFinder;
         }

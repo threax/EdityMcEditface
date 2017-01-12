@@ -9,9 +9,9 @@ namespace EdityMcEditface.HtmlRenderer
     {
         private TemplateEnvironment environment;
         private List<String> layouts = new List<string>();
-        private FileFinder fileFinder;
+        private IFileFinder fileFinder;
 
-        public PageStack(TemplateEnvironment environment, FileFinder fileFinder)
+        public PageStack(TemplateEnvironment environment, IFileFinder fileFinder)
         {
             this.environment = environment;
             this.fileFinder = fileFinder;

@@ -20,12 +20,12 @@ namespace EdityMcEditface.Mvc.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
     {
-        private FileFinder fileFinder;
+        private IFileFinder fileFinder;
         private PageStack pageStack;
         private TargetFileInfo targetFileInfo;
         private TemplateEnvironment templateEnvironment;
 
-        public HomeController(FileFinder fileFinder)
+        public HomeController(IFileFinder fileFinder)
         {
             this.fileFinder = fileFinder;
         }

@@ -31,7 +31,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             outBaseFile = Path.ChangeExtension(outBaseFile, null);
             var outTempFile = outBaseFile + "_temp.html";
 
-            FileFinder fileFinder = new FileFinder(inDir, backupPath);
+            IFileFinder fileFinder = new FileFinder1(inDir, backupPath);
             TargetFileInfo fileInfo = new TargetFileInfo(relativeFile);
             TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
             PageStack pageStack = new PageStack(environment, fileFinder);

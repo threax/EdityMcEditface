@@ -11,7 +11,7 @@ namespace EdityMcEditface.HtmlRenderer
     /// Loads and processes various files in the project. Used to build
     /// documents from the file system.
     /// </summary>
-    public class FileFinder
+    public class FileFinder1 : IFileFinder
     {
         private static char[] PathTrimChars = { '\\', '/' };
         /// <summary>
@@ -33,7 +33,7 @@ namespace EdityMcEditface.HtmlRenderer
         private String projectFilePath;
         private Lazy<EdityProject> project;
 
-        public FileFinder(String projectPath, String backupPath, String projectFilePath = "edity/edity.json")
+        public FileFinder1(String projectPath, String backupPath, String projectFilePath = "edity/edity.json")
         {
             project = new Lazy<EdityProject>(loadProject);
 
@@ -470,7 +470,7 @@ namespace EdityMcEditface.HtmlRenderer
         {
             for (int i = 1; i < paths.Length; ++i)
             {
-                paths[i] = FileFinder.TrimStartingPathChars(paths[i]);
+                paths[i] = FileFinder1.TrimStartingPathChars(paths[i]);
             }
             return Path.Combine(paths);
         }

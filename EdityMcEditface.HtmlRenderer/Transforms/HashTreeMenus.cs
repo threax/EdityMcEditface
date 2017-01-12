@@ -10,9 +10,9 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
 {
     public class HashTreeMenus : ServerSideTransform
     {
-        FileFinder fileFinder;
+        IFileFinder fileFinder;
 
-        public HashTreeMenus(FileFinder fileFinder)
+        public HashTreeMenus(IFileFinder fileFinder)
         {
             this.fileFinder = fileFinder;
         }

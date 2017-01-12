@@ -35,7 +35,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
                 outFile = Path.ChangeExtension(outFile, OutputExtension);
             }
 
-            FileFinder fileFinder = new FileFinder(inDir, backupPath);
+            IFileFinder fileFinder = new FileFinder1(inDir, backupPath);
             TargetFileInfo fileInfo = new TargetFileInfo(relativeFile);
             TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
             PageStack pageStack = new PageStack(environment, fileFinder);
@@ -63,7 +63,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
 
         public void copyProjectContent()
         {
-            FileFinder fileFinder = new FileFinder(inDir, backupPath);
+            IFileFinder fileFinder = new FileFinder1(inDir, backupPath);
             fileFinder.copyProjectContent(outDir);
         }
 

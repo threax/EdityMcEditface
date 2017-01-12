@@ -23,9 +23,9 @@ namespace EdityMcEditface.Mvc.Controllers
     [Authorize(Roles = Roles.EditPages)]
     public class PageController : Controller
     {
-        private FileFinder fileFinder;
+        private IFileFinder fileFinder;
 
-        public PageController(FileFinder fileFinder)
+        public PageController(IFileFinder fileFinder)
         {
             this.fileFinder = fileFinder;
         }

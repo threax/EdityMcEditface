@@ -305,36 +305,34 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             {
                 if (!String.IsNullOrEmpty(page.PageCssPath))
                 {
-                    var cssPath = NormalizePath(page.PageCssPath);
-                    if (!copiedContentFiles.Contains(page.PageCssPath) && isValidPhysicalFile(page.PageCssPath) && permissions.AllowOutputCopy(this, page.PageCssPath) && File.Exists(cssPath))
-                    {
-                        copyFileIfNotExists(cssPath, safePathCombine(baseOutDir, page.PageCssPath));
-                        copiedContentFiles.Add(page.PageCssPath);
-                    }
+                    CopyDependencyFile(baseOutDir, copiedContentFiles, page.PageCssPath);
                 }
                 if (!String.IsNullOrEmpty(page.PageScriptPath))
                 {
-                    var scriptPath = NormalizePath(page.PageScriptPath);
-                    if (!copiedContentFiles.Contains(page.PageScriptPath) && isValidPhysicalFile(page.PageScriptPath) && permissions.AllowOutputCopy(this, page.PageScriptPath) && File.Exists(scriptPath))
-                    {
-                        copyFileIfNotExists(scriptPath, safePathCombine(baseOutDir, page.PageScriptPath));
-                        copiedContentFiles.Add(page.PageScriptPath);
-                    }
+                    CopyDependencyFile(baseOutDir, copiedContentFiles, page.PageScriptPath);
                 }
                 foreach (var content in pageStack.LinkedContentFiles)
                 {
-                    var fullContentPath = NormalizePath(content);
-                    if (!copiedContentFiles.Contains(content) && isValidPhysicalFile(content) && permissions.AllowOutputCopy(this, content) && File.Exists(fullContentPath))
-                    {
-                        copyFileIfNotExists(fullContentPath, safePathCombine(baseOutDir, content));
-                        copiedContentFiles.Add(content);
-                    }
+                    CopyDependencyFile(baseOutDir, copiedContentFiles, content);
                 }
             }
 
             if (next != null)
             {
                 next.CopyDependencyFiles(baseOutDir, pageStack, copiedContentFiles);
+            }
+        }
+
+        private void CopyDependencyFile(string baseOutDir, HashSet<string> copiedContentFiles, string content)
+        {
+            if (!copiedContentFiles.Contains(content) && isValidPhysicalFile(content) && permissions.AllowOutputCopy(this, content))
+            {
+                var fullContentPath = NormalizePath(content);
+                if (File.Exists(fullContentPath))
+                {
+                    copyFileIfNotExists(fullContentPath, safePathCombine(baseOutDir, content));
+                    copiedContentFiles.Add(content);
+                }
             }
         }
 

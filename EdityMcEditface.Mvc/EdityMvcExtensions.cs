@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EdityMcEditface.HtmlRenderer.Compiler;
 
 namespace EdityMcEditface.Mvc
 {
@@ -85,6 +86,8 @@ namespace EdityMcEditface.Mvc
                 };
             });
 
+            services.TryAddScoped<IContentCompilerFactory, ContentCompilerFactory>();
+
             switch (projectConfiguration.Compiler)
             {
                 case "RoundRobin":
@@ -92,7 +95,8 @@ namespace EdityMcEditface.Mvc
                     {
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var settings = s.GetRequiredService<SiteBuilderSettings>();
-                        var builder = new RoundRobinSiteBuilder(settings, new WebConfigRoundRobinDeployer());
+                        var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
+                        var builder = new RoundRobinSiteBuilder(settings, compilerFactory, new WebConfigRoundRobinDeployer());
 
                         if (projectConfiguration.ProjectMode == "OneRepoPerUser")
                         {
@@ -108,7 +112,8 @@ namespace EdityMcEditface.Mvc
                     {
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var settings = s.GetRequiredService<SiteBuilderSettings>();
-                        var builder = new DirectOutputSiteBuilder(settings);
+                        var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
+                        var builder = new DirectOutputSiteBuilder(settings, compilerFactory);
 
                         if (projectConfiguration.ProjectMode == "OneRepoPerUser")
                         {

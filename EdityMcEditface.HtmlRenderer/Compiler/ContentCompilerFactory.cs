@@ -6,14 +6,19 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer.Compiler
 {
-    public static class ContentCompilerFactory
+    public class ContentCompilerFactory : IContentCompilerFactory
     {
-        public static List<ContentCompiler> CreateCompilers(String inDir, String outDir, String backupPath, IEnumerable<CompilerDefinition> definition)
+        public ContentCompilerFactory()
+        {
+
+        }
+
+        public List<ContentCompiler> CreateCompilers(String inDir, String outDir, String backupPath, IEnumerable<CompilerDefinition> definition)
         {
             return new List<ContentCompiler>(definition.Select(d => CreateCompiler(inDir, outDir, backupPath, d)));
         }
 
-        public static ContentCompiler CreateCompiler(String inDir, String outDir, String backupPath, CompilerDefinition definition)
+        public ContentCompiler CreateCompiler(String inDir, String outDir, String backupPath, CompilerDefinition definition)
         {
             switch (definition.Type)
             {

@@ -17,14 +17,14 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         private String outputFullPath;
         private RoundRobinDeployer deployer;
 
-        public RoundRobinSiteBuilder(SiteBuilderSettings settings, RoundRobinDeployer deployer)
+        public RoundRobinSiteBuilder(SiteBuilderSettings settings, IContentCompilerFactory contentCompilerFactory, RoundRobinDeployer deployer)
         {
             this.deployer = deployer;
             baseOutputFolder = Path.GetFullPath(settings.OutDir);
             outputFullPath = Path.GetFullPath(Path.Combine(baseOutputFolder, Guid.NewGuid().ToString()));
             settings.OutDir = outputFullPath;
             this.settings = settings;
-            directOutput = new DirectOutputSiteBuilder(settings);
+            directOutput = new DirectOutputSiteBuilder(settings, contentCompilerFactory);
         }
 
         public void BuildSite()

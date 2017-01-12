@@ -13,17 +13,6 @@ namespace EdityMcEditface.HtmlRenderer
     /// </summary>
     public class FileFinder1 : IFileFinder
     {
-        private static char[] PathTrimChars = { '\\', '/' };
-        /// <summary>
-        /// Trim leading / and \ from a string.
-        /// </summary>
-        /// <param name="input">The path to trim.</param>
-        /// <returns>The path without any leading / or \.</returns>
-        public static String TrimStartingPathChars(String input)
-        {
-            return input.TrimStart(PathTrimChars);
-        }
-
         /// <summary>
         /// This is the location of an additional directory to try to serve files from,
         /// best used to serve the default files this app needs to run.
@@ -470,7 +459,7 @@ namespace EdityMcEditface.HtmlRenderer
         {
             for (int i = 1; i < paths.Length; ++i)
             {
-                paths[i] = FileFinder1.TrimStartingPathChars(paths[i]);
+                paths[i] = paths[i].TrimStartingPathChars();
             }
             return Path.Combine(paths);
         }
@@ -582,7 +571,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns>The fully expanded path string.</returns>
         private String normalizeProjectPath(String path, out bool withinPath)
         {
-            path = TrimStartingPathChars(path);
+            path = path.TrimStartingPathChars();
             var fullPath = Path.GetFullPath(Path.Combine(projectPath, path));
             withinPath = fullPath.StartsWith(projectPath + Path.DirectorySeparatorChar) || fullPath == projectPath;
             return fullPath;
@@ -613,7 +602,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns>The fully expanded path string.</returns>
         private String normalizeBackupPath(String path, out bool withinPath)
         {
-            path = TrimStartingPathChars(path);
+            path = path.TrimStartingPathChars();
             var fullPath = Path.GetFullPath(Path.Combine(backupPath, path));
             withinPath = fullPath.StartsWith(backupPath + Path.DirectorySeparatorChar) || fullPath == backupPath;
             return fullPath;

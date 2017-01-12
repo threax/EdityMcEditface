@@ -67,7 +67,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 
             foreach (var file in Directory.EnumerateFiles(settings.InDir, "*.html", SearchOption.AllDirectories))
             {
-                var relativeFile = FileFinder1.TrimStartingPathChars(file.Substring(settings.InDir.Length));
+                var relativeFile = file.Substring(settings.InDir.Length).TrimStartingPathChars();
                 if (!relativeFile.StartsWith(settings.EdityDir, StringComparison.OrdinalIgnoreCase))
                 {
                     foreach (var compiler in compilers)

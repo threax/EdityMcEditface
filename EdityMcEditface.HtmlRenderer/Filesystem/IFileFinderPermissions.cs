@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.HtmlRenderer
+namespace EdityMcEditface.HtmlRenderer.Filesystem
 {
     /// <summary>
     /// The permissions allows the user to modify how a FileFinder interacts with files.

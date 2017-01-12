@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EdityMcEditface.HtmlRenderer.Compiler;
+using EdityMcEditface.HtmlRenderer.Filesystem;
 
 namespace EdityMcEditface.Mvc
 {

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.HtmlRenderer
+namespace EdityMcEditface.HtmlRenderer.Filesystem
 {
     /// <summary>
     /// Loads and processes various files in the project. Used to build

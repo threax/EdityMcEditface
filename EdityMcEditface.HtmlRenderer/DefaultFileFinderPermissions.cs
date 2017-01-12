@@ -7,22 +7,22 @@ namespace EdityMcEditface.HtmlRenderer
 {
     public class DefaultFileFinderPermissions : IFileFinderPermissions
     {
-        public bool AllowOutputCopy(FileFinder fileFinder)
+        public bool AllowOutputCopy(FileFinder fileFinder, string path)
         {
             return AllowOutputCopyValue;
         }
 
-        public bool AllowRead(FileFinder fileFinder, string layoutName)
+        public bool AllowRead(FileFinder fileFinder, string path)
         {
             return AllowReadValue;
         }
 
-        public bool AllowWrite(FileFinder fileFinder, string file)
+        public bool AllowWrite(FileFinder fileFinder, string path)
         {
             return AllowWriteValue;
         }
 
-        public bool TreatAsContent(FileFinder fileFinder)
+        public bool TreatAsContent(FileFinder fileFinder, string path)
         {
             return TreatAsContentValue;
         }

@@ -67,12 +67,9 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 
             foreach (var file in fileFinder.EnumerateContentFiles("/", "*.html", SearchOption.AllDirectories))
             {
-                if (!file.StartsWith(settings.EdityDir, StringComparison.OrdinalIgnoreCase))
+                foreach (var compiler in compilers)
                 {
-                    foreach (var compiler in compilers)
-                    {
-                        compiler.buildPage(file);
-                    }
+                    compiler.buildPage(file);
                 }
             }
 

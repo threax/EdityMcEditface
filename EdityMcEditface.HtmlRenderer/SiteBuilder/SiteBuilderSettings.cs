@@ -10,10 +10,6 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
     {
         public String OutDir { get; set; }
 
-        public String EdityDir { get; set; } = "edity";
-
         public string SiteName { get; set; }
-
-        private IContentCompilerFactory CompilerFactory { get; set; } = new ContentCompilerFactory();
     }
 }

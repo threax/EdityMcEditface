@@ -264,9 +264,9 @@ namespace EdityMcEditface.HtmlRenderer
 
         private void CopyProjectContent(String outDir, EdityProject edityProject)
         {
-            if (permissions.AllowOutputCopy(this))
+            foreach (var file in edityProject.AdditionalContent.Concat(new string[] { "AutoUploads" }))
             {
-                foreach (var file in edityProject.AdditionalContent.Concat(new string[] { "AutoUploads" }))
+                if (permissions.AllowOutputCopy(this, file))
                 {
                     var realPath = NormalizePath(file);
                     if (File.Exists(realPath))
@@ -301,36 +301,33 @@ namespace EdityMcEditface.HtmlRenderer
 
         private void CopyDependencyFiles(String baseOutDir, PageStack pageStack, HashSet<String> copiedContentFiles)
         {
-            if (permissions.AllowOutputCopy(this))
+            foreach (var page in pageStack.Pages)
             {
-                foreach (var page in pageStack.Pages)
+                if (!String.IsNullOrEmpty(page.PageCssPath))
                 {
-                    if (!String.IsNullOrEmpty(page.PageCssPath))
+                    var cssPath = NormalizePath(page.PageCssPath);
+                    if (!copiedContentFiles.Contains(page.PageCssPath) && isValidPhysicalFile(page.PageCssPath) && permissions.AllowOutputCopy(this, page.PageCssPath) && File.Exists(cssPath))
                     {
-                        var cssPath = NormalizePath(page.PageCssPath);
-                        if (!copiedContentFiles.Contains(page.PageCssPath) && isValidPhysicalFile(page.PageCssPath) && File.Exists(cssPath))
-                        {
-                            copyFileIfNotExists(cssPath, safePathCombine(baseOutDir, page.PageCssPath));
-                            copiedContentFiles.Add(page.PageCssPath);
-                        }
+                        copyFileIfNotExists(cssPath, safePathCombine(baseOutDir, page.PageCssPath));
+                        copiedContentFiles.Add(page.PageCssPath);
                     }
-                    if (!String.IsNullOrEmpty(page.PageScriptPath))
+                }
+                if (!String.IsNullOrEmpty(page.PageScriptPath))
+                {
+                    var scriptPath = NormalizePath(page.PageScriptPath);
+                    if (!copiedContentFiles.Contains(page.PageScriptPath) && isValidPhysicalFile(page.PageScriptPath) && permissions.AllowOutputCopy(this, page.PageScriptPath) && File.Exists(scriptPath))
                     {
-                        var scriptPath = NormalizePath(page.PageScriptPath);
-                        if (!copiedContentFiles.Contains(page.PageScriptPath) && isValidPhysicalFile(page.PageScriptPath) && File.Exists(scriptPath))
-                        {
-                            copyFileIfNotExists(scriptPath, safePathCombine(baseOutDir, page.PageScriptPath));
-                            copiedContentFiles.Add(page.PageScriptPath);
-                        }
+                        copyFileIfNotExists(scriptPath, safePathCombine(baseOutDir, page.PageScriptPath));
+                        copiedContentFiles.Add(page.PageScriptPath);
                     }
-                    foreach (var content in pageStack.LinkedContentFiles)
+                }
+                foreach (var content in pageStack.LinkedContentFiles)
+                {
+                    var fullContentPath = NormalizePath(content);
+                    if (!copiedContentFiles.Contains(content) && isValidPhysicalFile(content) && permissions.AllowOutputCopy(this, content) && File.Exists(fullContentPath))
                     {
-                        var fullContentPath = NormalizePath(content);
-                        if (!copiedContentFiles.Contains(content) && isValidPhysicalFile(content) && File.Exists(fullContentPath))
-                        {
-                            copyFileIfNotExists(fullContentPath, safePathCombine(baseOutDir, content));
-                            copiedContentFiles.Add(content);
-                        }
+                        copyFileIfNotExists(fullContentPath, safePathCombine(baseOutDir, content));
+                        copiedContentFiles.Add(content);
                     }
                 }
             }
@@ -348,21 +345,18 @@ namespace EdityMcEditface.HtmlRenderer
 
         private IEnumerable<String> EnumerateContentFiles(HashSet<String> seenPaths, String path, String searchPattern, SearchOption searchOption)
         {
-            IEnumerable<String> query = new String[0];
-            if (permissions.TreatAsContent(this))
+            var fullPath = NormalizePath(path);
+            var removeLength = projectPath.Length;
+            var query = Directory.EnumerateFiles(fullPath, searchPattern, searchOption).Select(s => s.Substring(removeLength)).Where(s =>
             {
-                var fullPath = NormalizePath(path);
-                var removeLength = projectPath.Length;
-                query = Directory.EnumerateFiles(fullPath, searchPattern, searchOption).Select(s => s.Substring(removeLength)).Where(s =>
+                if (seenPaths.Contains(s) || !permissions.TreatAsContent(this, s))
                 {
-                    if (seenPaths.Contains(s))
-                    {
-                        return false;
-                    }
-                    seenPaths.Add(s);
-                    return true;
-                });
-            }
+                    return false;
+                }
+                seenPaths.Add(s);
+                return true;
+            });
+
             if (next != null)
             {
                 query = query.Concat(next.EnumerateContentFiles(seenPaths, path, searchPattern, searchOption));
@@ -377,21 +371,18 @@ namespace EdityMcEditface.HtmlRenderer
 
         public IEnumerable<String> EnumerateContentDirectories(HashSet<String> seenPaths, String path, String searchPattern, SearchOption searchOption)
         {
-            IEnumerable<String> query = new String[0];
-            if (permissions.TreatAsContent(this))
+            var fullPath = NormalizePath(path);
+            var removeLength = projectPath.Length;
+            var query = Directory.EnumerateDirectories(fullPath, searchPattern, searchOption).Select(s => s.Substring(removeLength)).Where(s =>
             {
-                var fullPath = NormalizePath(path);
-                var removeLength = projectPath.Length;
-                return Directory.EnumerateDirectories(fullPath, searchPattern, searchOption).Select(s => s.Substring(removeLength)).Where(s =>
+                if (seenPaths.Contains(s) || !permissions.TreatAsContent(this, s))
                 {
-                    if (seenPaths.Contains(s))
-                    {
-                        return false;
-                    }
-                    seenPaths.Add(s);
-                    return true;
-                });
-            }
+                    return false;
+                }
+                seenPaths.Add(s);
+                return true;
+            });
+
             if (next != null)
             {
                 query = query.Concat(next.EnumerateContentDirectories(seenPaths, path, searchPattern, searchOption));
@@ -475,7 +466,7 @@ namespace EdityMcEditface.HtmlRenderer
 
         private PageDefinition getProjectPageDefinition(String file)
         {
-            if(permissions.AllowRead(this, file))
+            if (permissions.AllowRead(this, file))
             {
                 String settingsPath = getPageDefinitionFile(NormalizePath(file));
                 if (File.Exists(settingsPath))
@@ -507,7 +498,7 @@ namespace EdityMcEditface.HtmlRenderer
                     JsonWriter.Serialize(definition, outStream);
                 }
             }
-            else if(next != null)
+            else if (next != null)
             {
                 next.SavePageDefinition(definition, fileInfo);
             }
@@ -591,7 +582,7 @@ namespace EdityMcEditface.HtmlRenderer
         private EdityProject loadProject()
         {
             EdityProject project = null;
-            if(permissions.AllowRead(this, projectFilePath))
+            if (permissions.AllowRead(this, projectFilePath))
             {
                 String projectStr = "";
                 String file = NormalizePath(projectFilePath);
@@ -609,7 +600,7 @@ namespace EdityMcEditface.HtmlRenderer
                 var nextProject = next.Project;
                 if (nextProject != null)
                 {
-                    if(project == null)
+                    if (project == null)
                     {
                         project = nextProject;
                     }

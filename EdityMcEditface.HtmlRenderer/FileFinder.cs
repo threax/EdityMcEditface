@@ -13,22 +13,16 @@ namespace EdityMcEditface.HtmlRenderer
     /// </summary>
     public class FileFinder1 : IFileFinder
     {
-        /// <summary>
-        /// This is the location of an additional directory to try to serve files from,
-        /// best used to serve the default files this app needs to run.
-        /// </summary>
-        private String backupPath = null;
         private String projectPath;
         private String projectFilePath;
         private Lazy<EdityProject> project;
         private FileFinder1 next;
 
-        public FileFinder1(String projectPath, String backupPath, FileFinder1 next = null, String projectFilePath = "edity/edity.json")
+        public FileFinder1(String projectPath, FileFinder1 next = null, String projectFilePath = "edity/edity.json")
         {
             project = new Lazy<EdityProject>(loadProject);
 
             this.projectPath = Path.GetFullPath(projectPath);
-            this.backupPath = Path.GetFullPath(backupPath);
             this.projectFilePath = projectFilePath;
             this.next = next;
         }
@@ -241,22 +235,31 @@ namespace EdityMcEditface.HtmlRenderer
         /// <param name="outDir"></param>
         public void CopyProjectContent(String outDir)
         {
-            foreach (var file in Project.AdditionalContent.Concat(new string[] { "AutoUploads" }))
+            CopyProjectContent(outDir, Project);
+        }
+
+        private void CopyProjectContent(String outDir, EdityProject edityProject)
+        {
+            foreach (var file in edityProject.AdditionalContent.Concat(new string[] { "AutoUploads" }))
             {
                 var realPath = NormalizePath(file);
                 if (File.Exists(realPath))
                 {
                     copyFileIfNotExists(realPath, safePathCombine(outDir, file));
                 }
-                else if(Directory.Exists(realPath))
+                else if (Directory.Exists(realPath))
                 {
-                    copyFolderContents(realPath, outDir, file);
+                    foreach (var dirFile in Directory.EnumerateFiles(realPath, "*", SearchOption.AllDirectories))
+                    {
+                        var relativePath = dirFile.Substring(realPath.Length);
+                        copyFileIfNotExists(dirFile, safePathCombine(outDir, file, relativePath));
+                    }
                 }
             }
 
-            if(next != null)
+            if (next != null)
             {
-                next.CopyProjectContent(outDir);
+                next.CopyProjectContent(outDir, edityProject);
             }
         }
 
@@ -275,19 +278,30 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 if (!String.IsNullOrEmpty(page.PageCssPath))
                 {
-                    copyFileIfNotExists(NormalizePath(page.PageCssPath), safePathCombine(baseOutDir, page.PageCssPath));
+                    var cssPath = NormalizePath(page.PageCssPath);
+                    if (!copiedContentFiles.Contains(page.PageCssPath) && isValidPhysicalFile(page.PageCssPath) && File.Exists(cssPath))
+                    {
+                        copyFileIfNotExists(cssPath, safePathCombine(baseOutDir, page.PageCssPath));
+                        copiedContentFiles.Add(page.PageCssPath);
+                    }
                 }
                 if (!String.IsNullOrEmpty(page.PageScriptPath))
                 {
-                    copyFileIfNotExists(NormalizePath(page.PageScriptPath), safePathCombine(baseOutDir, page.PageScriptPath));
+                    var scriptPath = NormalizePath(page.PageScriptPath);
+                    if (!copiedContentFiles.Contains(page.PageScriptPath) && isValidPhysicalFile(page.PageScriptPath) && File.Exists(scriptPath))
+                    {
+                        copyFileIfNotExists(scriptPath, safePathCombine(baseOutDir, page.PageScriptPath));
+                        copiedContentFiles.Add(page.PageScriptPath);
+                    }
                 }
                 foreach (var content in pageStack.LinkedContentFiles)
                 {
-                    if (!copiedContentFiles.Contains(content) && isValidPhysicalFile(content))
+                    var fullContentPath = NormalizePath(content);
+                    if (!copiedContentFiles.Contains(content) && isValidPhysicalFile(content) && File.Exists(fullContentPath))
                     {
-                        copyFileIfNotExists(NormalizePath(content), safePathCombine(baseOutDir, content));
+                        copyFileIfNotExists(fullContentPath, safePathCombine(baseOutDir, content));
+                        copiedContentFiles.Add(content);
                     }
-                    copiedContentFiles.Add(content);
                 }
             }
 
@@ -479,13 +493,9 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 return path.Substring(fullProjectPath.Length);
             }
-            if (backupPath != null)
+            else if(next != null)
             {
-                fullProjectPath = Path.GetFullPath(backupPath);
-                if (fullPath.StartsWith(fullProjectPath))
-                {
-                    return path.Substring(fullProjectPath.Length);
-                }
+                return next.getUrlFromSystemPath(path);
             }
             return path;
         }
@@ -503,7 +513,7 @@ namespace EdityMcEditface.HtmlRenderer
             return true;
         }
 
-        private String safePathCombine(params string[] paths)
+        private static String safePathCombine(params string[] paths)
         {
             for (int i = 1; i < paths.Length; ++i)
             {
@@ -512,9 +522,9 @@ namespace EdityMcEditface.HtmlRenderer
             return Path.Combine(paths);
         }
 
-        private void copyFileIfNotExists(String source, String dest)
+        private static void copyFileIfNotExists(String source, String dest)
         {
-            if (!File.Exists(dest) && File.Exists(source))
+            if (!File.Exists(dest))
             {
                 var destDir = Path.GetDirectoryName(dest);
                 if (!Directory.Exists(destDir))
@@ -522,18 +532,6 @@ namespace EdityMcEditface.HtmlRenderer
                     Directory.CreateDirectory(destDir);
                 }
                 File.Copy(source, dest);
-            }
-        }
-
-        private void copyFolderContents(string sourceDir, String outDir, String additionalPath)
-        {
-            if (Directory.Exists(sourceDir))
-            {
-                foreach (var dirFile in Directory.EnumerateFiles(sourceDir, "*", SearchOption.AllDirectories))
-                {
-                    var relativePath = dirFile.Substring(sourceDir.Length);
-                    copyFileIfNotExists(dirFile, safePathCombine(outDir, additionalPath, relativePath));
-                }
             }
         }
 

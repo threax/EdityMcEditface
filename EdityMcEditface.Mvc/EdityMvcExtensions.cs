@@ -25,7 +25,46 @@ namespace EdityMcEditface.Mvc
 {
     public static class EdityMvcExtensions
     {
-        public static void AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration)
+        /// <summary>
+        /// Add a default file finder that has a content folder and a backup location. The
+        /// edity folder in the content folder is not considered content.
+        /// This will only do something if you have not previously registered a IFileFinder service.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        /// <returns></returns>
+        public static IServiceCollection AddDefaultFileFinder(this IServiceCollection services)
+        {
+            services.TryAddTransient<IFileFinder>(s =>
+            {
+                var userInfo = s.GetRequiredService<IUserInfo>();
+                var projectFinder = s.GetRequiredService<ProjectFinder>();
+                var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
+
+                var backupPermissions = new DefaultFileFinderPermissions();
+                backupPermissions.WritePermission.Permit = false;
+                backupPermissions.TreatAsContentPermission.Permit = false;
+                var backupFinder = new FileFinder(projectFinder.BackupPath, backupPermissions);
+
+                var edityFolderList = new PathList();
+                edityFolderList.AddDirectory("edity");
+
+                var contentFolderPermissions = new DefaultFileFinderPermissions();
+                contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
+                return new FileFinder(projectFolder, contentFolderPermissions, backupFinder);
+            });
+
+            return services;
+        }
+
+        /// <summary>
+        /// Add the main edity services. If you call this and can use the default IFileFinder, you don't need to
+        /// do anything else, if you want to customize the file finder add it before calling this function.
+        /// </summary>
+        /// <param name="services">The services collection.</param>
+        /// <param name="editySettings">The edity settings.</param>
+        /// <param name="projectConfiguration">The edity project configuration.</param>
+        /// <returns>The service collection.</returns>
+        public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -51,25 +90,6 @@ namespace EdityMcEditface.Mvc
                     });
                     break;
             }
-
-            services.TryAddTransient<IFileFinder>(s =>
-            {
-                var userInfo = s.GetRequiredService<IUserInfo>();
-                var projectFinder = s.GetRequiredService<ProjectFinder>();
-                var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
-
-                var backupPermissions = new DefaultFileFinderPermissions();
-                backupPermissions.WritePermission.Permit = false;
-                backupPermissions.TreatAsContentPermission.Permit = false;
-                var backupFinder = new FileFinder(projectFinder.BackupPath, backupPermissions);
-
-                var edityFolderList = new PathList();
-                edityFolderList.AddDirectory("edity");
-
-                var contentFolderPermissions = new DefaultFileFinderPermissions();
-                contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
-                return new FileFinder(projectFolder, contentFolderPermissions, backupFinder);
-            });
 
             services.AddTransient<Repository, Repository>(s =>
             {
@@ -97,6 +117,8 @@ namespace EdityMcEditface.Mvc
             });
 
             services.TryAddScoped<IContentCompilerFactory, ContentCompilerFactory>();
+
+            services.AddDefaultFileFinder();
 
             switch (projectConfiguration.Compiler)
             {
@@ -148,9 +170,17 @@ namespace EdityMcEditface.Mvc
                 o.SerializerSettings.Converters.Add(new StringEnumConverter());
             })
             .AddEdityControllers();
+
+            return services;
         }
 
-        public static void UseEdity(this IApplicationBuilder app)
+        /// <summary>
+        /// Use the EdityMcEditface mvc implementation. You can remove UseStaticFiles and UseMvc from your
+        /// own startup when calling this function.
+        /// </summary>
+        /// <param name="app">The app builder.</param>
+        /// <returns>The app builder.</returns>
+        public static IApplicationBuilder UseEdity(this IApplicationBuilder app)
         {
             app.UseStaticFiles(new StaticFileOptions()
             {
@@ -165,6 +195,8 @@ namespace EdityMcEditface.Mvc
                     defaults: new { controller = "Home", action = "Index" }
                 );
             });
+
+            return app;
         }
 
         private static IMvcBuilder AddEdityControllers(this IMvcBuilder builder)

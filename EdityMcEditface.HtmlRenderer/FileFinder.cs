@@ -241,18 +241,18 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
-        public IEnumerable<String> EnumerateFiles(String path, FileType fileTypes)
+        public IEnumerable<String> EnumerateContentFiles(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             var fullPath = normalizeProjectPath(path);
             var removeLength = projectPath.Length;
-            return Directory.EnumerateFiles(fullPath).Select(s => s.Substring(removeLength));
+            return Directory.EnumerateFiles(fullPath, searchPattern, searchOption).Select(s => s.Substring(removeLength));
         }
 
-        public IEnumerable<String> EnumerateDirectories(String path, FileType fileTypes)
+        public IEnumerable<String> EnumerateContentDirectories(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             var fullPath = normalizeProjectPath(path);
             var removeLength = projectPath.Length;
-            return Directory.EnumerateDirectories(fullPath).Select(s => s.Substring(removeLength));
+            return Directory.EnumerateDirectories(fullPath, searchPattern, searchOption).Select(s => s.Substring(removeLength));
         }
 
         public EdityProject Project

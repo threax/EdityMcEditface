@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace EdityMcEditface.HtmlRenderer
@@ -12,8 +13,8 @@ namespace EdityMcEditface.HtmlRenderer
         void DeleteFile(string file);
         void DeleteFolder(string folder);
         bool doesLayoutExist(string layoutName);
-        IEnumerable<string> EnumerateDirectories(string path, FileType fileTypes);
-        IEnumerable<string> EnumerateFiles(string path, FileType fileTypes);
+        IEnumerable<String> EnumerateContentDirectories(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly);
+        IEnumerable<String> EnumerateContentFiles(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly);
         void erasePage(string file);
         void eraseProjectFile(string file);
         PageDefinition getProjectPageDefinition(TargetFileInfo fileInfo);

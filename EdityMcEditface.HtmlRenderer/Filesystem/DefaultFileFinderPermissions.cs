@@ -9,30 +9,30 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
     {
         public bool AllowOutputCopy(FileFinder fileFinder, string path)
         {
-            return AllowOutputCopyValue;
+            return OutputCopyPermission.Allow(path);
         }
 
         public bool AllowRead(FileFinder fileFinder, string path)
         {
-            return AllowReadValue;
+            return ReadPermission.Allow(path);
         }
 
         public bool AllowWrite(FileFinder fileFinder, string path)
         {
-            return AllowWriteValue;
+            return WritePermission.Allow(path);
         }
 
         public bool TreatAsContent(FileFinder fileFinder, string path)
         {
-            return TreatAsContentValue;
+            return TreatAsContentPermission.Allow(path);
         }
 
-        public bool AllowOutputCopyValue { get; set; } = true;
+        public PermissionClass OutputCopyPermission { get; set; } = new PermissionClass();
 
-        public bool AllowReadValue { get; set; } = true;
+        public PermissionClass ReadPermission { get; set; } = new PermissionClass();
 
-        public bool AllowWriteValue { get; set; } = true;
+        public PermissionClass WritePermission { get; set; } = new PermissionClass();
 
-        public bool TreatAsContentValue { get; set; } = true;
+        public PermissionClass TreatAsContentPermission { get; set; } = new PermissionClass();
     }
 }

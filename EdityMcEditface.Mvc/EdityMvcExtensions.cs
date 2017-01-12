@@ -52,16 +52,23 @@ namespace EdityMcEditface.Mvc
                     break;
             }
 
-            services.AddTransient<IFileFinder, FileFinder>(s =>
+            services.TryAddTransient<IFileFinder>(s =>
             {
                 var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
                 var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
-                return new FileFinder(projectFolder, new DefaultFileFinderPermissions(), new FileFinder(projectFinder.BackupPath, new DefaultFileFinderPermissions()
-                {
-                    AllowWriteValue = false,
-                    TreatAsContentValue = false
-                }));
+
+                var backupPermissions = new DefaultFileFinderPermissions();
+                backupPermissions.WritePermission.Permit = false;
+                backupPermissions.TreatAsContentPermission.Permit = false;
+                var backupFinder = new FileFinder(projectFinder.BackupPath, backupPermissions);
+
+                var edityFolderList = new PathList();
+                edityFolderList.AddDirectory("edity");
+
+                var contentFolderPermissions = new DefaultFileFinderPermissions();
+                contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
+                return new FileFinder(projectFolder, contentFolderPermissions, backupFinder);
             });
 
             services.AddTransient<Repository, Repository>(s =>

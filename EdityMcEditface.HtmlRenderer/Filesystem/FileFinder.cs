@@ -584,14 +584,17 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             EdityProject project = null;
             if (permissions.AllowRead(this, projectFilePath))
             {
-                String projectStr = "";
                 String file = NormalizePath(projectFilePath);
-                using (var reader = new StreamReader(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                if (File.Exists(file))
                 {
-                    projectStr = reader.ReadToEnd();
-                }
+                    String projectStr = "";
+                    using (var reader = new StreamReader(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                    {
+                        projectStr = reader.ReadToEnd();
+                    }
 
-                project = JsonConvert.DeserializeObject<EdityProject>(projectStr);
+                    project = JsonConvert.DeserializeObject<EdityProject>(projectStr);
+                }
             }
 
             //Merge in all projects

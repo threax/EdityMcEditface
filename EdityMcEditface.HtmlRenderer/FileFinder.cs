@@ -121,7 +121,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// Delete a project file.
         /// </summary>
         /// <param name="file">The name of the file to delete.</param>
-        public void deleteFile(String file)
+        public void DeleteFile(String file)
         {
             file = normalizeProjectPath(file);
             if (File.Exists(file))
@@ -134,7 +134,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// Delete a folder
         /// </summary>
         /// <param name="folder">The name of the folder to delete.</param>
-        public void deleteFolder(String folder)
+        public void DeleteFolder(String folder)
         {
             folder = normalizeProjectPath(folder);
             if (Directory.Exists(folder))
@@ -194,7 +194,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// Copy the contetnt defined in the project to the outDir
         /// </summary>
         /// <param name="outDir"></param>
-        public void copyProjectContent(String outDir)
+        public void CopyProjectContent(String outDir)
         {
             foreach (var file in Project.AdditionalContent.Concat(new string[]{ "AutoUploads" }))
             {
@@ -216,7 +216,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// Copy the dependency files for the current page stack.
         /// </summary>
         /// <param name="fileFinder"></param>
-        public void copyDependencyFiles(String baseOutDir, PageStack pageStack)
+        public void CopyDependencyFiles(String baseOutDir, PageStack pageStack)
         {
             HashSet<String> copiedContentFiles = new HashSet<string>();
 
@@ -241,14 +241,14 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
-        public IEnumerable<String> enumerateFiles(String path)
+        public IEnumerable<String> EnumerateFiles(String path, FileType fileTypes)
         {
             var fullPath = normalizeProjectPath(path);
             var removeLength = projectPath.Length;
             return Directory.EnumerateFiles(fullPath).Select(s => s.Substring(removeLength));
         }
 
-        public IEnumerable<String> enumerateDirectories(String path)
+        public IEnumerable<String> EnumerateDirectories(String path, FileType fileTypes)
         {
             var fullPath = normalizeProjectPath(path);
             var removeLength = projectPath.Length;

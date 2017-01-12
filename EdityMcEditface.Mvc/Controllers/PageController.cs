@@ -98,10 +98,10 @@ namespace EdityMcEditface.Mvc.Controllers
                 throw new ValidationException("Cannot delete project files with the delete function.");
             }
 
-            fileFinder.deleteFile(fileInfo.DerivedFileName);
-            fileFinder.deleteFile(fileInfo.FileNoExtension + ".json");
-            fileFinder.deleteFile(fileInfo.FileNoExtension + ".css");
-            fileFinder.deleteFile(fileInfo.FileNoExtension + ".js");
+            fileFinder.DeleteFile(fileInfo.DerivedFileName);
+            fileFinder.DeleteFile(fileInfo.FileNoExtension + ".json");
+            fileFinder.DeleteFile(fileInfo.FileNoExtension + ".css");
+            fileFinder.DeleteFile(fileInfo.FileNoExtension + ".js");
         }
 
         /// <summary>

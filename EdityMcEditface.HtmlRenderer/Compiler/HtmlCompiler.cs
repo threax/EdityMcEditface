@@ -54,12 +54,12 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             {
                 writer.Write(document.DocumentNode.OuterHtml);
             }
-            fileFinder.copyDependencyFiles(this.outDir, pageStack);
+            fileFinder.CopyDependencyFiles(this.outDir, pageStack);
         }
 
         public void copyProjectContent()
         {
-            fileFinder.copyProjectContent(outDir);
+            fileFinder.CopyProjectContent(outDir);
         }
 
         /// <summary>

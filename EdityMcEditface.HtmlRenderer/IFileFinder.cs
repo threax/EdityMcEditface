@@ -7,13 +7,13 @@ namespace EdityMcEditface.HtmlRenderer
     {
         EdityProject Project { get; }
         IEnumerable<Template> Templates { get; }
-        void copyDependencyFiles(string baseOutDir, PageStack pageStack);
-        void copyProjectContent(string outDir);
-        void deleteFile(string file);
-        void deleteFolder(string folder);
+        void CopyDependencyFiles(string baseOutDir, PageStack pageStack);
+        void CopyProjectContent(string outDir);
+        void DeleteFile(string file);
+        void DeleteFolder(string folder);
         bool doesLayoutExist(string layoutName);
-        IEnumerable<string> enumerateDirectories(string path);
-        IEnumerable<string> enumerateFiles(string path);
+        IEnumerable<string> EnumerateDirectories(string path, FileType fileTypes);
+        IEnumerable<string> EnumerateFiles(string path, FileType fileTypes);
         void erasePage(string file);
         void eraseProjectFile(string file);
         PageDefinition getProjectPageDefinition(TargetFileInfo fileInfo);

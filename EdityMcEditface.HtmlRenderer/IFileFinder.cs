@@ -16,7 +16,6 @@ namespace EdityMcEditface.HtmlRenderer
         IEnumerable<String> EnumerateContentDirectories(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly);
         IEnumerable<String> EnumerateContentFiles(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly);
         void ErasePage(string file);
-        void EraseProjectFile(string file);
         PageDefinition GetProjectPageDefinition(TargetFileInfo fileInfo);
         string GetProjectRelativePath(string path);
         bool IsValidWritablePath(string path);

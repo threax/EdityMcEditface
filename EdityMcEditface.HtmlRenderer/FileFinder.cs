@@ -17,31 +17,16 @@ namespace EdityMcEditface.HtmlRenderer
         private String projectFilePath;
         private Lazy<EdityProject> project;
         private FileFinder next;
+        private IFileFinderPermissions permissions;
 
-        public FileFinder(String projectPath, FileFinder next = null, String projectFilePath = "edity/edity.json")
+        public FileFinder(String projectPath, IFileFinderPermissions permissions, FileFinder next = null, String projectFilePath = "edity/edity.json")
         {
             project = new Lazy<EdityProject>(loadProject);
 
             this.projectPath = Path.GetFullPath(projectPath);
             this.projectFilePath = projectFilePath;
             this.next = next;
-        }
-
-        /// <summary>
-        /// Erase a file in the project. Does not erase files in the backup location.
-        /// </summary>
-        /// <param name="file"></param>
-        public void EraseProjectFile(string file)
-        {
-            var fullPath = NormalizePath(file);
-            if (File.Exists(fullPath))
-            {
-                File.Delete(fullPath);
-            }
-            else if(next != null)
-            {
-                next.EraseProjectFile(file);
-            }
+            this.permissions = permissions;
         }
 
         /// <summary>
@@ -51,27 +36,33 @@ namespace EdityMcEditface.HtmlRenderer
         /// <param name="file"></param>
         public void ErasePage(string file)
         {
-            var fullPath = NormalizePath(file);
-            if (File.Exists(fullPath))
+            bool goNext = true;
+            if (permissions.AllowWrite(this, file))
             {
-                var jsFile = getPageFile(fullPath, ".js");
-                if (jsFile != null)
+                var fullPath = NormalizePath(file);
+                if (File.Exists(fullPath))
                 {
-                    File.Delete(jsFile);
+                    var jsFile = getPageFile(fullPath, ".js");
+                    if (jsFile != null)
+                    {
+                        File.Delete(jsFile);
+                    }
+                    var cssFile = getPageFile(fullPath, ".css");
+                    if (cssFile != null)
+                    {
+                        File.Delete(cssFile);
+                    }
+                    var settingsFile = getPageDefinitionFile(fullPath);
+                    if (File.Exists(settingsFile))
+                    {
+                        File.Delete(settingsFile);
+                    }
+                    File.Delete(fullPath);
+                    goNext = false;
                 }
-                var cssFile = getPageFile(fullPath, ".css");
-                if (cssFile != null)
-                {
-                    File.Delete(cssFile);
-                }
-                var settingsFile = getPageDefinitionFile(fullPath);
-                if (File.Exists(settingsFile))
-                {
-                    File.Delete(settingsFile);
-                }
-                File.Delete(fullPath);
             }
-            else if(next != null)
+
+            if (goNext && next != null)
             {
                 next.ErasePage(file);
             }
@@ -85,12 +76,16 @@ namespace EdityMcEditface.HtmlRenderer
         public bool DoesLayoutExist(String layoutName)
         {
             var layoutFileName = getLayoutFile(layoutName);
-            var fullPath = NormalizePath(layoutFileName);
-            if (File.Exists(fullPath))
+            if (permissions.AllowRead(this, layoutFileName))
             {
-                return true;
+                var fullPath = NormalizePath(layoutFileName);
+                if (File.Exists(fullPath))
+                {
+                    return true;
+                }
             }
-            else if(next != null)
+
+            if (next != null)
             {
                 return next.DoesLayoutExist(layoutName);
             }
@@ -107,12 +102,16 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns>A stream to the requested file.</returns>
         public Stream ReadFile(String file)
         {
-            var fullPath = NormalizePath(file);
-            if (File.Exists(fullPath))
+            if (permissions.AllowRead(this, file))
             {
-                return File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                var fullPath = NormalizePath(file);
+                if (File.Exists(fullPath))
+                {
+                    return File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                }
             }
-            else if(next != null)
+
+            if (next != null)
             {
                 return next.ReadFile(file);
             }
@@ -130,16 +129,26 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns>A stream to the requested file.</returns>
         public Stream WriteFile(String file)
         {
-            var savePath = NormalizePath(file);
-            String directory = Path.GetDirectoryName(savePath);
-            if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+            if (permissions.AllowWrite(this, file))
             {
-                Directory.CreateDirectory(directory);
+                var savePath = NormalizePath(file);
+                String directory = Path.GetDirectoryName(savePath);
+                if (!String.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                return File.Open(savePath, FileMode.Create, FileAccess.Write);
             }
 
-            return File.Open(savePath, FileMode.Create, FileAccess.Write);
-
-            //Currently no chain, always write to top level, will add this later
+            if (next != null)
+            {
+                return next.WriteFile(file);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Cannot write file {file} no file finder can write to its path.");
+            }
         }
 
         /// <summary>
@@ -148,12 +157,18 @@ namespace EdityMcEditface.HtmlRenderer
         /// <param name="file">The name of the file to delete.</param>
         public void DeleteFile(String file)
         {
-            var fullPath = NormalizePath(file);
-            if (File.Exists(fullPath))
+            bool goNext = true;
+            if (permissions.AllowWrite(this, file))
             {
-                File.Delete(fullPath);
+                var fullPath = NormalizePath(file);
+                if (File.Exists(fullPath))
+                {
+                    File.Delete(fullPath);
+                    goNext = false;
+                }
             }
-            else if(next != null)
+
+            if (goNext && next != null)
             {
                 next.DeleteFile(file);
             }
@@ -165,32 +180,38 @@ namespace EdityMcEditface.HtmlRenderer
         /// <param name="folder">The name of the folder to delete.</param>
         public void DeleteFolder(String folder)
         {
-            var fullPath = NormalizePath(folder);
-            if (Directory.Exists(fullPath))
+            bool goNext = true;
+            if (permissions.AllowWrite(this, folder))
             {
-                //Do a couple trys
-                try
+                var fullPath = NormalizePath(folder);
+                if (Directory.Exists(fullPath))
                 {
-                    Directory.Delete(fullPath, true);
-                }
-                catch (Exception)
-                {
+                    //Do a couple trys
                     try
                     {
                         Directory.Delete(fullPath, true);
                     }
                     catch (Exception)
                     {
-                        //Third time throws if there is a problem.
-                        Directory.Delete(fullPath, true);
+                        try
+                        {
+                            Directory.Delete(fullPath, true);
+                        }
+                        catch (Exception)
+                        {
+                            //Third time throws if there is a problem.
+                            Directory.Delete(fullPath, true);
+                        }
                     }
                 }
             }
-            else if(next != null)
+            if (goNext && next != null)
             {
                 next.DeleteFolder(folder);
             }
         }
+
+        const string TemplatePath = "edity/templates";
 
         /// <summary>
         /// Find the templates in the current project directory.
@@ -200,21 +221,24 @@ namespace EdityMcEditface.HtmlRenderer
             get
             {
                 IEnumerable<Template> query = null;
-                var templatePath = NormalizePath("edity/templates");
-                if (Directory.Exists(templatePath))
+                if (permissions.AllowRead(this, TemplatePath))
                 {
-                    query = Directory.EnumerateFiles(templatePath).Select(t => new Template()
+                    var templatePath = NormalizePath(TemplatePath);
+                    if (Directory.Exists(templatePath))
                     {
-                        Path = Path.ChangeExtension(getUrlFromSystemPath(t), null)
-                    });
+                        query = Directory.EnumerateFiles(templatePath).Select(t => new Template()
+                        {
+                            Path = Path.ChangeExtension(getUrlFromSystemPath(t), null)
+                        });
+                    }
                 }
 
-                if(next != null)
+                if (next != null)
                 {
                     var nextQuery = next.Templates;
-                    if(nextQuery != null)
+                    if (nextQuery != null)
                     {
-                        if(query == null)
+                        if (query == null)
                         {
                             query = nextQuery;
                         }
@@ -240,19 +264,22 @@ namespace EdityMcEditface.HtmlRenderer
 
         private void CopyProjectContent(String outDir, EdityProject edityProject)
         {
-            foreach (var file in edityProject.AdditionalContent.Concat(new string[] { "AutoUploads" }))
+            if (permissions.AllowOutputCopy(this))
             {
-                var realPath = NormalizePath(file);
-                if (File.Exists(realPath))
+                foreach (var file in edityProject.AdditionalContent.Concat(new string[] { "AutoUploads" }))
                 {
-                    copyFileIfNotExists(realPath, safePathCombine(outDir, file));
-                }
-                else if (Directory.Exists(realPath))
-                {
-                    foreach (var dirFile in Directory.EnumerateFiles(realPath, "*", SearchOption.AllDirectories))
+                    var realPath = NormalizePath(file);
+                    if (File.Exists(realPath))
                     {
-                        var relativePath = dirFile.Substring(realPath.Length);
-                        copyFileIfNotExists(dirFile, safePathCombine(outDir, file, relativePath));
+                        copyFileIfNotExists(realPath, safePathCombine(outDir, file));
+                    }
+                    else if (Directory.Exists(realPath))
+                    {
+                        foreach (var dirFile in Directory.EnumerateFiles(realPath, "*", SearchOption.AllDirectories))
+                        {
+                            var relativePath = dirFile.Substring(realPath.Length);
+                            copyFileIfNotExists(dirFile, safePathCombine(outDir, file, relativePath));
+                        }
                     }
                 }
             }
@@ -274,38 +301,41 @@ namespace EdityMcEditface.HtmlRenderer
 
         private void CopyDependencyFiles(String baseOutDir, PageStack pageStack, HashSet<String> copiedContentFiles)
         {
-            foreach (var page in pageStack.Pages)
+            if (permissions.AllowOutputCopy(this))
             {
-                if (!String.IsNullOrEmpty(page.PageCssPath))
+                foreach (var page in pageStack.Pages)
                 {
-                    var cssPath = NormalizePath(page.PageCssPath);
-                    if (!copiedContentFiles.Contains(page.PageCssPath) && isValidPhysicalFile(page.PageCssPath) && File.Exists(cssPath))
+                    if (!String.IsNullOrEmpty(page.PageCssPath))
                     {
-                        copyFileIfNotExists(cssPath, safePathCombine(baseOutDir, page.PageCssPath));
-                        copiedContentFiles.Add(page.PageCssPath);
+                        var cssPath = NormalizePath(page.PageCssPath);
+                        if (!copiedContentFiles.Contains(page.PageCssPath) && isValidPhysicalFile(page.PageCssPath) && File.Exists(cssPath))
+                        {
+                            copyFileIfNotExists(cssPath, safePathCombine(baseOutDir, page.PageCssPath));
+                            copiedContentFiles.Add(page.PageCssPath);
+                        }
                     }
-                }
-                if (!String.IsNullOrEmpty(page.PageScriptPath))
-                {
-                    var scriptPath = NormalizePath(page.PageScriptPath);
-                    if (!copiedContentFiles.Contains(page.PageScriptPath) && isValidPhysicalFile(page.PageScriptPath) && File.Exists(scriptPath))
+                    if (!String.IsNullOrEmpty(page.PageScriptPath))
                     {
-                        copyFileIfNotExists(scriptPath, safePathCombine(baseOutDir, page.PageScriptPath));
-                        copiedContentFiles.Add(page.PageScriptPath);
+                        var scriptPath = NormalizePath(page.PageScriptPath);
+                        if (!copiedContentFiles.Contains(page.PageScriptPath) && isValidPhysicalFile(page.PageScriptPath) && File.Exists(scriptPath))
+                        {
+                            copyFileIfNotExists(scriptPath, safePathCombine(baseOutDir, page.PageScriptPath));
+                            copiedContentFiles.Add(page.PageScriptPath);
+                        }
                     }
-                }
-                foreach (var content in pageStack.LinkedContentFiles)
-                {
-                    var fullContentPath = NormalizePath(content);
-                    if (!copiedContentFiles.Contains(content) && isValidPhysicalFile(content) && File.Exists(fullContentPath))
+                    foreach (var content in pageStack.LinkedContentFiles)
                     {
-                        copyFileIfNotExists(fullContentPath, safePathCombine(baseOutDir, content));
-                        copiedContentFiles.Add(content);
+                        var fullContentPath = NormalizePath(content);
+                        if (!copiedContentFiles.Contains(content) && isValidPhysicalFile(content) && File.Exists(fullContentPath))
+                        {
+                            copyFileIfNotExists(fullContentPath, safePathCombine(baseOutDir, content));
+                            copiedContentFiles.Add(content);
+                        }
                     }
                 }
             }
 
-            if(next != null)
+            if (next != null)
             {
                 next.CopyDependencyFiles(baseOutDir, pageStack, copiedContentFiles);
             }
@@ -313,16 +343,60 @@ namespace EdityMcEditface.HtmlRenderer
 
         public IEnumerable<String> EnumerateContentFiles(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
-            var fullPath = NormalizePath(path);
-            var removeLength = projectPath.Length;
-            return Directory.EnumerateFiles(fullPath, searchPattern, searchOption).Select(s => s.Substring(removeLength));
+            return EnumerateContentFiles(new HashSet<String>(), path, searchPattern, searchOption);
+        }
+
+        private IEnumerable<String> EnumerateContentFiles(HashSet<String> seenPaths, String path, String searchPattern, SearchOption searchOption)
+        {
+            IEnumerable<String> query = new String[0];
+            if (permissions.TreatAsContent(this))
+            {
+                var fullPath = NormalizePath(path);
+                var removeLength = projectPath.Length;
+                query = Directory.EnumerateFiles(fullPath, searchPattern, searchOption).Select(s => s.Substring(removeLength)).Where(s =>
+                {
+                    if (seenPaths.Contains(s))
+                    {
+                        return false;
+                    }
+                    seenPaths.Add(s);
+                    return true;
+                });
+            }
+            if (next != null)
+            {
+                query = query.Concat(next.EnumerateContentFiles(seenPaths, path, searchPattern, searchOption));
+            }
+            return query;
         }
 
         public IEnumerable<String> EnumerateContentDirectories(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
-            var fullPath = NormalizePath(path);
-            var removeLength = projectPath.Length;
-            return Directory.EnumerateDirectories(fullPath, searchPattern, searchOption).Select(s => s.Substring(removeLength));
+            return EnumerateContentDirectories(new HashSet<String>(), path, searchPattern, searchOption);
+        }
+
+        public IEnumerable<String> EnumerateContentDirectories(HashSet<String> seenPaths, String path, String searchPattern, SearchOption searchOption)
+        {
+            IEnumerable<String> query = new String[0];
+            if (permissions.TreatAsContent(this))
+            {
+                var fullPath = NormalizePath(path);
+                var removeLength = projectPath.Length;
+                return Directory.EnumerateDirectories(fullPath, searchPattern, searchOption).Select(s => s.Substring(removeLength)).Where(s =>
+                {
+                    if (seenPaths.Contains(s))
+                    {
+                        return false;
+                    }
+                    seenPaths.Add(s);
+                    return true;
+                });
+            }
+            if (next != null)
+            {
+                query = query.Concat(next.EnumerateContentDirectories(seenPaths, path, searchPattern, searchOption));
+            }
+            return query;
         }
 
         public EdityProject Project
@@ -341,20 +415,24 @@ namespace EdityMcEditface.HtmlRenderer
         public PageStackItem LoadPageStackLayout(String layout)
         {
             var layoutPath = getLayoutFile(layout);
-            var realPath = NormalizePath(layoutPath);
-            if (!File.Exists(realPath))
+            if (permissions.AllowRead(this, layoutPath))
             {
-                if(next != null)
+                var realPath = NormalizePath(layoutPath);
+                if (File.Exists(realPath))
                 {
-                    return next.LoadPageStackLayout(layout);
-                }
-                else
-                {
-                    throw new FileNotFoundException($"Cannot find page stack file {layoutPath}", layoutPath);
+                    layoutPath = layoutPath.EnsureStartingPathSlash();
+                    return loadPageStackFile(layoutPath, realPath);
                 }
             }
-            layoutPath = layoutPath.EnsureStartingPathSlash();
-            return loadPageStackFile(layoutPath, realPath);
+
+            if (next != null)
+            {
+                return next.LoadPageStackLayout(layout);
+            }
+            else
+            {
+                throw new FileNotFoundException($"Cannot find page stack file {layoutPath}", layoutPath);
+            }
         }
 
         /// <summary>
@@ -365,29 +443,23 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns></returns>
         public PageStackItem LoadPageStackContent(String path)
         {
-            var realPath = NormalizePath(path);
-            if (!File.Exists(realPath))
+            if (permissions.AllowRead(this, path))
             {
-                if(next != null)
+                var realPath = NormalizePath(path);
+                if (File.Exists(realPath))
                 {
-                    return next.LoadPageStackContent(path);
-                }
-                else
-                {
-                    throw new FileNotFoundException($"Cannot find page stack file {path}", path);
+                    return loadPageStackFile(path.EnsureStartingPathSlash(), realPath);
                 }
             }
-            return loadPageStackFile(path.EnsureStartingPathSlash(), realPath);
-        }
 
-        private static string getLayoutFile(String layoutName)
-        {
-            return $"edity/layouts/{layoutName}";
-        }
-
-        private static String getPageDefinitionFile(String file)
-        {
-            return Path.ChangeExtension(file, "json");
+            if (next != null)
+            {
+                return next.LoadPageStackContent(path);
+            }
+            else
+            {
+                throw new FileNotFoundException($"Cannot find page stack file {path}", path);
+            }
         }
 
         /// <summary>
@@ -398,41 +470,47 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns>The PageDefinition for the page. Will be a default instance if the file does not exist.</returns>
         public PageDefinition GetProjectPageDefinition(TargetFileInfo fileInfo)
         {
-            return getPageDefinition(fileInfo.HtmlFile);
+            return getProjectPageDefinition(fileInfo.HtmlFile);
         }
 
-        private PageDefinition getPageDefinition(String file)
+        private PageDefinition getProjectPageDefinition(String file)
         {
-            String settingsPath = getPageDefinitionFile(NormalizePath(file));
-            PageDefinition pageSettings;
-            if (File.Exists(settingsPath))
+            if(permissions.AllowRead(this, file))
             {
-                using (var stream = new StreamReader(File.Open(settingsPath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                String settingsPath = getPageDefinitionFile(NormalizePath(file));
+                if (File.Exists(settingsPath))
                 {
-                    pageSettings = JsonConvert.DeserializeObject<PageDefinition>(stream.ReadToEnd());
+                    using (var stream = new StreamReader(File.Open(settingsPath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                    {
+                        return JsonConvert.DeserializeObject<PageDefinition>(stream.ReadToEnd());
+                    }
                 }
             }
-            else if(next != null)
+
+            if (next != null)
             {
-                return next.getPageDefinition(file);
+                return next.getProjectPageDefinition(file);
             }
             else
             {
                 return new PageDefinition();
             }
-
-            return pageSettings;
         }
 
         public void SavePageDefinition(PageDefinition definition, TargetFileInfo fileInfo)
         {
-            var outputFile = getPageDefinitionFile(NormalizePath(fileInfo.HtmlFile));
-            using (var outStream = new StreamWriter(WriteFile(outputFile)))
+            if (permissions.AllowWrite(this, fileInfo.HtmlFile))
             {
-                JsonWriter.Serialize(definition, outStream);
+                var outputFile = getPageDefinitionFile(NormalizePath(fileInfo.HtmlFile));
+                using (var outStream = new StreamWriter(WriteFile(outputFile)))
+                {
+                    JsonWriter.Serialize(definition, outStream);
+                }
             }
-
-            //No Chain, this always writes to this directory.
+            else if(next != null)
+            {
+                next.SavePageDefinition(definition, fileInfo);
+            }
         }
 
         /// <summary>
@@ -451,6 +529,8 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 return false;
             }
+
+            //No chain, only operates on paths
         }
 
         /// <summary>
@@ -475,12 +555,17 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns>The matching linkFile name or null if it is not found.</returns>
         private String getPageFile(String file, String extension)
         {
-            String realPath = Path.ChangeExtension(NormalizePath(file), extension);
-            if (File.Exists(realPath))
+            var changedExtension = Path.ChangeExtension(file, extension);
+            if (permissions.AllowRead(this, changedExtension))
             {
-                return Path.ChangeExtension(file, extension);
+                String realPath = NormalizePath(changedExtension);
+                if (File.Exists(realPath))
+                {
+                    return changedExtension;
+                }
             }
-            else if(next != null)
+
+            if (next != null)
             {
                 return next.getPageFile(file, extension);
             }
@@ -489,72 +574,49 @@ namespace EdityMcEditface.HtmlRenderer
 
         private String getUrlFromSystemPath(String path)
         {
+            //Does not need permissions, only effects paths by trying to remove the folders for this file finder, if it fails it will chain
             var fullPath = Path.GetFullPath(path);
             var fullProjectPath = Path.GetFullPath(projectPath);
             if (fullPath.StartsWith(fullProjectPath))
             {
                 return path.Substring(fullProjectPath.Length);
             }
-            else if(next != null)
+            else if (next != null)
             {
                 return next.getUrlFromSystemPath(path);
             }
             return path;
         }
 
-        private static bool isValidPhysicalFile(String file)
-        {
-            try
-            {
-                Path.GetFullPath(file);
-            }
-            catch (NotSupportedException)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        private static String safePathCombine(params string[] paths)
-        {
-            for (int i = 1; i < paths.Length; ++i)
-            {
-                paths[i] = paths[i].TrimStartingPathChars();
-            }
-            return Path.Combine(paths);
-        }
-
-        private static void copyFileIfNotExists(String source, String dest)
-        {
-            if (!File.Exists(dest))
-            {
-                var destDir = Path.GetDirectoryName(dest);
-                if (!Directory.Exists(destDir))
-                {
-                    Directory.CreateDirectory(destDir);
-                }
-                File.Copy(source, dest);
-            }
-        }
-
         private EdityProject loadProject()
         {
-            String projectStr = "";
-            String file = NormalizePath(projectFilePath);
-            using (var reader = new StreamReader(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
+            EdityProject project = null;
+            if(permissions.AllowRead(this, projectFilePath))
             {
-                projectStr = reader.ReadToEnd();
+                String projectStr = "";
+                String file = NormalizePath(projectFilePath);
+                using (var reader = new StreamReader(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                {
+                    projectStr = reader.ReadToEnd();
+                }
+
+                project = JsonConvert.DeserializeObject<EdityProject>(projectStr);
             }
 
-            var project = JsonConvert.DeserializeObject<EdityProject>(projectStr);
-
             //Merge in all projects
-            if(next != null)
+            if (next != null)
             {
                 var nextProject = next.Project;
                 if (nextProject != null)
                 {
-                    project.merge(nextProject);
+                    if(project == null)
+                    {
+                        project = nextProject;
+                    }
+                    else
+                    {
+                        project.merge(nextProject);
+                    }
                 }
             }
 
@@ -568,7 +630,7 @@ namespace EdityMcEditface.HtmlRenderer
                 return new PageStackItem()
                 {
                     Content = layout.ReadToEnd(),
-                    PageDefinition = getPageDefinition(path),
+                    PageDefinition = getProjectPageDefinition(path),
                     PageScriptPath = getPageFile(path, "js"),
                     PageCssPath = getPageFile(path, "css"),
                 };
@@ -597,6 +659,51 @@ namespace EdityMcEditface.HtmlRenderer
                 throw new NotSupportedException("Cannot read from directory outside of the defined project paths.");
             }
             return fullPath;
+        }
+
+        private static string getLayoutFile(String layoutName)
+        {
+            return $"edity/layouts/{layoutName}";
+        }
+
+        private static String getPageDefinitionFile(String file)
+        {
+            return Path.ChangeExtension(file, "json");
+        }
+
+        private static String safePathCombine(params string[] paths)
+        {
+            for (int i = 1; i < paths.Length; ++i)
+            {
+                paths[i] = paths[i].TrimStartingPathChars();
+            }
+            return Path.Combine(paths);
+        }
+
+        private static void copyFileIfNotExists(String source, String dest)
+        {
+            if (!File.Exists(dest))
+            {
+                var destDir = Path.GetDirectoryName(dest);
+                if (!Directory.Exists(destDir))
+                {
+                    Directory.CreateDirectory(destDir);
+                }
+                File.Copy(source, dest);
+            }
+        }
+
+        private static bool isValidPhysicalFile(String file)
+        {
+            try
+            {
+                Path.GetFullPath(file);
+            }
+            catch (NotSupportedException)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

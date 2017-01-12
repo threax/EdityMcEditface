@@ -56,7 +56,11 @@ namespace EdityMcEditface.Mvc
                 var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
                 var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
-                return new FileFinder(projectFolder, new FileFinder(projectFinder.BackupPath));
+                return new FileFinder(projectFolder, new DefaultFileFinderPermissions(), new FileFinder(projectFinder.BackupPath, new DefaultFileFinderPermissions()
+                {
+                    AllowWriteValue = false,
+                    TreatAsContentValue = false
+                }));
             });
 
             services.AddTransient<Repository, Repository>(s =>

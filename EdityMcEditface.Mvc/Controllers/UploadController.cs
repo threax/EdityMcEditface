@@ -86,7 +86,7 @@ namespace EdityMcEditface.Mvc.Controllers
             }
             else
             {
-                fileFinder.EraseProjectFile(fileInfo.DerivedFileName);
+                fileFinder.DeleteFile(fileInfo.DerivedFileName);
             }
         }
     }

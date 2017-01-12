@@ -51,12 +51,12 @@ namespace EdityMcEditface.Mvc
                     break;
             }
 
-            services.AddTransient<IFileFinder, FileFinder1>(s =>
+            services.AddTransient<IFileFinder, FileFinder>(s =>
             {
                 var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
                 var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
-                return new FileFinder1(projectFolder, new FileFinder1(projectFinder.BackupPath));
+                return new FileFinder(projectFolder, new FileFinder(projectFinder.BackupPath));
             });
 
             services.AddTransient<Repository, Repository>(s =>

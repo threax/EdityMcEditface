@@ -11,14 +11,14 @@ namespace EdityMcEditface.HtmlRenderer
     /// Loads and processes various files in the project. Used to build
     /// documents from the file system.
     /// </summary>
-    public class FileFinder1 : IFileFinder
+    public class FileFinder : IFileFinder
     {
         private String projectPath;
         private String projectFilePath;
         private Lazy<EdityProject> project;
-        private FileFinder1 next;
+        private FileFinder next;
 
-        public FileFinder1(String projectPath, FileFinder1 next = null, String projectFilePath = "edity/edity.json")
+        public FileFinder(String projectPath, FileFinder next = null, String projectFilePath = "edity/edity.json")
         {
             project = new Lazy<EdityProject>(loadProject);
 
@@ -380,12 +380,12 @@ namespace EdityMcEditface.HtmlRenderer
             return loadPageStackFile(path.EnsureStartingPathSlash(), realPath);
         }
 
-        private string getLayoutFile(String layoutName)
+        private static string getLayoutFile(String layoutName)
         {
             return $"edity/layouts/{layoutName}";
         }
 
-        private String getPageDefinitionFile(String file)
+        private static String getPageDefinitionFile(String file)
         {
             return Path.ChangeExtension(file, "json");
         }
@@ -422,8 +422,6 @@ namespace EdityMcEditface.HtmlRenderer
             }
 
             return pageSettings;
-
-            //No chain, only reads from current directory.
         }
 
         public void SavePageDefinition(PageDefinition definition, TargetFileInfo fileInfo)
@@ -465,22 +463,26 @@ namespace EdityMcEditface.HtmlRenderer
         public String GetProjectRelativePath(String path)
         {
             return NormalizePath(path).Substring(projectPath.Length + 1);
+
+            //No chain, only operates on paths
         }
 
         /// <summary>
-        /// Get the page file with the given extension that exists in the same folder as hostFile,
-        /// the linkFile will be returned with the correct path so you can easily stay in web
-        /// server instead of file system scope.
+        /// Get the page file from the associated link.
         /// </summary>
-        /// <param name="linkFile">The link to the page file.</param>
+        /// <param name="file">The link to the page file.</param>
         /// <param name="extension">The extension of the file to look for.</param>
         /// <returns>The matching linkFile name or null if it is not found.</returns>
-        private String getPageFile(String linkFile, String extension)
+        private String getPageFile(String file, String extension)
         {
-            String realPath = Path.ChangeExtension(NormalizePath(linkFile), extension);
+            String realPath = Path.ChangeExtension(NormalizePath(file), extension);
             if (File.Exists(realPath))
             {
-                return Path.ChangeExtension(linkFile, extension);
+                return Path.ChangeExtension(file, extension);
+            }
+            else if(next != null)
+            {
+                return next.getPageFile(file, extension);
             }
             return null;
         }
@@ -500,7 +502,7 @@ namespace EdityMcEditface.HtmlRenderer
             return path;
         }
 
-        private bool isValidPhysicalFile(String file)
+        private static bool isValidPhysicalFile(String file)
         {
             try
             {

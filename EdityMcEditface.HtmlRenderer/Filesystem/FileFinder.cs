@@ -514,6 +514,10 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                 NormalizePath(path);
                 return true;
             }
+            catch (NotSupportedException)
+            {
+                return false;
+            }
             catch (InvalidOperationException)
             {
                 return false;

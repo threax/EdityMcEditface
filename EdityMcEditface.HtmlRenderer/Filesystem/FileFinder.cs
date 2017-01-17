@@ -330,8 +330,13 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                 var fullContentPath = NormalizePath(content);
                 if (File.Exists(fullContentPath))
                 {
-                    copyFileIfNotExists(fullContentPath, safePathCombine(baseOutDir, content));
-                    copiedContentFiles.Add(content);
+                    bool within;
+                    var fullDestPath = NormalizePath(content, baseOutDir, out within);
+                    if (within)
+                    {
+                        copyFileIfNotExists(fullContentPath, fullDestPath);
+                        copiedContentFiles.Add(content);
+                    }
                 }
             }
         }
@@ -633,6 +638,17 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             }
         }
 
+        private String NormalizePath(String path)
+        {
+            bool withinPath;
+            var normalized = NormalizePath(path, projectPath, out withinPath);
+            if (!withinPath)
+            {
+                throw new NotSupportedException("Cannot read from directory outside of the defined project paths.");
+            }
+            return normalized;
+        }
+
         /// <summary>
         /// Get the full path of path in the project directory.
         /// The file does not need to exist, and this function does not check for that.
@@ -643,17 +659,19 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// the path. By making sure to call NormalizePath first paths can be checked for safety.
         /// </exception>
         /// <returns>The normalized path or null if the path does not exist inside this file finder's folder.</returns>
-        private String NormalizePath(String path)
+        private static String NormalizePath(String path, String rootPath, out bool withinPath)
         {
+            //Remove path roots ~/ or ~\
+            if(path.Length > 1 && path[0] == '~' && (path[1] == '\\' || path[1] == '/'))
+            {
+                path = path.Substring(2);
+            }
             path = path.TrimStartingPathChars();
-            var fullPath = Path.GetFullPath(Path.Combine(projectPath, path));
+            var fullRootPath = Path.GetFullPath(rootPath);
+            var fullPath = Path.GetFullPath(Path.Combine(fullRootPath, path));
             //This next line seems weird, but it handles the path having being something like c:\safepath\..\windows\criticalfile.xml
             //When GetFullPath processes that it will be c:\windows\criticalfile.xml, which we then want to deny access to.
-            var withinPath = fullPath.StartsWith(projectPath + Path.DirectorySeparatorChar) || fullPath == projectPath;
-            if (!withinPath)
-            {
-                throw new NotSupportedException("Cannot read from directory outside of the defined project paths.");
-            }
+            withinPath = fullPath.StartsWith(fullRootPath + Path.DirectorySeparatorChar) || fullPath == fullRootPath;
             return fullPath;
         }
 

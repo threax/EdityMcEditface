@@ -42,6 +42,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
 
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(environment);
             dr.addTransform(new HashTreeMenus(fileFinder));
+            dr.addTransform(new ExpandRootedPaths(siteRoot));
             if (!String.IsNullOrEmpty(siteRoot))
             {
                 dr.addTransform(new FixRelativeUrls(siteRoot));

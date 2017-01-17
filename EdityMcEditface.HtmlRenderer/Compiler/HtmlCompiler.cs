@@ -20,7 +20,10 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             this.fileFinder = fileFinder;
             this.outDir = outDir;
             this.layout = layout;
-            settings.TryGetValue("siteRoot", out this.siteRoot);
+            if(!settings.TryGetValue("siteRoot", out this.siteRoot))
+            {
+                siteRoot = "";
+            }
         }
 
         public void buildPage(String relativeFile)
@@ -35,18 +38,18 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             }
 
             TargetFileInfo fileInfo = new TargetFileInfo(relativeFile);
-            TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
+            TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project, siteRoot);
             PageStack pageStack = new PageStack(environment, fileFinder);
             pageStack.ContentFile = fileInfo.HtmlFile;
             pageStack.pushLayout(layout);
 
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(environment);
             dr.addTransform(new HashTreeMenus(fileFinder));
-            dr.addTransform(new ExpandRootedPaths(siteRoot));
             if (!String.IsNullOrEmpty(siteRoot))
             {
                 dr.addTransform(new FixRelativeUrls(siteRoot));
             }
+            dr.addTransform(new ExpandRootedPaths(siteRoot)); //Expand paths after fixing relative urls, this way we don't double fix a path
             var document = dr.getDocument(pageStack.Pages);
             var outDir = Path.GetDirectoryName(outFile);
             if (!Directory.Exists(outDir))

@@ -5,6 +5,10 @@ import { CacheBuster } from 'hr.cachebuster';
 import { WindowFetch } from 'hr.windowfetch';
 import { WithCredentialsFetcher } from 'edity.editorcore.WithCredentialsFetcher';
 
+interface PageSettings {
+    baseUrl;
+}
+
 export class PageStart {
     //Configuration
     private fetcher: Fetcher;
@@ -20,6 +24,10 @@ export class PageStart {
     }
 
     get BaseUrl(): string {
+        var pageSettings = <PageSettings>(<any>window).editPageSettings;
+        if (pageSettings) {
+            return pageSettings.baseUrl;
+        }
         return "";
     }
 }

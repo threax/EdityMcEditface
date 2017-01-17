@@ -14,10 +14,12 @@ namespace EdityMcEditface.HtmlRenderer
         private String docLink;
         private EdityProject project;
         private PageDefinition pageDefinition = new PageDefinition();
+        private String pathBase;
 
-        public TemplateEnvironment(String docLink, EdityProject project)
+        public TemplateEnvironment(String docLink, EdityProject project, String pathBase)
         {
-            this.docLink = "/" + docLink;
+            this.pathBase = pathBase;
+            this.docLink = docLink.EnsureStartingPathSlash();
             this.project = project;
             linkedContent.mergeEntries(project.ContentMap);
         }
@@ -44,9 +46,10 @@ namespace EdityMcEditface.HtmlRenderer
             
             if (!vars.ContainsKey("editorRoot"))
             {
-                vars.Add("editorRoot", "/");
+                vars.Add("editorRoot", pathBase);
             }
             vars["docLink"] = docLink;
+            vars["pathBase"] = pathBase;
 
             List<LinkedContentEntry> links = new List<LinkedContentEntry>(linkedContent.buildResourceList(findLinkedContent(pages.Select(p => p.PageDefinition))));
             vars["css"] = linkedContent.renderCss(links, pages.Where(p => p.PageCssPath != null).Select(p => "~" + p.PageCssPath));

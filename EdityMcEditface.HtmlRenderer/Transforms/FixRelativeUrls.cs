@@ -28,7 +28,9 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
             foreach (var node in document.DocumentNode.Select($"[{attr}]"))
             {
                 var path = node.GetAttributeValue(attr, "");
-                if (path.Length == 0 || path[0] == '\\' || path[0] == '/')
+                bool singleSlash = path.Length > 0 && (path[0] == '\\' || path[0] == '/');
+                bool doubleSlash = path.Length > 1 && ((path[0] == '\\' && path[1] == '\\') || (path[0] == '/' && path[1] == '/'));
+                if (singleSlash && !doubleSlash)
                 {
                     node.SetAttributeValue(attr, baseUrl + path);
                 }

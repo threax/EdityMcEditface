@@ -2,63 +2,63 @@
   "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
   "contentMap": {
     "jsns": {
-      "js": [ { "file": "/lib/jsns.js" } ]
+      "js": [ { "file": "~/lib/jsns.js" } ]
     },
     "transitions": {
-      "css": [ "/lib/edity/css/fade.css" ]
+      "css": [ "~/lib/edity/css/fade.css" ]
     },
     "bootstrap-native": {
-      "js": [ { "file": "/lib/HtmlRapierBootstrap.js" } ],
+      "js": [ { "file": "~/lib/HtmlRapierBootstrap.js" } ],
       "dependencies": [ "transitions", "jsns", "HtmlRapier" ]
     },
     "bootstrap": {
-      "css": [ "/lib/bootstrap/dist/css/bootstrap-custom.css" ],
+      "css": [ "~/lib/bootstrap/dist/css/bootstrap-custom.css" ],
       "dependencies": [ "bootstrap-native" ]
     },
     "diff_match_patch": {
-      "js": [ { "file": "/edity/lib/diff_match_patch/diff_match_patch.js" } ]
+      "js": [ { "file": "~/edity/lib/diff_match_patch/diff_match_patch.js" } ]
     },
     "codemirror": {
       "js": [
-        { "file": "/edity/lib/codemirror/lib/codemirror.js" }
+        { "file": "~/edity/lib/codemirror/lib/codemirror.js" }
       ],
-      "css": [ "/edity/lib/codemirror/lib/codemirror.css" ]
+      "css": [ "~/edity/lib/codemirror/lib/codemirror.css" ]
     },
     "codemirror-html": {
       "js": [
-        { "file": "/edity/lib/codemirror/mode/xml/xml.js" },
-        { "file": "/edity/lib/codemirror/mode/css/css.js" },
-        { "file": "/edity/lib/codemirror/mode/javascript/javascript.js" },
-        { "file": "/edity/lib/codemirror/mode/htmlmixed/htmlmixed.js" }
+        { "file": "~/edity/lib/codemirror/mode/xml/xml.js" },
+        { "file": "~/edity/lib/codemirror/mode/css/css.js" },
+        { "file": "~/edity/lib/codemirror/mode/javascript/javascript.js" },
+        { "file": "~/edity/lib/codemirror/mode/htmlmixed/htmlmixed.js" }
       ],
-      "css": [ "/edity/lib/codemirror/theme/edity.css" ],
+      "css": [ "~/edity/lib/codemirror/theme/edity.css" ],
       "dependencies": [ "codemirror" ]
     },
     "codemirror-merge": {
       "js": [
-        { "file": "/edity/lib/codemirror/addon/merge/merge.js" }
+        { "file": "~/edity/lib/codemirror/addon/merge/merge.js" }
       ],
-      "css": [ "/edity/lib/codemirror/addon/merge/merge.css" ],
+      "css": [ "~/edity/lib/codemirror/addon/merge/merge.css" ],
       "dependencies": [ "codemirror-html", "diff_match_patch" ]
     },
     "ckeditor": {
-      "js": [ { "file": "/edity/lib/ckeditor/ckeditor.js" } ]
+      "js": [ { "file": "~/edity/lib/ckeditor/ckeditor.js" } ]
     },
     "edityLoading": {
-      "css": [ "/lib/edity/css/loading.css" ]
+      "css": [ "~/lib/edity/css/loading.css" ]
     },
     "HtmlRapier": {
       "js": [
         {
-          "file": "/lib/polyfill.js",
+          "file": "~/lib/polyfill.js",
           "async": false
         },
         {
-          "file": "/lib/HtmlRapier.js",
+          "file": "~/lib/HtmlRapier.js",
           "async": true
         },
         {
-          "file": "/lib/HtmlRapierWidgets.js",
+          "file": "~/lib/HtmlRapierWidgets.js",
           "async": true
         }
       ],
@@ -68,7 +68,7 @@
       ]
     },
     "Services": {
-      "js": [ { "file": "/edity/lib/EditorCore.js" } ],
+      "js": [ { "file": "~/edity/lib/EditorCore.js" } ],
       "dependencies": [ "HtmlRapier" ]
     },
     "GitService": {
@@ -85,11 +85,11 @@
     }
   },
   "vars": {
-    "uploadUrl": "/edity/upload",
-    "pageSettingsUrl": "/edity/page/settings",
-    "deletePageUrl": "/edity/Page",
-    "mediaBrowseDir": "/",
-    "pageTemplateUrl": "/edity/templates"
+    "uploadUrl": "~/edity/upload",
+    "pageSettingsUrl": "~/edity/page/settings",
+    "deletePageUrl": "~/edity/Page",
+    "mediaBrowseDir": "~/",
+    "pageTemplateUrl": "~/edity/templates"
   },
   "additionalContent": [ "lib/bootstrap/dist/fonts" ],
   "compilers": [

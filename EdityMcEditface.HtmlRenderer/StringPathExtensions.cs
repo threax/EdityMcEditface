@@ -27,7 +27,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns></returns>
         public static String EnsureStartingPathSlash(this String input, char separatorChar = '/')
         {
-            if (input[0] != '\\' && input[0] != '/')
+            if (input.Length == 0 || (input[0] != '\\' && input[0] != '/'))
             {
                 return separatorChar + input;
             }

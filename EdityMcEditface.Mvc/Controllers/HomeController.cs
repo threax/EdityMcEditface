@@ -109,6 +109,7 @@ namespace EdityMcEditface.Mvc.Controllers
             dr.addTransform(new CreateSettingsForm());
             dr.addTransform(new CreateTreeMenuEditor());
             dr.addTransform(new HashTreeMenus(fileFinder));
+            dr.addTransform(new ExpandRootedPaths(this.HttpContext.Request.PathBase));
             pageStack.pushLayout("edit.html");
             pageStack.pushLayout("default.html");
             foreach (var editStackItem in fileFinder.Project.EditComponents)
@@ -124,6 +125,7 @@ namespace EdityMcEditface.Mvc.Controllers
         {
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);
             dr.addTransform(new HashTreeMenus(fileFinder));
+            dr.addTransform(new ExpandRootedPaths(this.HttpContext.Request.PathBase));
             pageStack.pushLayout(layout);
             return build(pageStack, dr);
         }

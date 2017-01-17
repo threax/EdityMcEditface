@@ -64,7 +64,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [HttpPost]
         public async Task Upload([FromQuery] String file, IFormFile content)
         {
-            TargetFileInfo fileInfo = new TargetFileInfo(file);
+            TargetFileInfo fileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
             using (Stream stream = fileFinder.WriteFile(fileInfo.DerivedFileName))
             {
                 await content.CopyToAsync(stream);
@@ -79,7 +79,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [HttpDelete]
         public void Delete([FromQuery] String file)
         {
-            TargetFileInfo fileInfo = new TargetFileInfo(file);
+            TargetFileInfo fileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
             if (fileInfo.PointsToHtmlFile)
             {
                 fileFinder.ErasePage(fileInfo.HtmlFile);

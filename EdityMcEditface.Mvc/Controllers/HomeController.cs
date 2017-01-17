@@ -33,7 +33,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [HttpGet]
         public IActionResult Index(String file)
         {
-            targetFileInfo = new TargetFileInfo(file);
+            targetFileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
             templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder.Project, HttpContext.Request.PathBase);
             PageStack pageStack = new PageStack(templateEnvironment, fileFinder);
             pageStack.ContentFile = targetFileInfo.HtmlFile;
@@ -62,7 +62,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [HttpGet]
         public IActionResult Preview(String file)
         {
-            targetFileInfo = new TargetFileInfo(file);
+            targetFileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
             templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder.Project, HttpContext.Request.PathBase);
             PageStack pageStack = new PageStack(templateEnvironment, fileFinder);
             pageStack.ContentFile = targetFileInfo.HtmlFile;

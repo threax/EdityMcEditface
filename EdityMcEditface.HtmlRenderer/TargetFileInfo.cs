@@ -19,9 +19,16 @@ namespace EdityMcEditface.HtmlRenderer
         /// Use the specified file as the actual page. This must be called before
         /// most other functions will do anything useful.
         /// </summary>
-        /// <param name="file"></param>
-        public TargetFileInfo(String file)
+        /// <param name="file">The file name to lookup.</param>
+        /// <param name="pathBase">The path base, will be removed from the file name if not null.</param>
+        public TargetFileInfo(String file, String pathBase)
         {
+            //Remove path base
+            if(pathBase != null && file != null && file.StartsWith(pathBase, StringComparison.InvariantCultureIgnoreCase))
+            {
+                file = file.Substring(pathBase.Length);
+            }
+
             file = detectIndexFile(file);
             originalFileName = file;
 

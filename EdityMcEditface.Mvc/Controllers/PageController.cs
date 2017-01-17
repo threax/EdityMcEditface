@@ -38,7 +38,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [HttpGet]
         public PageSettings GetSettings([FromQuery] String page)
         {
-            TargetFileInfo targetFile = new TargetFileInfo(page);
+            TargetFileInfo targetFile = new TargetFileInfo(page, HttpContext.Request.PathBase);
             var definition = fileFinder.GetProjectPageDefinition(targetFile);
             String title;
             if(!definition.Vars.TryGetValue("title", out title))
@@ -60,7 +60,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [AutoValidate("Cannot update page settings.")]
         public void UpdateSettings([FromQuery] String page, [FromBody]PageSettings settings)
         {
-            TargetFileInfo targetFile = new TargetFileInfo(page);
+            TargetFileInfo targetFile = new TargetFileInfo(page, HttpContext.Request.PathBase);
             var definition = fileFinder.GetProjectPageDefinition(targetFile);
             definition.Vars["title"] = settings.Title;
             fileFinder.SavePageDefinition(definition, targetFile);
@@ -74,7 +74,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [HttpPut]
         public async Task Save([FromQuery] String page, IFormFile content)
         {
-            TargetFileInfo fileInfo = new TargetFileInfo(page);
+            TargetFileInfo fileInfo = new TargetFileInfo(page, HttpContext.Request.PathBase);
             if (fileInfo.IsProjectFile)
             {
                 throw new ValidationException("Cannot update project files with the save function.");
@@ -92,7 +92,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [HttpDelete]
         public void Delete([FromQuery] String page)
         {
-            TargetFileInfo fileInfo = new TargetFileInfo(page);
+            TargetFileInfo fileInfo = new TargetFileInfo(page, HttpContext.Request.PathBase);
             if (fileInfo.IsProjectFile)
             {
                 throw new ValidationException("Cannot delete project files with the delete function.");
@@ -117,7 +117,7 @@ namespace EdityMcEditface.Mvc.Controllers
 
             try
             {
-                TargetFileInfo fileInfo = new TargetFileInfo(page);
+                TargetFileInfo fileInfo = new TargetFileInfo(page, HttpContext.Request.PathBase);
                 string autoFileFolder = "AutoUploads";
                 var autoFileFile = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
                 var autoPath = Path.Combine(autoFileFolder, autoFileFile);
@@ -128,11 +128,7 @@ namespace EdityMcEditface.Mvc.Controllers
 
                 imageResponse.Uploaded = 1;
                 imageResponse.FileName = autoFileFile;
-                if (autoPath[0] != '\\' && autoPath[0] != '/')
-                {
-                    autoPath = '/' + autoPath;
-                }
-                imageResponse.Url = autoPath;
+                imageResponse.Url = HttpContext.Request.PathBase + autoPath.EnsureStartingPathSlash();
             }
             catch (Exception ex)
             {

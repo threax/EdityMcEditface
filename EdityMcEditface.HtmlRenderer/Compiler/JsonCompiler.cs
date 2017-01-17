@@ -37,7 +37,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             }
             outFile = Path.ChangeExtension(outFile, extension);
 
-            TargetFileInfo fileInfo = new TargetFileInfo(relativeFile);
+            TargetFileInfo fileInfo = new TargetFileInfo(relativeFile, null);
             TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project, "");
             PageStack pageStack = new PageStack(environment, fileFinder);
             pageStack.ContentFile = fileInfo.HtmlFile;

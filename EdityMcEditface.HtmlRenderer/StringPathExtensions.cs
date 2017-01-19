@@ -33,5 +33,20 @@ namespace EdityMcEditface.HtmlRenderer
             }
             return input;
         }
+
+        /// <summary>
+        /// Ensure that the path starts with a / or \. If a character needs to be added it will add separatorChar.
+        /// </summary>
+        /// <param name="input">The string to modify.</param>
+        /// <param name="separatorChar">The separator char to add.</param>
+        /// <returns></returns>
+        public static String EnsureTrailingPathSlash(this String input, char separatorChar = '/')
+        {
+            if (input.Length == 0 || (input[input.Length - 1] != '\\' && input[input.Length - 1] != '/'))
+            {
+                return input + separatorChar;
+            }
+            return input;
+        }
     }
 }

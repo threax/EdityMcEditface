@@ -40,8 +40,23 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         public bool OnList(String path)
         {
             var normalized = Path.GetFullPath(path.EnsureStartingPathSlash());
-            return files.Any(i => normalized.Equals(i, StringComparison.InvariantCultureIgnoreCase))
-                || dirs.Any(i => normalized.StartsWith(i));
+            foreach(var dir in dirs)
+            {
+                if(normalized.StartsWith(dir, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if(normalized.Length == dir.Length)
+                    {
+                        return true;
+                    }
+
+                    //Make sure the next character in the input string is a separator, or else this is not correct.
+                    var testChar = normalized[dir.Length];
+                    return testChar == '\\' || testChar == '/';
+                }
+            }
+
+            //No dir match, check files
+            return files.Any(i => normalized.Equals(i, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

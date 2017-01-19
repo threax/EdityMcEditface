@@ -24,10 +24,7 @@ namespace EdityMcEditface.HtmlRenderer
         public TargetFileInfo(String file, String pathBase)
         {
             //Remove path base
-            if(pathBase != null && file != null && file.StartsWith(pathBase, StringComparison.InvariantCultureIgnoreCase))
-            {
-                file = file.Substring(pathBase.Length);
-            }
+            file = RemovePathBase(file, pathBase);
 
             file = detectIndexFile(file);
             originalFileName = file;
@@ -183,6 +180,16 @@ namespace EdityMcEditface.HtmlRenderer
             }
 
             return file;
+        }
+
+        public static string RemovePathBase(string path, string pathBase)
+        {
+            if (pathBase != null && path != null && path.StartsWith(pathBase, StringComparison.InvariantCultureIgnoreCase))
+            {
+                path = path.Substring(pathBase.Length);
+            }
+
+            return path;
         }
     }
 }

@@ -23,7 +23,7 @@
             </div>
             <div data-hr-toggle="main" data-hr-style-off="display:none;">
                 <div class="modal-body">
-                    <ol class="filebrowser-directory-list" data-hr-model="directories" data-hr-model-src="/edity/list">
+                    <ol class="filebrowser-directory-list" data-hr-model="directories" data-hr-model-src="~/edity/list">
                         <template>
                             <li data-hr-on-click="changeDirectory">{{name}}</li>
                         </template>
@@ -35,7 +35,7 @@
                     </ol>
                 </div>
                 <div class="modal-footer">
-                    <form class="form-inline" data-hr-on-submit="upload" data-hr-model="upload" data-hr-model-src="edity/upload">
+                    <form class="form-inline" data-hr-on-submit="upload" data-hr-model="upload" data-hr-model-src="~/edity/upload">
                         <div class="form-group">
                             <label for="file">Choose File</label>
                             <input name="file" type="file" class="form-control" />

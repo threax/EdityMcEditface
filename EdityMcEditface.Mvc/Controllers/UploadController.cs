@@ -47,6 +47,8 @@ namespace EdityMcEditface.Mvc.Controllers
                 dir = "";
             }
 
+            dir = TargetFileInfo.RemovePathBase(dir, HttpContext.Request.PathBase);
+
             return new FileList
             {
                 Directories = fileFinder.EnumerateContentDirectories(dir),

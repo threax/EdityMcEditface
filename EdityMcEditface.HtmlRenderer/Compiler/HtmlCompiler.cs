@@ -45,11 +45,12 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
 
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(environment);
             dr.addTransform(new HashTreeMenus(fileFinder));
+            dr.addTransform(new ExpandRootedPaths(siteRoot));
             if (!String.IsNullOrEmpty(siteRoot))
             {
+                //Safe to fix relative urls last since it wont replace any that already start with the site root.
                 dr.addTransform(new FixRelativeUrls(siteRoot));
             }
-            dr.addTransform(new ExpandRootedPaths(siteRoot)); //Expand paths after fixing relative urls, this way we don't double fix a path
             var document = dr.getDocument(pageStack.Pages);
             var outDir = Path.GetDirectoryName(outFile);
             if (!Directory.Exists(outDir))

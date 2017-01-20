@@ -5,6 +5,7 @@ import * as controller from "hr.controller";
 import * as navmenu from "edity.editorcore.navmenu";
 import * as toggles from "hr.toggles";
 import * as GitService from "edity.editorcore.GitService";
+import * as saveService from "edity.editorcore.SaveService";
 
 var currentRowCreatedCallback;
 
@@ -30,7 +31,10 @@ class NavButtonController {
     }
 
     commit() {
-        commitController.startCommit();
+        saveService.saveNow()
+        .then(r => {
+            commitController.startCommit();
+        })
     }
 }
 

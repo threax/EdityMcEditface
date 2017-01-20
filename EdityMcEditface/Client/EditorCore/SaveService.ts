@@ -21,7 +21,7 @@ function doSave() {
     outstandingSaveRequest = false;
     allowSave = false;
     saveStartedEventHandler.fire(null);
-    saveEventHandler.fire(null)
+    return saveEventHandler.fire(null)
         .then(function (data) {
             saveCompletedEventHandler.fire(null);
             finishSave();
@@ -43,13 +43,14 @@ export function requestSave() {
     }
 }
 
-export function saveNow() {
+export function saveNow() : Promise<void> {
     saveTrigger.cancel();
     if (allowSave) {
-        doSave();
+        return doSave();
     }
     else {
         saveAgainWhenSaveCompleted = true;
+        return Promise.resolve<void>();
     }
 }
 

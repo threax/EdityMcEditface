@@ -111,7 +111,8 @@ PageStart.init().then(config => {
         })[0];
 
     class NavButtonController {
-        open() {
+        open(evt) {
+            evt.preventDefault();
             pageSettingsInstance.open();
         }
     }

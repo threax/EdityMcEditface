@@ -93,7 +93,8 @@ class SyncController {
 var syncInstance = controller.create<SyncController, void, void>("sync", SyncController)[0];
 
 class NavButtonController {
-    sync() {
+    sync(evt) {
+        evt.preventDefault();
         syncInstance.startSync();
     }
 }

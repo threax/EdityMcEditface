@@ -14,7 +14,8 @@ class NavButtonController {
         this.controller = controller;
     }
 
-    history() {
+    history(evt) {
+        evt.preventDefault();
         this.controller.showHistory();
     }
 }

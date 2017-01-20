@@ -111,7 +111,8 @@ class NavButtonController {
         this.mediaControllerInstance = mediaControllerInstance;
     }
 
-    loadMedia() {
+    loadMedia(evt) {
+        evt.preventDefault();
         this.mediaControllerInstance.loadMedia(this.bindings.getModel("browse").getSrc());
     }
 }

@@ -30,7 +30,8 @@ class NavButtonController {
 
     }
 
-    commit() {
+    commit(evt) {
+        evt.preventDefault();
         saveService.saveNow()
         .then(r => {
             commitController.startCommit();

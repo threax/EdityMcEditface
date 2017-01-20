@@ -40,7 +40,8 @@ class EditSourceController {
 var editSourceController = controller.create<EditSourceController, void, void>("editSource", EditSourceController)[0];
 
 class NavItemController {
-    edit() {
+    edit(evt) {
+        evt.preventDefault();
         editSourceController.startEdit();
     }
 }

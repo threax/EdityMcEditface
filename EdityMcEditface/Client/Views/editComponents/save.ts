@@ -32,5 +32,4 @@ class SaveController {
 PageStart.init().then(config => {
     var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
     editMenu.add("SaveButton", SaveController);
-    editMenu.add("PreviewButton");
 });

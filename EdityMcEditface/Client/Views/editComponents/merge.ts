@@ -34,8 +34,8 @@ class MergeController {
     private savePath;
 
     constructor(bindings: controller.BindingCollection) {
-        var dialog = bindings.getToggle('dialog');
-        var mergeModel = bindings.getModel('merge');
+        this.dialog = bindings.getToggle('dialog');
+        this.mergeModel = bindings.getModel('merge');
 
         GitService.determineCommitVariantEvent.add((d) => this.mergeVariant(d));
     }

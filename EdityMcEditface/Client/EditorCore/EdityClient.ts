@@ -5,6 +5,8 @@
 // </auto-generated>
 //----------------------
 
+import { Fetcher, RequestInfo, RequestInit, Response } from 'hr.Fetcher';
+
 export class CompileClient {
     private static jsonMimeType = "application/json";
     private baseUrl: string;
@@ -13,7 +15,7 @@ export class CompileClient {
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
         this.baseUrl = baseUrl ? baseUrl : "";
-        this.http = http ? http : window;
+        this.http = http ? http : <any>window;
     }
 
     parseResult<T>(response: Response, data: string, jsonParseReviver: (key: string, value: any) => any): T | string {
@@ -117,7 +119,7 @@ export class GitClient {
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
         this.baseUrl = baseUrl ? baseUrl : "";
-        this.http = http ? http : window;
+        this.http = http ? http : <any>window;
     }
 
     parseResult<T>(response: Response, data: string, jsonParseReviver: (key: string, value: any) => any): T | string {
@@ -719,7 +721,7 @@ export class PageClient {
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
         this.baseUrl = baseUrl ? baseUrl : "";
-        this.http = http ? http : window;
+        this.http = http ? http : <any>window;
     }
 
     parseResult<T>(response: Response, data: string, jsonParseReviver: (key: string, value: any) => any): T | string {
@@ -961,7 +963,7 @@ export class ShutdownClient {
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
         this.baseUrl = baseUrl ? baseUrl : "";
-        this.http = http ? http : window;
+        this.http = http ? http : <any>window;
     }
 
     parseResult<T>(response: Response, data: string, jsonParseReviver: (key: string, value: any) => any): T | string {
@@ -1023,7 +1025,7 @@ export class TemplateClient {
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
         this.baseUrl = baseUrl ? baseUrl : "";
-        this.http = http ? http : window;
+        this.http = http ? http : <any>window;
     }
 
     parseResult<T>(response: Response, data: string, jsonParseReviver: (key: string, value: any) => any): T | string {
@@ -1127,7 +1129,7 @@ export class UploadClient {
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
         this.baseUrl = baseUrl ? baseUrl : "";
-        this.http = http ? http : window;
+        this.http = http ? http : <any>window;
     }
 
     parseResult<T>(response: Response, data: string, jsonParseReviver: (key: string, value: any) => any): T | string {

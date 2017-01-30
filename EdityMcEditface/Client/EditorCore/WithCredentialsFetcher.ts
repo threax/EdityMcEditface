@@ -1,4 +1,4 @@
-﻿import { Fetcher } from 'hr.Fetcher';
+﻿import { Fetcher, RequestInfo, RequestInit, Response } from 'hr.Fetcher';
 
 /**
  * A fetcher that adds credentials.

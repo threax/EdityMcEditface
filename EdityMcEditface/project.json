@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "Threax.AspNetCore.Swashbuckle.Convention": "1.10.2",
     "Microsoft.AspNetCore.Antiforgery": "1.1.0",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.1.0",
     "Microsoft.AspNetCore.Diagnostics": "1.1.0",

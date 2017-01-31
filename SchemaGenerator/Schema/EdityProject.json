@@ -149,12 +149,10 @@
       "type": "string",
       "x-enumNames": [
         "Html",
-        "Pdf",
         "Json"
       ],
       "enum": [
         "Html",
-        "Pdf",
         "Json"
       ],
       "description": ""

@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IO;
-using Swashbuckle.Swagger.Model;
 using EdityMcEditface.Mvc.Config;
 using EdityMcEditface.Mvc;
 
@@ -23,14 +22,6 @@ namespace EdityMcEditface
         /// The file for project settings shared across all users for an edity project.
         /// </summary>
         public static String EdityProjectSettingsFile { get; set; } = "Config/edityserver.json";
-
-        private Info info = new Info
-        {
-            Version = "v1",
-            Title = "Edity McEdiface API",
-            Description = "The API for Edity McEdiface",
-            TermsOfService = "None"
-        };
 
         private String runningFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         private IHostingEnvironment env;
@@ -115,11 +106,6 @@ namespace EdityMcEditface
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddEdity(EditySettings, ProjectConfiguration);
-
-            if (env.IsEnvironment("Development"))
-            {
-                services.AddConventionalSwagger(info);
-            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -145,11 +131,6 @@ namespace EdityMcEditface
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-            }
-
-            if (env.IsEnvironment("Development"))
-            {
-                app.UseConventionalSwagger(info);
             }
 
             app.UseEdity();

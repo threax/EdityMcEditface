@@ -6,7 +6,7 @@
     "NETStandard.Library": "1.6.1",
     "LibGit2Sharp": "0.22.0",
     "Threax.AspNetCore.ExceptionToJson": "1.8.0",
-    "Microsoft.AspNetCore.Mvc": "1.1.0",
+    "Microsoft.AspNetCore.Mvc": "1.1.1",
     "Microsoft.AspNetCore.StaticFiles": "1.1.0"
   },
 

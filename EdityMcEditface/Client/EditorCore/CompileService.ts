@@ -1,7 +1,7 @@
 ﻿import * as EdityClient from 'edity.editorcore.EdityClient';
-import * as PageStart from 'edity.editorcore.EditorPageStart';
 import * as event from 'hr.eventdispatcher';
 import { ExternalPromise } from 'hr.externalpromise';
+import * as fetcher from 'hr.fetcher';
 
 export class CompilerServiceEventArgs {
     service: CompilerService;
@@ -40,8 +40,8 @@ export interface CompilerPhase {
 class PrimaryCompilePhase implements CompilerPhase {
     private compileClient: EdityClient.CompileClient;
 
-    constructor(pageStart: PageStart.EditorPageStart) {
-        this.compileClient = new EdityClient.CompileClient(pageStart.BaseUrl, pageStart.Fetcher);
+    constructor(compilerBaseUrl: string, fetcher: fetcher.Fetcher) {
+        this.compileClient = new EdityClient.CompileClient(compilerBaseUrl, fetcher);
     }
 
     execute(arg: CompilerServiceEventArgs) {
@@ -64,8 +64,8 @@ export class CompilerService {
 
     private phases: CompilerPhase[] = [];
 
-    constructor(pageStart: PageStart.EditorPageStart) {
-        this.phases.push(new PrimaryCompilePhase(pageStart));
+    constructor(compilerBaseUrl: string, fetcher: fetcher.Fetcher) {
+        this.phases.push(new PrimaryCompilePhase(compilerBaseUrl, fetcher));
     }
 
     public compile(): Promise<any> {

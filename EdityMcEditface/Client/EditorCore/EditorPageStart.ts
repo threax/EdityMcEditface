@@ -19,7 +19,7 @@ export class EditorPageStart {
     constructor() {
         bootstrap.activate();
         this.fetcher = new WithCredentialsFetcher(new CacheBuster(new WindowFetch()));
-        this.compilerService = new CompilerService(this);
+        this.compilerService = new CompilerService(this.BaseUrl, this.Fetcher);
     }
 
     get Fetcher(): Fetcher {

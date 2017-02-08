@@ -123,12 +123,26 @@ module.exports = function (rootDir, libDir, viewBaseDir, editylibDir, settings) 
     compileTypescript({
         libs: [
             __dirname + "/EditorCore/**/*.ts",
+            "!" + __dirname + "/EditorCore/EditorPageStart.ts",
         ],
         runners: ["edity.config"],
         dest: editylibDir,
         sourceRoot: __dirname + "/EditorCore/",
         namespace: "edity.editorcore",
         output: "EditorCore",
+        concat: settings.concat,
+        minify: settings.minify
+    });
+
+    compileTypescript({
+        libs: [
+            __dirname + "/EditorCore/EditorPageStart.ts",
+        ],
+        runners: null,
+        dest: editylibDir,
+        sourceRoot: __dirname + "/EditorCore/",
+        namespace: "edity.editorcore",
+        output: "EditorCorePageStart",
         concat: settings.concat,
         minify: settings.minify
     });

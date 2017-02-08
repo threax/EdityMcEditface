@@ -9,7 +9,7 @@ interface PageSettings {
     baseUrl;
 }
 
-export class PageStart {
+export class EditorPageStart {
     //Configuration
     private fetcher: Fetcher;
 
@@ -32,14 +32,14 @@ export class PageStart {
     }
 }
 
-var instance: PageStart = null;
+var instance: EditorPageStart = null;
 /**
  * Set up common config for the page to run.
  * @returns
  */
-export function init(): Promise<PageStart> {
+export function init(): Promise<EditorPageStart> {
     if (instance === null) {
-        instance = new PageStart();
+        instance = new EditorPageStart();
     }
 
     return Promise.resolve(instance);

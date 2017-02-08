@@ -4,7 +4,7 @@ import * as storage from "hr.storage";
 import * as controller from "hr.controller";
 import * as navmenu from "edity.editorcore.navmenu";
 import * as pageService from "edity.editorcore.PageService";
-import * as PageStart from "edity.editorcore.PageStart";
+import * as PageStart from "edity.editorcore.EditorPageStart";
 
 PageStart.init().then(pageConfig => {
     var editor = undefined;

@@ -2,7 +2,7 @@
 
 import * as edityClient from 'edity.editorcore.EdityClient';
 import * as saveService from 'edity.editorcore.SaveService';
-import * as pageStart from 'edity.editorcore.PageStart';
+import * as pageStart from 'edity.editorcore.EditorPageStart';
 
 var sourceAccessor;
 var needsSave = false;

@@ -6,7 +6,7 @@ import { ActionEventDispatcher, FuncEventDispatcher } from 'hr.eventdispatcher';
 import { PagedClientData } from 'edity.editorcore.pageddata';
 import { CacheBuster } from 'hr.cachebuster';
 import { WindowFetch } from 'hr.windowfetch';
-import * as pageStart from 'edity.editorcore.PageStart';
+import * as pageStart from 'edity.editorcore.EditorPageStart';
 
 var host = "";
 var cacheBuster = new CacheBuster(new WindowFetch());

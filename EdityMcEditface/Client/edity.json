@@ -67,9 +67,13 @@
         "jsns"
       ]
     },
+    "EditorCoreStart": {
+      "js": [ { "file": "~/edity/lib/EditorCorePageStart.js" } ],
+      "dependencies": [ "HtmlRapier" ]
+    },
     "Services": {
       "js": [ { "file": "~/edity/lib/EditorCore.js" } ],
-      "dependencies": [ "HtmlRapier" ]
+      "dependencies": [ "EditorCoreStart" ]
     },
     "GitService": {
       "dependencies": [ "Services" ]

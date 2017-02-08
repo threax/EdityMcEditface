@@ -6,7 +6,7 @@ import * as storage from "hr.storage";
 import { PageClient, PageSettings } from "edity.editorcore.EdityClient";
 import * as navmenu from "edity.editorcore.navmenu";
 import * as Toggles from 'hr.toggles';
-import * as PageStart from 'edity.editorcore.PageStart';
+import * as PageStart from 'edity.editorcore.EditorPageStart';
 
 class DeletePageConfirmationController {
     private dialog;

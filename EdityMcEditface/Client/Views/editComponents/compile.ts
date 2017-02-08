@@ -5,7 +5,7 @@ import * as controller from "hr.controller";
 import * as toggles from "hr.toggles";
 import * as navmenu from "edity.editorcore.navmenu";
 import * as EdityClient from 'edity.editorcore.EdityClient';
-import * as PageStart from 'edity.editorcore.PageStart';
+import * as PageStart from 'edity.editorcore.EditorPageStart';
 
 class NavButtonController {
     compile(evt) {
@@ -29,7 +29,7 @@ class CompileController {
     private dialogToggle;
     private compileClient: EdityClient.CompileClient;
 
-    constructor(bindings: controller.BindingCollection, context: PageStart.PageStart) {
+    constructor(bindings: controller.BindingCollection, context: PageStart.EditorPageStart) {
         this.start = bindings.getToggle("start");
         this.success = bindings.getToggle("success");
         this.fail = bindings.getToggle("fail");
@@ -73,5 +73,5 @@ class CompileController {
 var compileController;
 
 PageStart.init().then((config) => {
-    compileController = controller.create<CompileController, PageStart.PageStart, void>('compile', CompileController, config)[0];
+    compileController = controller.create<CompileController, PageStart.EditorPageStart, void>('compile', CompileController, config)[0];
 });

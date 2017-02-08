@@ -5,12 +5,12 @@ import * as uploader from "edity.editorcore.uploader";
 import * as component from "hr.components";
 import * as domQuery from "hr.domquery";
 import * as controller from "hr.controller";
-import { init, PageStart } from 'edity.editorcore.PageStart';
+import { init, EditorPageStart } from 'edity.editorcore.EditorPageStart';
 import { TemplateClient, Template, PageClient } from "edity.editorcore.EdityClient";
 
 interface TemplateItemControllerSettings {
     config: NewPageControllerConfig;
-    pageConfig: PageStart,
+    pageConfig: EditorPageStart,
     templateClient: TemplateClient
     pageClient: PageClient
 }
@@ -51,7 +51,7 @@ interface NewPageControllerConfig {
 }
 
 class NewPageController {
-    constructor(bindings: controller.BindingCollection, context: PageStart) {
+    constructor(bindings: controller.BindingCollection, context: EditorPageStart) {
         var templatesModel = bindings.getModel<Template>('templates');
         var config = bindings.getConfig<NewPageControllerConfig>();
         var templateClient = new TemplateClient(context.BaseUrl, context.Fetcher);
@@ -74,5 +74,5 @@ class NewPageController {
 
 
 init().then((pageConfig) => {
-    controller.create<NewPageController, PageStart, void>("new", NewPageController, pageConfig);
+    controller.create<NewPageController, EditorPageStart, void>("new", NewPageController, pageConfig);
 });

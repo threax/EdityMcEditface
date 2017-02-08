@@ -7,7 +7,7 @@ import * as Iterable from "hr.iterable";
 import * as controller from "hr.controller";
 import * as navmenu from "edity.editorcore.navmenu";
 import * as EdityClient from 'edity.editorcore.EdityClient';
-import * as PageStart from 'edity.editorcore.PageStart';
+import * as PageStart from 'edity.editorcore.EditorPageStart';
 
 function getFileName(path) {
     return path.replace(/^.*?([^\\\/]*)$/, '$1');
@@ -123,7 +123,7 @@ class MediaController {
     private dialog;
     private uploadClient: EdityClient.UploadClient;
 
-    constructor(bindings: controller.BindingCollection, context: PageStart.PageStart) {
+    constructor(bindings: controller.BindingCollection, context: PageStart.EditorPageStart) {
         this.uploadClient = new EdityClient.UploadClient(context.BaseUrl, context.Fetcher);
         this.fileBrowser = new FileBrowser(bindings, this.uploadClient);
         this.uploadModel = bindings.getModel('upload');
@@ -153,7 +153,7 @@ class MediaController {
 }
 
 PageStart.init().then((config) => {
-    var mediaControllerInstance = controller.create<MediaController, PageStart.PageStart, void>("media", MediaController, config)[0];
+    var mediaControllerInstance = controller.create<MediaController, PageStart.EditorPageStart, void>("media", MediaController, config)[0];
 
     var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
     editMenu.add("MediaNavItem", NavButtonController, mediaControllerInstance);

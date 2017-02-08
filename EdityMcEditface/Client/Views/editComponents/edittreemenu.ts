@@ -6,7 +6,7 @@ import * as http from "hr.http";
 import * as TreeMenu from "hr.treemenu.TreeMenu";
 import * as saveService from "edity.editorcore.SaveService";
 import * as EdityClient from 'edity.editorcore.EdityClient';
-import * as PageStart from 'edity.editorcore.PageStart';
+import * as PageStart from 'edity.editorcore.EditorPageStart';
 import * as Iter from 'hr.iterable';
 
 var treeMenuEditors = {};

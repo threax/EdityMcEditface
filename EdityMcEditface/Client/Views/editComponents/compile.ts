@@ -6,6 +6,7 @@ import * as toggles from "hr.toggles";
 import * as navmenu from "edity.editorcore.navmenu";
 import * as EdityClient from 'edity.editorcore.EdityClient';
 import * as PageStart from 'edity.editorcore.EditorPageStart';
+import * as CompileService from 'edity.editorcore.CompileService';
 
 class NavButtonController {
     compile(evt) {
@@ -22,12 +23,13 @@ class CompileController {
     private success;
     private fail;
     private compiling;
-    private toggleGroup;
+    private toggleGroup: toggles.Group;
     private resultsModel;
     private changesModel;
     private infoModel;
     private dialogToggle;
     private compileClient: EdityClient.CompileClient;
+    private compileService: CompileService.CompilerService;
 
     constructor(bindings: controller.BindingCollection, context: PageStart.EditorPageStart) {
         this.start = bindings.getToggle("start");
@@ -40,19 +42,16 @@ class CompileController {
         this.infoModel = bindings.getModel('info');
         this.dialogToggle = bindings.getToggle('dialog');
         this.compileClient = new EdityClient.CompileClient(context.BaseUrl, context.Fetcher);
+        this.compileService = context.CompilerService;
+        this.compileService.onStarted.add(a => this.toggleGroup.activate(this.compiling));
+        this.compileService.onStatusUpdated.add(a => this.statusUpdated(a));
+        this.compileService.onFailed.add(a => this.toggleGroup.activate(this.fail));
+        this.compileService.onSuccess.add(a => this.toggleGroup.activate(this.success));
     }
 
     runCompiler(evt) {
         evt.preventDefault();
-        this.toggleGroup.activate(this.compiling);
-        this.compileClient.compile(null)
-            .then((data) => {
-                this.resultsModel.setData(data);
-                this.toggleGroup.activate(this.success);
-            })
-            .catch(() => {
-                this.toggleGroup.activate(this.fail);
-            });
+        this.compileService.compile();
     }
 
     startCompile() {
@@ -67,6 +66,10 @@ class CompileController {
             .catch((err) => {
                 this.toggleGroup.activate(this.fail);
             });
+    }
+
+    private statusUpdated(arg: CompileService.CompilerServiceStatusEventArgs){
+
     }
 }
 

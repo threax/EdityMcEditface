@@ -4,6 +4,7 @@ import { Fetcher } from 'hr.fetcher';
 import { CacheBuster } from 'hr.cachebuster';
 import { WindowFetch } from 'hr.windowfetch';
 import { WithCredentialsFetcher } from 'edity.editorcore.WithCredentialsFetcher';
+import { CompilerService } from 'edity.editorcore.CompileService';
 
 interface PageSettings {
     baseUrl;
@@ -12,11 +13,13 @@ interface PageSettings {
 export class EditorPageStart {
     //Configuration
     private fetcher: Fetcher;
+    private compilerService: CompilerService;
 
     //Page Start
     constructor() {
         bootstrap.activate();
         this.fetcher = new WithCredentialsFetcher(new CacheBuster(new WindowFetch()));
+        this.compilerService = new CompilerService(this);
     }
 
     get Fetcher(): Fetcher {
@@ -29,6 +32,10 @@ export class EditorPageStart {
             return pageSettings.baseUrl;
         }
         return "";
+    }
+
+    get CompilerService(): CompilerService {
+        return this.compilerService;
     }
 }
 

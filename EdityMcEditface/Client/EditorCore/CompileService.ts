@@ -45,8 +45,12 @@ class PrimaryCompilePhase implements CompilerPhase {
     }
 
     execute(arg: CompilerServiceEventArgs) {
-        arg.service.setStatus({ message: "Compiling" })
-        return this.compileClient.compile(null);
+        arg.service.setStatus({ message: "Publishing Website" })
+        return this.compileClient.compile(null)
+            .then(r => {
+                arg.service.setStatus({ message: "Website compiled in " + r.elapsedSeconds + " seconds." });
+                return r;
+            });
     }
 }
 

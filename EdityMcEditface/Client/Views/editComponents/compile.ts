@@ -15,6 +15,10 @@ class NavButtonController {
     }
 }
 
+interface StatusMessage {
+    message: string;
+}
+
 var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
 editMenu.add("CompileNavItem", NavButtonController);
 
@@ -30,6 +34,7 @@ class CompileController {
     private dialogToggle;
     private compileClient: EdityClient.CompileClient;
     private compileService: CompileService.CompilerService;
+    private statusModel: controller.Model<StatusMessage>;
 
     constructor(bindings: controller.BindingCollection, context: PageStart.EditorPageStart) {
         this.start = bindings.getToggle("start");
@@ -43,10 +48,11 @@ class CompileController {
         this.dialogToggle = bindings.getToggle('dialog');
         this.compileClient = new EdityClient.CompileClient(context.BaseUrl, context.Fetcher);
         this.compileService = context.CompilerService;
-        this.compileService.onStarted.add(a => this.toggleGroup.activate(this.compiling));
+        this.compileService.onStarted.add(a => this.compileStarted(a));
         this.compileService.onStatusUpdated.add(a => this.statusUpdated(a));
         this.compileService.onFailed.add(a => this.toggleGroup.activate(this.fail));
         this.compileService.onSuccess.add(a => this.toggleGroup.activate(this.success));
+        this.statusModel = bindings.getModel<StatusMessage>("status");
     }
 
     runCompiler(evt) {
@@ -55,6 +61,7 @@ class CompileController {
     }
 
     startCompile() {
+        this.statusModel.clear();
         this.toggleGroup.activate(this.compiling);
         this.dialogToggle.on();
         this.compileClient.status(null)
@@ -68,8 +75,13 @@ class CompileController {
             });
     }
 
-    private statusUpdated(arg: CompileService.CompilerServiceStatusEventArgs){
+    private compileStarted(arg: CompileService.CompilerServiceEventArgs) {
+        this.toggleGroup.activate(this.compiling);
+        this.statusModel.clear();
+    }
 
+    private statusUpdated(arg: CompileService.CompilerServiceStatusEventArgs) {
+        this.statusModel.appendData(arg.status);
     }
 }
 

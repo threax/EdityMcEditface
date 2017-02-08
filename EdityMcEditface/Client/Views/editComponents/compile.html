@@ -38,10 +38,28 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
+            <div data-hr-toggle="compiling" data-hr-style-off="display:none;">
+                <div class="modal-body">
+                    <div class="center">
+                        <div class="load-linebar center-block">
+                            <div class="rect1"></div>
+                            <div class="rect2"></div>
+                            <div class="rect3"></div>
+                            <div class="rect4"></div>
+                            <div class="rect5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-hr-model="status" class="modal-body">
+                <template>
+                    <p>{{message}}</p>
+                </template>
+            </div>
             <div data-hr-toggle="success" data-hr-style-off="display:none;">
                 <div class="modal-body">
                     <p data-hr-model="results">
-                        Website compiled in {{elapsedSeconds}} seconds and published.
+                        Website compiled and published.
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -53,20 +71,6 @@
                     <p>
                         An error occured while compiling the website.
                     </p>
-                </div>
-            </div>
-            <div data-hr-toggle="compiling" data-hr-style-off="display:none;">
-                <div class="modal-body">
-                    <div class="center">
-                        <div class="load-linebar center-block">
-                            <div class="rect1"></div>
-                            <div class="rect2"></div>
-                            <div class="rect3"></div>
-                            <div class="rect4"></div>
-                            <div class="rect5"></div>
-                        </div>
-                        <p>Working</p>
-                    </div>
                 </div>
             </div>
         </div>

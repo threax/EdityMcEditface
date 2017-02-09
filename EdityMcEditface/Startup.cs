@@ -33,13 +33,13 @@ namespace EdityMcEditface
             String siteRootPath = runningFolder;
             if (env.IsEnvironment("Development"))
             {
-                if (!Directory.Exists(Path.Combine(siteRootPath, "wwwroot")))
+                if (!Directory.Exists(Path.Combine(siteRootPath, "ClientBin")))
                 {
                     //Probably running inside the output folder, go up the appropriate number of directories
                     siteRootPath = Path.GetFullPath(Path.Combine(runningFolder, "../../../../"));
-                    if (!Directory.Exists(Path.Combine(siteRootPath, "wwwroot")))
+                    if (!Directory.Exists(Path.Combine(siteRootPath, "ClientBin")))
                     {
-                        throw new Exception("Cannot find site root folder containing a backup wwwroot folder");
+                        throw new Exception("Cannot find site root folder containing a ClientBin folder");
                     }
                 }
             }
@@ -87,8 +87,8 @@ namespace EdityMcEditface
                 { "OutputPath", Path.Combine(Directory.GetCurrentDirectory(), $"..\\{Path.GetFileName(Directory.GetCurrentDirectory())}-EdityOutput") },
                 { "SiteName", "" },
                 { "ProjectPath", defaultProjectPath },
-                { "EdityCorePath", Path.Combine(siteRootPath, "wwwroot/EdityMcEditface") },
-                { "SitePath", Path.Combine(siteRootPath, "wwwroot/Site") }
+                { "EdityCorePath", Path.Combine(siteRootPath, "ClientBin/EdityMcEditface") },
+                { "SitePath", Path.Combine(siteRootPath, "ClientBin/Site") }
             })
             .AddJsonFile(EdityProjectSettingsFile, optional: true, reloadOnChange: true)
             .AddJsonFile($"{Path.GetFileNameWithoutExtension(EdityProjectSettingsFile)}.{env.EnvironmentName}.json", optional: true);

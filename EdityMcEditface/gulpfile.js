@@ -11,7 +11,7 @@ var treeMenuBuild = require(__dirname + '/node_modules/htmlrapier.treemenu/build
 var edityClientBuild = require(__dirname + '/Client/build');
 var siteClientBuild = require(__dirname + '/Client/clientbuild');
 
-var webroot = __dirname + "/wwwroot";
+var webroot = __dirname + "/ClientBin";
 
 gulp.task("default",function () {
     build();

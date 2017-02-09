@@ -82,13 +82,13 @@ namespace EdityMcEditface
             .SetBasePath(EdityRoot)
             .AddInMemoryCollection(new Dictionary<String, String>
             {
-                    { "ProjectMode", "SingleRepo" },
-                    { "Compiler", "Direct" },
-                    { "OutputPath", Path.Combine(Directory.GetCurrentDirectory(), $"..\\{Path.GetFileName(Directory.GetCurrentDirectory())}-EdityOutput") },
-                    { "SiteName", "" },
-                    { "ProjectPath", defaultProjectPath },
-                    { "EdityCorePath", Path.Combine(siteRootPath, "wwwroot/EdityMcEditface") },
-                    { "SitePath", Path.Combine(siteRootPath, "wwwroot/Site") }
+                { "ProjectMode", "SingleRepo" },
+                { "Compiler", "Direct" },
+                { "OutputPath", Path.Combine(Directory.GetCurrentDirectory(), $"..\\{Path.GetFileName(Directory.GetCurrentDirectory())}-EdityOutput") },
+                { "SiteName", "" },
+                { "ProjectPath", defaultProjectPath },
+                { "EdityCorePath", Path.Combine(siteRootPath, "wwwroot/EdityMcEditface") },
+                { "SitePath", Path.Combine(siteRootPath, "wwwroot/Site") }
             })
             .AddJsonFile(EdityProjectSettingsFile, optional: true, reloadOnChange: true)
             .AddJsonFile($"{Path.GetFileNameWithoutExtension(EdityProjectSettingsFile)}.{env.EnvironmentName}.json", optional: true);

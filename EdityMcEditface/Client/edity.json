@@ -102,17 +102,5 @@
       "template": "default.html",
       "extension": ".html"
     }
-  ],
-  "editComponents": [
-    "editComponents/save.html",
-    "editComponents/commit.html",
-    "editComponents/merge.html",
-    "editComponents/diff.html",
-    "editComponents/sync.html",
-    "editComponents/settings.html",
-    "editComponents/compile.html",
-    "editComponents/source.html",
-    "editComponents/media.html",
-    "editComponents/history.html"
   ]
 }

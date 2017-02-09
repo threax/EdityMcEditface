@@ -44,22 +44,22 @@ namespace EdityMcEditface.Mvc
                 var edityFolderList = new PathList();
                 edityFolderList.AddDirectory("edity");
 
-                //Backup location
+                //Editor core location
                 var backupPermissions = new DefaultFileFinderPermissions();
                 backupPermissions.WritePermission.Permit = false;
                 backupPermissions.TreatAsContentPermission.Permit = false;
-                var backupFinder = new FileFinder(projectFinder.EdityCorePath, backupPermissions);
+                var editorCoreFinder = new FileFinder(projectFinder.EdityCorePath, backupPermissions);
 
                 //Site specific files, not editable
                 var projectBackupPermissions = new DefaultFileFinderPermissions();
                 projectBackupPermissions.WritePermission.Permit = false;
                 projectBackupPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
-                var projectBackupFinder = new FileFinder(projectFinder.SitePath, projectBackupPermissions, backupFinder);
+                var siteFileFinder = new FileFinder(projectFinder.SitePath, projectBackupPermissions, editorCoreFinder);
 
                 //Project location
                 var contentFolderPermissions = new DefaultFileFinderPermissions();
                 contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
-                return new FileFinder(projectFolder, contentFolderPermissions, backupFinder);
+                return new FileFinder(projectFolder, contentFolderPermissions, siteFileFinder);
             });
 
             return services;

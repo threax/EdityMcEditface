@@ -1,6 +1,5 @@
 {
   "version": "1.5.1-*",
-
   "dependencies": {
     "EdityMcEditface.HtmlRenderer": "1.5.0-*",
     "NETStandard.Library": "1.6.1",
@@ -9,10 +8,12 @@
     "Microsoft.AspNetCore.Mvc": "1.1.1",
     "Microsoft.AspNetCore.StaticFiles": "1.1.0"
   },
-
   "frameworks": {
     "net452": {
-
     }
+  },
+  "buildOptions": {
+    "nowarn": [ "1591" ],
+    "xmlDoc": true
   }
 }

@@ -293,7 +293,8 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// <summary>
         /// Copy the dependency files for the current page stack.
         /// </summary>
-        /// <param name="fileFinder"></param>
+        /// <param name="baseOutDir">The output dir.</param>
+        /// <param name="pageStack">The page stack to copy files for.</param>
         public void CopyDependencyFiles(String baseOutDir, PageStack pageStack)
         {
             CopyDependencyFiles(baseOutDir, pageStack, new HashSet<string>());
@@ -654,6 +655,8 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// The file does not need to exist, and this function does not check for that.
         /// </summary>
         /// <param name="path">The path to normalize</param>
+        /// <param name="rootPath">The path to make sure we are under.</param>
+        /// <param name="withinPath">Will be set to true if the path is within rootPath.</param>
         /// <exception cref="NotSupportedException">
         /// Thrown if the path specified is outside of the project path. This can happen if there are ../ items in
         /// the path. By making sure to call NormalizePath first paths can be checked for safety.

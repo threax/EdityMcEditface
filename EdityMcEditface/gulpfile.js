@@ -37,10 +37,10 @@ function build(sharedSettings) {
     }
 
     var edityOuputRoot = webroot + "/EdityMcEditface";
-    var siteOutputRoot = webroot + "/Site"
+    var siteOutputRoot = webroot + "/Site";
     var libDir = siteOutputRoot + "/lib";
 
     edityClientBuild(__dirname, edityOuputRoot, sharedSettings);
     siteClientBuild(sharedSettings, __dirname + "/Site", siteOutputRoot, "site.client");
     treeMenuBuild(__dirname, libDir, sharedSettings);
-};
+}

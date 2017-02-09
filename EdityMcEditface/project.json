@@ -39,7 +39,8 @@
     "preserveCompilationContext": true,
     "copyToOutput": [ "NativeBinaries\\amd64\\git2-785d8c4.dll", "NativeBinaries\\x86\\git2-785d8c4.dll" ],
     "define": [ "LOCAL_RUN_ENABLED" ],
-    "xmlDoc": true
+    "xmlDoc": true,
+    "nowarn": [ "1591" ]
   },
 
   "runtimeOptions": {

@@ -32,6 +32,7 @@ namespace EdityMcEditface.Controllers
         /// <summary>
         /// Log in
         /// </summary>
+        /// <param name="settings"></param>
         /// <param name="returnUrl"></param>
         /// <returns></returns>
         [HttpGet]

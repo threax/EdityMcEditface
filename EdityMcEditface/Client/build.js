@@ -7,7 +7,16 @@ var compileTypescript = require('threax-gulp-tk/typescript.js');
 var compileLess = require('threax-gulp-tk/less.js');
 var copyFiles = require('threax-gulp-tk/copy.js');
 
-module.exports = function (rootDir, libDir, viewBaseDir, editylibDir, settings) {
+module.exports = function (rootDir, webroot, settings) {
+
+    var htmlRapierBuild = require(rootDir + '/node_modules/htmlrapier/build');
+    var htmlRapierWidgetsBuild = require(rootDir + '/node_modules/htmlrapier.widgets/build');
+    var htmlRapierBootstrapBuild = require(rootDir + '/node_modules/htmlrapier.bootstrap/build');
+
+    var libDir = webroot + "/lib";
+    var viewBaseDir = webroot + "/edity";
+    var editylibDir = viewBaseDir + "/lib";
+
     if (settings === undefined) {
         settings = {};
     }
@@ -21,6 +30,18 @@ module.exports = function (rootDir, libDir, viewBaseDir, editylibDir, settings) 
     if (settings.minify !== undefined) {
         minify = settings.minify;
     }
+
+    //Shared client side
+    copyFiles({
+        libs: ["./node_modules/jsns/jsns.js",
+        ],
+        baseName: './node_modules/jsns',
+        dest: libDir
+    });
+
+    htmlRapierBuild(__dirname, libDir, settings);
+    htmlRapierWidgetsBuild(__dirname, libDir, settings);
+    htmlRapierBootstrapBuild(__dirname, libDir, settings);
 
     compileLess({
         files: [

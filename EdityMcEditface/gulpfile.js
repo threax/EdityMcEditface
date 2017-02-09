@@ -7,11 +7,9 @@ var compileTypescript = require('threax-gulp-tk/typescript.js');
 var compileLess = require('threax-gulp-tk/less.js');
 var copyFiles = require('threax-gulp-tk/copy.js');
 
-var htmlRapierBuild = require(__dirname + '/node_modules/htmlrapier/build');
-var htmlRapierWidgetsBuild = require(__dirname + '/node_modules/htmlrapier.widgets/build');
-var htmlRapierBootstrapBuild = require(__dirname + '/node_modules/htmlrapier.bootstrap/build');
 var treeMenuBuild = require(__dirname + '/node_modules/htmlrapier.treemenu/build');
-var clientBuild = require(__dirname + '/Client/build');
+var edityClientBuild = require(__dirname + '/Client/build');
+var siteClientBuild = require(__dirname + '/Client/clientbuild');
 
 var webroot = __dirname + "/wwwroot";
 
@@ -38,21 +36,11 @@ function build(sharedSettings) {
         sharedSettings.concat = true;
     }
 
-    var libDir = webroot + "/lib";
-    var viewBaseDir = webroot + "/edity";
-    var editylibDir = viewBaseDir + "/lib";
+    var edityOuputRoot = webroot + "/EdityMcEditface";
+    var siteOutputRoot = webroot + "/Site"
+    var libDir = siteOutputRoot + "/lib";
 
-    //Shared client side
-    copyFiles({
-        libs: ["./node_modules/jsns/jsns.js",
-        ],
-        baseName: './node_modules/jsns',
-        dest: libDir
-    });
-
-    htmlRapierBuild(__dirname, libDir, sharedSettings);
-    htmlRapierWidgetsBuild(__dirname, libDir, sharedSettings);
-    htmlRapierBootstrapBuild(__dirname, libDir, sharedSettings);
+    edityClientBuild(__dirname, edityOuputRoot, sharedSettings);
+    siteClientBuild(sharedSettings, __dirname + "/Site", siteOutputRoot, "site.client");
     treeMenuBuild(__dirname, libDir, sharedSettings);
-    clientBuild(__dirname, libDir, viewBaseDir, editylibDir, sharedSettings);
 };

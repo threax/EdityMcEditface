@@ -10,6 +10,8 @@ namespace EdityMcEditface.Mvc.Models.Page
 
         String MasterRepoPath { get; }
 
-        String BackupPath { get; }
+        String EdityCorePath { get; }
+
+        String SitePath { get; }
     }
 }

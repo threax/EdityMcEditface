@@ -11,10 +11,11 @@ namespace EdityMcEditface.Mvc.Models.Page
     {
         String projectFolder;
 
-        public OneRepoPerUser(String projectFolder, String backupPath)
+        public OneRepoPerUser(String projectFolder, String edityCorePath, String sitePath)
         {
             this.projectFolder = projectFolder;
-            this.BackupPath = backupPath;
+            this.EdityCorePath = edityCorePath;
+            this.SitePath = sitePath;
             this.MasterRepoPath = Path.Combine(projectFolder, "Master");
         }
 
@@ -44,7 +45,9 @@ namespace EdityMcEditface.Mvc.Models.Page
             }
         }
 
-        public String BackupPath { get; private set; }
+        public String EdityCorePath { get; private set; }
+
+        public String SitePath { get; private set; }
 
         public String MasterRepoPath { get; private set; }
     }

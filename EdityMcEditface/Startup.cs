@@ -87,7 +87,8 @@ namespace EdityMcEditface
                     { "OutputPath", Path.Combine(Directory.GetCurrentDirectory(), $"..\\{Path.GetFileName(Directory.GetCurrentDirectory())}-EdityOutput") },
                     { "SiteName", "" },
                     { "ProjectPath", defaultProjectPath },
-                    { "BackupFilePath", Path.Combine(siteRootPath, "wwwroot") }
+                    { "EdityCorePath", Path.Combine(siteRootPath, "wwwroot/EdityMcEditface") },
+                    { "SitePath", Path.Combine(siteRootPath, "wwwroot/Site") }
             })
             .AddJsonFile(EdityProjectSettingsFile, optional: true, reloadOnChange: true)
             .AddJsonFile($"{Path.GetFileNameWithoutExtension(EdityProjectSettingsFile)}.{env.EnvironmentName}.json", optional: true);

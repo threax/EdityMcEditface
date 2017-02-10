@@ -1,3 +1,25 @@
-﻿[data-editor-navitem]{
-    display:none;
+﻿[data-editor-navitem] {
+    display: none;
+}
+
+.ed-editTools{
+    position: fixed;
+    bottom: 2%;
+    right: 2%;
+    z-index: 777;
+    background-color: white;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 28px;
+    color: #333;
+    background-color: #fff;
+    padding:20px;
+}
+
+.ed-editTools ul{
+    padding:0px;
+}
+
+.ed-editTools li{
+    list-style:none;
 }

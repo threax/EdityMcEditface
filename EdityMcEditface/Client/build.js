@@ -48,7 +48,7 @@ module.exports = function (rootDir, webroot, settings) {
         __dirname + '/bootstrap/bootstrap-custom.less'
         ],
         dest: libDir + '/bootstrap/dist/css',
-        importPaths: path.join(__dirname),
+        importPaths: path.join(rootDir + '/node_modules/bootstrap/less'),
     });
 
     copyFiles({

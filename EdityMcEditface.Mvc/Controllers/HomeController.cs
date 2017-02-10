@@ -111,11 +111,11 @@ namespace EdityMcEditface.Mvc.Controllers
             dr.addTransform(new HashTreeMenus(fileFinder));
             dr.addTransform(new ExpandRootedPaths(this.HttpContext.Request.PathBase));
             pageStack.pushLayout("edit.html");
-            pageStack.pushLayout("default.html");
             foreach (var editStackItem in fileFinder.Project.EditComponents)
             {
                 pageStack.pushLayout(editStackItem);
             }
+            pageStack.pushLayout("default.html");
             pageStack.pushLayout("editarea-ckeditor.html");
 
             return build(pageStack, dr);

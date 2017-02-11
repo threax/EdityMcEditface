@@ -6,7 +6,7 @@
     "threax-gulp-tk": "^4.2.0"
   },
   "dependencies": {
-    "bootstrap": "~3.3.6",
+    "bootstrap": "~3.3.7",
     "ckeditor": "~4.5.10",
     "ckeditor-youtube-plugin": "^2.1.1",
     "codemirror": "~5.17.0",

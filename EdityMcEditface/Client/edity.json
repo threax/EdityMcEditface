@@ -93,7 +93,8 @@
     "pageSettingsUrl": "~/edity/page/settings",
     "deletePageUrl": "~/edity/Page",
     "mediaBrowseDir": "~/",
-    "pageTemplateUrl": "~/edity/templates"
+    "pageTemplateUrl": "~/edity/templates",
+    "editToolsBackground": ""
   },
   "additionalContent": [ "lib/bootstrap/dist/fonts" ],
   "compilers": [

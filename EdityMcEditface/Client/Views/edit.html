@@ -7,14 +7,16 @@
     {{css}}
 </head>
 <body>
-    <div class="container-fluid">
-        <div id="edit-navbar-collapse" class="ed-editTools">
+    <div class="ed-editTools" data-hr-controller="edity-tools">
+        <div data-hr-toggle="main" style="display:none;" data-hr-style-on="display:block;" data-hr-state="on">
             <ul data-editor-navmenu></ul>
         </div>
-        <div class="row">
-            {{mainContent}}
+
+        <div class="ed-editTools-toolButton">
+            <button class="btn btn-primary" data-hr-on-click="toggleTools">Tools</button>
         </div>
     </div>
+    {{mainContent}}
     <script type="text/javascript">
         var editPageSettings = {
             baseUrl: "{{pathBase}}"

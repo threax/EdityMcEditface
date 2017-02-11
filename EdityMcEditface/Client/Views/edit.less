@@ -3,38 +3,35 @@
 }
 
 .ed-editTools{
-    min-width:115px;
     text-align:center;
     position: fixed;
     bottom: 2%;
     right: 2%;
     z-index: 777;
-    background-color: white;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
     line-height: 28px;
-    color: #333;
-    background-color: #fff;
-    padding:20px;
+    color: #ddd;
+    background-color: #222;
+    padding:7px;
     border: solid black 1px;
     border-radius: 7px;
+    opacity: 0.45;
+}
+
+.ed-editTools:hover{
+    opacity:1;
     box-shadow: 4px 4px 5px grey;
 }
 
 .ed-editTools-main{
     display:none;
-    -webkit-transition: height 2s; /* Safari */
-    transition: height 2s;
-    height:0px;
 }
 
 .ed-editTools-main-on{
     display:block;
-    height:100%;
-}
-
-.ed-editTools-main-on:hover{
-    height: 500px;
+    margin-left: 7px;
+    margin-right: 7px;
 }
 
 .ed-editTools-toolButton{

@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Microsoft.Net.Http.Headers;
 using EdityMcEditface.HtmlRenderer.Transforms;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Concurrent;
 
 namespace EdityMcEditface.Mvc.Controllers
 {
@@ -21,9 +22,9 @@ namespace EdityMcEditface.Mvc.Controllers
     public class HomeController : Controller
     {
         private IFileFinder fileFinder;
-        private PageStack pageStack;
         private TargetFileInfo targetFileInfo;
         private TemplateEnvironment templateEnvironment;
+        private ConcurrentBag<String> seenExtensions = new ConcurrentBag<string>();
 
         public HomeController(IFileFinder fileFinder)
         {
@@ -33,10 +34,8 @@ namespace EdityMcEditface.Mvc.Controllers
         [HttpGet]
         public IActionResult Index(String file)
         {
+            PageStack pageStack = null;
             targetFileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
-            templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder.Project, HttpContext.Request.PathBase);
-            PageStack pageStack = new PageStack(templateEnvironment, fileFinder);
-            pageStack.ContentFile = targetFileInfo.HtmlFile;
 
             switch (targetFileInfo.Extension)
             {
@@ -47,15 +46,30 @@ namespace EdityMcEditface.Mvc.Controllers
                     }
                     return Redirect(targetFileInfo.NoHtmlRedirect);
                 case "":
+                    pageStack = CreatePageStack();
                     return buildAsEditor(pageStack);
                 default:
                     var cleanExtension = targetFileInfo.Extension.TrimStart('.') + ".html";
-                    if (fileFinder.DoesLayoutExist(cleanExtension))
+                    bool seenBefore = seenExtensions.Contains(cleanExtension);
+                    if (!seenBefore)
                     {
-                        return buildAsPage(pageStack, cleanExtension);
+                        seenExtensions.Add(cleanExtension);
+                        if (fileFinder.DoesLayoutExist(cleanExtension))
+                        {
+                            pageStack = CreatePageStack();
+                            return buildAsPage(pageStack, cleanExtension);
+                        }
                     }
                     return returnFile(file);
             }
+        }
+
+        private PageStack CreatePageStack()
+        {
+            templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder.Project, HttpContext.Request.PathBase);
+            PageStack pageStack = new PageStack(templateEnvironment, fileFinder);
+            pageStack.ContentFile = targetFileInfo.HtmlFile;
+            return pageStack;
         }
 
         [Route("edity/preview/{*file}")]
@@ -164,7 +178,7 @@ namespace EdityMcEditface.Mvc.Controllers
 
         private IActionResult showNewPage(HtmlDocumentRenderer dr)
         {
-            pageStack = new PageStack(templateEnvironment, fileFinder);
+            var pageStack = new PageStack(templateEnvironment, fileFinder);
             pageStack.pushLayout("new.html");
             return getConvertedDocument(pageStack, dr);
         }

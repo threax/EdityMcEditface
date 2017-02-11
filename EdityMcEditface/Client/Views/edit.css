@@ -3,6 +3,8 @@
 }
 
 .ed-editTools{
+    min-width:115px;
+    text-align:center;
     position: fixed;
     bottom: 2%;
     right: 2%;
@@ -14,6 +16,25 @@
     color: #333;
     background-color: #fff;
     padding:20px;
+    border: solid black 1px;
+    border-radius: 7px;
+    box-shadow: 4px 4px 5px grey;
+}
+
+.ed-editTools-main{
+    display:none;
+    -webkit-transition: height 2s; /* Safari */
+    transition: height 2s;
+    height:0px;
+}
+
+.ed-editTools-main-on{
+    display:block;
+    height:100%;
+}
+
+.ed-editTools-main-on:hover{
+    height: 500px;
 }
 
 .ed-editTools-toolButton{

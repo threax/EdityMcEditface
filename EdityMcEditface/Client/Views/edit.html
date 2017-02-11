@@ -8,12 +8,12 @@
 </head>
 <body>
     <div class="ed-editTools" data-hr-controller="edity-tools">
-        <div data-hr-toggle="main" style="display:none;" data-hr-style-on="display:block;" data-hr-state="off">
+        <div data-hr-toggle="main" class="ed-editTools-main" data-hr-class-on="ed-editTools-main-on" data-hr-state="off">
             <ul data-editor-navmenu></ul>
         </div>
 
         <div class="ed-editTools-toolButton">
-            <button class="btn btn-primary" data-hr-on-click="toggleTools">Tools</button>
+            <button class="btn btn-primary" data-hr-on-click="toggleTools"><span class="glyphicon glyphicon-pencil"></span></button>
         </div>
     </div>
     {{mainContent}}

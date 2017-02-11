@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "devDependencies": {
-    "threax-gulp-tk": "^4.0.0"
+    "threax-gulp-tk": "^4.2.0"
   },
   "dependencies": {
     "bootstrap": "~3.3.6",

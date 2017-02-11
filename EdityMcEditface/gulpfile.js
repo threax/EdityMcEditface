@@ -2,6 +2,7 @@
 
 var gulp = require("gulp");
 var path = require('path');
+var del = require('del');
 
 var compileTypescript = require('threax-gulp-tk/typescript.js');
 var compileLess = require('threax-gulp-tk/less.js');
@@ -21,6 +22,10 @@ gulp.task("debug",function () {
     build({
         minify:false
     });
+});
+
+gulp.task("clean", function () {
+    del(["ClientBin/**"]);
 });
 
 function build(sharedSettings) {

@@ -47,6 +47,15 @@ module.exports = function (sharedSettings, inputDir, outputDir, clientSideNamesp
         sourceRoot: childClientDir + "/Views/"
     });
 
+    //less
+    compileLess({
+        files: [
+        childClientDir + "/Views/**/*.less"
+        ],
+        dest: viewBaseDir + '/layouts',
+        importPaths: [path.join("node_modules/bootstrap/less")],
+    });
+
     //Copy view files
     copyFiles({
         libs: [

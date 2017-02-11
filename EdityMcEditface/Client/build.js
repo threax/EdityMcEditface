@@ -6,6 +6,7 @@ var path = require('path');
 var compileTypescript = require('threax-gulp-tk/typescript.js');
 var compileLess = require('threax-gulp-tk/less.js');
 var copyFiles = require('threax-gulp-tk/copy.js');
+var clientBuild = require(__dirname + '/clientbuild.js');
 
 module.exports = function (rootDir, webroot, settings) {
 
@@ -168,48 +169,5 @@ module.exports = function (rootDir, webroot, settings) {
         minify: settings.minify
     });
 
-    //Compile view typescript
-    compileTypescript({
-        libs: [
-            __dirname + "/Views/**/*.ts",
-            "!**/*.intellisense.js"
-        ],
-        runners: true,
-        dest: viewBaseDir + '/layouts',
-        sourceRoot: __dirname + "/Views/"
-    });
-
-    //Copy view files
-    //Not working currently, converts everything to ascii for some reason, lots of version changes for node and gulp incliding 7 and 4 respectivly did not fix
-    copyFiles({
-        libs: [
-            __dirname + "/Views/**/*.html",
-            __dirname + "/Views/**/*.js",
-            __dirname + "/Views/**/*.json",
-            __dirname + "/Views/**/*.css",
-            "!**/*.intellisense.js"
-        ],
-        baseName: __dirname + "/Views",
-        dest: viewBaseDir + '/layouts'
-    });
-
-    copyFiles({
-        libs: [
-            __dirname + "/Templates/**/*.html",
-            __dirname + "/Templates/**/*.js",
-            __dirname + "/Templates/**/*.json",
-            __dirname + "/Templates/**/*.css",
-            "!**/*.intellisense.js"
-        ],
-        baseName: __dirname + "/Views",
-        dest: viewBaseDir + '/templates'
-    });
-
-    copyFiles({
-        libs: [
-            __dirname + "/edity.json"
-        ],
-        baseName: __dirname,
-        dest: viewBaseDir
-    });
+    clientBuild(settings, __dirname, webroot, "site.client");
 };

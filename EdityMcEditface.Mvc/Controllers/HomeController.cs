@@ -25,6 +25,7 @@ namespace EdityMcEditface.Mvc.Controllers
         private TargetFileInfo targetFileInfo;
         private TemplateEnvironment templateEnvironment;
         private ConcurrentBag<String> seenExtensions = new ConcurrentBag<string>();
+        private ConcurrentBag<String> altLayoutExtensions = new ConcurrentBag<string>();
 
         public HomeController(IFileFinder fileFinder)
         {
@@ -34,7 +35,6 @@ namespace EdityMcEditface.Mvc.Controllers
         [HttpGet]
         public IActionResult Index(String file)
         {
-            PageStack pageStack = null;
             targetFileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
 
             switch (targetFileInfo.Extension)
@@ -46,22 +46,36 @@ namespace EdityMcEditface.Mvc.Controllers
                     }
                     return Redirect(targetFileInfo.NoHtmlRedirect);
                 case "":
-                    pageStack = CreatePageStack();
+                    var pageStack = CreatePageStack();
                     return buildAsEditor(pageStack);
                 default:
                     var cleanExtension = targetFileInfo.Extension.TrimStart('.') + ".html";
                     bool seenBefore = seenExtensions.Contains(cleanExtension);
-                    if (!seenBefore)
+                    if (seenBefore)
                     {
+                        //Don't combine these if statements
+                        if (altLayoutExtensions.Contains(cleanExtension))
+                        {
+                            return BuildAsAltPage(cleanExtension);
+                        }
+                    }
+                    else
+                    { 
                         seenExtensions.Add(cleanExtension);
                         if (fileFinder.DoesLayoutExist(cleanExtension))
                         {
-                            pageStack = CreatePageStack();
-                            return buildAsPage(pageStack, cleanExtension);
+                            altLayoutExtensions.Add(cleanExtension);
+                            return BuildAsAltPage(cleanExtension);
                         }
                     }
                     return returnFile(file);
             }
+        }
+
+        private IActionResult BuildAsAltPage(string cleanExtension)
+        {
+            PageStack pageStack = CreatePageStack();
+            return buildAsPage(pageStack, cleanExtension);
         }
 
         private PageStack CreatePageStack()
@@ -76,6 +90,9 @@ namespace EdityMcEditface.Mvc.Controllers
         [HttpGet]
         public IActionResult Preview(String file)
         {
+            //This can be optimized like index, but will only be hit
+            //for one page if requested, so whatever
+
             targetFileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
             templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder.Project, HttpContext.Request.PathBase);
             PageStack pageStack = new PageStack(templateEnvironment, fileFinder);

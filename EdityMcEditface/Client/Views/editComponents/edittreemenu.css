@@ -2,14 +2,22 @@
 .treemenu-editor-link > .treemenu-editor{
     display:none;
     float:right;
+    position:absolute;
+    right:0px;
+    background-color: black;
+    padding: 2px;
+    border-radius: 7px;
 }
 
 .treemenu-editor-folder:hover > .treemenu-editor,
 .treemenu-editor-link:hover > .treemenu-editor{
-    display:block;
+    display:inline;
 }
 
 .treemenu-editor > .treemenu-editor-rootcontrols{
+    background-color: black;
+    padding: 2px;
+    border-radius: 7px;
     display:none;
 }
 

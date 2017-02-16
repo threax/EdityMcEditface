@@ -16,7 +16,7 @@
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0",
     "LibGit2Sharp": "0.22.0",
     "Microsoft.Extensions.Configuration.CommandLine": "1.1.0",
-    "EdityMcEditface.Mvc": "2.2.0-*"
+    "EdityMcEditface.Mvc": "2.2.1-*"
   },
 
   "tools": {

@@ -20,7 +20,7 @@ namespace EdityMcEditface.HtmlRenderer
         {
             if(!project.Vars.TryGetValue("pathBase", out this.pathBase))
             {
-                pathBase = "/";
+                pathBase = "";
             }
             else
             {

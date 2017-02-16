@@ -15,6 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6EF8FD6C-E
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EdityMcEditface.HtmlRenderer.Tests", "test\EdityMcEditface.HtmlRenderer.Tests\EdityMcEditface.HtmlRenderer.Tests.xproj", "{1CAC65FE-2D2C-4413-A04B-996628A69E13}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BBACF788-F0D0-4232-8948-F90F9EFAFBD4}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

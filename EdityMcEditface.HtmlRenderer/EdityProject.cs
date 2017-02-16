@@ -64,7 +64,7 @@ namespace EdityMcEditface.HtmlRenderer
         {
             foreach (var item in source)
             {
-                if (!dest.Select(i => i.Extension == item.Extension).Any())
+                if (!dest.Any(i => i.Extension == item.Extension))
                 {
                     dest.Add(item);
                 }

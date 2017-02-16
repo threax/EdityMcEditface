@@ -13,17 +13,12 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
         private IFileFinder fileFinder;
         private String outDir;
         private String layout;
-        private String siteRoot;
 
-        public HtmlCompiler(IFileFinder fileFinder, String outDir, String layout, Dictionary<String, String> settings)
+        public HtmlCompiler(IFileFinder fileFinder, String outDir, String layout)
         {
             this.fileFinder = fileFinder;
             this.outDir = outDir;
             this.layout = layout;
-            if(!settings.TryGetValue("siteRoot", out this.siteRoot))
-            {
-                siteRoot = "";
-            }
         }
 
         public void buildPage(String relativeFile)
@@ -38,18 +33,20 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             }
 
             TargetFileInfo fileInfo = new TargetFileInfo(relativeFile, null);
-            TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project, siteRoot);
+            TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
             PageStack pageStack = new PageStack(environment, fileFinder);
             pageStack.ContentFile = fileInfo.HtmlFile;
             pageStack.pushLayout(layout);
 
+            var pathBase = environment.PathBase;
+
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(environment);
             dr.addTransform(new HashTreeMenus(fileFinder));
-            dr.addTransform(new ExpandRootedPaths(siteRoot));
-            if (!String.IsNullOrEmpty(siteRoot))
+            dr.addTransform(new ExpandRootedPaths(pathBase));
+            if (!String.IsNullOrEmpty(pathBase))
             {
-                //Safe to fix relative urls last since it wont replace any that already start with the site root.
-                dr.addTransform(new FixRelativeUrls(siteRoot));
+                //Safe to fix relative urls last since it wont replace any that already start with the path base.
+                dr.addTransform(new FixRelativeUrls(pathBase));
             }
             var document = dr.getDocument(pageStack.Pages);
             var outDir = Path.GetDirectoryName(outFile);

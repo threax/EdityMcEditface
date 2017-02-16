@@ -23,7 +23,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             switch (definition.Type)
             {
                 case CompilerTypes.Html:
-                    return new HtmlCompiler(fileFinder, outDir, definition.Template, definition.Settings)
+                    return new HtmlCompiler(fileFinder, outDir, definition.Template)
                     {
                         OutputExtension = definition.Extension
                     };

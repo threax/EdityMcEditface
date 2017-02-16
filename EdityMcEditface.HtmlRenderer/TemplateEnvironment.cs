@@ -16,9 +16,16 @@ namespace EdityMcEditface.HtmlRenderer
         private PageDefinition pageDefinition = new PageDefinition();
         private String pathBase;
 
-        public TemplateEnvironment(String docLink, EdityProject project, String pathBase)
+        public TemplateEnvironment(String docLink, EdityProject project)
         {
-            this.pathBase = pathBase;
+            if(!project.Vars.TryGetValue("pathBase", out this.pathBase))
+            {
+                pathBase = "/";
+            }
+            else
+            {
+                pathBase = pathBase.EnsureStartingPathSlash();
+            }
             this.docLink = docLink.EnsureStartingPathSlash();
             this.project = project;
             linkedContent.mergeEntries(project.ContentMap);
@@ -49,7 +56,7 @@ namespace EdityMcEditface.HtmlRenderer
                 vars.Add("editorRoot", pathBase);
             }
             vars["docLink"] = docLink;
-            vars["pathBase"] = pathBase;
+            vars["pathBase"] = pathBase; //This ensure we use what was in the edity settings, so pages can't overwrite this.
 
             List<LinkedContentEntry> links = new List<LinkedContentEntry>(linkedContent.buildResourceList(findLinkedContent(pages.Select(p => p.PageDefinition))));
             vars["css"] = linkedContent.renderCss(links, pages.Where(p => p.PageCssPath != null).Select(p => "~" + p.PageCssPath));
@@ -129,6 +136,17 @@ namespace EdityMcEditface.HtmlRenderer
             get
             {
                 return linkedContent;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public String PathBase
+        {
+            get
+            {
+                return this.pathBase;
             }
         }
     }

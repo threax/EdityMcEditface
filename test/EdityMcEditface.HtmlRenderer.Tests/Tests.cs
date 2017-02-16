@@ -27,16 +27,14 @@ namespace Tests
             {
                 Type = CompilerTypes.Html,
                 Template = "default.html",
-                Extension = ".html",
-                Settings = new Dictionary<string, string>() { { "siteRoot", "/EdityPlayground" } }
+                Extension = ".html"
             });
 
             project2.Compilers.Add(new CompilerDefinition()
             {
                 Type = CompilerTypes.Html,
                 Template = "default.html",
-                Extension = ".print.html",
-                Settings = new Dictionary<string, string>() { { "siteRoot", "/EdityPlayground" } }
+                Extension = ".print.html"
             });
 
             project2.Compilers.Add(new CompilerDefinition()

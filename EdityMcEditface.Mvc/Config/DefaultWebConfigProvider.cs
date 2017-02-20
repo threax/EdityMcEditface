@@ -7,11 +7,18 @@ namespace EdityMcEditface.Mvc.Config
 {
     public class DefaultWebConfigProvider : IWebConfigProvider
     {
+        private String homePage;
+
+        public DefaultWebConfigProvider(String homePage)
+        {
+            this.homePage = homePage;
+        }
+
         public string WebConfigTemplate
         {
             get
             {
-                return webConfigContents;
+                return webConfigContents + homePage + webConfigContentsEnd;
             }
         }
 
@@ -21,7 +28,9 @@ namespace EdityMcEditface.Mvc.Config
   <system.webServer>
     <defaultDocument>
       <files>
-        <add value=""{0}/index.html""/>
+        <add value=""{0}/";
+
+        private const String webConfigContentsEnd = @".html""/>
       </files>
     </defaultDocument>
     <rewrite>

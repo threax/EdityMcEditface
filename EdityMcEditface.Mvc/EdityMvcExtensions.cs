@@ -76,10 +76,13 @@ namespace EdityMcEditface.Mvc
         /// <returns>The service collection.</returns>
         public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration)
         {
-            services.TryAddScoped<IWebConfigProvider, DefaultWebConfigProvider>();
+            services.TryAddScoped<IWebConfigProvider>(s =>
+            {
+                return new DefaultWebConfigProvider(projectConfiguration.DefaultPage);
+            });
             services.TryAddScoped<ITargetFileInfoProvider>(s =>
             {
-                return new DefaultTargetFileInfoProvider("index");
+                return new DefaultTargetFileInfoProvider(projectConfiguration.DefaultPage);
             });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

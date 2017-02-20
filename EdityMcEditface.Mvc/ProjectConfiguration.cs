@@ -26,5 +26,10 @@ namespace EdityMcEditface.Mvc
         /// The path to this site's client side files.
         /// </summary>
         public String SitePath { get; set; }
+
+        /// <summary>
+        /// The default page for the project. Defaults to "index".
+        /// </summary>
+        public String DefaultPage { get; set; } = "index";
     }
 }

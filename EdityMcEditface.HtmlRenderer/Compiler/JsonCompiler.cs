@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer;
+using EdityMcEditface.HtmlRenderer.FileInfo;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 using System;
@@ -16,12 +17,14 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
         private IFileFinder fileFinder;
         private String outDir;
         private String layout;
+        private ITargetFileInfoProvider fileInfoProvider;
 
-        public JsonCompiler(IFileFinder fileFinder, String outDir, String layout)
+        public JsonCompiler(IFileFinder fileFinder, String outDir, String layout, ITargetFileInfoProvider fileInfoProvider)
         {
             this.fileFinder = fileFinder;
             this.outDir = outDir;
             this.layout = layout;
+            this.fileInfoProvider = fileInfoProvider;
         }
 
         public void buildPage(string relativeFile)
@@ -37,7 +40,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             }
             outFile = Path.ChangeExtension(outFile, extension);
 
-            TargetFileInfo fileInfo = new TargetFileInfo(relativeFile, null);
+            var fileInfo = fileInfoProvider.GetFileInfo(relativeFile, null);
             TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
             PageStack pageStack = new PageStack(environment, fileFinder);
             pageStack.ContentFile = fileInfo.HtmlFile;

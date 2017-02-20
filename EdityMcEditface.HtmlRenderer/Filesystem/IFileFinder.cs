@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EdityMcEditface.HtmlRenderer.FileInfo;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -16,13 +17,13 @@ namespace EdityMcEditface.HtmlRenderer
         IEnumerable<String> EnumerateContentDirectories(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly);
         IEnumerable<String> EnumerateContentFiles(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly);
         void ErasePage(string file);
-        PageDefinition GetProjectPageDefinition(TargetFileInfo fileInfo);
+        PageDefinition GetProjectPageDefinition(ITargetFileInfo fileInfo);
         string GetProjectRelativePath(string path);
         bool IsValidWritablePath(string path);
         PageStackItem LoadPageStackContent(string path);
         PageStackItem LoadPageStackLayout(string path);
         Stream ReadFile(string file);
-        void SavePageDefinition(PageDefinition definition, TargetFileInfo fileInfo);
+        void SavePageDefinition(PageDefinition definition, ITargetFileInfo fileInfo);
         Stream WriteFile(string file);
     }
 }

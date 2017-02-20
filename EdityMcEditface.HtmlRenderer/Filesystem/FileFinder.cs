@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using EdityMcEditface.HtmlRenderer.FileInfo;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -463,7 +464,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// </summary>
         /// <param name="fileInfo">The file info to use to find the PageDefinition file.</param>
         /// <returns>The PageDefinition for the page. Will be a default instance if the file does not exist.</returns>
-        public PageDefinition GetProjectPageDefinition(TargetFileInfo fileInfo)
+        public PageDefinition GetProjectPageDefinition(ITargetFileInfo fileInfo)
         {
             return getProjectPageDefinition(fileInfo.HtmlFile);
         }
@@ -492,7 +493,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             }
         }
 
-        public void SavePageDefinition(PageDefinition definition, TargetFileInfo fileInfo)
+        public void SavePageDefinition(PageDefinition definition, ITargetFileInfo fileInfo)
         {
             if (permissions.AllowWrite(this, fileInfo.HtmlFile))
             {

@@ -11,6 +11,7 @@ using EdityMcEditface.Mvc.Models.CKEditor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using EdityMcEditface.Mvc.Models.Upload;
+using EdityMcEditface.HtmlRenderer.FileInfo;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,14 +25,17 @@ namespace EdityMcEditface.Mvc.Controllers
     public class UploadController : Controller
     {
         private IFileFinder fileFinder;
+        private ITargetFileInfoProvider fileInfoProvider;
 
         /// <summary>
         /// Controller.
         /// </summary>
         /// <param name="fileFinder"></param>
-        public UploadController(IFileFinder fileFinder)
+        /// <param name="fileInfoProvider">The file info provider.</param>
+        public UploadController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider)
         {
             this.fileFinder = fileFinder;
+            this.fileInfoProvider = fileInfoProvider;
         }
 
         /// <summary>
@@ -47,7 +51,7 @@ namespace EdityMcEditface.Mvc.Controllers
                 dir = "";
             }
 
-            dir = TargetFileInfo.RemovePathBase(dir, HttpContext.Request.PathBase);
+            dir = DefaultTargetFileInfo.RemovePathBase(dir, HttpContext.Request.PathBase);
 
             return new FileList
             {
@@ -66,7 +70,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [HttpPost]
         public async Task Upload([FromQuery] String file, IFormFile content)
         {
-            TargetFileInfo fileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
+            var fileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
             using (Stream stream = fileFinder.WriteFile(fileInfo.DerivedFileName))
             {
                 await content.CopyToAsync(stream);
@@ -81,7 +85,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [HttpDelete]
         public void Delete([FromQuery] String file)
         {
-            TargetFileInfo fileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
+            var fileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
             if (fileInfo.PointsToHtmlFile)
             {
                 fileFinder.ErasePage(fileInfo.HtmlFile);

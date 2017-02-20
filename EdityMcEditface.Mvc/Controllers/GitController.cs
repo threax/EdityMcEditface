@@ -13,6 +13,7 @@ using System.Net;
 using Threax.AspNetCore.ExceptionToJson;
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
+using EdityMcEditface.HtmlRenderer.FileInfo;
 
 namespace EdityMcEditface.Mvc.Controllers
 {
@@ -25,16 +26,19 @@ namespace EdityMcEditface.Mvc.Controllers
     {
         private Repository repo;
         private IFileFinder fileFinder;
+        private ITargetFileInfoProvider fileInfoProvider;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="repo"></param>
         /// <param name="fileFinder"></param>
-        public GitController(Repository repo, IFileFinder fileFinder)
+        /// <param name="fileInfoProvider">The file info provider.</param>
+        public GitController(Repository repo, IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider)
         {
             this.repo = repo;
             this.fileFinder = fileFinder;
+            this.fileInfoProvider = fileInfoProvider;
         }
 
         /// <summary>
@@ -135,7 +139,7 @@ namespace EdityMcEditface.Mvc.Controllers
             }
 
             //Changed file
-            var targetFileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
+            var targetFileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
 
             var repoPath = Path.Combine(repo.Info.WorkingDirectory, targetFileInfo.DerivedFileName);
             using (var stream = new StreamReader(fileFinder.ReadFile(fileFinder.GetProjectRelativePath(repoPath))))
@@ -175,7 +179,7 @@ namespace EdityMcEditface.Mvc.Controllers
                 throw new ErrorResultException($"Cannot access file '{file}'");
             }
 
-            var fileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
+            var fileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
 
             return repo.Commits.QueryBy(fileInfo.DerivedFileName).Count();
         }
@@ -209,7 +213,7 @@ namespace EdityMcEditface.Mvc.Controllers
                 throw new ErrorResultException($"Cannot access file '{file}'");
             }
 
-            var targetFileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
+            var targetFileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
 
             var repoPath = Path.Combine(repo.Info.WorkingDirectory, targetFileInfo.DerivedFileName);
             using (var stream = new StreamReader(fileFinder.ReadFile(fileFinder.GetProjectRelativePath(repoPath))))
@@ -233,7 +237,7 @@ namespace EdityMcEditface.Mvc.Controllers
                 throw new ErrorResultException($"Cannot access file '{file}'");
             }
 
-            var fileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
+            var fileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
 
             var historyCommits = repo.Commits.QueryBy(fileInfo.DerivedFileName).Skip(page * count).Take(count);
             foreach (var logEntry in historyCommits)
@@ -388,7 +392,7 @@ namespace EdityMcEditface.Mvc.Controllers
                 throw new ErrorResultException($"No conflicts to resolve for {file}.");
             }
 
-            TargetFileInfo fileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
+            var fileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
             var repoPath = Path.Combine(repo.Info.WorkingDirectory, fileInfo.DerivedFileName);
             using (var stream = fileFinder.WriteFile(fileFinder.GetProjectRelativePath(repoPath)))
             {
@@ -420,7 +424,7 @@ namespace EdityMcEditface.Mvc.Controllers
                 if (blob != null)
                 {
                     //Changed file
-                    var targetFileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
+                    var targetFileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
                     var repoPath = Path.Combine(repo.Info.WorkingDirectory, targetFileInfo.DerivedFileName);
                     using (var dest = fileFinder.WriteFile(fileFinder.GetProjectRelativePath(repoPath)))
                     {

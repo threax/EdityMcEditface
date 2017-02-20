@@ -20,6 +20,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EdityMcEditface.HtmlRenderer.Compiler;
 using EdityMcEditface.HtmlRenderer.Filesystem;
+using EdityMcEditface.HtmlRenderer.FileInfo;
 
 namespace EdityMcEditface.Mvc
 {
@@ -76,6 +77,10 @@ namespace EdityMcEditface.Mvc
         public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration)
         {
             services.TryAddScoped<IWebConfigProvider, DefaultWebConfigProvider>();
+            services.TryAddScoped<ITargetFileInfoProvider>(s =>
+            {
+                return new DefaultTargetFileInfoProvider("index");
+            });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

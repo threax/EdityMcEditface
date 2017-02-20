@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer;
+using EdityMcEditface.HtmlRenderer.FileInfo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,11 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
 {
     public class ContentCompilerFactory : IContentCompilerFactory
     {
-        public ContentCompilerFactory()
-        {
+        ITargetFileInfoProvider fileInfoProvider;
 
+        public ContentCompilerFactory(ITargetFileInfoProvider fileInfoProvider)
+        {
+            this.fileInfoProvider = fileInfoProvider;
         }
 
         public List<IContentCompiler> CreateCompilers(IFileFinder fileFinder, String outDir, IEnumerable<CompilerDefinition> definition)
@@ -23,12 +26,12 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             switch (definition.Type)
             {
                 case CompilerTypes.Html:
-                    return new HtmlCompiler(fileFinder, outDir, definition.Template)
+                    return new HtmlCompiler(fileFinder, outDir, definition.Template, fileInfoProvider)
                     {
                         OutputExtension = definition.Extension
                     };
                 case CompilerTypes.Json:
-                    return new JsonCompiler(fileFinder, outDir, definition.Template)
+                    return new JsonCompiler(fileFinder, outDir, definition.Template, fileInfoProvider)
                     {
                         OutputExtension = definition.Extension
                     };

@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.HtmlRenderer
+namespace EdityMcEditface.HtmlRenderer.FileInfo
 {
-    public class TargetFileInfo
+    public class DefaultTargetFileInfo : ITargetFileInfo
     {
-        private String defaultFileName = "index";
+        private String defaultFileName;
         private String originalFileName;
         private String extension;
         private String fileNoExtension;
@@ -22,8 +22,11 @@ namespace EdityMcEditface.HtmlRenderer
         /// </summary>
         /// <param name="file">The file name to lookup.</param>
         /// <param name="pathBase">The path base, will be removed from the file name if not null.</param>
-        public TargetFileInfo(String file, String pathBase)
+        /// <param name="defaultFileName">The name of the default document for this site, normally would be something like index.html.</param>
+        public DefaultTargetFileInfo(String file, String pathBase, String defaultFileName)
         {
+            this.defaultFileName = defaultFileName;
+
             //Remove path base
             file = RemovePathBase(file, pathBase);
 

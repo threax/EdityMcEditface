@@ -14,6 +14,7 @@ using Microsoft.Net.Http.Headers;
 using EdityMcEditface.HtmlRenderer.Transforms;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Concurrent;
+using EdityMcEditface.HtmlRenderer.FileInfo;
 
 namespace EdityMcEditface.Mvc.Controllers
 {
@@ -22,20 +23,22 @@ namespace EdityMcEditface.Mvc.Controllers
     public class HomeController : Controller
     {
         private IFileFinder fileFinder;
-        private TargetFileInfo targetFileInfo;
+        private ITargetFileInfo targetFileInfo;
+        private ITargetFileInfoProvider fileInfoProvider;
         private TemplateEnvironment templateEnvironment;
         private ConcurrentBag<String> seenExtensions = new ConcurrentBag<string>();
         private ConcurrentBag<String> altLayoutExtensions = new ConcurrentBag<string>();
 
-        public HomeController(IFileFinder fileFinder)
+        public HomeController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider)
         {
             this.fileFinder = fileFinder;
+            this.fileInfoProvider = fileInfoProvider;
         }
 
         [HttpGet]
         public IActionResult Index(String file)
         {
-            targetFileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
+            targetFileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
 
             switch (targetFileInfo.Extension)
             {
@@ -93,7 +96,7 @@ namespace EdityMcEditface.Mvc.Controllers
             //This can be optimized like index, but will only be hit
             //for one page if requested, so whatever
 
-            targetFileInfo = new TargetFileInfo(file, HttpContext.Request.PathBase);
+            targetFileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
             templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder.Project);
             PageStack pageStack = new PageStack(templateEnvironment, fileFinder);
             pageStack.ContentFile = targetFileInfo.HtmlFile;

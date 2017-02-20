@@ -75,6 +75,8 @@ namespace EdityMcEditface.Mvc
         /// <returns>The service collection.</returns>
         public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration)
         {
+            services.TryAddScoped<IWebConfigProvider, DefaultWebConfigProvider>();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddSingleton<WorkQueue, WorkQueue>();
@@ -138,7 +140,8 @@ namespace EdityMcEditface.Mvc
                         var settings = s.GetRequiredService<SiteBuilderSettings>();
                         var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
                         var fileFinder = s.GetRequiredService<IFileFinder>();
-                        var builder = new RoundRobinSiteBuilder(settings, compilerFactory, fileFinder, new WebConfigRoundRobinDeployer());
+                        var webConfigProvider = s.GetRequiredService<IWebConfigProvider>();
+                        var builder = new RoundRobinSiteBuilder(settings, compilerFactory, fileFinder, new WebConfigRoundRobinDeployer(webConfigProvider));
 
                         if (projectConfiguration.ProjectMode == "OneRepoPerUser")
                         {

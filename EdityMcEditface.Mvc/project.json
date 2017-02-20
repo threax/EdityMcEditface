@@ -1,5 +1,5 @@
 {
-  "version": "2.3.2-*",
+  "version": "2.3.3-*",
   "dependencies": {
     "EdityMcEditface.HtmlRenderer": "2.3.0-*",
     "NETStandard.Library": "1.6.1",

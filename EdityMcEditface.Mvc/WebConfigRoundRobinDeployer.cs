@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using EdityMcEditface.Mvc.Config;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,13 +10,20 @@ namespace EdityMcEditface.Mvc
 {
     public class WebConfigRoundRobinDeployer : RoundRobinDeployer
     {
+        private IWebConfigProvider webConfigProvider;
+
+        public WebConfigRoundRobinDeployer(IWebConfigProvider webConfigProvider)
+        {
+            this.webConfigProvider = webConfigProvider;
+        }
+
         public bool Deploy(string outputFolder)
         {
             var innerFolder = Path.GetFileName(outputFolder);
             var outputPath = Path.GetDirectoryName(outputFolder);
 
             var webConfigFile = Path.Combine(outputPath, "web.config");
-            var webConfigOutput = String.Format(webConfigContents, innerFolder);
+            var webConfigOutput = String.Format(webConfigProvider.WebConfigTemplate, innerFolder);
 
             using (var writer = new StreamWriter(File.Open(webConfigFile, FileMode.Create, FileAccess.Write, FileShare.None)))
             {
@@ -24,39 +32,5 @@ namespace EdityMcEditface.Mvc
 
             return true;
         }
-
-        private const String webConfigContents =
-@"<?xml version=""1.0"" encoding=""UTF-8""?>
-<configuration>
-  <system.webServer>
-    <defaultDocument>
-      <files>
-        <add value=""{0}/index.html""/>
-      </files>
-    </defaultDocument>
-    <rewrite>
-      <rules>
-        <rule name=""RewriteToGuidDir"">
-          <match url=""^(.*)$"" ignoreCase=""false"" />
-          <conditions logicalGrouping=""MatchAll"" >
-            <add input=""{{REQUEST_FILENAME}}"" matchType=""IsFile"" ignoreCase=""false"" negate=""true"" />
-            <add input=""{{REQUEST_FILENAME}}"" matchType=""IsDirectory"" ignoreCase=""false"" negate=""true"" />
-            <add input=""{{REQUEST_URI}}"" pattern=""^/(Service-)"" negate=""true"" />
-          </conditions>
-          <action type=""Rewrite"" url=""{0}/{{R:1}}"" />
-        </rule>
-        <rule name=""RewriteHtmlToGuidDir"">
-          <match url=""(.*)"" />
-          <conditions logicalGrouping=""MatchAll"" >
-            <add input=""{{REQUEST_FILENAME}}"" matchType=""IsFile"" negate=""true"" />
-            <add input=""{{REQUEST_FILENAME}}"" matchType=""IsDirectory"" negate=""true"" />
-            <add input=""{{REQUEST_URI}}"" pattern=""^/(Service-)"" negate=""true"" />
-          </conditions>
-          <action type=""Rewrite"" url=""{{R:1}}.html"" />
-        </rule>
-      </rules>
-    </rewrite>
-  </system.webServer>
-</configuration>";
     }
 }

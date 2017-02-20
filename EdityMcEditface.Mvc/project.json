@@ -1,7 +1,7 @@
 {
-  "version": "2.3.3-*",
+  "version": "2.4.0-*",
   "dependencies": {
-    "EdityMcEditface.HtmlRenderer": "2.3.0-*",
+    "EdityMcEditface.HtmlRenderer": "2.4.0-*",
     "NETStandard.Library": "1.6.1",
     "LibGit2Sharp": "0.22.0",
     "Threax.AspNetCore.ExceptionToJson": "1.8.0",

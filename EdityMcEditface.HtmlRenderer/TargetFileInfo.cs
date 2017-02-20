@@ -8,6 +8,7 @@ namespace EdityMcEditface.HtmlRenderer
 {
     public class TargetFileInfo
     {
+        private String defaultFileName = "index";
         private String originalFileName;
         private String extension;
         private String fileNoExtension;
@@ -26,7 +27,7 @@ namespace EdityMcEditface.HtmlRenderer
             //Remove path base
             file = RemovePathBase(file, pathBase);
 
-            file = detectIndexFile(file);
+            file = detectIndexFile(file, defaultFileName);
             originalFileName = file;
 
             extension = Path.GetExtension(file).ToLowerInvariant();
@@ -148,7 +149,7 @@ namespace EdityMcEditface.HtmlRenderer
                 {
                     path = "/";
                 }
-                if ("index".Equals(file, StringComparison.InvariantCultureIgnoreCase))
+                if (defaultFileName.Equals(file, StringComparison.InvariantCultureIgnoreCase))
                 {
                     file = "";
                 }
@@ -167,16 +168,16 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
-        private static string detectIndexFile(string file)
+        private static string detectIndexFile(string file, string defaultFileName)
         {
             if (file == null)
             {
-                file = "index";
+                file = defaultFileName;
             }
             file = file.TrimStart('\\', '/');
             if(file == "" || file.Equals(".html", StringComparison.OrdinalIgnoreCase))
             {
-                file = "index";
+                file = defaultFileName;
             }
 
             return file;

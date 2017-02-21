@@ -76,23 +76,27 @@ namespace EdityMcEditface.Mvc.BuildTasks
 
                     if (item.Link != null)
                     {
-                        PageDefinition def;
-
-                        try
+                        //Only fix absolute paths into this website
+                        if (item.Link[0] == '\\' || item.Link[0] == '/')
                         {
-                            using (var stream = new JsonTextReader(new StreamReader(this.fileFinder.ReadFile(item.Link + ".json"))))
+                            PageDefinition def;
+
+                            try
                             {
-                                def = serializer.Deserialize<PageDefinition>(stream);
+                                using (var stream = new JsonTextReader(new StreamReader(this.fileFinder.ReadFile(item.Link + ".json"))))
+                                {
+                                    def = serializer.Deserialize<PageDefinition>(stream);
+                                }
                             }
-                        }
-                        catch (IOException)
-                        {
-                            def = new PageDefinition();
-                        }
+                            catch (IOException)
+                            {
+                                def = new PageDefinition();
+                            }
 
-                        if (def.Hidden)
-                        {
-                            itemsToRemove.Add(item);
+                            if (def.Hidden)
+                            {
+                                itemsToRemove.Add(item);
+                            }
                         }
                     }
                     else //No link, is a folder, check to see if its empty

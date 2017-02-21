@@ -56,5 +56,10 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         {
             directOutput.addPostBuildTask(task);
         }
+
+        public Stream OpenOutputWriteStream(string file)
+        {
+            return directOutput.OpenOutputWriteStream(file);
+        }
     }
 }

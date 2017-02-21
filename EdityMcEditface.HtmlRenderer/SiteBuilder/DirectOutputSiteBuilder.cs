@@ -94,5 +94,16 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         {
             postBuildTasks.Add(task);
         }
+
+        public Stream OpenOutputWriteStream(string file)
+        {
+            var fullPath = Path.Combine(settings.OutDir, StringPathExtensions.TrimStartingPathChars(file));
+            var fullDir = Path.GetDirectoryName(fullPath);
+            if (!Directory.Exists(fullDir))
+            {
+                Directory.CreateDirectory(fullDir);
+            }
+            return File.Open(fullPath, FileMode.Create, FileAccess.Write, FileShare.None);
+        }
     }
 }

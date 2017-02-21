@@ -70,6 +70,26 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        /// <summary>
+        /// Determine if the ContentFile is allowed to be rendered. if no content file is set this will be false.
+        /// </summary>
+        public bool Visible
+        {
+            get
+            {
+                if (ContentFile != null)
+                {
+                    var content = fileFinder.LoadPageStackContent(ContentFile);
+                    if (ContentTransformer != null)
+                    {
+                        content.Content = ContentTransformer(content.Content);
+                    }
+                    return !content.PageDefinition.Hidden;
+                }
+                return false;
+            }
+        }
+
         public IEnumerable<LinkedContent> LinkedContent { get; set; }
 
         public IEnumerable<String> LinkedContentFiles

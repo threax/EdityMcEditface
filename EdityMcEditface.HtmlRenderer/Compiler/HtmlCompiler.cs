@@ -39,29 +39,32 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
             PageStack pageStack = new PageStack(environment, fileFinder);
             pageStack.ContentFile = fileInfo.HtmlFile;
-            pageStack.pushLayout(layout);
+            if (pageStack.Visible)
+            {
+                pageStack.pushLayout(layout);
 
-            var pathBase = environment.PathBase;
+                var pathBase = environment.PathBase;
 
-            HtmlDocumentRenderer dr = new HtmlDocumentRenderer(environment);
-            dr.addTransform(new HashTreeMenus(fileFinder));
-            dr.addTransform(new ExpandRootedPaths(pathBase));
-            if (!String.IsNullOrEmpty(pathBase))
-            {
-                //Safe to fix relative urls last since it wont replace any that already start with the path base.
-                dr.addTransform(new FixRelativeUrls(pathBase));
+                HtmlDocumentRenderer dr = new HtmlDocumentRenderer(environment);
+                dr.addTransform(new HashTreeMenus(fileFinder));
+                dr.addTransform(new ExpandRootedPaths(pathBase));
+                if (!String.IsNullOrEmpty(pathBase))
+                {
+                    //Safe to fix relative urls last since it wont replace any that already start with the path base.
+                    dr.addTransform(new FixRelativeUrls(pathBase));
+                }
+                var document = dr.getDocument(pageStack.Pages);
+                var outDir = Path.GetDirectoryName(outFile);
+                if (!Directory.Exists(outDir))
+                {
+                    Directory.CreateDirectory(outDir);
+                }
+                using (var writer = new StreamWriter(File.Open(outFile, FileMode.Create, FileAccess.Write, FileShare.None)))
+                {
+                    writer.Write(document.DocumentNode.OuterHtml);
+                }
+                fileFinder.CopyDependencyFiles(this.outDir, pageStack);
             }
-            var document = dr.getDocument(pageStack.Pages);
-            var outDir = Path.GetDirectoryName(outFile);
-            if (!Directory.Exists(outDir))
-            {
-                Directory.CreateDirectory(outDir);
-            }
-            using (var writer = new StreamWriter(File.Open(outFile, FileMode.Create, FileAccess.Write, FileShare.None)))
-            {
-                writer.Write(document.DocumentNode.OuterHtml);
-            }
-            fileFinder.CopyDependencyFiles(this.outDir, pageStack);
         }
 
         public void copyProjectContent()

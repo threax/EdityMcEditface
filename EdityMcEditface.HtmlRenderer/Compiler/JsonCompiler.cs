@@ -44,27 +44,30 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
             PageStack pageStack = new PageStack(environment, fileFinder);
             pageStack.ContentFile = fileInfo.HtmlFile;
-            pageStack.ContentTransformer = (content) =>
+            if (pageStack.Visible)
             {
+                pageStack.ContentTransformer = (content) =>
+                {
                 //This removes all html elements and formatting and cleans up the whitespace
                 HtmlDocument htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(content);
-                var escaped = HtmlEntity.DeEntitize(htmlDoc.DocumentNode.InnerText);
-                escaped = escaped.SingleSpaceWhitespace();
-                return escaped.JsonEscape();
-            };
-            pageStack.pushLayout(layout);
+                    htmlDoc.LoadHtml(content);
+                    var escaped = HtmlEntity.DeEntitize(htmlDoc.DocumentNode.InnerText);
+                    escaped = escaped.SingleSpaceWhitespace();
+                    return escaped.JsonEscape();
+                };
+                pageStack.pushLayout(layout);
 
-            var dr = new PlainTextRenderer(environment, StringExtensions.JsonEscape);
-            var document = dr.getDocument(pageStack.Pages);
-            var outDir = Path.GetDirectoryName(outFile);
-            if (!Directory.Exists(outDir))
-            {
-                Directory.CreateDirectory(outDir);
-            }
-            using (var writer = new StreamWriter(File.Open(outFile, FileMode.Create, FileAccess.Write, FileShare.None), Encoding.UTF8))
-            {
-                writer.Write(document);
+                var dr = new PlainTextRenderer(environment, StringExtensions.JsonEscape);
+                var document = dr.getDocument(pageStack.Pages);
+                var outDir = Path.GetDirectoryName(outFile);
+                if (!Directory.Exists(outDir))
+                {
+                    Directory.CreateDirectory(outDir);
+                }
+                using (var writer = new StreamWriter(File.Open(outFile, FileMode.Create, FileAccess.Write, FileShare.None), Encoding.UTF8))
+                {
+                    writer.Write(document);
+                }
             }
         }
 

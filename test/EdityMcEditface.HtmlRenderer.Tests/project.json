@@ -7,7 +7,7 @@
     "xunit": "2.2.0-beta5-build3474",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Microsoft.DotNet.InternalAbstractions": "1.0.0",
-    "EdityMcEditface.HtmlRenderer": "2.4.1-*"
+    "EdityMcEditface.HtmlRenderer": "2.4.2-*"
   },
   "testRunner": "xunit",
   "frameworks": {

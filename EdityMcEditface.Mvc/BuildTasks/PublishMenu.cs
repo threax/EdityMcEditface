@@ -31,10 +31,10 @@ namespace EdityMcEditface.Mvc.BuildTasks
         private String menuFile;
         private SiteBuilder siteBuilder;
 
-        public PublishMenu(IFileFinder fileFinder, SiteBuilder siteBuilder, String menuFile)
+        public PublishMenu(IFileFinder fileFinder, SiteBuilder siteBuilder, String menuFile, JsonSerializer jsonSerializer)
         {
             this.fileFinder = fileFinder;
-            this.serializer = new JsonSerializer();
+            this.serializer = jsonSerializer;
             this.menuFile = menuFile;
             this.siteBuilder = siteBuilder;
         }

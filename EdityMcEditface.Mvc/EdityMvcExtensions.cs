@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using EdityMcEditface.HtmlRenderer.Compiler;
 using EdityMcEditface.HtmlRenderer.Filesystem;
 using EdityMcEditface.HtmlRenderer.FileInfo;
+using EdityMcEditface.BuildTasks;
 
 namespace EdityMcEditface.Mvc
 {
@@ -156,6 +157,8 @@ namespace EdityMcEditface.Mvc
                             builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
                         }
 
+                        editySettings.FireCustomizeSiteBuilder(builder);
+
                         return builder;
                     });
                     break;
@@ -173,6 +176,8 @@ namespace EdityMcEditface.Mvc
                         {
                             builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
                         }
+
+                        editySettings.FireCustomizeSiteBuilder(builder);
 
                         return builder;
                     });

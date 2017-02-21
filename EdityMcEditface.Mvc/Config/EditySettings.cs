@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,5 +25,22 @@ namespace EdityMcEditface.Mvc.Config
         /// The user account name to use when using NoAuth
         /// </summary>
         public String NoAuthUser { get; set; } = "OnlyUser";
+
+        /// <summary>
+        /// This event is fired when the site builder is created, it can be customized further in this callback.
+        /// </summary>
+        public event Action<SiteBuilder> CustomizeSiteBuilder;
+
+        /// <summary>
+        /// Fire the customize site builder event.
+        /// </summary>
+        /// <param name="siteBuilder"></param>
+        public void FireCustomizeSiteBuilder(SiteBuilder siteBuilder)
+        {
+            if(this.CustomizeSiteBuilder != null)
+            {
+                this.CustomizeSiteBuilder.Invoke(siteBuilder);
+            }
+        }
     }
 }

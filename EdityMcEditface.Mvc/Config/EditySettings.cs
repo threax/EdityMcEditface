@@ -27,20 +27,8 @@ namespace EdityMcEditface.Mvc.Config
         public String NoAuthUser { get; set; } = "OnlyUser";
 
         /// <summary>
-        /// This event is fired when the site builder is created, it can be customized further in this callback.
+        /// Some events that are fired during runtime.
         /// </summary>
-        public event Action<SiteBuilder> CustomizeSiteBuilder;
-
-        /// <summary>
-        /// Fire the customize site builder event.
-        /// </summary>
-        /// <param name="siteBuilder"></param>
-        public void FireCustomizeSiteBuilder(SiteBuilder siteBuilder)
-        {
-            if(this.CustomizeSiteBuilder != null)
-            {
-                this.CustomizeSiteBuilder.Invoke(siteBuilder);
-            }
-        }
+        public IEdityEvents Events { get; set; } = new EdityEvents();
     }
 }

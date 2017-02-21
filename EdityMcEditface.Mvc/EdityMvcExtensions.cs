@@ -77,6 +77,11 @@ namespace EdityMcEditface.Mvc
         /// <returns>The service collection.</returns>
         public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration)
         {
+            if(editySettings.Events == null)
+            {
+                editySettings.Events = new EdityEvents();
+            }
+
             services.TryAddScoped<IWebConfigProvider>(s =>
             {
                 return new DefaultWebConfigProvider(projectConfiguration.DefaultPage);
@@ -157,7 +162,11 @@ namespace EdityMcEditface.Mvc
                             builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
                         }
 
-                        editySettings.FireCustomizeSiteBuilder(builder);
+                        editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()
+                        {
+                            SiteBuilder = builder,
+                            Services = s
+                        });
 
                         return builder;
                     });
@@ -177,7 +186,11 @@ namespace EdityMcEditface.Mvc
                             builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
                         }
 
-                        editySettings.FireCustomizeSiteBuilder(builder);
+                        editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()
+                        {
+                            SiteBuilder = builder,
+                            Services = s
+                        });
 
                         return builder;
                     });

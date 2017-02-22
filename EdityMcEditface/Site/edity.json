@@ -14,5 +14,12 @@
     "editComponents/source.html",
     "editComponents/media.html",
     "editComponents/history.html"
+  ],
+  "compilers": [
+    {
+      "type": "Html",
+      "template": "default.html",
+      "extension": ".html"
+    }
   ]
 }

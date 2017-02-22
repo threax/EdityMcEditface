@@ -723,5 +723,14 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             }
             return true;
         }
+
+        public string LoadSection(string path)
+        {
+            path = Path.Combine("edity/layouts/sections", path.TrimStartingPathChars());
+            using(var reader = new StreamReader(this.ReadFile(path)))
+            {
+                return reader.ReadToEnd();
+            }
+        }
     }
 }

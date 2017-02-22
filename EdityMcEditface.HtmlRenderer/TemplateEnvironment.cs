@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,16 +10,18 @@ namespace EdityMcEditface.HtmlRenderer
     public class TemplateEnvironment : ValueProvider
     {
         private Dictionary<String, String> vars = new Dictionary<string, string>();
-        private HashSet<String> usedVars = new HashSet<string>();
         private LinkedContent linkedContent = new LinkedContent();
         private String docLink;
         private EdityProject project;
         private PageDefinition pageDefinition = new PageDefinition();
         private String pathBase;
+        private IFileFinder fileFinder;
 
-        public TemplateEnvironment(String docLink, EdityProject project)
+        public TemplateEnvironment(String docLink, IFileFinder fileFinder)
         {
-            if(!project.Vars.TryGetValue("pathBase", out this.pathBase))
+            this.project = fileFinder.Project;
+
+            if (!project.Vars.TryGetValue("pathBase", out this.pathBase))
             {
                 pathBase = "";
             }
@@ -27,7 +30,7 @@ namespace EdityMcEditface.HtmlRenderer
                 pathBase = pathBase.EnsureStartingPathSlash();
             }
             this.docLink = docLink.EnsureStartingPathSlash();
-            this.project = project;
+            this.fileFinder = fileFinder;
             linkedContent.mergeEntries(project.ContentMap);
         }
 
@@ -37,7 +40,6 @@ namespace EdityMcEditface.HtmlRenderer
         /// <param name="pages">An enumerator over the pages in inside -> out order.</param>
         public void buildVariables(IEnumerable<PageStackItem> pages)
         {
-            usedVars.Clear();
             vars.Clear();
             foreach(var page in pages)
             {
@@ -86,13 +88,31 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        private const String sectionOpen = "section(";
+        private const String macroClose = ")";
+
         public String getValue(String key, String defaultVal)
         {
-            usedVars.Add(key);
-            String value;
-            if(vars.TryGetValue(key, out value))
+            if(key.StartsWith(sectionOpen) && key.EndsWith(macroClose))
             {
-                return value;
+                var sectionName = key.Substring(sectionOpen.Length, key.Length - sectionOpen.Length - macroClose.Length);
+                try
+                {
+                    return fileFinder.LoadSection(sectionName);
+                }
+                catch (IOException ex)
+                {
+                    //Return an error message
+                    return $"{ex.GetType().Name} Message: {ex.Message}";
+                }
+            }
+            else
+            {
+                String value;
+                if (vars.TryGetValue(key, out value))
+                {
+                    return value;
+                }
             }
             return defaultVal;
         }
@@ -105,8 +125,8 @@ namespace EdityMcEditface.HtmlRenderer
         /// <returns></returns>
         public bool shouldEncodeOutput(String key)
         {
-            //ONLY the css and javascript tags should be written insecurly
-            return key != "css" && key != "javascript";
+            //The css and javascript tags should be written insecurly, also the section macro
+            return key != "css" && key != "javascript" && !key.StartsWith(sectionOpen);
         }
 
         /// <summary>
@@ -117,17 +137,6 @@ namespace EdityMcEditface.HtmlRenderer
             get
             {
                 return vars;
-            }
-        }
-
-        /// <summary>
-        /// A collection of vars that have been used already
-        /// </summary>
-        public IEnumerable<String> UsedVars
-        {
-            get
-            {
-                return usedVars;
             }
         }
 

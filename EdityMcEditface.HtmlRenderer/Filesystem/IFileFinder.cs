@@ -25,5 +25,12 @@ namespace EdityMcEditface.HtmlRenderer
         Stream ReadFile(string file);
         void SavePageDefinition(PageDefinition definition, ITargetFileInfo fileInfo);
         Stream WriteFile(string file);
+
+        /// <summary>
+        /// Load a section file and return its contents.
+        /// </summary>
+        /// <param name="path">The path to load.</param>
+        /// <returns>The contents of path.</returns>
+        String LoadSection(string path);
     }
 }

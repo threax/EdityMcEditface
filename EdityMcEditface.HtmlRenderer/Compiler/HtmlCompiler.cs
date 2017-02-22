@@ -36,7 +36,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             }
 
             ITargetFileInfo fileInfo = fileInfoProvider.GetFileInfo(relativeFile, null);
-            TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder.Project);
+            TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder);
             PageStack pageStack = new PageStack(environment, fileFinder);
             pageStack.ContentFile = fileInfo.HtmlFile;
             if (pageStack.Visible)

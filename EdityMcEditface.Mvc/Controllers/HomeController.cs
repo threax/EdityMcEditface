@@ -83,7 +83,7 @@ namespace EdityMcEditface.Mvc.Controllers
 
         private PageStack CreatePageStack()
         {
-            templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder.Project);
+            templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder);
             PageStack pageStack = new PageStack(templateEnvironment, fileFinder);
             pageStack.ContentFile = targetFileInfo.HtmlFile;
             return pageStack;
@@ -97,7 +97,7 @@ namespace EdityMcEditface.Mvc.Controllers
             //for one page if requested, so whatever
 
             targetFileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
-            templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder.Project);
+            templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder);
             PageStack pageStack = new PageStack(templateEnvironment, fileFinder);
             pageStack.ContentFile = targetFileInfo.HtmlFile;
 

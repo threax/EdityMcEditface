@@ -40,7 +40,7 @@ namespace EdityMcEditface.Mvc.Config
           <conditions logicalGrouping=""MatchAll"" >
             <add input=""{{REQUEST_FILENAME}}"" matchType=""IsFile"" ignoreCase=""false"" negate=""true"" />
             <add input=""{{REQUEST_FILENAME}}"" matchType=""IsDirectory"" ignoreCase=""false"" negate=""true"" />
-            <add input=""{{REQUEST_URI}}"" pattern=""^/(Service-)"" negate=""true"" />
+            <add input=""{{REQUEST_URI}}"" pattern=""^/(EmbdSvcs-)"" negate=""true"" />
           </conditions>
           <action type=""Rewrite"" url=""{0}/{{R:1}}"" />
         </rule>
@@ -49,7 +49,7 @@ namespace EdityMcEditface.Mvc.Config
           <conditions logicalGrouping=""MatchAll"" >
             <add input=""{{REQUEST_FILENAME}}"" matchType=""IsFile"" negate=""true"" />
             <add input=""{{REQUEST_FILENAME}}"" matchType=""IsDirectory"" negate=""true"" />
-            <add input=""{{REQUEST_URI}}"" pattern=""^/(Service-)"" negate=""true"" />
+            <add input=""{{REQUEST_URI}}"" pattern=""^/(EmbdSvcs-)"" negate=""true"" />
           </conditions>
           <action type=""Rewrite"" url=""{{R:1}}.html"" />
         </rule>

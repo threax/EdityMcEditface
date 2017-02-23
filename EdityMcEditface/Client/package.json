@@ -1,10 +1,10 @@
 {
   "name": "editymceditface.client",
-  "version": "2.2.1",
+  "version": "2.6.0",
   "private": false,
   "types": "./types/fetch.d.ts",
   "devDependencies": {
-    "threax-gulp-tk": "^4.0.0"
+    "threax-gulp-tk": "^4.2.0"
   },
   "dependencies": {
     "bootstrap": "~3.3.6",

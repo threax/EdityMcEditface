@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace EdityMcEditface.Mvc.Config
@@ -30,5 +31,10 @@ namespace EdityMcEditface.Mvc.Config
         /// Some events that are fired during runtime.
         /// </summary>
         public IEdityEvents Events { get; set; } = new EdityEvents();
+
+        /// <summary>
+        /// Set this to an enumerable of assemblies to add them as application parts to mvc.
+        /// </summary>
+        public IEnumerable<Assembly> AdditionalMvcLibraries { get; set; }
     }
 }

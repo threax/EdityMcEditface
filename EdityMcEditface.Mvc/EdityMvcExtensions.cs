@@ -22,6 +22,7 @@ using EdityMcEditface.HtmlRenderer.Compiler;
 using EdityMcEditface.HtmlRenderer.Filesystem;
 using EdityMcEditface.HtmlRenderer.FileInfo;
 using EdityMcEditface.BuildTasks;
+using System.Reflection;
 
 namespace EdityMcEditface.Mvc
 {
@@ -207,7 +208,7 @@ namespace EdityMcEditface.Mvc
                 o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 o.SerializerSettings.Converters.Add(new StringEnumConverter());
             })
-            .AddEdityControllers();
+            .AddEdityControllers(editySettings.AdditionalMvcLibraries);
 
             return services;
         }
@@ -237,9 +238,16 @@ namespace EdityMcEditface.Mvc
             return app;
         }
 
-        private static IMvcBuilder AddEdityControllers(this IMvcBuilder builder)
+        private static IMvcBuilder AddEdityControllers(this IMvcBuilder builder, IEnumerable<Assembly> additionalAssemblies)
         {
             builder.AddApplicationPart(typeof(EdityMvcExtensions).Assembly);
+            if(additionalAssemblies != null)
+            {
+                foreach(var assembly in additionalAssemblies)
+                {
+                    builder.AddApplicationPart(assembly);
+                }
+            }
             return builder;
         }
     }

@@ -4,8 +4,10 @@
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
+    "allowJs": true,
     "target": "es5",
     "outDir": "obj/tscout/lib",
+    "outFile": "ClientBin/tsbin.js",
     "module": "amd",
     "baseUrl": ".",
     "paths": {
@@ -28,14 +30,28 @@
       ],
       "edity.widgets.*": [
         "Client/Widgets/*"
+      ],
+      "hr.halcyon.*": [
+        "node_modules/HtmlRapier.Halcyon/src/*"
+      ],
+      "jdorn.*": [
+        "node_modules/htmlrapier.json-editor/*"
       ]
     }
   },
+  "include": [
+    "./"
+  ],
   "exclude": [
-    "node_modules",
+    "./**/*.js",
+    "node_modules/jsns",
     "Client/node_modules",
     "wwwroot",
     "Client/SwaggerGen/*"
+  ],
+  "files": [
+    "node_modules/jsns/jsns.ts",
+    "node_modules/htmlrapier/src/polyfill.js"
   ],
   "compileOnSave": true
 }

@@ -11,9 +11,9 @@
     "ckeditor": "~4.5.10",
     "ckeditor-youtube-plugin": "^2.1.1",
     "codemirror": "~5.17.0",
-    "jsns": "^2.0.1",
-    "htmlrapier": "^3.3.1",
-    "htmlrapier.bootstrap": "^3.2.0",
-    "htmlrapier.widgets": "^3.3.0"
+    "jsns": "^2.0.2",
+    "htmlrapier": "^4.0.0",
+    "htmlrapier.bootstrap": "^4.0.4",
+    "htmlrapier.widgets": "^4.0.6"
   }
 }

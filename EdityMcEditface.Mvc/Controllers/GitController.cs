@@ -10,10 +10,10 @@ using EdityMcEditface.Mvc.Models.Git;
 using Microsoft.AspNetCore.Authorization;
 using EdityMcEditface.HtmlRenderer;
 using System.Net;
-using Threax.AspNetCore.ExceptionToJson;
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 using EdityMcEditface.HtmlRenderer.FileInfo;
+using Threax.AspNetCore.ExceptionFilter;
 
 namespace EdityMcEditface.Mvc.Controllers
 {

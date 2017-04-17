@@ -17,12 +17,13 @@
     },
     "EdityMcEditface": {
       "commandName": "Project",
-      "commandLineArgs": "--workingDirOff=\"custom_components\\HtmlRapier\\docs\" --workingDirOff=\"C:\\Development\\EdityTestDir\\repos\\mycourses-support\" --workingDirOff=\"C:\\Development\\EdityMcEditface\\EdityMcEditface\\custom_components\\HtmlRapier\\docs\" --workingDir=\"C:\\Development\\AspNetCoreFrameworkDocs\"",
+      "commandLineArgs": "--workingDirOff=\"custom_components\\HtmlRapier\\docs\" --workingDirOff=\"C:\\Development\\EdityTestDir\\repos\\mycourses-support\" --workingDirOff=\"C:\\Development\\EdityMcEditface\\EdityMcEditface\\custom_components\\HtmlRapier\\docs\" --workingDirOff=\"C:\\Development\\AspNetCoreFrameworkDocs\"",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "http://localhost:5000/"
     }
   }
 }

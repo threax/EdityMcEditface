@@ -133,15 +133,6 @@
             "null",
             "string"
           ]
-        },
-        "settings": {
-          "type": [
-            "null",
-            "object"
-          ],
-          "additionalProperties": {
-            "type": "string"
-          }
         }
       }
     },

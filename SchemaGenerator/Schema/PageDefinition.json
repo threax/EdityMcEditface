@@ -11,7 +11,8 @@
       ],
       "additionalProperties": {
         "type": "string"
-      }
+      },
+      "description": "The variables for this page."
     },
     "linkedContent": {
       "type": [
@@ -20,7 +21,12 @@
       ],
       "items": {
         "type": "string"
-      }
+      },
+      "description": "The content linked to this page."
+    },
+    "hidden": {
+      "type": "boolean",
+      "description": "True if the page should be hidden and not included in output."
     }
   }
 }

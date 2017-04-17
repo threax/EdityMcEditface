@@ -36,7 +36,7 @@ namespace EdityMcEditface
                 if (!Directory.Exists(Path.Combine(siteRootPath, "ClientBin")))
                 {
                     //Probably running inside the output folder, go up the appropriate number of directories
-                    siteRootPath = Path.GetFullPath(Path.Combine(runningFolder, "../../../../"));
+                    siteRootPath = Path.GetFullPath(Path.Combine(runningFolder, "../../../"));
                     if (!Directory.Exists(Path.Combine(siteRootPath, "ClientBin")))
                     {
                         throw new Exception("Cannot find site root folder containing a ClientBin folder");

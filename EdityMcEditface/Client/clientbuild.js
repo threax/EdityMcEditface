@@ -1,91 +1,53 @@
 ﻿"use strict";
+var copy = require('threax-npm-tk/copy');
+var less = require('threax-npm-tk/less');
 
-var path = require('path');
+module.exports = function (outDir, iconOutPath, moduleDir) {
+    var promises = [];
 
-var compileTypescript = require('threax-gulp-tk/typescript.js');
-var compileLess = require('threax-gulp-tk/less.js');
-var copyFiles = require('threax-gulp-tk/copy.js');
+    promises.push(less({
+        encoding: 'utf8',
+        importPaths: [__dirname, moduleDir + '/bootstrap/less'],
+        input: __dirname + '/edity/**/*.less',
+        basePath: __dirname + '/edity',
+        out: outDir + '/edity',
+        compress: true,
+    }));
 
+    promises.push(less({
+        encoding: 'utf8',
+        importPaths: [__dirname, moduleDir + '/bootstrap/less'],
+        input: __dirname + '/Views/**/*.less',
+        basePath: __dirname + '/Views',
+        out: outDir + '/edity/layouts',
+        compress: true,
+    }));
 
-module.exports = function (sharedSettings, inputDir, outputDir, clientSideNamespace) {
-    //Spc specific client side
-    var childClientDir = inputDir;
-    var libDir = outputDir + "/lib";
-    var viewBaseDir = outputDir + "/edity";
+    //Views
+    promises.push(copy.glob(
+        __dirname + '/Views/**/*.css',
+        __dirname + '/Views',
+        outDir + '/edity/layouts'
+    ));
 
-    //less
-    compileLess({
-        files: [
-        childClientDir + '/Less/**/*.less'
-        ],
-        dest: libDir + '/css',
-        importPaths: [path.join("node_modules/bootstrap/less")],
-    });
+    promises.push(copy.glob(
+        __dirname + '/Views/**/*.html',
+        __dirname + '/Views',
+        outDir + '/edity/layouts'
+    ));
 
-    //Client Side ts
-    compileTypescript({
-        libs: [
-            childClientDir + "/Libs/**/*.ts",
-        ],
-        runners: false,
-        dest: libDir,
-        sourceRoot: childClientDir + "/Libs/",
-        namespace: clientSideNamespace,
-        output: clientSideNamespace,
-        concat: sharedSettings.concat,
-        minify: sharedSettings.minify
-    });
+    //Templates
+    promises.push(copy.glob(
+        __dirname + '/Templates/**/*.css',
+        __dirname + '/Templates',
+        outDir + '/edity/Templates'
+    ));
 
-    //Compile view typescript
-    compileTypescript({
-        libs: [
-            childClientDir + "/Views/**/*.ts",
-            "!**/*.intellisense.js"
-        ],
-        runners: true,
-        dest: viewBaseDir + '/layouts',
-        sourceRoot: childClientDir + "/Views/"
-    });
+    promises.push(copy.glob(
+        __dirname + '/Templates/**/*.html',
+        __dirname + '/Templates',
+        outDir + '/edity/Templates'
+    ));
 
-    //less
-    compileLess({
-        files: [
-        childClientDir + "/Views/**/*.less"
-        ],
-        dest: viewBaseDir + '/layouts',
-        importPaths: [path.join("node_modules/bootstrap/less")],
-    });
-
-    //Copy view files
-    copyFiles({
-        libs: [
-            childClientDir + "/Views/**/*.html",
-            childClientDir + "/Views/**/*.js",
-            childClientDir + "/Views/**/*.json",
-            childClientDir + "/Views/**/*.css",
-            "!**/*.intellisense.js"
-        ],
-        baseName: childClientDir + "/Views",
-        dest: viewBaseDir + '/layouts'
-    });
-
-    copyFiles({
-        libs: [
-            childClientDir + "/Templates/**/*.html",
-            childClientDir + "/Templates/**/*.js",
-            childClientDir + "/Templates/**/*.json",
-            childClientDir + "/Templates/**/*.css",
-            "!**/*.intellisense.js"
-        ],
-        baseName: childClientDir + "/Views",
-        dest: viewBaseDir + '/templates'
-    });
-
-    copyFiles({
-        libs: [
-            childClientDir + "/edity.json",
-        ],
-        baseName: childClientDir,
-        dest: viewBaseDir
-    });
+    return Promise.all(promises);
 }

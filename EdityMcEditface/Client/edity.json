@@ -47,21 +47,6 @@
         }
       ],
       "hasMin": false
-    },
-    "Services": {
-      "dependencies": [ "HtmlRapier" ]
-    },
-    "GitService": {
-      "dependencies": [ "Services" ]
-    },
-    "CompileService": {
-      "dependencies": [ "Services" ]
-    },
-    "SaveService": {
-      "dependencies": [ "Services" ]
-    },
-    "PageService": {
-      "dependencies": [ "Services" ]
     }
   },
   "vars": {

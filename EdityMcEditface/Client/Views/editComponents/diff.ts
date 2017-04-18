@@ -1,4 +1,6 @@
-﻿"use strict";
+﻿///<amd-module name="edity.core.edit.components.diff"/>
+
+"use strict";
 
 import * as storage from "hr.storage";
 import * as uploader from "edity.editorcore.uploader";

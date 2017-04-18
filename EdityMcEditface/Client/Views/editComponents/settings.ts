@@ -1,4 +1,6 @@
-﻿"use strict";
+﻿///<amd-module name="edity.core.edit.components.settings"/>
+
+"use strict";
 
 import * as controller from "hr.controller";
 import * as FormLifecycle from "edity.editorcore.FormLifecycle";

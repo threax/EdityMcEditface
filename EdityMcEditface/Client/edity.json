@@ -4,13 +4,8 @@
     "transitions": {
       "css": [ "~/lib/edity/css/fade.css" ]
     },
-    "bootstrap-native": {
-      "js": [ { "file": "~/lib/HtmlRapierBootstrap.js" } ],
-      "dependencies": [ "transitions", "HtmlRapier" ]
-    },
     "bootstrap": {
       "css": [ "~/lib/bootstrap/dist/css/bootstrap-custom.css" ],
-      "dependencies": [ "bootstrap-native" ]
     },
     "diff_match_patch": {
       "js": [ { "file": "~/edity/lib/diff_match_patch/diff_match_patch.js" } ]
@@ -53,13 +48,8 @@
       ],
       "hasMin": false
     },
-    "EditorCoreStart": {
-      "js": [ { "file": "~/edity/lib/EditorCorePageStart.js" } ],
-      "dependencies": [ "HtmlRapier" ]
-    },
     "Services": {
-      "js": [ { "file": "~/edity/lib/EditorCore.js" } ],
-      "dependencies": [ "EditorCoreStart" ]
+      "dependencies": [ "HtmlRapier" ]
     },
     "GitService": {
       "dependencies": [ "Services" ]

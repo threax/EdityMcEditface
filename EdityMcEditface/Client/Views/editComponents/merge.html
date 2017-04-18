@@ -1,7 +1,7 @@
 ﻿<template data-hr-component="commitComponent" data-hr-variant="Conflicted">
     <li style="color:orange;">{{filePath}} <a class="pull-right" data-hr-on-click="merge">Resolve Conflict</a></li>
 </template>
-<div class="modal fade" id="mergeModal" data-hr-controller="merge" tabindex="-1" role="dialog" aria-labelledby="mergeModalLabel" data-hr-toggle="dialog">
+<div class="modal fade" id="mergeModal" data-hr-controller="merge" tabindex="-1" role="dialog" aria-labelledby="mergeModalLabel" data-hr-toggle="dialog" data-hr-run="edity.core.edit.components.merge">
     <div class="modal-dialog mergeModal" role="document">
         <div class="modal-content">
             <div class="modal-header">

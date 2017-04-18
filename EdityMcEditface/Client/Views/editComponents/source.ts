@@ -1,4 +1,6 @@
-﻿"use strict";
+﻿///<amd-module name="edity.core.edit.components.source"/>
+
+"use strict";
 
 
 import * as domQuery from "hr.domquery";

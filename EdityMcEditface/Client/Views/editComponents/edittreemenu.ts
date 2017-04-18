@@ -1,4 +1,6 @@
-﻿"use strict";
+﻿///<amd-module name="edity.core.edit.components.edittreemenu"/>
+
+"use strict";
 
 import * as controller from "hr.controller";
 import * as toggles from "hr.toggles";

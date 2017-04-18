@@ -1,4 +1,6 @@
-﻿"use strict";
+﻿///<amd-module name="edity.core.edit.components.media"/>
+
+"use strict";
 
 import * as storage from "hr.storage";
 import * as BindingCollection from "hr.bindingcollection";

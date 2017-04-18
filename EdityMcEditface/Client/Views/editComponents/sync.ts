@@ -1,4 +1,6 @@
-﻿"use strict";
+﻿///<amd-module name="edity.core.edit.components.sync"/>
+
+"use strict";
 
 
 import * as storage from "hr.storage";

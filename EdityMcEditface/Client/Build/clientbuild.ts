@@ -10,7 +10,7 @@ export function build(outDir, iconOutPath, moduleDir, filesDir): Promise<any> {
         importPaths: [filesDir, moduleDir + '/bootstrap/less'],
         input: filesDir + '/edity/**/*.less',
         basePath: filesDir + '/edity',
-        out: outDir + '/lib',
+        out: outDir + '/lib/edity',
         compress: true,
     }));
 

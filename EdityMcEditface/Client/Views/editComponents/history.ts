@@ -1,4 +1,6 @@
-﻿"use strict";
+﻿///<amd-module name="edity.core.edit.components.history"/>
+
+"use strict";
 
 import * as controller from "hr.controller";
 import * as navmenu from "edity.editorcore.navmenu";

@@ -8,7 +8,7 @@ function build(outDir, iconOutPath, moduleDir, filesDir) {
         importPaths: [filesDir, moduleDir + '/bootstrap/less'],
         input: filesDir + '/edity/**/*.less',
         basePath: filesDir + '/edity',
-        out: outDir + '/lib',
+        out: outDir + '/lib/edity',
         compress: true,
     }));
     //Views

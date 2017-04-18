@@ -1,7 +1,7 @@
 ﻿<template data-hr-component="MediaNavItem">
     <li><a data-toggle="modal" data-target="#mediaModal" data-hr-on-click="loadMedia" data-hr-model="browse" data-hr-model-src="{{mediaBrowseDir}}" href="#Media">Media</a></li>
 </template>
-<div class="modal fade" id="mediaModal" data-hr-controller="media" tabindex="-1" role="dialog" aria-labelledby="mediaModalLabel" data-hr-toggle="dialog">
+<div class="modal fade" id="mediaModal" data-hr-controller="media" tabindex="-1" role="dialog" aria-labelledby="mediaModalLabel" data-hr-toggle="dialog" data-hr-run="edity.core.edit.components.media">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

@@ -39,7 +39,7 @@
     "edityLoading": {
       "css": [ "~/lib/edity/css/loading.css" ]
     },
-    "HtmlRapier": {
+    "tsBin": {
       "js": [
         {
           "file": "~/lib/tsbin.js",

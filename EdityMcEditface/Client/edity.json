@@ -1,15 +1,12 @@
 ﻿{
   "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
   "contentMap": {
-    "jsns": {
-      "js": [ { "file": "~/lib/jsns.js" } ]
-    },
     "transitions": {
       "css": [ "~/lib/edity/css/fade.css" ]
     },
     "bootstrap-native": {
       "js": [ { "file": "~/lib/HtmlRapierBootstrap.js" } ],
-      "dependencies": [ "transitions", "jsns", "HtmlRapier" ]
+      "dependencies": [ "transitions", "HtmlRapier" ]
     },
     "bootstrap": {
       "css": [ "~/lib/bootstrap/dist/css/bootstrap-custom.css" ],
@@ -50,22 +47,11 @@
     "HtmlRapier": {
       "js": [
         {
-          "file": "~/lib/polyfill.js",
+          "file": "~/lib/tsbin.js",
           "async": false
-        },
-        {
-          "file": "~/lib/HtmlRapier.js",
-          "async": true
-        },
-        {
-          "file": "~/lib/HtmlRapierWidgets.js",
-          "async": true
         }
       ],
-      "hasMin": true,
-      "dependencies": [
-        "jsns"
-      ]
+      "hasMin": false
     },
     "EditorCoreStart": {
       "js": [ { "file": "~/edity/lib/EditorCorePageStart.js" } ],

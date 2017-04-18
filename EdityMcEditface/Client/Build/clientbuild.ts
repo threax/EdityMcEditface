@@ -14,15 +14,6 @@ export function build(outDir, iconOutPath, moduleDir, filesDir): Promise<any> {
         compress: true,
     }));
 
-    promises.push(less.compile({
-        encoding: 'utf8',
-        importPaths: [filesDir, moduleDir + '/bootstrap/less'],
-        input: filesDir + '/Views/**/*.less',
-        basePath: filesDir + '/Views',
-        out: outDir + '/edity/layouts',
-        compress: true,
-    }));
-
     //Views
     promises.push(copy.glob(
         filesDir + '/Views/**/*.css',
@@ -36,6 +27,21 @@ export function build(outDir, iconOutPath, moduleDir, filesDir): Promise<any> {
         outDir + '/edity/layouts'
     ));
 
+    promises.push(copy.glob(
+        filesDir + '/Views/**/*.json',
+        filesDir + '/Views',
+        outDir + '/edity/layouts'
+    ));
+
+    promises.push(less.compile({
+        encoding: 'utf8',
+        importPaths: [filesDir, moduleDir + '/bootstrap/less'],
+        input: filesDir + '/Views/**/*.less',
+        basePath: filesDir + '/Views',
+        out: outDir + '/edity/layouts',
+        compress: true,
+    }));
+
     //Templates
     promises.push(copy.glob(
         filesDir + '/Templates/**/*.css',
@@ -48,6 +54,21 @@ export function build(outDir, iconOutPath, moduleDir, filesDir): Promise<any> {
         filesDir + '/Templates',
         outDir + '/edity/Templates'
     ));
+
+    promises.push(copy.glob(
+        filesDir + '/Templates/**/*.json',
+        filesDir + '/Templates',
+        outDir + '/edity/Templates'
+    ));
+
+    promises.push(less.compile({
+        encoding: 'utf8',
+        importPaths: [filesDir, moduleDir + '/bootstrap/less'],
+        input: filesDir + '/Templates/**/*.less',
+        basePath: filesDir + '/Templates',
+        out: outDir + '/edity/Templates',
+        compress: true,
+    }));
 
     promises.push(copy.glob(filesDir + "/edity.json", filesDir, outDir + '/edity'));
 

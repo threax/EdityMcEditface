@@ -1,4 +1,6 @@
-﻿"use strict";
+﻿///<amd-module name="edity.core.new"/>
+
+"use strict";
 
 import * as http from "hr.http";
 import * as uploader from "edity.editorcore.uploader";

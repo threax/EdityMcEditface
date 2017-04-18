@@ -2,6 +2,7 @@
 import * as clientBuild from './clientbuild';
 
 var copy = require('threax-npm-tk/copy');
+var less = require('threax-npm-tk/less');
 
 var filesDir = __dirname + "/..";
 
@@ -10,12 +11,31 @@ export function build(outDir, iconOutPath, moduleDir): Promise<any> {
 
     var libDir = outDir + '/edity/lib';
 
-    promises.push(clientBuild.build(outDir, iconOutPath, moduleDir));
+    promises.push(clientBuild.build(outDir, iconOutPath, moduleDir, filesDir));
     promises.push(buildCkEditor(libDir, moduleDir));
     promises.push(buildCodemirror(libDir, moduleDir));
+    promises.push(buildBootstrap(outDir + '/lib', moduleDir));
     promises.push(copy.glob(filesDir + "/diff_match_patch/**/*", filesDir, libDir));
 
     //Return composite promise
+    return Promise.all(promises);
+}
+
+function buildBootstrap(outDir, moduleDir): Promise<any> {
+    var promises: Promise<any>[] = [];
+
+    //Build bootstrap theme
+    promises.push(less.compile({
+        encoding: 'utf8',
+        importPaths: [filesDir, moduleDir + '/bootstrap/less'],
+        input: filesDir + '/bootstrap/bootstrap-custom.less',
+        basePath: filesDir + '/bootstrap',
+        out: outDir + "/bootstrap/dist/css",
+        compress: true,
+    }));
+
+    promises.push(copy.glob(moduleDir + "/bootstrap/dist/fonts/**/*", moduleDir + "/bootstrap/dist/fonts", outDir + "/bootstrap/dist/fonts"));
+    
     return Promise.all(promises);
 }
 

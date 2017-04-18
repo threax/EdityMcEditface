@@ -1,4 +1,6 @@
-﻿"use strict";
+﻿///<amd-module name="edity.core.editarea-ckeditor"/>
+
+"use strict";
 
 import * as storage from "hr.storage";
 import * as controller from "hr.controller";

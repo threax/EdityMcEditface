@@ -2,48 +2,54 @@
 var copy = require('threax-npm-tk/copy');
 var less = require('threax-npm-tk/less');
 
-module.exports = async function (outDir, iconOutPath, moduleDir) {
-    await less({
+var rootDir = __dirname + '/..'
+
+export function build(outDir, iconOutPath, moduleDir): Promise<any> {
+    var promises = [];
+
+    promises.push(less({
         encoding: 'utf8',
-        importPaths: [__dirname, moduleDir + '/bootstrap/less'],
-        input: __dirname + '/edity/**/*.less',
-        basePath: __dirname + '/edity',
+        importPaths: [rootDir, moduleDir + '/bootstrap/less'],
+        input: rootDir + '/edity/**/*.less',
+        basePath: rootDir + '/edity',
         out: outDir + '/edity',
         compress: true,
-    });
+    }));
 
-    await less({
+    promises.push(less({
         encoding: 'utf8',
-        importPaths: [__dirname, moduleDir + '/bootstrap/less'],
-        input: __dirname + '/Views/**/*.less',
-        basePath: __dirname + '/Views',
+        importPaths: [rootDir, moduleDir + '/bootstrap/less'],
+        input: rootDir + '/Views/**/*.less',
+        basePath: rootDir + '/Views',
         out: outDir + '/edity/layouts',
         compress: true,
-    });
+    }));
 
     //Views
-    await copy.glob(
-        __dirname + '/Views/**/*.css',
-        __dirname + '/Views',
+    promises.push(copy.glob(
+        rootDir + '/Views/**/*.css',
+        rootDir + '/Views',
         outDir + '/edity/layouts'
-    );
+    ));
 
-    await copy.glob(
-        __dirname + '/Views/**/*.html',
-        __dirname + '/Views',
+    promises.push(copy.glob(
+        rootDir + '/Views/**/*.html',
+        rootDir + '/Views',
         outDir + '/edity/layouts'
-    );
+    ));
 
     //Templates
-    await copy.glob(
-        __dirname + '/Templates/**/*.css',
-        __dirname + '/Templates',
+    promises.push(copy.glob(
+        rootDir + '/Templates/**/*.css',
+        rootDir + '/Templates',
         outDir + '/edity/Templates'
-    );
+    ));
 
-    await copy.glob(
-        __dirname + '/Templates/**/*.html',
-        __dirname + '/Templates',
+    promises.push(copy.glob(
+        rootDir + '/Templates/**/*.html',
+        rootDir + '/Templates',
         outDir + '/edity/Templates'
-    );
+    ));
+
+    return Promise.all(promises);
 }

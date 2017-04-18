@@ -1,16 +1,14 @@
 ﻿"use strict";
-var copy = require('threax-npm-tk/copy');
-var less = require('threax-npm-tk/less');
-var clientBuild = require('./clientbuild');
+import * as clientBuild from './clientbuild';
 
-var fs = require('threax-npm-tk/node_modules/fs-extra');
+var copy = require('threax-npm-tk/copy');
 
 var filesDir = __dirname + "/..";
 
-export function build(outDir, iconOutPath, moduleDir) {
+export function build(outDir, iconOutPath, moduleDir): Promise<any> {
     var promises = [];
 
-    promises.push(clientBuild(outDir, iconOutPath, moduleDir));
+    promises.push(clientBuild.build(outDir, iconOutPath, moduleDir));
     promises.push(buildCkEditor(outDir + '/edity/lib', moduleDir));
     promises.push(buildCodemirror(outDir + '/edity/lib', moduleDir));
 

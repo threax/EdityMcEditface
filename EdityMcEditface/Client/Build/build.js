@@ -1,12 +1,10 @@
 "use strict";
+var clientBuild = require("./clientbuild");
 var copy = require('threax-npm-tk/copy');
-var less = require('threax-npm-tk/less');
-var clientBuild = require('./clientbuild');
-var fs = require('threax-npm-tk/node_modules/fs-extra');
 var filesDir = __dirname + "/..";
 function build(outDir, iconOutPath, moduleDir) {
     var promises = [];
-    promises.push(clientBuild(outDir, iconOutPath, moduleDir));
+    promises.push(clientBuild.build(outDir, iconOutPath, moduleDir));
     promises.push(buildCkEditor(outDir + '/edity/lib', moduleDir));
     promises.push(buildCodemirror(outDir + '/edity/lib', moduleDir));
     //Return composite promise

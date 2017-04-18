@@ -8,9 +8,12 @@ var filesDir = __dirname + "/..";
 export function build(outDir, iconOutPath, moduleDir): Promise<any> {
     var promises = [];
 
+    var libDir = outDir + '/edity/lib';
+
     promises.push(clientBuild.build(outDir, iconOutPath, moduleDir));
-    promises.push(buildCkEditor(outDir + '/edity/lib', moduleDir));
-    promises.push(buildCodemirror(outDir + '/edity/lib', moduleDir));
+    promises.push(buildCkEditor(libDir, moduleDir));
+    promises.push(buildCodemirror(libDir, moduleDir));
+    promises.push(copy.glob(filesDir + "/diff_match_patch/**/*", filesDir, libDir));
 
     //Return composite promise
     return Promise.all(promises);
@@ -43,6 +46,12 @@ function buildCkEditor(outDir, moduleDir): Promise<any> {
     promises.push(copy.glob(moduleDir + "/ckeditor/plugins/notification/**/*", moduleDir, outDir));
     promises.push(copy.glob(moduleDir + "/ckeditor/plugins/image/**/*", moduleDir, outDir));
 
+    //External plugins
+    promises.push(copy.glob(moduleDir + "/ckeditor-youtube-plugin/youtube/**/*", moduleDir + '/ckeditor-youtube-plugin', outDir + "/ckeditor/plugins/"));
+
+    //Our customizations
+    promises.push(copy.glob(filesDir + "/ckeditor/**/*", filesDir, outDir));
+
     return Promise.all(promises);
 }
 
@@ -56,7 +65,9 @@ function buildCodemirror(outDir, moduleDir): Promise<any> {
     promises.push(copy.glob(moduleDir + "/codemirror/mode/css/**/*", moduleDir, outDir));
     promises.push(copy.glob(moduleDir + "/codemirror/mode/htmlmixed/**/*", moduleDir, outDir));
     promises.push(copy.glob(moduleDir + "/codemirror/addon/merge/**/*", moduleDir, outDir));
-    promises.push(copy.glob(filesDir + "/codemirror/theme/edity.css", filesDir, outDir));
+
+    //Our Customizations
+    promises.push(copy.glob(filesDir + "/codemirror/**/*", filesDir, outDir));
 
     return Promise.all(promises);
 }

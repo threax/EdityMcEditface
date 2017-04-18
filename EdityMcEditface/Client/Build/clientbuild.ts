@@ -7,7 +7,7 @@ var rootDir = __dirname + '/..'
 export function build(outDir, iconOutPath, moduleDir): Promise<any> {
     var promises = [];
 
-    promises.push(less({
+    promises.push(less.compile({
         encoding: 'utf8',
         importPaths: [rootDir, moduleDir + '/bootstrap/less'],
         input: rootDir + '/edity/**/*.less',
@@ -16,7 +16,7 @@ export function build(outDir, iconOutPath, moduleDir): Promise<any> {
         compress: true,
     }));
 
-    promises.push(less({
+    promises.push(less.compile({
         encoding: 'utf8',
         importPaths: [rootDir, moduleDir + '/bootstrap/less'],
         input: rootDir + '/Views/**/*.less',

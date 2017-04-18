@@ -4,7 +4,7 @@ var less = require('threax-npm-tk/less');
 var rootDir = __dirname + '/..';
 function build(outDir, iconOutPath, moduleDir) {
     var promises = [];
-    promises.push(less({
+    promises.push(less.compile({
         encoding: 'utf8',
         importPaths: [rootDir, moduleDir + '/bootstrap/less'],
         input: rootDir + '/edity/**/*.less',
@@ -12,7 +12,7 @@ function build(outDir, iconOutPath, moduleDir) {
         out: outDir + '/edity',
         compress: true,
     }));
-    promises.push(less({
+    promises.push(less.compile({
         encoding: 'utf8',
         importPaths: [rootDir, moduleDir + '/bootstrap/less'],
         input: rootDir + '/Views/**/*.less',

@@ -8,7 +8,7 @@ function build(outDir, iconOutPath, moduleDir, filesDir) {
         importPaths: [filesDir, moduleDir + '/bootstrap/less'],
         input: filesDir + '/edity/**/*.less',
         basePath: filesDir + '/edity',
-        out: outDir + '/edity',
+        out: outDir + '/lib',
         compress: true,
     }));
     promises.push(less.compile({

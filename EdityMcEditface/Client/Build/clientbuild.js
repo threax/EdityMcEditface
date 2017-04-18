@@ -25,7 +25,7 @@ function build(outDir, iconOutPath, moduleDir, filesDir) {
     //Templates
     promises.push(copy.glob(filesDir + '/Templates/**/*.css', filesDir + '/Templates', outDir + '/edity/Templates'));
     promises.push(copy.glob(filesDir + '/Templates/**/*.html', filesDir + '/Templates', outDir + '/edity/Templates'));
-    promises.push(copy.glob(filesDir + "/edity.json", filesDir, outDir));
+    promises.push(copy.glob(filesDir + "/edity.json", filesDir, outDir + '/edity'));
     return Promise.all(promises);
 }
 exports.build = build;

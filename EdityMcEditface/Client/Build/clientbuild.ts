@@ -49,7 +49,7 @@ export function build(outDir, iconOutPath, moduleDir, filesDir): Promise<any> {
         outDir + '/edity/Templates'
     ));
 
-    promises.push(copy.glob(filesDir + "/edity.json", filesDir, outDir));
+    promises.push(copy.glob(filesDir + "/edity.json", filesDir, outDir + '/edity'));
 
     return Promise.all(promises);
 }

@@ -6,9 +6,7 @@
     "sourceMap": true,
     "allowJs": true,
     "target": "es5",
-    "outDir": "obj/tscout/lib",
-    "outFile": "ClientBin/tsbin.js",
-    "module": "amd",
+    "module": "commonjs",
     "baseUrl": ".",
     "paths": {
       "hr.*": [
@@ -37,23 +35,14 @@
       "jdorn.*": [
         "node_modules/htmlrapier.json-editor/*"
       ]
-    }
+    },
+    "typeRoots": [ "../node_modules/@types" ]
   },
   "include": [
-    "./"
+    "../**/Build/*.ts"
   ],
   "exclude": [
-    "./**/*.js",
-    "./**/Build/*.ts",
-    "node_modules/jsns",
-    "Client/node_modules/*",
-    "wwwroot",
-    "Client/SwaggerGen/*"
-  ],
-  "files": [
-    "node_modules/jsns/jsns.ts",
-    "node_modules/htmlrapier/src/polyfill.js",
-    "node_modules/htmlrapier.json-editor/bin/json-editor.js"
+    "./**/*.js"
   ],
   "compileOnSave": true
 }

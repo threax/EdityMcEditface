@@ -2,6 +2,7 @@
 var clientBuild = require("./clientbuild");
 var copy = require('threax-npm-tk/copy');
 var less = require('threax-npm-tk/less');
+var tsc = require('threax-npm-tk/typescript');
 var filesDir = __dirname + "/..";
 function build(outDir, iconOutPath, moduleDir) {
     var promises = [];
@@ -11,6 +12,9 @@ function build(outDir, iconOutPath, moduleDir) {
     promises.push(buildCodemirror(libDir, moduleDir));
     promises.push(buildBootstrap(outDir + '/lib', moduleDir));
     promises.push(copy.glob(filesDir + "/diff_match_patch/**/*", filesDir, libDir));
+    promises.push(tsc({
+        projectFolder: __dirname
+    }));
     //Return composite promise
     return Promise.all(promises);
 }

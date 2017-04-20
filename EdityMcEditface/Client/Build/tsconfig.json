@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "allowJs": true,
+    "target": "es5",
+    "outDir": "obj/EdityMcEditface/tscout/lib",
+    "outFile": "../../../ClientBin/EdityMcEditface/lib/editybin.js",
+    "module": "amd",
+    "baseUrl": ".",
+    "paths": {
+      "hr.*": [
+        "../../HtmlRapier/src/*",
+        "../../htmlrapier.json-editor/*"
+      ],
+      "hr.widgets.*": [
+        "../../HtmlRapier.Widgets/src/*"
+      ],
+      "hr.bootstrap.*": [
+        "../../HtmlRapier.Bootstrap/lib/*",
+        "../../HtmlRapier.Bootstrap/*"
+      ],
+      "hr.treemenu.*": [
+        "../../HtmlRapier.TreeMenu/src/*"
+      ],
+      "edity.editorcore.*": [
+        "../EditorCore/*"
+      ],
+      "hr.halcyon.*": [
+        "../../HtmlRapier.Halcyon/src/*"
+      ],
+      "jdorn.*": [
+        "../../htmlrapier.json-editor/*"
+      ]
+    }
+  },
+  "include": [
+    "../**/*.ts"
+  ],
+  "exclude": [
+    "../**/*.js",
+    "../**/Build/*.ts",
+    "../../jsns"
+  ],
+  "files": [
+    "../../jsns/jsns.ts",
+    "../../htmlrapier/src/polyfill.js",
+    "../../htmlrapier.json-editor/bin/json-editor.js"
+  ],
+  "compileOnSave": true
+}

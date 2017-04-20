@@ -15,7 +15,8 @@
     "htmlrapier.bootstrap": "^4.0.4",
     "htmlrapier.widgets": "^4.0.6",
     "htmlrapier.json-editor": "^4.1.0",
-    "htmlrapier.treemenu": "^3.2.3"
+    "htmlrapier.treemenu": "^3.2.3",
+    "editymceditface.client": "^3.0.2"
   },
   "scripts": {
     "build": "node Build/build.js"

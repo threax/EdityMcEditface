@@ -1,5 +1,5 @@
 "use strict";
-var clientBuild = require("./../../Client/Build/clientbuild");
+var clientBuild = require("editymceditface.client/Build/clientbuild");
 var copy = require('threax-npm-tk/copy');
 var less = require('threax-npm-tk/less');
 var filesDir = __dirname + "/..";

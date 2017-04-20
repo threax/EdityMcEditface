@@ -1,5 +1,5 @@
 ﻿"use strict";
-import * as clientBuild from './../../Client/Build/clientbuild';
+import * as clientBuild from 'editymceditface.client/Build/clientbuild';
 var copy = require('threax-npm-tk/copy');
 var less = require('threax-npm-tk/less');
 

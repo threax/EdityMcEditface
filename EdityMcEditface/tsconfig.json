@@ -12,11 +12,7 @@
     "baseUrl": ".",
     "paths": {
       "hr.*": [
-        "node_modules/HtmlRapier/src/*",
-        "node_modules/htmlrapier.json-editor/*"
-      ],
-      "hr.widgets.*": [
-        "node_modules/HtmlRapier.Widgets/src/*"
+        "node_modules/HtmlRapier/src/*"
       ],
       "hr.bootstrap.*": [
         "node_modules/HtmlRapier.Bootstrap/lib/*",
@@ -24,36 +20,26 @@
       ],
       "hr.treemenu.*": [
         "node_modules/HtmlRapier.TreeMenu/src/*"
-      ],
-      "edity.editorcore.*": [
-        "Client/EditorCore/*"
-      ],
-      "edity.widgets.*": [
-        "Client/Widgets/*"
-      ],
-      "hr.halcyon.*": [
-        "node_modules/HtmlRapier.Halcyon/src/*"
-      ],
-      "jdorn.*": [
-        "node_modules/htmlrapier.json-editor/*"
       ]
     }
   },
   "include": [
-    "./"
+    "node_modules/HtmlRapier/src/*",
+    "node_modules/HtmlRapier.TreeMenu/src/*",
+    "node_modules/HtmlRapier.Bootstrap/lib/*",
+    "node_modules/HtmlRapier.Bootstrap/*"
   ],
   "exclude": [
     "./**/*.js",
     "./**/Build/*.ts",
     "node_modules/jsns",
-    "Client/node_modules/*",
+    "node_modules/editymceditface.client/*",
     "wwwroot",
     "Client/SwaggerGen/*"
   ],
   "files": [
     "node_modules/jsns/jsns.ts",
-    "node_modules/htmlrapier/src/polyfill.js",
-    "node_modules/htmlrapier.json-editor/bin/json-editor.js"
+    "node_modules/htmlrapier/src/polyfill.js"
   ],
   "compileOnSave": true
 }

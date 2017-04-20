@@ -3,6 +3,17 @@
   "vars": {
     "siteTitle": "Edity McEditface Manual"
   },
+  "contentMap": {
+    "tsBin": {
+      "js": [
+        {
+          "file": "~/lib/tsbin.js",
+          "async": false
+        }
+      ],
+      "hasMin": false
+    }
+  },
   "editComponents": [
     "editComponents/save.html",
     "editComponents/commit.html",

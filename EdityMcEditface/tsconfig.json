@@ -12,7 +12,11 @@
     "baseUrl": ".",
     "paths": {
       "hr.*": [
-        "node_modules/HtmlRapier/src/*"
+        "node_modules/HtmlRapier/src/*",
+        "node_modules/htmlrapier.json-editor/*"
+      ],
+      "hr.widgets.*": [
+        "node_modules/HtmlRapier.Widgets/src/*"
       ],
       "hr.bootstrap.*": [
         "node_modules/HtmlRapier.Bootstrap/lib/*",
@@ -20,22 +24,38 @@
       ],
       "hr.treemenu.*": [
         "node_modules/HtmlRapier.TreeMenu/src/*"
+      ],
+      "edity.editorcore.*": [
+        "node_modules/editymceditface.client/EditorCore/*"
+      ],
+      "jdorn.*": [
+        "node_modules/htmlrapier.json-editor/*"
+      ],
+      "spc.hr.feedbackclient.*": [
+        "node_modules/spc.htmlrapier.feedbackclient/src/*"
+      ],
+      "hr.halcyon.*": [
+        "node_modules/HtmlRapier.Halcyon/src/*"
+      ],
+      "spc.hr.pagesearchclient.*": [
+        "node_modules/spc.hr.pagesearchclient/src/*"
+      ],
+      "spc.hr.pagesearchwidget.*": [
+        "node_modules/spc.hr.pagesearchwidget/src/*"
+      ],
+      "spc.editymceditface.client.*": [
+        "Libs/*"
       ]
     }
   },
   "include": [
-    "node_modules/HtmlRapier/src/*",
-    "node_modules/HtmlRapier.TreeMenu/src/*",
-    "node_modules/HtmlRapier.Bootstrap/lib/*",
-    "node_modules/HtmlRapier.Bootstrap/*"
+    "./**/*.ts"
   ],
   "exclude": [
     "./**/*.js",
     "./**/Build/*.ts",
     "node_modules/jsns",
-    "node_modules/editymceditface.client/*",
-    "wwwroot",
-    "Client/SwaggerGen/*"
+    "wwwroot"
   ],
   "files": [
     "node_modules/jsns/jsns.ts",

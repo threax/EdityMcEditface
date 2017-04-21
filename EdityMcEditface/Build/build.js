@@ -3,7 +3,7 @@ var edityCoreBuild = require("editymceditface.client/Build/build");
 var clientBuild = require("editymceditface.client/Build/clientbuild");
 var copy = require('threax-npm-tk/copy');
 var less = require('threax-npm-tk/less');
-var tsc = require('threax-npm-tk/typescript');
+var tsc = require('threax-npm-tk/typescript').tsc;
 var filesDir = __dirname + "/..";
 edityCoreBuild.build(filesDir + "/ClientBin/EdityMcEditface", filesDir + "/wwwroot", filesDir + "/node_modules");
 build(filesDir + "/ClientBin/Site", filesDir + "/wwwroot", filesDir + "/node_modules");

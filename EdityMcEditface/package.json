@@ -10,13 +10,13 @@
     "ckeditor": "~4.5.10",
     "ckeditor-youtube-plugin": "^2.1.1",
     "codemirror": "~5.17.0",
-    "jsns": "^3.0.3",
-    "htmlrapier": "^4.0.2",
-    "htmlrapier.bootstrap": "^4.0.4",
+    "jsns": "^4.0.0",
+    "htmlrapier": "^4.1.0",
+    "htmlrapier.bootstrap": "^4.1.0",
     "htmlrapier.widgets": "^4.0.6",
     "htmlrapier.json-editor": "^4.1.0",
     "htmlrapier.treemenu": "^3.2.3",
-    "editymceditface.client": "^3.0.4"
+    "editymceditface.client": "^3.4.1"
   },
   "scripts": {
     "build": "node Build/build.js"

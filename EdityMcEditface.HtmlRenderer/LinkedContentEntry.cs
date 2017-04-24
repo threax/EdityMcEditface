@@ -9,9 +9,9 @@ namespace EdityMcEditface.HtmlRenderer
 {
     public class LinkedContentEntry
     {
-        public LinkedContentEntry(bool hasMin = true)
+        public LinkedContentEntry()
         {
-            this.HasMin = hasMin;
+            
         }
 
         public void addCss(String file)
@@ -23,8 +23,6 @@ namespace EdityMcEditface.HtmlRenderer
         {
             Js.Add(file);
         }
-
-        public bool HasMin { get; set; }
 
         public List<String> Dependencies { get; set; } = new List<String>();
 

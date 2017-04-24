@@ -43,6 +43,7 @@
     "./**/*.js",
     "./**/Build/*.ts",
     "node_modules/jsns",
+    "node_modules/*/node_modules/**/*.ts",
     "wwwroot"
   ],
   "files": [

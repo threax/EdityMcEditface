@@ -29,7 +29,8 @@
         "node_modules/HtmlRapier.TreeMenu/src/*"
       ],
       "edity.editorcore.*": [
-        "node_modules/editymceditface.client/EditorCore/*"
+        "node_modules/editymceditface.client/EditorCore/*",
+        "Editor/*"
       ],
       "jdorn.*": [
         "node_modules/htmlrapier.json-editor/*"

@@ -10,6 +10,9 @@
     "outFile": "ClientBin/Site/lib/tsbin.js",
     "module": "amd",
     "baseUrl": ".",
+    "noEmitHelpers": true,
+    "importHelpers": true,
+    "moduleResolution": "node",
     "paths": {
       "hr.*": [
         "node_modules/HtmlRapier/src/*",
@@ -49,6 +52,7 @@
   "files": [
     "node_modules/jsns/jsns.ts",
     "node_modules/htmlrapier/src/polyfill.js",
+    "node_modules/tslib/tslib.jsns.js",
     "node_modules/htmlrapier.json-editor/bin/json-editor.js"
   ],
   "compileOnSave": true

@@ -4,14 +4,13 @@
     "siteTitle": "Edity McEditface Manual"
   },
   "contentMap": {
-    "tsBin": {
+    "tsBinProd": {
       "js": [
         {
-          "file": "~/lib/tsbin.js",
+          "file": "~/lib/tsbin.prod.js",
           "async": false
         }
-      ],
-      "hasMin": false
+      ]
     }
   },
   "editComponents": [

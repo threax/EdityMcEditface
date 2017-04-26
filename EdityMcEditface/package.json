@@ -11,12 +11,12 @@
     "ckeditor-youtube-plugin": "^2.1.5",
     "codemirror": "~5.25.2",
     "jsns": "^4.2.2",
-    "htmlrapier": "^5.0.0",
+    "htmlrapier": "^5.0.1",
     "htmlrapier.bootstrap": "^4.1.0",
-    "htmlrapier.widgets": "^4.0.6",
+    "htmlrapier.widgets": "^5.0.0",
     "htmlrapier.json-editor": "^4.1.0",
     "htmlrapier.treemenu": "^3.2.3",
-    "editymceditface.client": "^3.5.3"
+    "editymceditface.client": "^4.0.0"
   },
   "scripts": {
     "build": "node Build/build.js"

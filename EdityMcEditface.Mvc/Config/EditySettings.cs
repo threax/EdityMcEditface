@@ -36,5 +36,11 @@ namespace EdityMcEditface.Mvc.Config
         /// Set this to an enumerable of assemblies to add them as application parts to mvc.
         /// </summary>
         public IEnumerable<Assembly> AdditionalMvcLibraries { get; set; }
+
+        /// <summary>
+        /// The base url for the website, can be null unless the site is hosted in a subfolder, then you
+        /// should set this to the subfolder path.
+        /// </summary>
+        public String BaseUrl { get; set; }
     }
 }

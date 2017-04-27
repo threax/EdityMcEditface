@@ -23,6 +23,11 @@ using EdityMcEditface.HtmlRenderer.Filesystem;
 using EdityMcEditface.HtmlRenderer.FileInfo;
 using EdityMcEditface.BuildTasks;
 using System.Reflection;
+using Threax.AspNetCore.Halcyon.Ext;
+using EdityMcEditface.Mvc.Controllers;
+using Newtonsoft.Json;
+using Halcyon.Web.HAL.Json;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EdityMcEditface.Mvc
 {
@@ -78,7 +83,22 @@ namespace EdityMcEditface.Mvc
         /// <returns>The service collection.</returns>
         public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration)
         {
-            if(editySettings.Events == null)
+            var baseUrl = HalcyonConventionOptions.HostVariable;
+            if(editySettings.BaseUrl != null)
+            {
+                baseUrl += "/" + editySettings.BaseUrl;
+            }
+
+            var halOptions = new HalcyonConventionOptions()
+            {
+                BaseUrl = baseUrl,
+                HalDocEndpointInfo = new HalDocEndpointInfo(typeof(EndpointDocController)),
+                MakeAllControllersHalcyon = false
+            };
+
+            services.AddConventionalHalcyon(halOptions);
+
+            if (editySettings.Events == null)
             {
                 editySettings.Events = new EdityEvents();
             }
@@ -202,11 +222,12 @@ namespace EdityMcEditface.Mvc
             var mvcBuilder = services.AddMvc(o =>
             {
                 o.UseExceptionErrorFilters(editySettings.DetailedErrors);
+                o.UseConventionalHalcyon(halOptions);
             })
             .AddJsonOptions(o =>
             {
-                o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                o.SerializerSettings.Converters.Add(new StringEnumConverter());
+                o.SerializerSettings.SetToHalcyonDefault();
+                o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             })
             .AddEdityControllers(editySettings.AdditionalMvcLibraries);
 

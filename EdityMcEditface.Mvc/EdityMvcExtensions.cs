@@ -28,6 +28,7 @@ using EdityMcEditface.Mvc.Controllers;
 using Newtonsoft.Json;
 using Halcyon.Web.HAL.Json;
 using Microsoft.AspNetCore.Mvc;
+using Threax.AspNetCore.Halcyon.ClientGen;
 
 namespace EdityMcEditface.Mvc
 {
@@ -97,6 +98,18 @@ namespace EdityMcEditface.Mvc
             };
 
             services.AddConventionalHalcyon(halOptions);
+
+            var halClientGenOptions = new HalClientGenOptions()
+            {
+                SourceAssemblies = new Assembly[] { typeof(EdityMvcExtensions).Assembly }
+            };
+
+            if(editySettings.AdditionalMvcLibraries != null)
+            {
+                halClientGenOptions.SourceAssemblies = halClientGenOptions.SourceAssemblies.Concat(editySettings.AdditionalMvcLibraries);
+            }
+
+            services.AddHalClientGen(halClientGenOptions);
 
             if (editySettings.Events == null)
             {

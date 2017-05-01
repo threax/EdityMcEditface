@@ -10,6 +10,8 @@ namespace EdityMcEditface.Mvc.Controllers
 {
     [Route("edity/[controller]")]
     [ResponseCache(NoStore = true)]
+    [ProducesHal]
+    [TypeFilter(typeof(HalModelResultFilterAttribute))]
     public class EndpointDocController : Controller
     {
         IEndpointDocBuilder descriptionProvider;

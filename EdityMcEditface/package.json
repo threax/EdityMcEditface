@@ -13,7 +13,7 @@
     "jsns": "^4.2.2",
     "htmlrapier.json-editor": "^4.1.0",
     "htmlrapier.treemenu": "^3.2.3",
-    "editymceditface.client": "^4.0.1"
+    "editymceditface.client": "^4.0.4"
   },
   "scripts": {
     "build": "node Build/build.js"

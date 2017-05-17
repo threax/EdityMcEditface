@@ -111,6 +111,15 @@ namespace EdityMcEditface.HtmlRenderer
                 String value;
                 if (vars.TryGetValue(key, out value))
                 {
+                    //Expand any paths that start with ~/, can be escaped with \~/
+                    if(value.StartsWith("~/"))
+                    {
+                        value = pathBase + value.Substring(1);
+                    }
+                    else if(value.StartsWith("\\~/"))
+                    {
+                        value = value.Substring(1);
+                    }
                     return value;
                 }
             }

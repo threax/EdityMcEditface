@@ -31,12 +31,25 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                 query = modelNode.Select("template");
             }
 
+            var current = query.FirstOrDefault();
+
             if (variant != null)
             {
-                query = query.Where(i => i.GetAttributeValue("data-hr-variant", (String)null) == variant);
+                //Check current node and all siblings for variant
+                while (current != null)
+                {
+                    var attr = current.GetAttributeValue("data-hr-variant", (String)null);
+                    if (attr == variant)
+                    {
+                        return current;
+                    }
+                    current = current.NextSibling;
+                }
+
+                //If nothing found return the current, this is what htmlrapier does
             }
 
-            return query.FirstOrDefault();
+            return current;
         }
 
         public static String getModelSrc(HtmlNode node)

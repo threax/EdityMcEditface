@@ -42,7 +42,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             var normalized = Path.GetFullPath(path.EnsureStartingPathSlash());
             foreach(var dir in dirs)
             {
-                if(normalized.StartsWith(dir, StringComparison.InvariantCultureIgnoreCase))
+                if(normalized.StartsWith(dir, StringComparison.OrdinalIgnoreCase))
                 {
                     if(normalized.Length == dir.Length)
                     {
@@ -56,7 +56,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             }
 
             //No dir match, check files
-            return files.Any(i => normalized.Equals(i, StringComparison.InvariantCultureIgnoreCase));
+            return files.Any(i => normalized.Equals(i, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

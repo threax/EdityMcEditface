@@ -36,7 +36,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                     bool singleSlash = path.Length > 0 && (path[0] == '\\' || path[0] == '/');
                     bool doubleSlash = path.Length > 1 && ((path[0] == '\\' && path[1] == '\\') || (path[0] == '/' && path[1] == '/'));
                     var fullPath = Path.GetFullPath(path);
-                    bool startsWithBasePath = fullPath.StartsWith(fullBaseUrl, StringComparison.InvariantCultureIgnoreCase);
+                    bool startsWithBasePath = fullPath.StartsWith(fullBaseUrl, StringComparison.OrdinalIgnoreCase);
                     if (singleSlash && !doubleSlash && !startsWithBasePath)
                     {
                         node.SetAttributeValue(attr, baseUrl + path);

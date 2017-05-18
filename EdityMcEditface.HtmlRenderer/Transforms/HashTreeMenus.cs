@@ -19,7 +19,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
 
         public void transform(HtmlDocument document, TemplateEnvironment environment, List<PageStackItem> pageDefinitions)
         {
-            using (var sha = new SHA256Managed())
+            using (var sha = SHA256.Create())
             {
                 var controllerNode = HtmlRapierQueries.getControllerNode("treeMenu", document.DocumentNode);
                 if (controllerNode != null)

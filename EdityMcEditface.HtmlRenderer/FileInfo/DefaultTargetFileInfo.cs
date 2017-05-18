@@ -85,7 +85,7 @@ namespace EdityMcEditface.HtmlRenderer.FileInfo
         {
             get
             {
-                return !isDirectory && (extension == "" || ".html".Equals(extension, StringComparison.InvariantCultureIgnoreCase));
+                return !isDirectory && (extension == "" || ".html".Equals(extension, StringComparison.OrdinalIgnoreCase));
             }
         }
 
@@ -152,7 +152,7 @@ namespace EdityMcEditface.HtmlRenderer.FileInfo
                 {
                     path = "/";
                 }
-                if (defaultFileName.Equals(file, StringComparison.InvariantCultureIgnoreCase))
+                if (defaultFileName.Equals(file, StringComparison.OrdinalIgnoreCase))
                 {
                     file = "";
                 }
@@ -188,7 +188,7 @@ namespace EdityMcEditface.HtmlRenderer.FileInfo
 
         public static string RemovePathBase(string path, string pathBase)
         {
-            if (pathBase != null && path != null && path.StartsWith(pathBase, StringComparison.InvariantCultureIgnoreCase))
+            if (pathBase != null && path != null && path.StartsWith(pathBase, StringComparison.OrdinalIgnoreCase))
             {
                 path = path.Substring(pathBase.Length);
             }

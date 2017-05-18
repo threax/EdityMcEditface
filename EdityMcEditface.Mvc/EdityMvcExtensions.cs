@@ -101,7 +101,7 @@ namespace EdityMcEditface.Mvc
 
             var halClientGenOptions = new HalClientGenOptions()
             {
-                SourceAssemblies = new Assembly[] { typeof(EdityMvcExtensions).Assembly }
+                SourceAssemblies = new Assembly[] { typeof(EdityMvcExtensions).GetTypeInfo().Assembly }
             };
 
             if(editySettings.AdditionalMvcLibraries != null)
@@ -274,7 +274,7 @@ namespace EdityMcEditface.Mvc
 
         private static IMvcBuilder AddEdityControllers(this IMvcBuilder builder, IEnumerable<Assembly> additionalAssemblies)
         {
-            builder.AddApplicationPart(typeof(EdityMvcExtensions).Assembly);
+            builder.AddApplicationPart(typeof(EdityMvcExtensions).GetTypeInfo().Assembly);
             if(additionalAssemblies != null)
             {
                 foreach(var assembly in additionalAssemblies)

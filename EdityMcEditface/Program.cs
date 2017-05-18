@@ -61,7 +61,7 @@ namespace EdityMcEditface
             if (!String.IsNullOrEmpty(workingDirPath))
             {
                 var fullWorkDir = Path.GetFullPath(workingDirPath);
-                Environment.CurrentDirectory = fullWorkDir;
+                Directory.SetCurrentDirectory(fullWorkDir);
             }
 #endif
 

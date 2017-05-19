@@ -6,14 +6,7 @@
     "@types/node": "^6.0.69"
   },
   "dependencies": {
-    "bootstrap": "~3.3.7",
-    "ckeditor": "~4.6.0",
-    "ckeditor-youtube-plugin": "^2.1.5",
-    "codemirror": "~5.25.2",
-    "jsns": "^4.2.2",
-    "htmlrapier.json-editor": "^4.1.0",
-    "htmlrapier.treemenu": "^3.2.3",
-    "editymceditface.client": "^4.0.4"
+    "editymceditface.client": "^5.1.0"
   },
   "scripts": {
     "build": "node Build/build.js"

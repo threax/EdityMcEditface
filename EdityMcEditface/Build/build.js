@@ -37,10 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var edityCoreBuild = require("editymceditface.client/Build/build");
 var clientBuild = require("editymceditface.client/Build/clientbuild");
-var copy = require('threax-npm-tk/copy');
-var less = require('threax-npm-tk/less');
-var tsc = require('threax-npm-tk/typescript').tsc;
-var jsnsTools = require('threax-npm-tk/jsnstools');
+var less = require("threax-npm-tk/less");
+var typescript_1 = require("threax-npm-tk/typescript");
+var jsnsTools = require("threax-npm-tk/jsnstools");
 var filesDir = __dirname + "/..";
 build(filesDir + "/ClientBin/Site", filesDir + "/wwwroot", filesDir + "/node_modules");
 function build(outDir, iconOutPath, moduleDir) {
@@ -66,7 +65,7 @@ function compileTypescript() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, tsc({
+                case 0: return [4 /*yield*/, typescript_1.tsc({
                         projectFolder: filesDir
                     })];
                 case 1:

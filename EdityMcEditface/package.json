@@ -9,6 +9,7 @@
     "editymceditface.client": "^5.2.1"
   },
   "scripts": {
-    "build": "node Build/build.js"
+    "build": "node Build/build.js",
+    "linktk": "npm link threax-npm-tk"
   }
 }

@@ -51,7 +51,8 @@
     "./**/Build/*.ts",
     "node_modules/jsns",
     "node_modules/*/node_modules/**/*.ts",
-    "wwwroot"
+    "wwwroot",
+    "node_modules/**/threax-npm-tk/*.ts"
   ],
   "files": [
     "node_modules/jsns/jsns.ts",

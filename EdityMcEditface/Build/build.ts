@@ -1,10 +1,10 @@
 ﻿import * as edityCoreBuild from 'editymceditface.client/Build/build';
 import * as clientBuild from 'editymceditface.client/Build/clientbuild';
 
-var copy = require('threax-npm-tk/copy');
-var less = require('threax-npm-tk/less');
-var tsc = require('threax-npm-tk/typescript').tsc;
-var jsnsTools = require('threax-npm-tk/jsnstools');
+import * as copy from 'threax-npm-tk/copy';
+import * as less from 'threax-npm-tk/less';
+import { tsc } from 'threax-npm-tk/typescript';
+import * as jsnsTools from 'threax-npm-tk/jsnstools';
 
 var filesDir = __dirname + "/..";
 

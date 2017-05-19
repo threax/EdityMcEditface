@@ -23,7 +23,8 @@
     "editComponents/compile.html",
     "editComponents/source.html",
     "editComponents/media.html",
-    "editComponents/history.html"
+    "editComponents/history.html",
+    "editComponents/edittreemenu.html"
   ],
   "compilers": [
     {

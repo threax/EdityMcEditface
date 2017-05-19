@@ -28,6 +28,9 @@
       "hr.treemenu.*": [
         "node_modules/HtmlRapier.TreeMenu/src/*"
       ],
+      "hr.sidebar.*": [
+        "node_modules/HtmlRapier.Sidebar/src/*"
+      ],
       "edity.editorcore.*": [
         "node_modules/editymceditface.client/EditorCore/*",
         "Editor/*"

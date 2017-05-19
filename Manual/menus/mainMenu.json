@@ -1,0 +1,21 @@
+{
+    "name": "Root",
+    "children": [
+        {
+            "name": "Overview",
+            "link": "/"
+        },
+        {
+            "name": "Configuration",
+            "link": "/configuration"
+        },
+        {
+            "name": "Editing",
+            "link": "/editing"
+        },
+        {
+            "name": "Page Stack",
+            "link": "/pagestack"
+        }
+    ]
+}

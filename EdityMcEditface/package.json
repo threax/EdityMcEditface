@@ -6,10 +6,10 @@
     "@types/node": "^6.0.69"
   },
   "dependencies": {
-    "editymceditface.client": "^5.2.2"
+    "editymceditface.client": "^5.2.4"
   },
   "scripts": {
     "build": "node Build/build.js",
-    "linktk": "npm link threax-npm-tk"
+    "link-tk": "npm link threax-npm-tk"
   }
 }

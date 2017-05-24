@@ -24,7 +24,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                 var controllerNode = HtmlRapierQueries.getControllerNode("treeMenu", document.DocumentNode);
                 if (controllerNode != null)
                 {
-                    var file = HtmlRapierQueries.getModelSrc(controllerNode);
+                    var file = controllerNode.GetAttributeValue("data-hr-config-menu", default(String));
                     if (file != null)
                     {
                         try

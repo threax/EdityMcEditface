@@ -30,6 +30,12 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                     var folderTemplate = HtmlRapierQueries.getModelTemplate(folderModel);
                     if (folderTemplate != null)
                     {
+                        var firstElement = folderTemplate.FirstElementChild();
+                        if (firstElement != null)
+                        {
+                            MakeDraggable(firstElement);
+                        }
+
                         var insertNode = folderTemplate.Select("[data-hr-on-click='toggleMenuItem']").FirstOrDefault();
                         if (insertNode != null)
                         {
@@ -52,10 +58,24 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                         {
                             insertNode.InnerHtml += linkEditor;
                             insertNode.AddClass("treemenu-editor-link");
+                            MakeDraggable(insertNode);
                         }
                     }
                 }
             }
+        }
+
+        private static void MakeDraggable(HtmlNode insertNode)
+        {
+            insertNode.Attributes.Add("draggable", "true");
+            insertNode.Attributes.Add("data-hr-on-dragstart", "dragStart");
+            insertNode.Attributes.Add("data-hr-on-dragover", "dragOver");
+            insertNode.Attributes.Add("data-hr-on-dragleave", "dragLeave");
+            insertNode.Attributes.Add("data-hr-on-drop", "drop");
+            insertNode.Attributes.Add("data-hr-class-above", "drop-above");
+            insertNode.Attributes.Add("data-hr-class-inside", "drop-inside");
+            insertNode.Attributes.Add("data-hr-class-below", "drop-below");
+            insertNode.Attributes.Add("data-hr-toggle", "drag");
         }
 
         private static String rootEditor =

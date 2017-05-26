@@ -8,6 +8,12 @@ namespace EdityMcEditface.Mvc.Models.Page
 
         String PublishedProjectPath { get; }
 
+        /// <summary>
+        /// Specifies which git branch to use for the published content.
+        /// Can be null to specify default.
+        /// </summary>
+        String PublishedBranch { get; }
+
         String MasterRepoPath { get; }
 
         String EdityCorePath { get; }

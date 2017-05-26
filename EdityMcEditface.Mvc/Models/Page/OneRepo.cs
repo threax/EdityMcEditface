@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibGit2Sharp;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -36,5 +37,13 @@ namespace EdityMcEditface.Mvc.Models.Page
         public String SitePath { get; private set; }
 
         public String MasterRepoPath { get; private set; }
+
+        public String PublishedBranch
+        {
+            get
+            {
+                return null;
+            }
+        }
     }
 }

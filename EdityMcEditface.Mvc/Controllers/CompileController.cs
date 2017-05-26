@@ -53,12 +53,20 @@ namespace EdityMcEditface.Mvc.Controllers
                 }
                 if (!Repository.IsValid(publishRepoPath))
                 {
-                    Repository.Clone(masterRepoPath, publishRepoPath);
+                    Repository.Clone(masterRepoPath, publishRepoPath, new CloneOptions()
+                    {
+                        BranchName = projectFinder.PublishedBranch
+                    });
                 }
 
                 using (var repo = new Repository(publishRepoPath))
                 {
-                    repo.Fetch("origin");
+                    string logMessage = "";
+                    foreach (Remote remote in repo.Network.Remotes)
+                    {
+                        var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
+                        Commands.Fetch(repo, remote.Name, refSpecs, null, logMessage);
+                    }
 
                     var head = repo.Head.Commits.First();
                     var tracked = repo.Head.TrackedBranch.Commits.First();

@@ -50,5 +50,24 @@ namespace EdityMcEditface.Mvc.Models.Page
         public String SitePath { get; private set; }
 
         public String MasterRepoPath { get; private set; }
+
+        public String PublishedBranch
+        {
+            get
+            {
+                //See if the repo has a branch called live, if so use it
+                using (var repo = new Repository(MasterRepoPath))
+                {
+                    var query = repo.Branches.Where(b => !b.IsRemote);
+                    var branch = query.Where(b => b.FriendlyName == "live").FirstOrDefault();
+                    if (branch != null)
+                    {
+                        return branch.FriendlyName;
+                    }
+                }
+
+                return null;
+            }
+        }
     }
 }

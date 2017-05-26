@@ -65,10 +65,16 @@ namespace EdityMcEditface.Mvc
                 projectBackupPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
                 var siteFileFinder = new FileFinder(projectFinder.SitePath, projectBackupPermissions, editorCoreFinder);
 
+                //wwwroot for javascript, not editable
+                var wwwRootFilePermissions = new DefaultFileFinderPermissions();
+                wwwRootFilePermissions.WritePermission.Permit = false;
+                wwwRootFilePermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
+                var wwwRootFileFinder = new FileFinder("wwwroot", wwwRootFilePermissions, siteFileFinder);
+
                 //Project location
                 var contentFolderPermissions = new DefaultFileFinderPermissions();
                 contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
-                return new FileFinder(projectFolder, contentFolderPermissions, siteFileFinder);
+                return new FileFinder(projectFolder, contentFolderPermissions, wwwRootFileFinder);
             });
 
             return services;

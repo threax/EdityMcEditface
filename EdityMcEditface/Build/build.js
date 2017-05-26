@@ -70,7 +70,7 @@ function compileTypescript() {
                     })];
                 case 1:
                     _a.sent();
-                    jsnsTools.saveLoadedModules(filesDir + '/ClientBin/Site/lib/tsbin.js', ['edity.theme.layouts.default'], filesDir + '/ClientBin/Site/lib/tsbin.prod.js');
+                    jsnsTools.saveLoadedModules(filesDir + '/wwwroot/lib/tsbin.js', ['edity.theme.layouts.default'], filesDir + '/ClientBin/Site/lib/tsbin.prod.js');
                     return [2 /*return*/];
             }
         });

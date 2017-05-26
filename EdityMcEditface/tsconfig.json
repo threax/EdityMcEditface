@@ -7,7 +7,7 @@
     "allowJs": true,
     "target": "es5",
     "outDir": "obj/tscout/lib",
-    "outFile": "ClientBin/Site/lib/tsbin.js",
+    "outFile": "wwwroot/lib/tsbin.js",
     "module": "amd",
     "baseUrl": ".",
     "noEmitHelpers": true,

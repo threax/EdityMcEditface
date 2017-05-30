@@ -9,6 +9,7 @@
     <AssemblyName>EdityMcEditface</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>EdityMcEditface</PackageId>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
 
   <ItemGroup>

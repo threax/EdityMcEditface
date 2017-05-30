@@ -1,4 +1,5 @@
-﻿using LibGit2Sharp;
+﻿using EdityMcEditface.Mvc.Models.Branch;
+using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -67,6 +68,20 @@ namespace EdityMcEditface.Mvc.Models.Page
                 }
 
                 return null;
+            }
+        }
+
+        public Task<BranchViewCollection> GetBranches()
+        {
+            //See if the repo has a branch called live, if so use it
+            using (var repo = new Repository(MasterRepoPath))
+            {
+                var query = repo.Branches.Where(b => !b.IsRemote).Select(i => new BranchView()
+                {
+                    Name = i.FriendlyName,
+                    Current = i.IsCurrentRepositoryHead
+                });
+                return Task.FromResult(new BranchViewCollection(query.ToList()));
             }
         }
     }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using EdityMcEditface.Mvc.Models.Branch;
+using System;
+using System.Collections;
+using System.Threading.Tasks;
 
 namespace EdityMcEditface.Mvc.Models.Page
 {
@@ -19,5 +22,11 @@ namespace EdityMcEditface.Mvc.Models.Page
         String EdityCorePath { get; }
 
         String SitePath { get; }
+
+        /// <summary>
+        /// Get the branches for the current project.
+        /// </summary>
+        /// <returns></returns>
+        Task<BranchViewCollection> GetBranches();
     }
 }

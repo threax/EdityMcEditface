@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using EdityMcEditface.Mvc.Models.Branch;
 
 namespace EdityMcEditface.Mvc.Models.Page
 {
@@ -22,6 +23,11 @@ namespace EdityMcEditface.Mvc.Models.Page
         public String GetUserProjectPath(String user)
         {
             return projectFolder;
+        }
+
+        public Task<BranchViewCollection> GetBranches()
+        {
+            return Task.FromResult(new BranchViewCollection(new BranchView[] { new BranchView() { Name = "master", Current = true } }));
         }
 
         public String PublishedProjectPath

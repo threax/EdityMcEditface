@@ -7,8 +7,16 @@ namespace EdityMcEditface.Mvc.Models.Page
 {
     public interface ProjectFinder
     {
-        String GetUserProjectPath(String user);
+        /// <summary>
+        /// Get the project path, this may be based on the current user or current branch.
+        /// </summary>
+        /// <param name="user">The current user name.</param>
+        /// <returns>The path to the branch.</returns>
+        String GetCurrentProjectPath(String user);
 
+        /// <summary>
+        /// Get the path to the publish repo.
+        /// </summary>
         String PublishedProjectPath { get; }
 
         /// <summary>
@@ -35,7 +43,7 @@ namespace EdityMcEditface.Mvc.Models.Page
         /// <summary>
         /// This will be true if the project is currently looking at the live branch.
         /// </summary>
-        bool IsLiveBranch { get; }
+        bool IsPrepublishBranch { get; }
 
         /// <summary>
         /// Get the branches for the current project.

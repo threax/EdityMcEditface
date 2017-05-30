@@ -33,8 +33,8 @@ namespace EdityMcEditface.Mvc
         public String DefaultPage { get; set; } = "index";
 
         /// <summary>
-        /// The name of the live branch, the live branch gets published when the site compiles, defaults to "live"
+        /// The name of the prepublished branch, the prepublished branch gets published when the site compiles, defaults to "prepublish"
         /// </summary>
-        public String LiveBranchName { get; set; } = "live";
+        public String PrepublishBranchName { get; set; } = "prepublish";
     }
 }

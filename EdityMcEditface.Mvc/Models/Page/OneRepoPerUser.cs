@@ -11,12 +11,12 @@ namespace EdityMcEditface.Mvc.Models.Page
     public class OneRepoPerUser : ProjectFinder
     {
         private String projectFolder;
-        private String liveBranchName;
+        private String prepublishBranchName;
         private IBranchDetector branchDetector;
 
         public OneRepoPerUser(ProjectConfiguration projectConfig, IBranchDetector branchDetector)
         {
-            this.liveBranchName = projectConfig.LiveBranchName;
+            this.prepublishBranchName = projectConfig.PrepublishBranchName;
             this.projectFolder = projectConfig.ProjectPath;
             this.EdityCorePath = projectConfig.EdityCorePath;
             this.SitePath = projectConfig.SitePath;
@@ -24,14 +24,14 @@ namespace EdityMcEditface.Mvc.Models.Page
             this.branchDetector = branchDetector;
         }
 
-        public String GetUserProjectPath(String user)
+        public String GetCurrentProjectPath(String user)
         {
             String repoPath;
             String branch = null;
-            if (IsLiveBranch)
+            if (IsPrepublishBranch)
             {
-                branch = liveBranchName;
-                repoPath = Path.Combine(projectFolder, liveBranchName);
+                branch = prepublishBranchName;
+                repoPath = Path.Combine(projectFolder, prepublishBranchName);
             }
             else
             {
@@ -74,11 +74,11 @@ namespace EdityMcEditface.Mvc.Models.Page
         {
             get
             {
-                //See if the repo has a branch called live, if so use it
+                //See if the repo has a branch named the prepublishedBranchName, if so use it
                 using (var repo = new Repository(MasterRepoPath))
                 {
                     var query = repo.Branches.Where(b => !b.IsRemote);
-                    var branch = query.Where(b => b.FriendlyName == this.liveBranchName).FirstOrDefault();
+                    var branch = query.Where(b => b.FriendlyName == this.prepublishBranchName).FirstOrDefault();
                     if (branch != null)
                     {
                         return branch.FriendlyName;
@@ -103,11 +103,11 @@ namespace EdityMcEditface.Mvc.Models.Page
             }
         }
 
-        public bool IsLiveBranch
+        public bool IsPrepublishBranch
         {
             get
             {
-                return this.branchDetector.RequestedBranch == liveBranchName;
+                return this.branchDetector.RequestedBranch == prepublishBranchName;
             }
         }
     }

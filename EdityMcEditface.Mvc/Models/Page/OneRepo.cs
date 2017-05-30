@@ -20,7 +20,7 @@ namespace EdityMcEditface.Mvc.Models.Page
             this.MasterRepoPath = projectFolder;
         }
 
-        public String GetUserProjectPath(String user)
+        public String GetCurrentProjectPath(String user)
         {
             return projectFolder;
         }
@@ -52,7 +52,7 @@ namespace EdityMcEditface.Mvc.Models.Page
             }
         }
 
-        public bool IsLiveBranch
+        public bool IsPrepublishBranch
         {
             get
             {

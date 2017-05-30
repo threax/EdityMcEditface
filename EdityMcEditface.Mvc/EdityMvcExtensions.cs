@@ -48,7 +48,7 @@ namespace EdityMcEditface.Mvc
             {
                 var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
-                var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
+                var projectFolder = projectFinder.GetCurrentProjectPath(userInfo.UniqueUserName);
 
                 //Folder blacklist
                 var edityFolderList = new PathList();
@@ -169,7 +169,7 @@ namespace EdityMcEditface.Mvc
             {
                 var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
-                var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
+                var projectFolder = projectFinder.GetCurrentProjectPath(userInfo.UniqueUserName);
                 return new Repository(Repository.Discover(projectFolder));
             });
 

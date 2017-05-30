@@ -26,18 +26,32 @@ namespace EdityMcEditface.Mvc.Models.Page
 
         public String GetUserProjectPath(String user)
         {
-            if(user == null)
+            String repoPath;
+            String branch = null;
+            if (IsLiveBranch)
             {
-                user = "null-reserved-user";
+                branch = liveBranchName;
+                repoPath = Path.Combine(projectFolder, liveBranchName);
             }
-            var repoPath = Path.Combine(projectFolder, "UserRepos", user);
+            else
+            {
+                if (user == null)
+                {
+                    user = "null-reserved-user";
+                }
+                repoPath = Path.Combine(projectFolder, "UserRepos", user);
+            }
+            
             if (!Directory.Exists(repoPath))
             {
                 Directory.CreateDirectory(repoPath);
             }
             if (!Repository.IsValid(repoPath))
             {
-                Repository.Clone(MasterRepoPath, repoPath);
+                Repository.Clone(MasterRepoPath, repoPath, new CloneOptions()
+                {
+                    BranchName = branch
+                });
             }
             return repoPath;
         }

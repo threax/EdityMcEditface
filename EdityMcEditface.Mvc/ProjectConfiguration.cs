@@ -31,5 +31,10 @@ namespace EdityMcEditface.Mvc
         /// The default page for the project. Defaults to "index".
         /// </summary>
         public String DefaultPage { get; set; } = "index";
+
+        /// <summary>
+        /// The name of the live branch, the live branch gets published when the site compiles, defaults to "live"
+        /// </summary>
+        public String LiveBranchName { get; set; } = "live";
     }
 }

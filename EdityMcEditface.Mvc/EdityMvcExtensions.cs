@@ -29,6 +29,7 @@ using Newtonsoft.Json;
 using Halcyon.Web.HAL.Json;
 using Microsoft.AspNetCore.Mvc;
 using Threax.AspNetCore.Halcyon.ClientGen;
+using EdityMcEditface.Mvc.Models.Branch;
 
 namespace EdityMcEditface.Mvc
 {
@@ -137,6 +138,14 @@ namespace EdityMcEditface.Mvc
 
             services.TryAddScoped<IUserInfo, DefaultUserInfo>();
 
+            services.TryAddScoped<IBranchDetector>(s =>
+            {
+                var settings = new JsonSerializerSettings();
+                settings.SetToHalcyonDefault();
+                var serializer = JsonSerializer.Create(settings);
+                return new CookieBranchDetector("edityBranch", serializer, s.GetRequiredService<IHttpContextAccessor>());
+            });
+
             services.AddSingleton<EditySettings>(s => editySettings);
 
             switch (projectConfiguration.ProjectMode)
@@ -151,7 +160,7 @@ namespace EdityMcEditface.Mvc
                 case "OneRepoPerUser":
                     services.AddTransient<ProjectFinder, OneRepoPerUser>(s =>
                     {
-                        return new OneRepoPerUser(projectConfiguration.ProjectPath, projectConfiguration.EdityCorePath, projectConfiguration.SitePath);
+                        return new OneRepoPerUser(projectConfiguration, s.GetRequiredService<IBranchDetector>());
                     });
                     break;
             }

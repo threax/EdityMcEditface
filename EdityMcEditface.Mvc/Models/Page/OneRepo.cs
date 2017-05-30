@@ -51,5 +51,13 @@ namespace EdityMcEditface.Mvc.Models.Page
                 return null;
             }
         }
+
+        public bool IsLiveBranch
+        {
+            get
+            {
+                return false;
+            }
+        }
     }
 }

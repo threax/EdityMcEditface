@@ -12,6 +12,6 @@ namespace EdityMcEditface.Mvc.Models.Branch
         /// <summary>
         /// Get the name of the branch the user requested.
         /// </summary>
-        String RequestedBranch { get; }
+        String RequestedBranch { get; set; }
     }
 }

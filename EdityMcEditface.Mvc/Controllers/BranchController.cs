@@ -50,11 +50,13 @@ namespace EdityMcEditface.Mvc.Controllers
         /// Set the branch that is currently active.
         /// </summary>
         /// <param name="name">The name of the branch to make active</param>
+        /// <param name="branchDetector">The branch detector to use to change branches.</param>
         /// <returns></returns>
-        [HttpPut("Name")]
+        [HttpPut("{Name}")]
         [HalRel(Rels.SetBranch)]
-        public Task Put(String name)
+        public Task Put(String name, [FromServices] IBranchDetector branchDetector)
         {
+            branchDetector.RequestedBranch = name;
             return Task.FromResult(0);
         }
     }

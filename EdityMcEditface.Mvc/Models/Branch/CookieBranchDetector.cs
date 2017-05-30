@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace EdityMcEditface.Mvc.Models.Branch
@@ -16,14 +17,40 @@ namespace EdityMcEditface.Mvc.Models.Branch
         {
             this.cookieName = cookieName;
             this.jsonSerializer = jsonSerializer;
+            this.context = context;
         }
 
         public string RequestedBranch
         {
             get
             {
-                return "master";
+                var cookie = GetBranchCookie();
+                return cookie.CurrentBranch;
             }
+            set
+            {
+                var cookie = GetBranchCookie();
+                cookie.CurrentBranch = value;
+                using(var writer = new StringWriter())
+                {
+                    jsonSerializer.Serialize(writer, cookie);
+                    context.HttpContext.Response.Cookies.Append(cookieName, writer.ToString());
+                }
+            }
+        }
+
+        private BranchCookie GetBranchCookie()
+        {
+            var cookie = context.HttpContext.Request.Cookies[cookieName];
+            if (cookie != null)
+            {
+                using (JsonTextReader reader = new JsonTextReader(new StringReader(cookie)))
+                {
+                    var branchCookie = jsonSerializer.Deserialize<BranchCookie>(reader);
+                    return branchCookie;
+                }
+            }
+            return new BranchCookie();
         }
     }
 }

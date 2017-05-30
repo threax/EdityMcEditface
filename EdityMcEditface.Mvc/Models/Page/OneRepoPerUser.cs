@@ -10,14 +10,18 @@ namespace EdityMcEditface.Mvc.Models.Page
 {
     public class OneRepoPerUser : ProjectFinder
     {
-        String projectFolder;
+        private String projectFolder;
+        private String liveBranchName;
+        private IBranchDetector branchDetector;
 
-        public OneRepoPerUser(String projectFolder, String edityCorePath, String sitePath)
+        public OneRepoPerUser(ProjectConfiguration projectConfig, IBranchDetector branchDetector)
         {
-            this.projectFolder = projectFolder;
-            this.EdityCorePath = edityCorePath;
-            this.SitePath = sitePath;
+            this.liveBranchName = projectConfig.LiveBranchName;
+            this.projectFolder = projectConfig.ProjectPath;
+            this.EdityCorePath = projectConfig.EdityCorePath;
+            this.SitePath = projectConfig.SitePath;
             this.MasterRepoPath = Path.Combine(projectFolder, "Master");
+            this.branchDetector = branchDetector;
         }
 
         public String GetUserProjectPath(String user)
@@ -60,7 +64,7 @@ namespace EdityMcEditface.Mvc.Models.Page
                 using (var repo = new Repository(MasterRepoPath))
                 {
                     var query = repo.Branches.Where(b => !b.IsRemote);
-                    var branch = query.Where(b => b.FriendlyName == "live").FirstOrDefault();
+                    var branch = query.Where(b => b.FriendlyName == this.liveBranchName).FirstOrDefault();
                     if (branch != null)
                     {
                         return branch.FriendlyName;
@@ -82,6 +86,14 @@ namespace EdityMcEditface.Mvc.Models.Page
                     Current = i.IsCurrentRepositoryHead
                 });
                 return Task.FromResult(new BranchViewCollection(query.ToList()));
+            }
+        }
+
+        public bool IsLiveBranch
+        {
+            get
+            {
+                return this.branchDetector.RequestedBranch == liveBranchName;
             }
         }
     }

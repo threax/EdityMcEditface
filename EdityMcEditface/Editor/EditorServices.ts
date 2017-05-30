@@ -5,6 +5,7 @@ import { WindowFetch } from 'hr.windowfetch';
 import { WithCredentialsFetcher } from 'edity.editorcore.WithCredentialsFetcher';
 import * as urlInjector from 'edity.editorcore.BaseUrlInjector';
 import * as controller from 'hr.controller';
+import * as client from 'edity.editorcore.EdityHypermediaClient';
 
 interface PageSettings {
     baseUrl;
@@ -26,8 +27,9 @@ export function createBaseBuilder(): controller.InjectedControllerBuilder {
         }
 
         var services = mainBuilder.Services;
-        services.tryAddShared(Fetcher, s => new WithCredentialsFetcher(new CacheBuster(new WindowFetch())));
-        services.tryAddShared(urlInjector.IBaseUrlInjector, s => new urlInjector.BaseUrlInjector(pageSettings.baseUrl));
+        services.addShared(Fetcher, s => new WithCredentialsFetcher(new CacheBuster(new WindowFetch())));
+        services.addShared(urlInjector.IBaseUrlInjector, s => new urlInjector.BaseUrlInjector(pageSettings.baseUrl));
+        services.addShared(client.EntryPointInjector, s => new client.EntryPointInjector(pageSettings.baseUrl + 'edity/entrypoint', s.getRequiredService(Fetcher)));
     }
     return mainBuilder;
 }

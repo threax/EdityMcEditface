@@ -7,8 +7,10 @@ using Threax.AspNetCore.Halcyon.Ext;
 
 namespace EdityMcEditface.Mvc.Controllers
 {
-    [Route("")]
+    [Route("edity/[controller]")]
     [ResponseCache(NoStore = true)]
+    [ProducesHal]
+    [TypeFilter(typeof(HalModelResultFilterAttribute))]
     public class EntryPointController : Controller
     {
         public class Rels

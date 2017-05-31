@@ -22,23 +22,14 @@ namespace EdityMcEditface.Mvc.Models.Page
             this.branchDetector = branchDetector;
         }
 
-        public String GetCurrentProjectPath(String user)
+        public String GetUserProjectPath(String user)
         {
             String repoPath;
-            String branch = null;
-            if (this.branchDetector.IsPrepublishBranch)
+            if (user == null)
             {
-                branch = this.branchDetector.RequestedBranch;
-                repoPath = Path.Combine(projectFolder, branch);
+                user = "null-reserved-user";
             }
-            else
-            {
-                if (user == null)
-                {
-                    user = "null-reserved-user";
-                }
-                repoPath = Path.Combine(projectFolder, "UserRepos", user);
-            }
+            repoPath = Path.Combine(projectFolder, "UserRepos", user);
             
             if (!Directory.Exists(repoPath))
             {
@@ -46,10 +37,7 @@ namespace EdityMcEditface.Mvc.Models.Page
             }
             if (!Repository.IsValid(repoPath))
             {
-                Repository.Clone(MasterRepoPath, repoPath, new CloneOptions()
-                {
-                    BranchName = branch
-                });
+                Repository.Clone(MasterRepoPath, repoPath);
             }
             return repoPath;
         }
@@ -58,7 +46,21 @@ namespace EdityMcEditface.Mvc.Models.Page
         {
             get
             {
-                return Path.Combine(projectFolder, "Publish");
+                var publishRepoPath = Path.Combine(projectFolder, "Publish");
+
+                if (!Directory.Exists(publishRepoPath))
+                {
+                    Directory.CreateDirectory(publishRepoPath);
+                }
+                if (!Repository.IsValid(publishRepoPath))
+                {
+                    Repository.Clone(MasterRepoPath, publishRepoPath, new CloneOptions()
+                    {
+                        BranchName = PublishedBranch
+                    });
+                }
+
+                return publishRepoPath;
             }
         }
 

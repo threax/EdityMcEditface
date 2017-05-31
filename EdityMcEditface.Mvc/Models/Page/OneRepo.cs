@@ -20,7 +20,7 @@ namespace EdityMcEditface.Mvc.Models.Page
             this.MasterRepoPath = projectFolder;
         }
 
-        public String GetCurrentProjectPath(String user)
+        public String GetUserProjectPath(String user)
         {
             return projectFolder;
         }

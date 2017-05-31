@@ -21,7 +21,6 @@ using System.Threading.Tasks;
 using EdityMcEditface.HtmlRenderer.Compiler;
 using EdityMcEditface.HtmlRenderer.Filesystem;
 using EdityMcEditface.HtmlRenderer.FileInfo;
-using EdityMcEditface.BuildTasks;
 using System.Reflection;
 using Threax.AspNetCore.Halcyon.Ext;
 using EdityMcEditface.Mvc.Controllers;
@@ -30,6 +29,7 @@ using Halcyon.Web.HAL.Json;
 using Microsoft.AspNetCore.Mvc;
 using Threax.AspNetCore.Halcyon.ClientGen;
 using EdityMcEditface.Mvc.Models.Branch;
+using EdityMcEditface.BuildTasks;
 
 namespace EdityMcEditface.Mvc
 {
@@ -48,7 +48,7 @@ namespace EdityMcEditface.Mvc
             {
                 var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
-                var projectFolder = projectFinder.GetCurrentProjectPath(userInfo.UniqueUserName);
+                var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
 
                 //Folder blacklist
                 var edityFolderList = new PathList();
@@ -169,7 +169,7 @@ namespace EdityMcEditface.Mvc
             {
                 var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
-                var projectFolder = projectFinder.GetCurrentProjectPath(userInfo.UniqueUserName);
+                var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
                 return new Repository(Repository.Discover(projectFolder));
             });
 
@@ -194,6 +194,12 @@ namespace EdityMcEditface.Mvc
 
             services.AddDefaultFileFinder();
 
+            services.TryAddTransient<PullPublish>(s =>
+            {
+                var projectFinder = s.GetRequiredService<ProjectFinder>();
+                return new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath);
+            });
+
             switch (projectConfiguration.Compiler)
             {
                 case "RoundRobin":
@@ -208,7 +214,7 @@ namespace EdityMcEditface.Mvc
 
                         if (projectConfiguration.ProjectMode == "OneRepoPerUser")
                         {
-                            builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
+                            builder.addPreBuildTask(s.GetRequiredService<PullPublish>());
                         }
 
                         editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()
@@ -232,7 +238,7 @@ namespace EdityMcEditface.Mvc
 
                         if (projectConfiguration.ProjectMode == "OneRepoPerUser")
                         {
-                            builder.addPreBuildTask(new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath));
+                            builder.addPreBuildTask(s.GetRequiredService<PullPublish>());
                         }
 
                         editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()

@@ -47,18 +47,6 @@ namespace EdityMcEditface.Mvc.Controllers
 
             if (publishRepoPath != masterRepoPath)
             {
-                if (!Directory.Exists(publishRepoPath))
-                {
-                    Directory.CreateDirectory(publishRepoPath);
-                }
-                if (!Repository.IsValid(publishRepoPath))
-                {
-                    Repository.Clone(masterRepoPath, publishRepoPath, new CloneOptions()
-                    {
-                        BranchName = projectFinder.PublishedBranch
-                    });
-                }
-
                 using (var repo = new Repository(publishRepoPath))
                 {
                     string logMessage = "";

@@ -34,7 +34,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// Erase a page in the project. Does not erase files in the backup location.
         /// Will erase all linked files, the .html, .json, .css and .js files.
         /// </summary>
-        /// <param name="file"></param>
+        /// <param name="file">The path to the html file.</param>
         public void ErasePage(string file)
         {
             bool goNext = true;
@@ -43,17 +43,22 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                 var fullPath = NormalizePath(file);
                 if (File.Exists(fullPath))
                 {
-                    var jsFile = getPageFile(fullPath, ".js");
+                    var jsFile = getPageFile(file, ".js");
                     if (jsFile != null)
                     {
                         File.Delete(jsFile);
                     }
-                    var cssFile = getPageFile(fullPath, ".css");
+                    var cssFile = getPageFile(file, ".css");
                     if (cssFile != null)
                     {
                         File.Delete(cssFile);
                     }
-                    var settingsFile = getPageDefinitionFile(fullPath);
+                    var publishSettings = getPageFile(file, ".publish");
+                    if (publishSettings != null)
+                    {
+                        File.Delete(publishSettings);
+                    }
+                    var settingsFile = getPageDefinitionFile(file);
                     if (File.Exists(settingsFile))
                     {
                         File.Delete(settingsFile);
@@ -67,6 +72,49 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             {
                 next.ErasePage(file);
             }
+        }
+
+        public void PrepublishPage(String file)
+        {
+            //var serializer = JsonSerializer.CreateDefault();
+            //bool goNext = true;
+            //var fullPath = NormalizePath(file);
+            //if (File.Exists(fullPath))
+            //{
+            //    using(var repo = new Repository(Repository.Discover(fullPath)))
+            //    {
+            //        var latestCommit = repo.Commits.QueryBy(file).FirstOrDefault();
+            //        if(latestCommit != null)
+            //        {
+            //            var publishInfoFile = Path.ChangeExtension(file, ".publish");
+            //            PublishedPageInfo publishInfo;
+            //            //See if we can read the file
+            //            try
+            //            {
+            //                using (var reader = new JsonTextReader(new StreamReader(ReadFile(publishInfoFile))))
+            //                {
+            //                    publishInfo = serializer.Deserialize<PublishedPageInfo>(reader);
+            //                }
+            //            }
+            //            catch (Exception)
+            //            {
+            //                publishInfo = new PublishedPageInfo();
+            //            }
+
+            //            publishInfo.Sha = latestCommit.Commit.Sha;
+
+            //            using (var writer = new JsonTextWriter(new StreamWriter(WriteFile(publishInfoFile))))
+            //            {
+            //                serializer.Serialize(writer, publishInfo);
+            //            }
+            //        }
+            //    }
+            //}
+
+            //if (goNext && next != null)
+            //{
+            //    next.PrepublishPage(file);
+            //}
         }
 
         /// <summary>
@@ -433,8 +481,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
 
         /// <summary>
         /// Load a page stack item as content, this will not attempt to derive a file name
-        /// and will use what is passed in. It will also only load content from the main project
-        /// folder, not the backup location.
+        /// and will use what is passed in.
         /// </summary>
         /// <returns></returns>
         public PageStackItem LoadPageStackContent(String path)
@@ -459,8 +506,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         }
 
         /// <summary>
-        /// Load a page definition. This only looks in the project folder for the definition, not the
-        /// backup location.
+        /// Load a page definition.
         /// </summary>
         /// <param name="fileInfo">The file info to use to find the PageDefinition file.</param>
         /// <returns>The PageDefinition for the page. Will be a default instance if the file does not exist.</returns>

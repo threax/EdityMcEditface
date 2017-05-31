@@ -8,11 +8,11 @@ namespace EdityMcEditface.Mvc.Models.Page
     public interface ProjectFinder
     {
         /// <summary>
-        /// Get the project path, this may be based on the current user or current branch.
+        /// Get the project path per user.
         /// </summary>
         /// <param name="user">The current user name.</param>
         /// <returns>The path to the branch.</returns>
-        String GetCurrentProjectPath(String user);
+        String GetUserProjectPath(String user);
 
         /// <summary>
         /// Get the path to the publish repo.

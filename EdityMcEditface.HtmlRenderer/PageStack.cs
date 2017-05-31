@@ -42,6 +42,9 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
+        /// <summary>
+        /// The file with the content.
+        /// </summary>
         public String ContentFile { get; set; }
 
         /// <summary>

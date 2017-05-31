@@ -143,18 +143,26 @@ namespace EdityMcEditface.Mvc.Controllers
 
         private IActionResult buildAsEditor(PageStack pageStack)
         {
-            HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);
-            dr.addTransform(new CreateSettingsForm());
-            dr.addTransform(new CreateTreeMenuEditor());
-            dr.addTransform(new HashTreeMenus(fileFinder));
-            dr.addTransform(new ExpandRootedPaths(this.HttpContext.Request.PathBase));
+            HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);            
             pageStack.pushLayout("edit.html");
             foreach (var editStackItem in fileFinder.Project.EditComponents)
             {
                 pageStack.pushLayout(editStackItem);
             }
             pageStack.pushLayout("default.html");
-            pageStack.pushLayout("editarea-ckeditor.html");
+            if (branchDetector.IsPrepublishBranch)
+            {
+                pageStack.pushLayout("editarea-noedit.html");
+            }
+            else
+            {
+                pageStack.pushLayout("editarea-ckeditor.html");
+                dr.addTransform(new CreateSettingsForm());
+                dr.addTransform(new CreateTreeMenuEditor());
+            }
+
+            dr.addTransform(new HashTreeMenus(fileFinder));
+            dr.addTransform(new ExpandRootedPaths(this.HttpContext.Request.PathBase));
 
             return build(pageStack, dr);
         }
@@ -179,7 +187,7 @@ namespace EdityMcEditface.Mvc.Controllers
                 //If the source file cannot be read offer to create the new file instead.
                 if (targetFileInfo.PathCanCreateFile)
                 {
-                    return showNewPage(dr);
+                    return showNewPage(pageStack, dr);
                 }
                 else
                 {
@@ -191,7 +199,7 @@ namespace EdityMcEditface.Mvc.Controllers
                 //If the source file cannot be read offer to create the new file instead.
                 if (targetFileInfo.PathCanCreateFile)
                 {
-                    return showNewPage(dr);
+                    return showNewPage(pageStack, dr);
                 }
                 else
                 {
@@ -200,27 +208,18 @@ namespace EdityMcEditface.Mvc.Controllers
             }
         }
 
-        private IActionResult showNewPage(HtmlDocumentRenderer dr)
+        private IActionResult showNewPage(PageStack pageStack, HtmlDocumentRenderer dr)
         {
-            var pageStack = new PageStack(templateEnvironment, fileFinder);
-
             if (branchDetector.IsPrepublishBranch)
             {
-                //Create a basic not found page, prepublish cannot edit pages.
-
-                pageStack.pushLayout("edit.html");
-                foreach (var editStackItem in fileFinder.Project.EditComponents)
-                {
-                    pageStack.pushLayout(editStackItem);
-                }
-                pageStack.pushLayout("default.html");
-                pageStack.pushLayout("editarea-ckeditor.html");
+                pageStack.pushLayout("notfound.html");
+                pageStack.ContentFile = null;
             }
             else
             {
+                pageStack = new PageStack(templateEnvironment, fileFinder);
                 pageStack.pushLayout("new.html");
             }
-
             return getConvertedDocument(pageStack, dr);
         }
 

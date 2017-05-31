@@ -143,7 +143,7 @@ namespace EdityMcEditface.Mvc
                 var settings = new JsonSerializerSettings();
                 settings.SetToHalcyonDefault();
                 var serializer = JsonSerializer.Create(settings);
-                return new CookieBranchDetector("edityBranch", serializer, s.GetRequiredService<IHttpContextAccessor>());
+                return new CookieBranchDetector("edityBranch", projectConfiguration.PrepublishBranchName, serializer, s.GetRequiredService<IHttpContextAccessor>());
             });
 
             services.AddSingleton<EditySettings>(s => editySettings);

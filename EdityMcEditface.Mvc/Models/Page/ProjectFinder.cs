@@ -41,11 +41,6 @@ namespace EdityMcEditface.Mvc.Models.Page
         String SitePath { get; }
 
         /// <summary>
-        /// This will be true if the project is currently looking at the live branch.
-        /// </summary>
-        bool IsPrepublishBranch { get; }
-
-        /// <summary>
         /// Get the branches for the current project.
         /// </summary>
         /// <returns></returns>

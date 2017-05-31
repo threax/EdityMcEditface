@@ -12,10 +12,12 @@ namespace EdityMcEditface.Mvc.Models.Branch
         private String cookieName;
         private JsonSerializer jsonSerializer;
         private IHttpContextAccessor context;
+        private String prepublishBranchName;
 
-        public CookieBranchDetector(String cookieName, JsonSerializer jsonSerializer, IHttpContextAccessor context)
+        public CookieBranchDetector(String cookieName, String prepublishBranchName, JsonSerializer jsonSerializer, IHttpContextAccessor context)
         {
             this.cookieName = cookieName;
+            this.prepublishBranchName = prepublishBranchName;
             this.jsonSerializer = jsonSerializer;
             this.context = context;
         }
@@ -51,6 +53,22 @@ namespace EdityMcEditface.Mvc.Models.Branch
                 }
             }
             return new BranchCookie();
+        }
+
+        public bool IsPrepublishBranch
+        {
+            get
+            {
+                return this.RequestedBranch == prepublishBranchName;
+            }
+        }
+
+        public string PrepublishedBranchName
+        {
+            get
+            {
+                return prepublishBranchName;
+            }
         }
     }
 }

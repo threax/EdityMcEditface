@@ -15,6 +15,8 @@ using EdityMcEditface.HtmlRenderer.Transforms;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Concurrent;
 using EdityMcEditface.HtmlRenderer.FileInfo;
+using EdityMcEditface.Mvc.Models.Page;
+using EdityMcEditface.Mvc.Models.Branch;
 
 namespace EdityMcEditface.Mvc.Controllers
 {
@@ -28,11 +30,13 @@ namespace EdityMcEditface.Mvc.Controllers
         private TemplateEnvironment templateEnvironment;
         private ConcurrentBag<String> seenExtensions = new ConcurrentBag<string>();
         private ConcurrentBag<String> altLayoutExtensions = new ConcurrentBag<string>();
+        private IBranchDetector branchDetector;
 
-        public HomeController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider)
+        public HomeController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, IBranchDetector branchDetector)
         {
             this.fileFinder = fileFinder;
             this.fileInfoProvider = fileInfoProvider;
+            this.branchDetector = branchDetector;
         }
 
         [HttpGet]
@@ -199,7 +203,24 @@ namespace EdityMcEditface.Mvc.Controllers
         private IActionResult showNewPage(HtmlDocumentRenderer dr)
         {
             var pageStack = new PageStack(templateEnvironment, fileFinder);
-            pageStack.pushLayout("new.html");
+
+            if (branchDetector.IsPrepublishBranch)
+            {
+                //Create a basic not found page, prepublish cannot edit pages.
+
+                pageStack.pushLayout("edit.html");
+                foreach (var editStackItem in fileFinder.Project.EditComponents)
+                {
+                    pageStack.pushLayout(editStackItem);
+                }
+                pageStack.pushLayout("default.html");
+                pageStack.pushLayout("editarea-ckeditor.html");
+            }
+            else
+            {
+                pageStack.pushLayout("new.html");
+            }
+
             return getConvertedDocument(pageStack, dr);
         }
 

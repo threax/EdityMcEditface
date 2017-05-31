@@ -11,12 +11,10 @@ namespace EdityMcEditface.Mvc.Models.Page
     public class OneRepoPerUser : ProjectFinder
     {
         private String projectFolder;
-        private String prepublishBranchName;
         private IBranchDetector branchDetector;
 
         public OneRepoPerUser(ProjectConfiguration projectConfig, IBranchDetector branchDetector)
         {
-            this.prepublishBranchName = projectConfig.PrepublishBranchName;
             this.projectFolder = projectConfig.ProjectPath;
             this.EdityCorePath = projectConfig.EdityCorePath;
             this.SitePath = projectConfig.SitePath;
@@ -28,10 +26,10 @@ namespace EdityMcEditface.Mvc.Models.Page
         {
             String repoPath;
             String branch = null;
-            if (IsPrepublishBranch)
+            if (this.branchDetector.IsPrepublishBranch)
             {
-                branch = prepublishBranchName;
-                repoPath = Path.Combine(projectFolder, prepublishBranchName);
+                branch = this.branchDetector.RequestedBranch;
+                repoPath = Path.Combine(projectFolder, branch);
             }
             else
             {
@@ -78,7 +76,7 @@ namespace EdityMcEditface.Mvc.Models.Page
                 using (var repo = new Repository(MasterRepoPath))
                 {
                     var query = repo.Branches.Where(b => !b.IsRemote);
-                    var branch = query.Where(b => b.FriendlyName == this.prepublishBranchName).FirstOrDefault();
+                    var branch = query.Where(b => b.FriendlyName == this.branchDetector.PrepublishedBranchName).FirstOrDefault();
                     if (branch != null)
                     {
                         return branch.FriendlyName;
@@ -100,14 +98,6 @@ namespace EdityMcEditface.Mvc.Models.Page
                     Current = i.IsCurrentRepositoryHead
                 });
                 return Task.FromResult(new BranchViewCollection(query.ToList()));
-            }
-        }
-
-        public bool IsPrepublishBranch
-        {
-            get
-            {
-                return this.branchDetector.RequestedBranch == prepublishBranchName;
             }
         }
     }

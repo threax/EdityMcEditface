@@ -51,13 +51,5 @@ namespace EdityMcEditface.Mvc.Models.Page
                 return null;
             }
         }
-
-        public bool IsPrepublishBranch
-        {
-            get
-            {
-                return false;
-            }
-        }
     }
 }

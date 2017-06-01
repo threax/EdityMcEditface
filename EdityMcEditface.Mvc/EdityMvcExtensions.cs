@@ -77,11 +77,14 @@ namespace EdityMcEditface.Mvc
                 var contentFolderPermissions = new DefaultFileFinderPermissions();
                 contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
 
+                //Always use the git draft manager for the project content, this way you can actually create drafts.
                 GitDraftManager draftManager = new GitDraftManager();
                 IFileStreamManager streamManager = null;
 
                 if (phaseDetector.Phase == Phases.Draft)
                 {
+                    //If the request is in draft mode, change the content to only files with draft files and change the file stream
+                    //manager to read published versions out of git
                     var oldPermissions = contentFolderPermissions.TreatAsContentPermission.Permissions;
                     contentFolderPermissions.TreatAsContentPermission.Permissions = new MustHaveDraftFile(draftManager, oldPermissions);
                     streamManager = new PublishedFileStreamManager(draftManager);

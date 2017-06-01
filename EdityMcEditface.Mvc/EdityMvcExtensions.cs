@@ -79,7 +79,7 @@ namespace EdityMcEditface.Mvc
 
                 if (branchDetector.Phase == Phases.Draft)
                 {
-                    return new PublishedRepoFileFinder(projectFolder, contentFolderPermissions, wwwRootFileFinder);
+                    return new PublishedRepoFileFinder(projectFolder, contentFolderPermissions, new PublishedFileDetector(), wwwRootFileFinder);
                 }
                 return new PublishableRepoFileFinder(projectFolder, contentFolderPermissions, wwwRootFileFinder);
             });

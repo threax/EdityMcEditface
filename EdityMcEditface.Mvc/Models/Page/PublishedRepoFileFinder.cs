@@ -15,6 +15,7 @@ namespace EdityMcEditface.Mvc.Models.Page
         public PublishableRepoFileFinder(string projectPath, IFileFinderPermissions permissions, FileFinder next = null, string projectFilePath = "edity/edity.json")
             : base(projectPath, permissions, next, projectFilePath)
         {
+            
         }
 
         private JsonSerializer serializer = JsonSerializer.CreateDefault();
@@ -89,14 +90,17 @@ namespace EdityMcEditface.Mvc.Models.Page
 
     public class PublishedRepoFileFinder : PublishableRepoFileFinder
     {
-        public PublishedRepoFileFinder(string projectPath, IFileFinderPermissions permissions, FileFinder next = null, string projectFilePath = "edity/edity.json")
+        IPublishedFileDetector publishedFileDetector;
+
+        public PublishedRepoFileFinder(string projectPath, IFileFinderPermissions permissions, IPublishedFileDetector publishedFileDetector, FileFinder next = null, string projectFilePath = "edity/edity.json")
             : base(projectPath, permissions, next, projectFilePath)
         {
+            this.publishedFileDetector = publishedFileDetector;
         }
 
-        protected override Stream OpenReadStream(String originalFile, String normalizedFile, bool isPublishable)
+        protected override Stream OpenReadStream(String originalFile, String normalizedFile)
         {
-            if (isPublishable)
+            if (publishedFileDetector.IsPublishableFile(originalFile, normalizedFile))
             {
                 PublishedPageInfo publishInfo = LoadPublishInfo(originalFile);
                 if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version
@@ -115,7 +119,7 @@ namespace EdityMcEditface.Mvc.Models.Page
             }
             else
             {
-                return base.OpenReadStream(originalFile, normalizedFile, isPublishable);
+                return base.OpenReadStream(originalFile, normalizedFile);
             }
         }
     }

@@ -18,11 +18,11 @@ namespace EdityMcEditface.HtmlRenderer
         IEnumerable<Template> Templates { get; }
 
         /// <summary>
-        /// Copy the dependency files for the given page stack.
+        /// Copy the linked content files for the given page stack.
         /// </summary>
         /// <param name="baseOutDir">The base out directory to copy files to.</param>
         /// <param name="pageStack">The page stack to read content files from.</param>
-        void CopyDependencyFiles(string baseOutDir, PageStack pageStack);
+        void CopyLinkedFiles(string baseOutDir, PageStack pageStack);
 
         /// <summary>
         /// Copy any other content defined in the project.

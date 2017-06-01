@@ -321,43 +321,43 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         }
 
         /// <summary>
-        /// Copy the dependency files for the current page stack.
+        /// Copy the linked files for the current page stack.
         /// </summary>
         /// <param name="baseOutDir">The output dir.</param>
         /// <param name="pageStack">The page stack to copy files for.</param>
-        public void CopyDependencyFiles(String baseOutDir, PageStack pageStack)
+        public void CopyLinkedFiles(String baseOutDir, PageStack pageStack)
         {
-            CopyDependencyFiles(baseOutDir, pageStack, new HashSet<string>());
+            CopyLinkedFiles(baseOutDir, pageStack, new HashSet<string>());
         }
 
-        private void CopyDependencyFiles(String baseOutDir, PageStack pageStack, HashSet<String> copiedContentFiles)
+        private void CopyLinkedFiles(String baseOutDir, PageStack pageStack, HashSet<String> copiedFiles)
         {
             foreach (var page in pageStack.Pages)
             {
                 if (!String.IsNullOrEmpty(page.PageCssPath))
                 {
-                    CopyDependencyFile(baseOutDir, copiedContentFiles, page.PageCssPath);
+                    CopyLinkedFile(baseOutDir, copiedFiles, page.PageCssPath);
                 }
                 if (!String.IsNullOrEmpty(page.PageScriptPath))
                 {
-                    CopyDependencyFile(baseOutDir, copiedContentFiles, page.PageScriptPath);
+                    CopyLinkedFile(baseOutDir, copiedFiles, page.PageScriptPath);
                 }
             }
 
             foreach (var content in pageStack.LinkedContentFiles)
             {
-                CopyDependencyFile(baseOutDir, copiedContentFiles, content);
+                CopyLinkedFile(baseOutDir, copiedFiles, content);
             }
 
             if (next != null)
             {
-                next.CopyDependencyFiles(baseOutDir, pageStack, copiedContentFiles);
+                next.CopyLinkedFiles(baseOutDir, pageStack, copiedFiles);
             }
         }
 
-        private void CopyDependencyFile(string baseOutDir, HashSet<string> copiedContentFiles, string content)
+        private void CopyLinkedFile(string baseOutDir, HashSet<string> copiedFiles, string content)
         {
-            if (!copiedContentFiles.Contains(content) && isValidPhysicalFile(content) && permissions.AllowOutputCopy(this, content))
+            if (!copiedFiles.Contains(content) && isValidPhysicalFile(content) && permissions.AllowOutputCopy(this, content))
             {
                 var fullContentPath = NormalizePath(content);
                 if (File.Exists(fullContentPath))
@@ -367,7 +367,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                     if (within)
                     {
                         copyFileIfNotExists(fullContentPath, fullDestPath);
-                        copiedContentFiles.Add(content);
+                        copiedFiles.Add(content);
                     }
                 }
             }

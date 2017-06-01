@@ -63,7 +63,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
                 {
                     writer.Write(document.DocumentNode.OuterHtml);
                 }
-                fileFinder.CopyDependencyFiles(this.outDir, pageStack);
+                fileFinder.CopyLinkedFiles(this.outDir, pageStack);
             }
         }
 

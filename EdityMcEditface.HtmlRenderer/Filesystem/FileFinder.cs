@@ -17,8 +17,8 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         private String projectPath;
         private String projectFilePath;
         private Lazy<EdityProject> project;
-        private FileFinder next;
-        private IFileFinderPermissions permissions;
+        protected FileFinder next;
+        protected IFileFinderPermissions permissions;
 
         public FileFinder(String projectPath, IFileFinderPermissions permissions, FileFinder next = null, String projectFilePath = "edity/edity.json")
         {
@@ -74,47 +74,13 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             }
         }
 
-        public void PrepublishPage(String file)
+        public virtual void PrepublishPage(String file)
         {
-            //var serializer = JsonSerializer.CreateDefault();
-            //bool goNext = true;
-            //var fullPath = NormalizePath(file);
-            //if (File.Exists(fullPath))
-            //{
-            //    using(var repo = new Repository(Repository.Discover(fullPath)))
-            //    {
-            //        var latestCommit = repo.Commits.QueryBy(file).FirstOrDefault();
-            //        if(latestCommit != null)
-            //        {
-            //            var publishInfoFile = Path.ChangeExtension(file, ".publish");
-            //            PublishedPageInfo publishInfo;
-            //            //See if we can read the file
-            //            try
-            //            {
-            //                using (var reader = new JsonTextReader(new StreamReader(ReadFile(publishInfoFile))))
-            //                {
-            //                    publishInfo = serializer.Deserialize<PublishedPageInfo>(reader);
-            //                }
-            //            }
-            //            catch (Exception)
-            //            {
-            //                publishInfo = new PublishedPageInfo();
-            //            }
-
-            //            publishInfo.Sha = latestCommit.Commit.Sha;
-
-            //            using (var writer = new JsonTextWriter(new StreamWriter(WriteFile(publishInfoFile))))
-            //            {
-            //                serializer.Serialize(writer, publishInfo);
-            //            }
-            //        }
-            //    }
-            //}
-
-            //if (goNext && next != null)
-            //{
-            //    next.PrepublishPage(file);
-            //}
+            //No concept of prepublish here.
+            if (next != null)
+            {
+                next.PrepublishPage(file);
+            }
         }
 
         /// <summary>
@@ -484,7 +450,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// and will use what is passed in.
         /// </summary>
         /// <returns></returns>
-        public PageStackItem LoadPageStackContent(String path)
+        public virtual PageStackItem LoadPageStackContent(String path)
         {
             if (permissions.AllowRead(this, path))
             {
@@ -672,21 +638,26 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             return project;
         }
 
-        private PageStackItem loadPageStackFile(string path, string realPath)
+        protected PageStackItem loadPageStackFile(string path, string realPath)
         {
             using (var layout = new StreamReader(File.OpenRead(realPath)))
             {
-                return new PageStackItem()
-                {
-                    Content = layout.ReadToEnd(),
-                    PageDefinition = getProjectPageDefinition(path),
-                    PageScriptPath = getPageFile(path, "js"),
-                    PageCssPath = getPageFile(path, "css"),
-                };
+                return loadPageStackFile(path, layout);
             }
         }
 
-        private String NormalizePath(String path)
+        protected PageStackItem loadPageStackFile(string path, StreamReader layout)
+        {
+            return new PageStackItem()
+            {
+                Content = layout.ReadToEnd(),
+                PageDefinition = getProjectPageDefinition(path),
+                PageScriptPath = getPageFile(path, "js"),
+                PageCssPath = getPageFile(path, "css"),
+            };
+        }
+
+        protected String NormalizePath(String path)
         {
             bool withinPath;
             var normalized = NormalizePath(path, projectPath, out withinPath);

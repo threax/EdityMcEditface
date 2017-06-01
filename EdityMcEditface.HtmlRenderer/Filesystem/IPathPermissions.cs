@@ -10,6 +10,11 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
     /// </summary>
     public interface IPathPermissions
     {
+        /// <summary>
+        /// Determine if path should be allowed to be accessed.
+        /// </summary>
+        /// <param name="path">The path to access.</param>
+        /// <returns>True to allow, false to deny.</returns>
         bool AllowFile(String path);
     }
 }

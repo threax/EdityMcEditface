@@ -8,18 +8,19 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
     /// <summary>
     /// This will return true if the files are on the list provided.
     /// </summary>
-    public class PathWhitelist : IPathPermissions
+    public class PathWhitelist : PathPermissionChain
     {
         private PathList pathList;
 
-        public PathWhitelist(PathList pathList)
+        public PathWhitelist(PathList pathList, IPathPermissions next = null)
+            : base(next)
         {
             this.pathList = pathList;
         }
 
-        public bool AllowFile(string path)
+        public override bool AllowFile(string path)
         {
-            return pathList.OnList(path);
+            return pathList.OnList(path) && this.Next(path);
         }
     }
 }

@@ -48,6 +48,7 @@ namespace EdityMcEditface.Mvc
             {
                 var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
+                var branchDetector = s.GetRequiredService<IBranchDetector>();
                 var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
 
                 //Folder blacklist
@@ -75,7 +76,12 @@ namespace EdityMcEditface.Mvc
                 //Project location
                 var contentFolderPermissions = new DefaultFileFinderPermissions();
                 contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
-                return new FileFinder(projectFolder, contentFolderPermissions, wwwRootFileFinder);
+
+                if (branchDetector.IsPrepublishBranch)
+                {
+                    return new PublishedRepoFileFinder(projectFolder, contentFolderPermissions, wwwRootFileFinder);
+                }
+                return new PublishableRepoFileFinder(projectFolder, contentFolderPermissions, wwwRootFileFinder);
             });
 
             return services;

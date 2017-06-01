@@ -76,7 +76,12 @@ namespace EdityMcEditface.Mvc.Controllers
         {
             return await Task.Run<SyncInfo>(() =>
             {
-                repo.Fetch("origin");
+                string logMessage = "";
+                foreach (Remote remote in repo.Network.Remotes)
+                {
+                    var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
+                    Commands.Fetch(repo, remote.Name, refSpecs, null, logMessage);
+                }
 
                 var head = repo.Head.Commits.First();
                 var tracked = repo.Head.TrackedBranch.Commits.First();
@@ -301,7 +306,7 @@ namespace EdityMcEditface.Mvc.Controllers
             {
                 foreach(var path in QueryChanges(status).Select(s => s.FilePath))
                 {
-                    repo.Stage(path);
+                    Commands.Stage(repo, path);
                 }
                 repo.Commit(newCommit.Message, signature, signature);
             }
@@ -321,7 +326,7 @@ namespace EdityMcEditface.Mvc.Controllers
 
             try
             {
-                var result = repo.Network.Pull(signature, new PullOptions());
+                var result = Commands.Pull(repo, signature, new PullOptions());
                 switch (result.Status)
                 {
                     case MergeStatus.Conflicts:

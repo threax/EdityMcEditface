@@ -119,10 +119,10 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         {
             if (permissions.AllowRead(this, file))
             {
-                var fullPath = NormalizePath(file);
-                if (File.Exists(fullPath))
+                var normalizedPath = NormalizePath(file);
+                if (File.Exists(normalizedPath))
                 {
-                    return File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    return OpenReadStream(file, normalizedPath);
                 }
             }
 
@@ -134,6 +134,19 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             {
                 throw new FileNotFoundException($"Cannot find file to read {file}", file);
             }
+        }
+
+        /// <summary>
+        /// Called by ReadFile to open a read stream. If you need to customize the stream
+        /// to read from, override this function. The default returns the file directly
+        /// from the file system.
+        /// </summary>
+        /// <param name="originalFile">The original path to the file.</param>
+        /// <param name="normalizedFile">The path to the file normalized by NormalizePath.</param>
+        /// <returns></returns>
+        protected virtual Stream OpenReadStream(String originalFile, String normalizedFile)
+        {
+            return File.Open(normalizedFile, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
         /// <summary>
@@ -451,7 +464,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// and will use what is passed in.
         /// </summary>
         /// <returns></returns>
-        public virtual PageStackItem LoadPageStackContent(String path)
+        public PageStackItem LoadPageStackContent(String path)
         {
             if (permissions.AllowRead(this, path))
             {
@@ -639,23 +652,18 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             return project;
         }
 
-        protected PageStackItem loadPageStackFile(string path, string realPath)
+        private PageStackItem loadPageStackFile(string path, string realPath)
         {
-            using (var layout = new StreamReader(File.OpenRead(realPath)))
+            using (var stream = new StreamReader(OpenReadStream(path, realPath)))
             {
-                return loadPageStackFile(path, layout);
+                return new PageStackItem()
+                {
+                    Content = stream.ReadToEnd(),
+                    PageDefinition = getProjectPageDefinition(path),
+                    PageScriptPath = getPageFile(path, "js"),
+                    PageCssPath = getPageFile(path, "css"),
+                };
             }
-        }
-
-        protected PageStackItem loadPageStackFile(string path, StreamReader layout)
-        {
-            return new PageStackItem()
-            {
-                Content = layout.ReadToEnd(),
-                PageDefinition = getProjectPageDefinition(path),
-                PageScriptPath = getPageFile(path, "js"),
-                PageCssPath = getPageFile(path, "css"),
-            };
         }
 
         protected String NormalizePath(String path)

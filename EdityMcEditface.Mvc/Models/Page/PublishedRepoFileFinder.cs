@@ -12,7 +12,7 @@ namespace EdityMcEditface.Mvc.Models.Page
 {
     public class PublishableRepoFileFinder : FileFinder
     {
-        public PublishableRepoFileFinder(string projectPath, IFileFinderPermissions permissions, FileFinder next = null, string projectFilePath = "edity/edity.json") 
+        public PublishableRepoFileFinder(string projectPath, IFileFinderPermissions permissions, FileFinder next = null, string projectFilePath = "edity/edity.json")
             : base(projectPath, permissions, next, projectFilePath)
         {
         }
@@ -48,17 +48,24 @@ namespace EdityMcEditface.Mvc.Models.Page
 
         protected PublishedPageInfo LoadPublishInfo(string file)
         {
-            PublishedPageInfo publishInfo;
+            PublishedPageInfo publishInfo = null;
             var publishInfoFile = GetPublishInfoFileName(file);
             //See if we can read the file
             try
             {
-                using (var reader = new JsonTextReader(new StreamReader(ReadFile(publishInfoFile))))
+                var normalizedPath = NormalizePath(publishInfoFile);
+                if (File.Exists(normalizedPath))
                 {
-                    publishInfo = serializer.Deserialize<PublishedPageInfo>(reader);
+                    //Always read file directly, this gets called during the ReadFile function call.
+                    using (var reader = new JsonTextReader(new StreamReader(File.Open(normalizedPath, FileMode.Open, FileAccess.Read, FileShare.Read))))
+                    {
+                        publishInfo = serializer.Deserialize<PublishedPageInfo>(reader);
+                    }
                 }
             }
-            catch (Exception)
+            catch (Exception) { }
+
+            if (publishInfo == null)
             {
                 publishInfo = new PublishedPageInfo();
             }
@@ -82,7 +89,7 @@ namespace EdityMcEditface.Mvc.Models.Page
 
     public class PublishedRepoFileFinder : PublishableRepoFileFinder
     {
-        public PublishedRepoFileFinder(string projectPath, IFileFinderPermissions permissions, FileFinder next = null, string projectFilePath = "edity/edity.json") 
+        public PublishedRepoFileFinder(string projectPath, IFileFinderPermissions permissions, FileFinder next = null, string projectFilePath = "edity/edity.json")
             : base(projectPath, permissions, next, projectFilePath)
         {
         }
@@ -91,47 +98,23 @@ namespace EdityMcEditface.Mvc.Models.Page
         //also when loading files to copy, make sure you load older ones for pages, will need to alter base
         //file finder for this
 
-        
-
-        /// <summary>
-        /// Load a page stack item as content, this will not attempt to derive a file name
-        /// and will use what is passed in.
-        /// </summary>
-        /// <returns></returns>
-        public override PageStackItem LoadPageStackContent(String path)
+        protected override Stream OpenReadStream(String originalFile, String normalizedFile)
         {
-            PublishedPageInfo publishInfo = LoadPublishInfo(path);
-            if(publishInfo.Sha != null)
+            PublishedPageInfo publishInfo = LoadPublishInfo(originalFile);
+            if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version
             {
-                if (permissions.AllowRead(this, path))
+                using (var repo = new Repository(Repository.Discover(normalizedFile)))
                 {
-                    var realPath = NormalizePath(path);
+                    var commit = repo.Lookup<Commit>(publishInfo.Sha);
+                    var treeEntry = commit[originalFile.TrimStartingPathChars()];
+                    var blob = treeEntry.Target as Blob;
 
-                    using (var repo = new Repository(Repository.Discover(realPath)))
-                    {
-                        var commit = repo.Lookup<Commit>(publishInfo.Sha);
-                        var treeEntry = commit[path];
-                        var blob = treeEntry.Target as Blob;
-
-                        using(var sr = new StreamReader(blob.GetContentStream()))
-                        {
-                            return loadPageStackFile(path, sr);
-                        }
-                    }
-                }
-
-                if (next != null)
-                {
-                    return next.LoadPageStackContent(path);
-                }
-                else
-                {
-                    throw new FileNotFoundException($"Cannot find page stack file {path}", path);
+                    return blob.GetContentStream();
                 }
             }
             else
             {
-                throw new FileNotFoundException($"Cannot find file {path} in publish mode. No Sha set on .publish file or .publish file does not exist");
+                return base.OpenReadStream(originalFile, normalizedFile);
             }
         }
     }

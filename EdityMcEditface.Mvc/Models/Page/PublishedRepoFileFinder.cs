@@ -94,23 +94,28 @@ namespace EdityMcEditface.Mvc.Models.Page
         {
         }
 
-        protected override Stream OpenReadStream(String originalFile, String normalizedFile)
+        protected override Stream OpenReadStream(String originalFile, String normalizedFile, bool isPublishable)
         {
-            PublishedPageInfo publishInfo = LoadPublishInfo(originalFile);
-            if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version
+            if (isPublishable)
             {
-                using (var repo = new Repository(Repository.Discover(normalizedFile)))
+                PublishedPageInfo publishInfo = LoadPublishInfo(originalFile);
+                if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version
                 {
-                    var commit = repo.Lookup<Commit>(publishInfo.Sha);
-                    var treeEntry = commit[originalFile.TrimStartingPathChars()];
-                    var blob = treeEntry.Target as Blob;
+                    using (var repo = new Repository(Repository.Discover(normalizedFile)))
+                    {
+                        var commit = repo.Lookup<Commit>(publishInfo.Sha);
+                        var treeEntry = commit[originalFile.TrimStartingPathChars()];
+                        var blob = treeEntry.Target as Blob;
 
-                    return blob.GetContentStream();
+                        return blob.GetContentStream();
+                    }
                 }
+
+                throw new FileNotFoundException($"Cannot find draft version of {originalFile}.");
             }
             else
             {
-                return base.OpenReadStream(originalFile, normalizedFile);
+                return base.OpenReadStream(originalFile, normalizedFile, isPublishable);
             }
         }
     }

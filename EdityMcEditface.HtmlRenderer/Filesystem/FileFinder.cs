@@ -122,7 +122,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                 var normalizedPath = NormalizePath(file);
                 if (File.Exists(normalizedPath))
                 {
-                    return OpenReadStream(file, normalizedPath);
+                    return OpenReadStream(file, normalizedPath, false);
                 }
             }
 
@@ -143,8 +143,9 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// </summary>
         /// <param name="originalFile">The original path to the file.</param>
         /// <param name="normalizedFile">The path to the file normalized by NormalizePath.</param>
+        /// <param name="isPublishable">True if the file is a publishable file, false if it is not.</param>
         /// <returns></returns>
-        protected virtual Stream OpenReadStream(String originalFile, String normalizedFile)
+        protected virtual Stream OpenReadStream(String originalFile, String normalizedFile, bool isPublishable)
         {
             return File.Open(normalizedFile, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
@@ -503,7 +504,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                 var normalizedPath = NormalizePath(pageDefPath);
                 if (File.Exists(normalizedPath))
                 {
-                    using (var stream = new StreamReader(OpenReadStream(pageDefPath, normalizedPath)))
+                    using (var stream = new StreamReader(OpenReadStream(pageDefPath, normalizedPath, true)))
                     {
                         return JsonConvert.DeserializeObject<PageDefinition>(stream.ReadToEnd());
                     }
@@ -655,7 +656,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
 
         private PageStackItem loadPageStackFile(string path, string realPath)
         {
-            using (var stream = new StreamReader(OpenReadStream(path, realPath)))
+            using (var stream = new StreamReader(OpenReadStream(path, realPath, true)))
             {
                 return new PageStackItem()
                 {

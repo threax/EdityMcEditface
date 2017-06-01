@@ -57,7 +57,7 @@ namespace EdityMcEditface.Mvc.Controllers
         /// </summary>
         /// <param name="file">The name of the file.</param>
         /// <returns></returns>
-        [HttpPut("{File}")]
+        [HttpPut("{*File}")]
         [HalRel(Rels.SubmitLatestDraft)]
         public Task Put(String file)
         {

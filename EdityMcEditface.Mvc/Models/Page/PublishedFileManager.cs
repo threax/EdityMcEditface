@@ -14,19 +14,19 @@ namespace EdityMcEditface.Mvc.Models.Page
     {
         private JsonSerializer serializer = JsonSerializer.CreateDefault();
 
-        public bool SendPageToDraft(String file, String normalizedPath)
+        public bool SendPageToDraft(String normalizedPath)
         {
             if (File.Exists(normalizedPath))
             {
                 using (var repo = new Repository(Repository.Discover(normalizedPath)))
                 {
-                    var latestCommit = repo.Commits.QueryBy(file).FirstOrDefault();
+                    var latestCommit = repo.Commits.FirstOrDefault();
                     if (latestCommit != null)
                     {
                         PublishedPageInfo publishInfo = LoadPublishInfo(normalizedPath);
 
-                        publishInfo.Sha = latestCommit.Commit.Sha;
-                        WritePublishInfo(file, publishInfo);
+                        publishInfo.Sha = latestCommit.Sha;
+                        WritePublishInfo(normalizedPath, publishInfo);
                     }
                 }
                 return true;
@@ -63,7 +63,7 @@ namespace EdityMcEditface.Mvc.Models.Page
         public void WritePublishInfo(string file, PublishedPageInfo publishInfo)
         {
             //write files directly.
-            using (var writer = new JsonTextWriter(new StreamWriter(File.Open(GetPublishInfoFileName(file), FileMode.Open, FileAccess.Read, FileShare.Read))))
+            using (var writer = new JsonTextWriter(new StreamWriter(File.Open(GetPublishInfoFileName(file), FileMode.Create, FileAccess.Write, FileShare.None))))
             {
                 serializer.Serialize(writer, publishInfo);
             }

@@ -48,7 +48,7 @@ namespace EdityMcEditface.Mvc
             {
                 var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
-                var branchDetector = s.GetRequiredService<IPhaseDetector>();
+                var phaseDetector = s.GetRequiredService<IPhaseDetector>();
                 var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
 
                 //Folder blacklist
@@ -77,12 +77,11 @@ namespace EdityMcEditface.Mvc
                 var contentFolderPermissions = new DefaultFileFinderPermissions();
                 contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
 
-                PublishedFileManager publishManager = null;
+                PublishedFileManager publishManager = new PublishedFileManager();
                 IFileStreamManager streamManager = null;
 
-                if (branchDetector.Phase == Phases.Draft)
+                if (phaseDetector.Phase == Phases.Draft)
                 {
-                    publishManager = new PublishedFileManager();
                     streamManager = new PublishedFileStreamManager(publishManager);
                 }
 

@@ -29,6 +29,8 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             {
                 this.fileStreamManager = new FileStreamManager();
             }
+
+            this.publishedFileManager = publishedFileManager;
             if(this.publishedFileManager == null)
             {
                 this.publishedFileManager = new NoPublishedFiles();
@@ -94,7 +96,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         {
             //Send the page to the registered published file manager
             var normalized = NormalizePath(file);
-            if (!publishedFileManager.SendPageToDraft(file, normalized) && next != null)
+            if (!publishedFileManager.SendPageToDraft(normalized) && next != null)
             {
                 next.SendToDraft(file);
             }

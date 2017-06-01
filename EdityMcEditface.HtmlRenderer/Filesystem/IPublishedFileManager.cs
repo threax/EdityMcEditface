@@ -21,9 +21,8 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// Send a page to draft. Will return true if the page is updated, false if 
         /// no changes are made (page not found, other errors).
         /// </summary>
-        /// <param name="file">The incoming path to the file.</param>
         /// <param name="normalizedPath">The full normalized path of the file.</param>
         /// <returns></returns>
-        bool SendPageToDraft(String file, String normalizedPath);
+        bool SendPageToDraft(String normalizedPath);
     }
 }

@@ -145,18 +145,25 @@ namespace EdityMcEditface.Mvc.Controllers
         {
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);            
             pageStack.pushLayout("edit.html");
-            foreach (var editStackItem in fileFinder.Project.EditComponents)
-            {
-                pageStack.pushLayout(editStackItem);
-            }
-            pageStack.pushLayout("default.html");
 
             switch (branchDetector.Phase)
             {
                 case Phases.Draft:
+                    foreach (var editStackItem in fileFinder.Project.DraftComponents)
+                    {
+                        pageStack.pushLayout(editStackItem);
+                    }
+
+                    pageStack.pushLayout("default.html");
                     pageStack.pushLayout("editarea-noedit.html");
                     break;
                 case Phases.Edit:
+                    foreach (var editStackItem in fileFinder.Project.EditComponents)
+                    {
+                        pageStack.pushLayout(editStackItem);
+                    }
+
+                    pageStack.pushLayout("default.html");
                     pageStack.pushLayout("editarea-ckeditor.html");
                     dr.addTransform(new CreateSettingsForm());
                     dr.addTransform(new CreateTreeMenuEditor());

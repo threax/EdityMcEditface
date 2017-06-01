@@ -21,6 +21,8 @@ namespace EdityMcEditface.HtmlRenderer
 
         public List<String> EditComponents { get; set; } = new List<String>();
 
+        public List<String> DraftComponents { get; set; } = new List<String>();
+
         /// <summary>
         /// Merge two projects together. Does not fully copy the other project and will use objects
         /// from inside it, don't keep making changes to the project merged into this one or the
@@ -34,6 +36,7 @@ namespace EdityMcEditface.HtmlRenderer
             mergeStringList(backupProject.LinkedContent, LinkedContent);
             mergeStringList(backupProject.AdditionalContent, AdditionalContent);
             mergeStringList(backupProject.EditComponents, EditComponents);
+            mergeStringList(backupProject.DraftComponents, DraftComponents);
             mergeCompilerLists(backupProject.Compilers, Compilers);
 
         }

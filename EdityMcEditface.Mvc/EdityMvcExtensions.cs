@@ -48,7 +48,7 @@ namespace EdityMcEditface.Mvc
             {
                 var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
-                var branchDetector = s.GetRequiredService<IBranchDetector>();
+                var branchDetector = s.GetRequiredService<IPhaseDetector>();
                 var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
 
                 //Folder blacklist
@@ -77,7 +77,7 @@ namespace EdityMcEditface.Mvc
                 var contentFolderPermissions = new DefaultFileFinderPermissions();
                 contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
 
-                if (branchDetector.IsPrepublishBranch)
+                if (branchDetector.Phase == Phases.Draft)
                 {
                     return new PublishedRepoFileFinder(projectFolder, contentFolderPermissions, wwwRootFileFinder);
                 }
@@ -144,12 +144,12 @@ namespace EdityMcEditface.Mvc
 
             services.TryAddScoped<IUserInfo, DefaultUserInfo>();
 
-            services.TryAddScoped<IBranchDetector>(s =>
+            services.TryAddScoped<IPhaseDetector>(s =>
             {
                 var settings = new JsonSerializerSettings();
                 settings.SetToHalcyonDefault();
                 var serializer = JsonSerializer.Create(settings);
-                return new CookieBranchDetector("edityBranch", projectConfiguration.PrepublishBranchName, serializer, s.GetRequiredService<IHttpContextAccessor>());
+                return new CookiePhaseDetector("edityBranch", serializer, s.GetRequiredService<IHttpContextAccessor>());
             });
 
             services.AddSingleton<EditySettings>(s => editySettings);
@@ -166,7 +166,7 @@ namespace EdityMcEditface.Mvc
                 case "OneRepoPerUser":
                     services.AddTransient<ProjectFinder, OneRepoPerUser>(s =>
                     {
-                        return new OneRepoPerUser(projectConfiguration, s.GetRequiredService<IBranchDetector>());
+                        return new OneRepoPerUser(projectConfiguration, s.GetRequiredService<IPhaseDetector>());
                     });
                     break;
             }

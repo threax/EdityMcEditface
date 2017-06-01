@@ -4,8 +4,8 @@ using System.Text;
 
 namespace EdityMcEditface.Mvc.Models.Branch
 {
-    class BranchCookie
+    class PhaseCookie
     {
-        public String CurrentBranch { get; set; } = "master";
+        public Phases Current { get; set; } = Phases.Edit;
     }
 }

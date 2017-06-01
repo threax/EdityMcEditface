@@ -8,11 +8,11 @@ using Threax.AspNetCore.Halcyon.Ext;
 namespace EdityMcEditface.Mvc.Models.Branch
 {
     [HalModel]
-    [HalSelfActionLink(BranchController.Rels.List, typeof(BranchController))]
-    public class BranchViewCollection : CollectionView<BranchView>
+    [HalActionLink(PhaseController.Rels.SetPhase, typeof(PhaseController))]
+    public class Phase
     {
-        public BranchViewCollection(IEnumerable<BranchView> items) : base(items)
-        {
-        }
+        public String Name { get; set; }
+
+        public bool Current { get; set; }
     }
 }

@@ -30,9 +30,9 @@ namespace EdityMcEditface.Mvc.Controllers
         private TemplateEnvironment templateEnvironment;
         private ConcurrentBag<String> seenExtensions = new ConcurrentBag<string>();
         private ConcurrentBag<String> altLayoutExtensions = new ConcurrentBag<string>();
-        private IBranchDetector branchDetector;
+        private IPhaseDetector branchDetector;
 
-        public HomeController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, IBranchDetector branchDetector)
+        public HomeController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, IPhaseDetector branchDetector)
         {
             this.fileFinder = fileFinder;
             this.fileInfoProvider = fileInfoProvider;
@@ -150,15 +150,17 @@ namespace EdityMcEditface.Mvc.Controllers
                 pageStack.pushLayout(editStackItem);
             }
             pageStack.pushLayout("default.html");
-            if (branchDetector.IsPrepublishBranch)
+
+            switch (branchDetector.Phase)
             {
-                pageStack.pushLayout("editarea-noedit.html");
-            }
-            else
-            {
-                pageStack.pushLayout("editarea-ckeditor.html");
-                dr.addTransform(new CreateSettingsForm());
-                dr.addTransform(new CreateTreeMenuEditor());
+                case Phases.Draft:
+                    pageStack.pushLayout("editarea-noedit.html");
+                    break;
+                case Phases.Edit:
+                    pageStack.pushLayout("editarea-ckeditor.html");
+                    dr.addTransform(new CreateSettingsForm());
+                    dr.addTransform(new CreateTreeMenuEditor());
+                    break;
             }
 
             dr.addTransform(new HashTreeMenus(fileFinder));
@@ -210,15 +212,16 @@ namespace EdityMcEditface.Mvc.Controllers
 
         private IActionResult showNewPage(PageStack pageStack, HtmlDocumentRenderer dr)
         {
-            if (branchDetector.IsPrepublishBranch)
+            switch (branchDetector.Phase)
             {
-                pageStack.pushLayout("notfound.html");
-                pageStack.ContentFile = null;
-            }
-            else
-            {
-                pageStack = new PageStack(templateEnvironment, fileFinder);
-                pageStack.pushLayout("new.html");
+                case Phases.Draft:
+                    pageStack.pushLayout("notfound.html");
+                    pageStack.ContentFile = null;
+                    break;
+                case Phases.Edit:
+                    pageStack = new PageStack(templateEnvironment, fileFinder);
+                    pageStack.pushLayout("new.html");
+                    break;
             }
             return getConvertedDocument(pageStack, dr);
         }

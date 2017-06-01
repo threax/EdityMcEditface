@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Threax.AspNetCore.Halcyon.Ext;
 
-namespace EdityMcEditface.Mvc.Models.Prepublish
+namespace EdityMcEditface.Mvc.Models
 {
     [HalModel]
-    public class PrepublishFileQuery
+    public class DraftQuery : PagedCollectionQuery
     {
         public String File { get; set; }
     }

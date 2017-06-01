@@ -1,7 +1,7 @@
 ﻿using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.HtmlRenderer.FileInfo;
+using EdityMcEditface.Mvc.Models;
 using EdityMcEditface.Mvc.Models.Page;
-using EdityMcEditface.Mvc.Models.Prepublish;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,26 +15,19 @@ namespace EdityMcEditface.Mvc.Controllers
     [ResponseCache(NoStore = true)]
     [ProducesHal]
     [TypeFilter(typeof(HalModelResultFilterAttribute))]
-    public class PrepublishController : Controller
+    public class DraftController : Controller
     {
-        /// <summary>
-        /// Each controller should define a Rels class inside of it. Note that each rel across the system
-        /// should be unique, so name them with an appropriate prefix. Right now these rel names are used
-        /// by the codegen to make functions, which is why they need to be unique (technically only unique
-        /// across any endpoints that have the same rels, but globally is a good enough approximiation of this,
-        /// I hope to fix this in the future.
-        /// </summary>
         public static class Rels
         {
-            public const String Find = "FindPrepublishedFile";
-            public const String Prepublish = "SendToPrepublish";
+            public const String List = "ListDrafts";
+            public const String SubmitLatestDraft = "SubmitLatestDraft";
         }
 
         IFileFinder fileFinder;
         ITargetFileInfoProvider fileInfoProvider;
         ProjectFinder projectFinder;
 
-        public PrepublishController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, ProjectFinder projectFinder)
+        public DraftController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, ProjectFinder projectFinder)
         {
             this.fileFinder = fileFinder;
             this.fileInfoProvider = fileInfoProvider;
@@ -42,28 +35,30 @@ namespace EdityMcEditface.Mvc.Controllers
         }
 
         /// <summary>
-        /// Get the list of branches. Not paged.
+        /// Get the list of files in draft.
         /// </summary>
-        /// <returns>The list of branches.</returns>
+        /// <returns>The list of drafted files.</returns>
         [HttpGet]
-        [HalRel(Rels.Find)]
-        public Task<PrepublishFileInfo> Find([FromQuery]PrepublishFileQuery query)
+        [HalRel(Rels.List)]
+        public Task<DraftCollection> List([FromQuery]DraftQuery query)
         {
             var fileInfo = fileInfoProvider.GetFileInfo(query.File, HttpContext.Request.PathBase);
 
-            return Task.FromResult(new PrepublishFileInfo()
+            var collection = new DraftCollection(query, 1, new Draft[] { new Draft()
             {
                 File = fileInfo.DerivedFileName
-            });
+            } });
+
+            return Task.FromResult(collection);
         }
 
         /// <summary>
-        /// Publish the given file
+        /// Mark the given file's latest revision as its draft.
         /// </summary>
         /// <param name="file">The name of the file.</param>
         /// <returns></returns>
         [HttpPut("{File}")]
-        [HalRel(Rels.Prepublish)]
+        [HalRel(Rels.SubmitLatestDraft)]
         public Task Put(String file)
         {
             var fileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);

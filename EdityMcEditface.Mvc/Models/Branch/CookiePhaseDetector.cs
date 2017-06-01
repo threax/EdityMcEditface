@@ -7,32 +7,30 @@ using System.Text;
 
 namespace EdityMcEditface.Mvc.Models.Branch
 {
-    public class CookieBranchDetector : IBranchDetector
+    public class CookiePhaseDetector : IPhaseDetector
     {
         private String cookieName;
         private JsonSerializer jsonSerializer;
         private IHttpContextAccessor context;
-        private String prepublishBranchName;
 
-        public CookieBranchDetector(String cookieName, String prepublishBranchName, JsonSerializer jsonSerializer, IHttpContextAccessor context)
+        public CookiePhaseDetector(String cookieName, JsonSerializer jsonSerializer, IHttpContextAccessor context)
         {
             this.cookieName = cookieName;
-            this.prepublishBranchName = prepublishBranchName;
             this.jsonSerializer = jsonSerializer;
             this.context = context;
         }
 
-        public string RequestedBranch
+        public Phases Phase
         {
             get
             {
                 var cookie = GetBranchCookie();
-                return cookie.CurrentBranch;
+                return cookie.Current;
             }
             set
             {
                 var cookie = GetBranchCookie();
-                cookie.CurrentBranch = value;
+                cookie.Current = value;
                 using(var writer = new StringWriter())
                 {
                     jsonSerializer.Serialize(writer, cookie);
@@ -41,34 +39,18 @@ namespace EdityMcEditface.Mvc.Models.Branch
             }
         }
 
-        private BranchCookie GetBranchCookie()
+        private PhaseCookie GetBranchCookie()
         {
             var cookie = context.HttpContext.Request.Cookies[cookieName];
             if (cookie != null)
             {
                 using (JsonTextReader reader = new JsonTextReader(new StringReader(cookie)))
                 {
-                    var branchCookie = jsonSerializer.Deserialize<BranchCookie>(reader);
+                    var branchCookie = jsonSerializer.Deserialize<PhaseCookie>(reader);
                     return branchCookie;
                 }
             }
-            return new BranchCookie();
-        }
-
-        public bool IsPrepublishBranch
-        {
-            get
-            {
-                return this.RequestedBranch == prepublishBranchName;
-            }
-        }
-
-        public string PrepublishedBranchName
-        {
-            get
-            {
-                return prepublishBranchName;
-            }
+            return new PhaseCookie();
         }
     }
 }

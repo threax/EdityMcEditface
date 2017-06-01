@@ -11,9 +11,9 @@ namespace EdityMcEditface.Mvc.Models.Page
     public class OneRepoPerUser : ProjectFinder
     {
         private String projectFolder;
-        private IBranchDetector branchDetector;
+        private IPhaseDetector branchDetector;
 
-        public OneRepoPerUser(ProjectConfiguration projectConfig, IBranchDetector branchDetector)
+        public OneRepoPerUser(ProjectConfiguration projectConfig, IPhaseDetector branchDetector)
         {
             this.projectFolder = projectConfig.ProjectPath;
             this.EdityCorePath = projectConfig.EdityCorePath;
@@ -54,10 +54,7 @@ namespace EdityMcEditface.Mvc.Models.Page
                 }
                 if (!Repository.IsValid(publishRepoPath))
                 {
-                    Repository.Clone(MasterRepoPath, publishRepoPath, new CloneOptions()
-                    {
-                        BranchName = PublishedBranch
-                    });
+                    Repository.Clone(MasterRepoPath, publishRepoPath);
                 }
 
                 return publishRepoPath;
@@ -69,38 +66,5 @@ namespace EdityMcEditface.Mvc.Models.Page
         public String SitePath { get; private set; }
 
         public String MasterRepoPath { get; private set; }
-
-        public String PublishedBranch
-        {
-            get
-            {
-                //See if the repo has a branch named the prepublishedBranchName, if so use it
-                using (var repo = new Repository(MasterRepoPath))
-                {
-                    var query = repo.Branches.Where(b => !b.IsRemote);
-                    var branch = query.Where(b => b.FriendlyName == this.branchDetector.PrepublishedBranchName).FirstOrDefault();
-                    if (branch != null)
-                    {
-                        return branch.FriendlyName;
-                    }
-                }
-
-                return null;
-            }
-        }
-
-        public Task<BranchViewCollection> GetBranches()
-        {
-            //See if the repo has a branch called live, if so use it
-            using (var repo = new Repository(MasterRepoPath))
-            {
-                var query = repo.Branches.Where(b => !b.IsRemote).Select(i => new BranchView()
-                {
-                    Name = i.FriendlyName,
-                    Current = i.IsCurrentRepositoryHead
-                });
-                return Task.FromResult(new BranchViewCollection(query.ToList()));
-            }
-        }
     }
 }

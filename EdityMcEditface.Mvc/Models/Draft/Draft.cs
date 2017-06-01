@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Text;
 using Threax.AspNetCore.Halcyon.Ext;
 
-namespace EdityMcEditface.Mvc.Models.Prepublish
+namespace EdityMcEditface.Mvc.Models
 {
     [HalModel]
-    [HalActionLink(PrepublishController.Rels.Prepublish, typeof(PrepublishController))]
-    public class PrepublishFileInfo
+    [HalActionLink(DraftController.Rels.SubmitLatestDraft, typeof(DraftController))]
+    public class Draft
     {
         public String File { get; set; }
     }

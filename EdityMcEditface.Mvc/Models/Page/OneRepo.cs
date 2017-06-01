@@ -25,11 +25,6 @@ namespace EdityMcEditface.Mvc.Models.Page
             return projectFolder;
         }
 
-        public Task<BranchViewCollection> GetBranches()
-        {
-            return Task.FromResult(new BranchViewCollection(new BranchView[] { new BranchView() { Name = "master", Current = true } }));
-        }
-
         public String PublishedProjectPath
         {
             get
@@ -43,13 +38,5 @@ namespace EdityMcEditface.Mvc.Models.Page
         public String SitePath { get; private set; }
 
         public String MasterRepoPath { get; private set; }
-
-        public String PublishedBranch
-        {
-            get
-            {
-                return null;
-            }
-        }
     }
 }

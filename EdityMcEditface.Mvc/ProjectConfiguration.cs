@@ -31,10 +31,5 @@ namespace EdityMcEditface.Mvc
         /// The default page for the project. Defaults to "index".
         /// </summary>
         public String DefaultPage { get; set; } = "index";
-
-        /// <summary>
-        /// The name of the prepublished branch, the prepublished branch gets published when the site compiles, defaults to "prepublish"
-        /// </summary>
-        public String PrepublishBranchName { get; set; } = "prepublish";
     }
 }

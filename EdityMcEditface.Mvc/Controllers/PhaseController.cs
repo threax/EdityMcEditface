@@ -13,7 +13,7 @@ namespace EdityMcEditface.Mvc.Controllers
     [ResponseCache(NoStore = true)]
     [ProducesHal]
     [TypeFilter(typeof(HalModelResultFilterAttribute))]
-    public class BranchController : Controller
+    public class PhaseController : Controller
     {
         /// <summary>
         /// Each controller should define a Rels class inside of it. Note that each rel across the system
@@ -24,40 +24,55 @@ namespace EdityMcEditface.Mvc.Controllers
         /// </summary>
         public static class Rels
         {
-            public const String List = "ListBranches";
-            public const String SetBranch = "SetBranch";
+            public const String List = "ListPhases";
+            public const String SetPhase = "SetPhase";
         }
 
         ProjectFinder projectFinder;
+        IPhaseDetector phaseDetector;
 
-        public BranchController(ProjectFinder projectFinder)
+        public PhaseController(ProjectFinder projectFinder, IPhaseDetector phaseDetector)
         {
             this.projectFinder = projectFinder;
+            this.phaseDetector = phaseDetector;
         }
 
         /// <summary>
-        /// Get the list of branches. Not paged.
+        /// Get the list of phases. Not paged.
         /// </summary>
-        /// <returns>The list of branches.</returns>
+        /// <returns>The list of phases.</returns>
         [HttpGet]
         [HalRel(Rels.List)]
-        public Task<BranchViewCollection> Get()
+        public PhaseCollection Get()
         {
-            return this.projectFinder.GetBranches();
+            return new PhaseCollection(PhaseEnumerable());
+        }
+
+        private IEnumerable<Phase> PhaseEnumerable()
+        {
+            yield return new Phase()
+            {
+                Name = Phases.Edit.ToString(),
+                Current = this.phaseDetector.Phase == Phases.Edit
+            };
+
+            yield return new Phase()
+            {
+                Name = Phases.Draft.ToString(),
+                Current = this.phaseDetector.Phase == Phases.Draft
+            };
         }
 
         /// <summary>
-        /// Set the branch that is currently active.
+        /// Set the phase that is currently active.
         /// </summary>
-        /// <param name="name">The name of the branch to make active</param>
-        /// <param name="branchDetector">The branch detector to use to change branches.</param>
+        /// <param name="name">The name of the phase to make active</param>
         /// <returns></returns>
         [HttpPut("{Name}")]
-        [HalRel(Rels.SetBranch)]
-        public Task Put(String name, [FromServices] IBranchDetector branchDetector)
+        [HalRel(Rels.SetPhase)]
+        public void Put(Phases name)
         {
-            branchDetector.RequestedBranch = name;
-            return Task.FromResult(0);
+            phaseDetector.Phase = name;
         }
     }
 }

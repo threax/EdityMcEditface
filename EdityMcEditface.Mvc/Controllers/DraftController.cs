@@ -62,7 +62,7 @@ namespace EdityMcEditface.Mvc.Controllers
         public Task Put(String file)
         {
             var fileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
-            fileFinder.PrepublishPage(fileInfo.DerivedFileName);
+            fileFinder.SendToDraft(fileInfo.DerivedFileName);
             return Task.FromResult(0);
         }
     }

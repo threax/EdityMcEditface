@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EdityMcEditface.HtmlRenderer.Filesystem
+namespace EdityMcEditface.Mvc.Models.Page
 {
     public class PublishedPageInfo
     {

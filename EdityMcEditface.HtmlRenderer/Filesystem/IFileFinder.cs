@@ -77,7 +77,7 @@ namespace EdityMcEditface.HtmlRenderer
         /// Call this to prepublish a page by moving it to the prepublished files.
         /// </summary>
         /// <param name="file">The page's html file to move.</param>
-        void PrepublishPage(String file);
+        void SendToDraft(String file);
 
         /// <summary>
         /// Get the definition for the specified page.

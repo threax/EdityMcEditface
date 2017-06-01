@@ -77,11 +77,16 @@ namespace EdityMcEditface.Mvc
                 var contentFolderPermissions = new DefaultFileFinderPermissions();
                 contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
 
+                PublishedFileManager publishManager = null;
+                IFileStreamManager streamManager = null;
+
                 if (branchDetector.Phase == Phases.Draft)
                 {
-                    return new PublishedRepoFileFinder(projectFolder, contentFolderPermissions, new PublishedFileDetector(), wwwRootFileFinder);
+                    publishManager = new PublishedFileManager();
+                    streamManager = new PublishedFileStreamManager(publishManager);
                 }
-                return new PublishableRepoFileFinder(projectFolder, contentFolderPermissions, wwwRootFileFinder);
+
+                return new FileFinder(projectFolder, contentFolderPermissions, wwwRootFileFinder, streamManager, publishManager);
             });
 
             return services;

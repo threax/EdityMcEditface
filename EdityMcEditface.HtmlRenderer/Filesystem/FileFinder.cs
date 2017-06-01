@@ -19,9 +19,21 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         private Lazy<EdityProject> project;
         private FileFinder next;
         private IFileFinderPermissions permissions;
+        private IFileStreamManager fileStreamManager;
+        private IPublishedFileManager publishedFileManager;
 
-        public FileFinder(String projectPath, IFileFinderPermissions permissions, FileFinder next = null, String projectFilePath = "edity/edity.json")
+        public FileFinder(String projectPath, IFileFinderPermissions permissions, FileFinder next = null, IFileStreamManager fileStreamManager = null, IPublishedFileManager publishedFileManager = null, String projectFilePath = "edity/edity.json")
         {
+            this.fileStreamManager = fileStreamManager;
+            if(this.fileStreamManager == null)
+            {
+                this.fileStreamManager = new FileStreamManager();
+            }
+            if(this.publishedFileManager == null)
+            {
+                this.publishedFileManager = new NoPublishedFiles();
+            }
+
             project = new Lazy<EdityProject>(loadProject);
 
             this.projectPath = Path.GetFullPath(projectPath);
@@ -74,12 +86,17 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             }
         }
 
-        public virtual void PrepublishPage(String file)
+        /// <summary>
+        /// Send the specified file to draft.
+        /// </summary>
+        /// <param name="file"></param>
+        public void SendToDraft(String file)
         {
-            //No concept of prepublish here.
-            if (next != null)
+            //Send the page to the registered published file manager
+            var normalized = NormalizePath(file);
+            if (!publishedFileManager.SendPageToDraft(file, normalized) && next != null)
             {
-                next.PrepublishPage(file);
+                next.SendToDraft(file);
             }
         }
 
@@ -122,7 +139,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                 var normalizedPath = NormalizePath(file);
                 if (File.Exists(normalizedPath))
                 {
-                    return OpenReadStream(file, normalizedPath);
+                    return this.fileStreamManager.OpenReadStream(file, normalizedPath);
                 }
             }
 
@@ -134,20 +151,6 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             {
                 throw new FileNotFoundException($"Cannot find file to read {file}", file);
             }
-        }
-
-        /// <summary>
-        /// Called by ReadFile to open a read stream. If you need to customize the stream
-        /// to read from, override this function. The default returns the file directly
-        /// from the file system.
-        /// This function does not chain.
-        /// </summary>
-        /// <param name="originalFile">The original path to the file.</param>
-        /// <param name="normalizedFile">The path to the file normalized by NormalizePath.</param>
-        /// <returns></returns>
-        protected virtual Stream OpenReadStream(String originalFile, String normalizedFile)
-        {
-            return File.Open(normalizedFile, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
         /// <summary>
@@ -504,7 +507,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                 var normalizedPath = NormalizePath(pageDefPath);
                 if (File.Exists(normalizedPath))
                 {
-                    using (var stream = new StreamReader(OpenReadStream(pageDefPath, normalizedPath)))
+                    using (var stream = new StreamReader(this.fileStreamManager.OpenReadStream(pageDefPath, normalizedPath)))
                     {
                         return JsonConvert.DeserializeObject<PageDefinition>(stream.ReadToEnd());
                     }
@@ -656,7 +659,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
 
         private PageStackItem loadPageStackFile(string path, string realPath)
         {
-            using (var stream = new StreamReader(OpenReadStream(path, realPath)))
+            using (var stream = new StreamReader(this.fileStreamManager.OpenReadStream(path, realPath)))
             {
                 return new PageStackItem()
                 {
@@ -726,7 +729,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             return Path.Combine(paths);
         }
 
-        private static void copyFileIfNotExists(String source, String dest)
+        private void copyFileIfNotExists(String source, String dest)
         {
             if (!File.Exists(dest))
             {
@@ -735,7 +738,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                 {
                     Directory.CreateDirectory(destDir);
                 }
-                File.Copy(source, dest);
+                this.fileStreamManager.CopyFile(source, dest);
             }
         }
 

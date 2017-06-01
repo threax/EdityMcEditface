@@ -44,20 +44,20 @@ namespace EdityMcEditface.Mvc.Models.Page
             }
         }
 
-        public override void CopyFile(string source, string dest)
+        public override void CopyFile(String source, string physicalSource, string physicalDest)
         {
-            if(publishedFileManager.IsDraftedFile(source))
+            if(publishedFileManager.IsDraftedFile(physicalSource))
             {
-                DraftInfo publishInfo = publishedFileManager.LoadDraftInfo(source);
+                DraftInfo publishInfo = publishedFileManager.LoadDraftInfo(physicalSource);
                 if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version
                 {
-                    using (var repo = new Repository(Repository.Discover(source)))
+                    using (var repo = new Repository(Repository.Discover(physicalSource)))
                     {
                         var commit = repo.Lookup<Commit>(publishInfo.Sha);
                         var treeEntry = commit[source.TrimStartingPathChars()];
                         var blob = treeEntry.Target as Blob;
 
-                        using(var destStream = File.Open(dest, FileMode.Create, FileAccess.Write, FileShare.None))
+                        using(var destStream = File.Open(physicalDest, FileMode.Create, FileAccess.Write, FileShare.None))
                         {
                             using(var srcStream = blob.GetContentStream())
                             {
@@ -66,12 +66,14 @@ namespace EdityMcEditface.Mvc.Models.Page
                         }
                     }
                 }
-
-                throw new FileNotFoundException($"Cannot find draft version of {source}.");
+                else
+                {
+                    throw new FileNotFoundException($"Cannot find draft version of {source}.");
+                }
             }
             else
             {
-                base.CopyFile(source, dest);
+                base.CopyFile(source, physicalSource, physicalDest);
             }
         }
     }

@@ -305,14 +305,14 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                 {
                     if (File.Exists(physicalPath))
                     {
-                        copyFileIfNotExists(physicalPath, safePathCombine(outDir, file));
+                        copyFileIfNotExists(file, physicalPath, safePathCombine(outDir, file));
                     }
                     else if (Directory.Exists(physicalPath))
                     {
                         foreach (var dirFile in Directory.EnumerateFiles(physicalPath, "*", SearchOption.AllDirectories))
                         {
                             var relativePath = dirFile.Substring(physicalPath.Length);
-                            copyFileIfNotExists(dirFile, safePathCombine(outDir, file, relativePath));
+                            copyFileIfNotExists(relativePath, dirFile, safePathCombine(outDir, file, relativePath));
                         }
                     }
                 }
@@ -359,19 +359,19 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             }
         }
 
-        private void CopyLinkedFile(string baseOutDir, HashSet<string> copiedFiles, string content)
+        private void CopyLinkedFile(string baseOutDir, HashSet<string> copiedFiles, string file)
         {
-            var physicalPath = NormalizePath(content);
-            if (!copiedFiles.Contains(content) && isValidPhysicalFile(content) && permissions.AllowOutputCopy(this, content, physicalPath))
+            var physicalPath = NormalizePath(file);
+            if (!copiedFiles.Contains(file) && isValidPhysicalFile(file) && permissions.AllowOutputCopy(this, file, physicalPath))
             {
                 if (File.Exists(physicalPath))
                 {
                     bool within;
-                    var fullDestPath = NormalizePath(content, baseOutDir, out within);
+                    var fullDestPath = NormalizePath(file, baseOutDir, out within);
                     if (within)
                     {
-                        copyFileIfNotExists(physicalPath, fullDestPath);
-                        copiedFiles.Add(content);
+                        copyFileIfNotExists(file, physicalPath, fullDestPath);
+                        copiedFiles.Add(file);
                     }
                 }
             }
@@ -738,16 +738,16 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             return Path.Combine(paths);
         }
 
-        private void copyFileIfNotExists(String source, String dest)
+        private void copyFileIfNotExists(String source, String physicalSource, String physicalDest)
         {
-            if (!File.Exists(dest))
+            if (!File.Exists(physicalDest))
             {
-                var destDir = Path.GetDirectoryName(dest);
+                var destDir = Path.GetDirectoryName(physicalDest);
                 if (!Directory.Exists(destDir))
                 {
                     Directory.CreateDirectory(destDir);
                 }
-                this.fileStreamManager.CopyFile(source, dest);
+                this.fileStreamManager.CopyFile(source, physicalSource, physicalDest);
             }
         }
 

@@ -24,8 +24,9 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// <summary>
         /// Copy a file from source to dest.
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="dest"></param>
-        void CopyFile(String source, String dest);
+        /// <param name="source">The relative source path for the file.</param>
+        /// <param name="physicalSource">The full path to the source file.</param>
+        /// <param name="physicalDest">The full path to the destination file.</param>
+        void CopyFile(String source, String physicalSource, String physicalDest);
     }
 }

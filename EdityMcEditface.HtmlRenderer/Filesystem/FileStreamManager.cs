@@ -24,11 +24,11 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// <summary>
         /// Copy a file from source to dest.
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="dest"></param>
-        public virtual void CopyFile(String source, String dest)
+        /// <param name="physicalSource"></param>
+        /// <param name="physicalDest"></param>
+        public virtual void CopyFile(String source, String physicalSource, String physicalDest)
         {
-            File.Copy(source, dest);
+            File.Copy(physicalSource, physicalDest);
         }
     }
 }

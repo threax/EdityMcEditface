@@ -25,7 +25,7 @@
     "editComponents/media.html",
     "editComponents/history.html",
     "editComponents/edittreemenu.html",
-    "editComponents/branch.html",
+    "editComponents/phase.html",
     "editComponents/draft.html"
   ],
   "compilers": [

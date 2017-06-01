@@ -327,10 +327,11 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                 {
                     CopyDependencyFile(baseOutDir, copiedContentFiles, page.PageScriptPath);
                 }
-                foreach (var content in pageStack.LinkedContentFiles)
-                {
-                    CopyDependencyFile(baseOutDir, copiedContentFiles, content);
-                }
+            }
+
+            foreach (var content in pageStack.LinkedContentFiles)
+            {
+                CopyDependencyFile(baseOutDir, copiedContentFiles, content);
             }
 
             if (next != null)

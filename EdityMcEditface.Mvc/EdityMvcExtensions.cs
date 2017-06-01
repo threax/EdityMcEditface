@@ -77,7 +77,7 @@ namespace EdityMcEditface.Mvc
                 var contentFolderPermissions = new DefaultFileFinderPermissions();
                 contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
 
-                PublishedFileManager publishManager = new PublishedFileManager();
+                GitDraftManager publishManager = new GitDraftManager();
                 IFileStreamManager streamManager = null;
 
                 if (phaseDetector.Phase == Phases.Draft)

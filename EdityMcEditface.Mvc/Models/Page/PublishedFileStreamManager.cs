@@ -12,18 +12,18 @@ namespace EdityMcEditface.Mvc.Models.Page
 {
     public class PublishedFileStreamManager : FileStreamManager
     {
-        PublishedFileManager publishedFileManager;
+        GitDraftManager publishedFileManager;
     
-        public PublishedFileStreamManager(PublishedFileManager publishedFileManager)
+        public PublishedFileStreamManager(GitDraftManager publishedFileManager)
         {
             this.publishedFileManager = publishedFileManager;
         }
 
         public override Stream OpenReadStream(String originalFile, String normalizedFile)
         {
-            if (publishedFileManager.IsPublishableFile(normalizedFile))
+            if (publishedFileManager.IsDraftedFile(normalizedFile))
             {
-                PublishedPageInfo publishInfo = publishedFileManager.LoadPublishInfo(normalizedFile);
+                DraftInfo publishInfo = publishedFileManager.LoadDraftInfo(normalizedFile);
                 if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version
                 {
                     using (var repo = new Repository(Repository.Discover(normalizedFile)))
@@ -46,9 +46,9 @@ namespace EdityMcEditface.Mvc.Models.Page
 
         public override void CopyFile(string source, string dest)
         {
-            if(publishedFileManager.IsPublishableFile(source))
+            if(publishedFileManager.IsDraftedFile(source))
             {
-                PublishedPageInfo publishInfo = publishedFileManager.LoadPublishInfo(source);
+                DraftInfo publishInfo = publishedFileManager.LoadDraftInfo(source);
                 if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version
                 {
                     using (var repo = new Repository(Repository.Discover(source)))

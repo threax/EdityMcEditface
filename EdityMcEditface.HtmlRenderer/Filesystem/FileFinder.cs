@@ -20,9 +20,9 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         private FileFinder next;
         private IFileFinderPermissions permissions;
         private IFileStreamManager fileStreamManager;
-        private IPublishedFileManager publishedFileManager;
+        private IDraftManager draftManager;
 
-        public FileFinder(String projectPath, IFileFinderPermissions permissions, FileFinder next = null, IFileStreamManager fileStreamManager = null, IPublishedFileManager publishedFileManager = null, String projectFilePath = "edity/edity.json")
+        public FileFinder(String projectPath, IFileFinderPermissions permissions, FileFinder next = null, IFileStreamManager fileStreamManager = null, IDraftManager draftManager = null, String projectFilePath = "edity/edity.json")
         {
             this.fileStreamManager = fileStreamManager;
             if(this.fileStreamManager == null)
@@ -30,10 +30,10 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                 this.fileStreamManager = new FileStreamManager();
             }
 
-            this.publishedFileManager = publishedFileManager;
-            if(this.publishedFileManager == null)
+            this.draftManager = draftManager;
+            if(this.draftManager == null)
             {
-                this.publishedFileManager = new NoPublishedFiles();
+                this.draftManager = new NoDrafts();
             }
 
             project = new Lazy<EdityProject>(loadProject);
@@ -67,10 +67,10 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                     {
                         File.Delete(cssFile);
                     }
-                    var publishSettings = getPageFile(file, ".publish");
-                    if (publishSettings != null)
+                    var draftSettings = getPageFile(file, ".draft");
+                    if (draftSettings != null)
                     {
-                        File.Delete(publishSettings);
+                        File.Delete(draftSettings);
                     }
                     var settingsFile = getPageDefinitionFile(file);
                     if (File.Exists(settingsFile))
@@ -96,7 +96,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         {
             //Send the page to the registered published file manager
             var normalized = NormalizePath(file);
-            if (!publishedFileManager.SendPageToDraft(normalized) && next != null)
+            if (!draftManager.SendPageToDraft(normalized) && next != null)
             {
                 next.SendToDraft(file);
             }

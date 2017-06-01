@@ -10,7 +10,7 @@ using System.Text;
 
 namespace EdityMcEditface.Mvc.Models.Page
 {
-    public class PublishedFileManager : IPublishedFileManager
+    public class GitDraftManager : IDraftManager
     {
         private JsonSerializer serializer = JsonSerializer.CreateDefault();
 
@@ -23,10 +23,10 @@ namespace EdityMcEditface.Mvc.Models.Page
                     var latestCommit = repo.Commits.FirstOrDefault();
                     if (latestCommit != null)
                     {
-                        PublishedPageInfo publishInfo = LoadPublishInfo(normalizedPath);
+                        DraftInfo publishInfo = LoadDraftInfo(normalizedPath);
 
                         publishInfo.Sha = latestCommit.Sha;
-                        WritePublishInfo(normalizedPath, publishInfo);
+                        WriteDraftInfo(normalizedPath, publishInfo);
                     }
                 }
                 return true;
@@ -34,10 +34,10 @@ namespace EdityMcEditface.Mvc.Models.Page
             return false;
         }
 
-        public PublishedPageInfo LoadPublishInfo(string file)
+        public DraftInfo LoadDraftInfo(string file)
         {
-            PublishedPageInfo publishInfo = null;
-            var publishInfoFile = GetPublishInfoFileName(file);
+            DraftInfo publishInfo = null;
+            var publishInfoFile = GetDraftInfoFileName(file);
             //See if we can read the file
             try
             {
@@ -46,7 +46,7 @@ namespace EdityMcEditface.Mvc.Models.Page
                     //Always read file directly, this gets called during the ReadFile function call.
                     using (var reader = new JsonTextReader(new StreamReader(File.Open(publishInfoFile, FileMode.Open, FileAccess.Read, FileShare.Read))))
                     {
-                        publishInfo = serializer.Deserialize<PublishedPageInfo>(reader);
+                        publishInfo = serializer.Deserialize<DraftInfo>(reader);
                     }
                 }
             }
@@ -54,27 +54,27 @@ namespace EdityMcEditface.Mvc.Models.Page
 
             if (publishInfo == null)
             {
-                publishInfo = new PublishedPageInfo();
+                publishInfo = new DraftInfo();
             }
 
             return publishInfo;
         }
 
-        public void WritePublishInfo(string file, PublishedPageInfo publishInfo)
+        public void WriteDraftInfo(string file, DraftInfo publishInfo)
         {
             //write files directly.
-            using (var writer = new JsonTextWriter(new StreamWriter(File.Open(GetPublishInfoFileName(file), FileMode.Create, FileAccess.Write, FileShare.None))))
+            using (var writer = new JsonTextWriter(new StreamWriter(File.Open(GetDraftInfoFileName(file), FileMode.Create, FileAccess.Write, FileShare.None))))
             {
                 serializer.Serialize(writer, publishInfo);
             }
         }
 
-        public String GetPublishInfoFileName(String file)
+        public String GetDraftInfoFileName(String file)
         {
-            return Path.ChangeExtension(file, ".publish");
+            return Path.ChangeExtension(file, ".draft");
         }
 
-        public bool IsPublishableFile(string normalizedFile)
+        public bool IsDraftedFile(string normalizedFile)
         {
             var htmlFile = Path.ChangeExtension(normalizedFile, "html");
             return File.Exists(htmlFile);

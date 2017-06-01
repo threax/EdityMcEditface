@@ -5,17 +5,17 @@ using System.Text;
 namespace EdityMcEditface.HtmlRenderer.Filesystem
 {
     /// <summary>
-    /// This class manages published files, determining which ones are publishable
-    /// and getting / setting the current publish status.
+    /// This class manages drafted files, determining which ones are drafted
+    /// and getting / setting the current draft status.
     /// </summary>
-    public interface IPublishedFileManager
+    public interface IDraftManager
     {
         /// <summary>
         /// Determine if the path specified by the normalized file name is correct.
         /// </summary>
         /// <param name="normalizedFile"></param>
         /// <returns></returns>
-        bool IsPublishableFile(String normalizedFile);
+        bool IsDraftedFile(String normalizedFile);
 
         /// <summary>
         /// Send a page to draft. Will return true if the page is updated, false if 

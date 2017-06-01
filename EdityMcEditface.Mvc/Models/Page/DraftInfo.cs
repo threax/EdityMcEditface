@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EdityMcEditface.Mvc.Models.Page
 {
-    public class PublishedPageInfo
+    public class DraftInfo
     {
         /// <summary>
         /// The sha of the version to publish.

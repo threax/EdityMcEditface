@@ -4,9 +4,9 @@ using System.Text;
 
 namespace EdityMcEditface.HtmlRenderer.Filesystem
 {
-    public class NoPublishedFiles : IPublishedFileManager
+    public class NoDrafts : IDraftManager
     {
-        public bool IsPublishableFile(string normalizedFile)
+        public bool IsDraftedFile(string normalizedFile)
         {
             return false;
         }

@@ -499,10 +499,11 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         {
             if (permissions.AllowRead(this, file))
             {
-                String settingsPath = getPageDefinitionFile(NormalizePath(file));
-                if (File.Exists(settingsPath))
+                var pageDefPath = getPageDefinitionFile(file);
+                var normalizedPath = NormalizePath(pageDefPath);
+                if (File.Exists(normalizedPath))
                 {
-                    using (var stream = new StreamReader(File.Open(settingsPath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                    using (var stream = new StreamReader(OpenReadStream(pageDefPath, normalizedPath)))
                     {
                         return JsonConvert.DeserializeObject<PageDefinition>(stream.ReadToEnd());
                     }

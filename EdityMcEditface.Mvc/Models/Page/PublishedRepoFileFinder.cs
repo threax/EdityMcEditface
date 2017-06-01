@@ -94,10 +94,6 @@ namespace EdityMcEditface.Mvc.Models.Page
         {
         }
 
-        //this is working pretty well, but need to call this prepublishpage even if on main branch
-        //also when loading files to copy, make sure you load older ones for pages, will need to alter base
-        //file finder for this
-
         protected override Stream OpenReadStream(String originalFile, String normalizedFile)
         {
             PublishedPageInfo publishInfo = LoadPublishInfo(originalFile);

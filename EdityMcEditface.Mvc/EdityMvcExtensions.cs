@@ -77,15 +77,17 @@ namespace EdityMcEditface.Mvc
                 var contentFolderPermissions = new DefaultFileFinderPermissions();
                 contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
 
-                GitDraftManager publishManager = new GitDraftManager();
+                GitDraftManager draftManager = new GitDraftManager();
                 IFileStreamManager streamManager = null;
 
                 if (phaseDetector.Phase == Phases.Draft)
                 {
-                    streamManager = new PublishedFileStreamManager(publishManager);
+                    var oldPermissions = contentFolderPermissions.TreatAsContentPermission.Permissions;
+                    contentFolderPermissions.TreatAsContentPermission.Permissions = new MustHaveDraftFile(draftManager, oldPermissions);
+                    streamManager = new PublishedFileStreamManager(draftManager);
                 }
 
-                return new FileFinder(projectFolder, contentFolderPermissions, wwwRootFileFinder, streamManager, publishManager);
+                return new FileFinder(projectFolder, contentFolderPermissions, wwwRootFileFinder, streamManager, draftManager);
             });
 
             return services;

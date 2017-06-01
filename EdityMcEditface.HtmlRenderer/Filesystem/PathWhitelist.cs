@@ -18,9 +18,9 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             this.pathList = pathList;
         }
 
-        public override bool AllowFile(string path)
+        public override bool AllowFile(string path, String physicalPath)
         {
-            return pathList.OnList(path) && this.Next(path);
+            return pathList.OnList(path) && this.Next(path, physicalPath);
         }
     }
 }

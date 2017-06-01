@@ -13,8 +13,9 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// <summary>
         /// Determine if path should be allowed to be accessed.
         /// </summary>
-        /// <param name="path">The path to access.</param>
+        /// <param name="path">The relative path to access inside the edity folders.</param>
+        /// <param name="physicalPath">The path fully expanded on the file system.</param>
         /// <returns>True to allow, false to deny.</returns>
-        bool AllowFile(String path);
+        bool AllowFile(String path, String physicalPath);
     }
 }

@@ -11,9 +11,9 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
 
         public IPathPermissions Permissions { get; set; }
 
-        public bool Allow(String path)
+        public bool Allow(String path, String physicalPath)
         {
-            return Permit && (Permissions == null || Permissions.AllowFile(path));
+            return Permit && (Permissions == null || Permissions.AllowFile(path, physicalPath));
         }
     }
 }

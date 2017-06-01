@@ -20,20 +20,21 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             this.next = next;
         }
 
-        public abstract bool AllowFile(string path);
+        public abstract bool AllowFile(string path, String physicalPath);
 
         /// <summary>
         /// Call the next item in the chain. Can optionally pass a different value to return
         /// if next is null. Defaults to true.
         /// </summary>
         /// <param name="path">The path to test.</param>
+        /// <param name="physicalPath">The path fully expanded on the filesystem.</param>
         /// <param name="nullValue">The value to return if next is null. Defaults to true.</param>
         /// <returns>The value of next's AllowFile or nullValue if next is null.</returns>
-        public bool Next(string path, bool nullValue = true)
+        public bool Next(string path, String physicalPath, bool nullValue = true)
         {
             if (next != null)
             {
-                return next.AllowFile(path);
+                return next.AllowFile(path, physicalPath);
             }
             else
             {

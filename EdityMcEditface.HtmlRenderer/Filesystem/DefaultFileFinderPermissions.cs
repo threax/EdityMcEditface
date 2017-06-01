@@ -7,24 +7,24 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
 {
     public class DefaultFileFinderPermissions : IFileFinderPermissions
     {
-        public bool AllowOutputCopy(FileFinder fileFinder, string path)
+        public bool AllowOutputCopy(FileFinder fileFinder, string path, string physicalPath)
         {
-            return OutputCopyPermission.Allow(path);
+            return OutputCopyPermission.Allow(path, physicalPath);
         }
 
-        public bool AllowRead(FileFinder fileFinder, string path)
+        public bool AllowRead(FileFinder fileFinder, string path, string physicalPath)
         {
-            return ReadPermission.Allow(path);
+            return ReadPermission.Allow(path, physicalPath);
         }
 
-        public bool AllowWrite(FileFinder fileFinder, string path)
+        public bool AllowWrite(FileFinder fileFinder, string path, string physicalPath)
         {
-            return WritePermission.Allow(path);
+            return WritePermission.Allow(path, physicalPath);
         }
 
-        public bool TreatAsContent(FileFinder fileFinder, string path)
+        public bool TreatAsContent(FileFinder fileFinder, string path, string physicalPath)
         {
-            return TreatAsContentPermission.Allow(path);
+            return TreatAsContentPermission.Allow(path, physicalPath);
         }
 
         public PermissionClass OutputCopyPermission { get; set; } = new PermissionClass();

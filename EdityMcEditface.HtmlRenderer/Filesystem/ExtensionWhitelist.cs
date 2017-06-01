@@ -20,10 +20,10 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             this.extensions = new List<string>(extensions);
         }
 
-        public override bool AllowFile(string path)
+        public override bool AllowFile(string path, String physicalPath)
         {
             var extension = Path.GetExtension(path);
-            return extensions.Contains(extension) && this.Next(path);
+            return extensions.Contains(extension) && this.Next(path, physicalPath);
         }
     }
 }

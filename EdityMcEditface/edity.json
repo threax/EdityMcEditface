@@ -29,6 +29,11 @@
     "editComponents/compile.html"
   ],
   "draftComponents": [
+    "editComponents/commit.html",
+    "editComponents/merge.html",
+    "editComponents/diff.html",
+    "editComponents/sync.html",
+    "editComponents/history.html",
     "editComponents/edittreemenu.html",
     "editComponents/compile.html",
     "editComponents/phase.html",

@@ -145,11 +145,11 @@ namespace EdityMcEditface.Mvc.Controllers
         private IActionResult buildAsEditor(PageStack pageStack)
         {
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);            
-            pageStack.pushLayout("edit.html");
 
             switch (branchDetector.Phase)
             {
                 case Phases.Draft:
+                    pageStack.pushLayout("draft.html");
                     foreach (var editStackItem in fileFinder.Project.DraftComponents)
                     {
                         pageStack.pushLayout(editStackItem);
@@ -159,6 +159,7 @@ namespace EdityMcEditface.Mvc.Controllers
                     pageStack.pushLayout("editarea-noedit.html");
                     break;
                 case Phases.Edit:
+                    pageStack.pushLayout("edit.html");
                     foreach (var editStackItem in fileFinder.Project.EditComponents)
                     {
                         pageStack.pushLayout(editStackItem);

@@ -1,35 +1,27 @@
-﻿using EdityMcEditface.Mvc.Auth;
-using EdityMcEditface.Mvc.Config;
-using EdityMcEditface;
+﻿using EdityMcEditface.BuildTasks;
 using EdityMcEditface.HtmlRenderer;
+using EdityMcEditface.HtmlRenderer.Compiler;
+using EdityMcEditface.HtmlRenderer.FileInfo;
+using EdityMcEditface.HtmlRenderer.Filesystem;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using EdityMcEditface.Mvc.Auth;
+using EdityMcEditface.Mvc.Config;
+using EdityMcEditface.Mvc.Controllers;
+using EdityMcEditface.Mvc.Models.Branch;
+using EdityMcEditface.Mvc.Models.Compiler;
 using EdityMcEditface.Mvc.Models.Page;
 using LibGit2Sharp;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using EdityMcEditface.HtmlRenderer.Compiler;
-using EdityMcEditface.HtmlRenderer.Filesystem;
-using EdityMcEditface.HtmlRenderer.FileInfo;
 using System.Reflection;
-using Threax.AspNetCore.Halcyon.Ext;
-using EdityMcEditface.Mvc.Controllers;
-using Newtonsoft.Json;
-using Halcyon.Web.HAL.Json;
-using Microsoft.AspNetCore.Mvc;
 using Threax.AspNetCore.Halcyon.ClientGen;
-using EdityMcEditface.Mvc.Models.Branch;
-using EdityMcEditface.BuildTasks;
+using Threax.AspNetCore.Halcyon.Ext;
 
 namespace EdityMcEditface.Mvc
 {
@@ -49,7 +41,17 @@ namespace EdityMcEditface.Mvc
                 var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
                 var phaseDetector = s.GetRequiredService<IPhaseDetector>();
-                var projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
+                var compileRequestDetector = s.GetRequiredService<ICompileRequestDetector>();
+
+                String projectFolder;
+                if (compileRequestDetector.IsCompileRequest)
+                {
+                    projectFolder = projectFinder.PublishedProjectPath;
+                }
+                else
+                {
+                    projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
+                }
 
                 //Folder blacklist
                 var edityFolderList = new PathList();
@@ -81,7 +83,7 @@ namespace EdityMcEditface.Mvc
                 GitDraftManager draftManager = new GitDraftManager();
                 IFileStreamManager streamManager = null;
 
-                if (phaseDetector.Phase == Phases.Draft)
+                if (phaseDetector.Phase == Phases.Draft || compileRequestDetector.IsCompileRequest)
                 {
                     //If the request is in draft mode, change the content to only files with draft files and change the file stream
                     //manager to read published versions out of git
@@ -279,6 +281,8 @@ namespace EdityMcEditface.Mvc
                 o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             })
             .AddEdityControllers(editySettings.AdditionalMvcLibraries);
+
+            services.AddScoped<ICompileRequestDetector, CompileRequestDetector>();
 
             return services;
         }

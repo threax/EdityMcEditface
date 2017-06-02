@@ -20,5 +20,10 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         {
             yield break;
         }
+
+        public DraftInfo GetDraftStatus(String file, String physicalFile)
+        {
+            return new DraftInfo(null, DraftStatus.NeverDrafted, file);
+        }
     }
 }

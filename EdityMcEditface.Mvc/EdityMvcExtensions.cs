@@ -36,8 +36,6 @@ namespace EdityMcEditface.Mvc
         /// <returns></returns>
         public static IServiceCollection AddDefaultFileFinder(this IServiceCollection services)
         {
-            services.TryAddScoped<IDraftManager, GitDraftManager>();
-
             services.TryAddTransient<IFileFinder>(s =>
             {
                 var userInfo = s.GetRequiredService<IUserInfo>();
@@ -86,7 +84,7 @@ namespace EdityMcEditface.Mvc
                 contentFolderPermissions.WritePermission.Permissions = sharedWritePermissions;
 
                 //Always use the git draft manager for the project content, this way you can actually create drafts.
-                var draftManager = s.GetRequiredService<IDraftManager>();
+                var draftManager = new GitDraftManager();
                 IFileStreamManager streamManager = null;
 
                 if (phaseDetector.Phase == Phases.Draft || compileRequestDetector.IsCompileRequest)

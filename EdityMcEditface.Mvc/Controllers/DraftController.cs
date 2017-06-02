@@ -30,14 +30,12 @@ namespace EdityMcEditface.Mvc.Controllers
         IFileFinder fileFinder;
         ITargetFileInfoProvider fileInfoProvider;
         ProjectFinder projectFinder;
-        IDraftManager draftManager;
 
-        public DraftController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, ProjectFinder projectFinder, IDraftManager draftManager)
+        public DraftController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, ProjectFinder projectFinder)
         {
             this.fileFinder = fileFinder;
             this.fileInfoProvider = fileInfoProvider;
             this.projectFinder = projectFinder;
-            this.draftManager = draftManager;
         }
 
         /// <summary>
@@ -61,12 +59,19 @@ namespace EdityMcEditface.Mvc.Controllers
             }
             else
             {
-                var draftQuery = draftManager.GetAllDraftables(fileFinder);
+                var draftQuery = fileFinder.GetAllDraftables();
                 var total = draftQuery.Count();
-                var draftConvert = draftQuery.Skip(query.SkipTo(total)).Take(query.Limit).Select(i => new Draft()
-                {
-                    File = i
-                });
+                var draftConvert = draftQuery
+                    .Skip(query.SkipTo(total))
+                    .Take(query.Limit)
+                    .Select(i => fileFinder.GetDraftStatus(i))
+                    .Select(i => new Draft()
+                    {
+                        File = i.File,
+                        LastUpdate = i.LastUpdate,
+                        Status = i.Status
+                    });
+
                 collection = new DraftCollection(query, total, draftConvert);
             }
 

@@ -32,5 +32,13 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// </summary>
         /// <returns>A list of all pages.</returns>
         IEnumerable<String> GetAllDraftables(IFileFinder fileFinder);
+
+        /// <summary>
+        /// Get the draft status of a file. If you cannot determine the file's status, return null.
+        /// </summary>
+        /// <param name="file">The file to lookup draft status for.</param>
+        /// <param name="physicalFile">The full path to the file on the disk.</param>
+        /// <returns>The draft info for the file or null if no status can be computed.</returns>
+        DraftInfo GetDraftStatus(String file, String physicalFile);
     }
 }

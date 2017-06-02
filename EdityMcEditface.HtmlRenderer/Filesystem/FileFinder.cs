@@ -105,6 +105,47 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         }
 
         /// <summary>
+        /// Get all files that are draftable.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<String> GetAllDraftables()
+        {
+            var query = draftManager.GetAllDraftables(this);
+            if(next != null)
+            {
+                query = query.Concat(next.GetAllDraftables());
+            }
+            return query;
+        }
+
+        /// <summary>
+        /// Get the draft status of a file. This will tell you if the file's draft matches its latest version
+        /// and when the file was last drafted.
+        /// </summary>
+        /// <param name="file">The file to lookup draft status for.</param>
+        /// <returns>The DraftInfo with the file's draft status.</returns>
+        public DraftInfo GetDraftStatus(String file)
+        {
+            var normalized = NormalizePath(file);
+
+            var status = draftManager.GetDraftStatus(file, normalized);
+
+            //If the status was null and we have a next in the chain use it.
+            if (status == null && next != null)
+            {
+                status = next.GetDraftStatus(file);
+            }
+
+            //Check the next result, if it is still null create a default
+            if (status == null)
+            {
+                status = new DraftInfo(null, DraftStatus.NeverDrafted, file);
+            }
+
+            return status;
+        }
+
+        /// <summary>
         /// Determine if a layout exists in the layouts folder.
         /// </summary>
         /// <param name="layoutName"></param>

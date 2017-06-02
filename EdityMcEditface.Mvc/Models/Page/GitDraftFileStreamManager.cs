@@ -14,20 +14,16 @@ namespace EdityMcEditface.Mvc.Models.Page
     {
         GitDraftManager publishedFileManager;
     
-        public GitDraftFileStreamManager(IDraftManager publishedFileManager)
+        public GitDraftFileStreamManager(GitDraftManager publishedFileManager)
         {
-            this.publishedFileManager = publishedFileManager as GitDraftManager;
-            if(this.publishedFileManager == null)
-            {
-                throw new InvalidCastException("Cannot cast the IDraftManager provided to a GitDraftManager when creating a GitDraftFileStreamManager. Please make sure your custom draft manager is a subclass of GitDraftManager or use a different FileStreamManager implementation");
-            }
+            this.publishedFileManager = publishedFileManager;
         }
 
         public override Stream OpenReadStream(String originalFile, String normalizedFile)
         {
             if (publishedFileManager.IsDraftedFile(normalizedFile))
             {
-                DraftInfo publishInfo = publishedFileManager.LoadDraftInfo(normalizedFile);
+                GitDraftInfo publishInfo = publishedFileManager.LoadDraftInfo(normalizedFile);
                 if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version
                 {
                     using (var repo = new Repository(Repository.Discover(normalizedFile)))
@@ -52,7 +48,7 @@ namespace EdityMcEditface.Mvc.Models.Page
         {
             if(publishedFileManager.IsDraftedFile(physicalSource))
             {
-                DraftInfo publishInfo = publishedFileManager.LoadDraftInfo(physicalSource);
+                GitDraftInfo publishInfo = publishedFileManager.LoadDraftInfo(physicalSource);
                 if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version
                 {
                     using (var repo = new Repository(Repository.Discover(physicalSource)))

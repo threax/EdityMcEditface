@@ -23,7 +23,7 @@ namespace EdityMcEditface.Mvc.Models.Page
                     var latestCommit = repo.Commits.FirstOrDefault();
                     if (latestCommit != null)
                     {
-                        DraftInfo publishInfo = LoadDraftInfo(physicalFile);
+                        GitDraftInfo publishInfo = LoadDraftInfo(physicalFile);
 
                         publishInfo.Sha = latestCommit.Sha;
 
@@ -38,30 +38,30 @@ namespace EdityMcEditface.Mvc.Models.Page
             return false;
         }
 
-        public DraftInfo LoadDraftInfo(string file)
+        public GitDraftInfo LoadDraftInfo(string file)
         {
-            DraftInfo publishInfo = null;
-            var publishInfoFile = GetDraftInfoFileName(file);
+            GitDraftInfo draftInfo = null;
+            var draftInfoFile = GetDraftInfoFileName(file);
             //See if we can read the file
             try
             {
-                if (File.Exists(publishInfoFile))
+                if (File.Exists(draftInfoFile))
                 {
                     //Always read file directly, this gets called during the ReadFile function call.
-                    using (var reader = new JsonTextReader(new StreamReader(File.Open(publishInfoFile, FileMode.Open, FileAccess.Read, FileShare.Read))))
+                    using (var reader = new JsonTextReader(new StreamReader(File.Open(draftInfoFile, FileMode.Open, FileAccess.Read, FileShare.Read))))
                     {
-                        publishInfo = serializer.Deserialize<DraftInfo>(reader);
+                        draftInfo = serializer.Deserialize<GitDraftInfo>(reader);
                     }
                 }
             }
             catch (Exception) { }
 
-            if (publishInfo == null)
+            if (draftInfo == null)
             {
-                publishInfo = new DraftInfo();
+                draftInfo = new GitDraftInfo();
             }
 
-            return publishInfo;
+            return draftInfo;
         }
 
         public String GetDraftInfoFileName(String file)
@@ -69,15 +69,43 @@ namespace EdityMcEditface.Mvc.Models.Page
             return Path.ChangeExtension(file, ".draft");
         }
 
-        public bool IsDraftedFile(string normalizedFile)
+        public bool IsDraftedFile(string physicalFile)
         {
-            var htmlFile = Path.ChangeExtension(normalizedFile, "html");
+            var htmlFile = Path.ChangeExtension(physicalFile, "html");
             return File.Exists(htmlFile);
         }
 
         public IEnumerable<String> GetAllDraftables(IFileFinder fileFinder)
         {
             return fileFinder.EnumerateContentFiles("", "*.html");
+        }
+
+        public DraftInfo GetDraftStatus(String file, string physicalFile)
+        {
+            GitDraftInfo gitDraftInfo = LoadDraftInfo(physicalFile);
+
+            //If the file has a sha, 
+            if(gitDraftInfo.Sha != null)
+            {
+                using (var repo = new Repository(Repository.Discover(physicalFile)))
+                {
+                    var draftCommit = repo.Lookup<Commit>(gitDraftInfo.Sha);
+                    if (draftCommit != null)
+                    {
+                        var latestCommit = repo.Commits.QueryBy(file.TrimStartingPathChars()).FirstOrDefault();
+                        if (latestCommit != null)
+                        {
+                            var draftTime = draftCommit.Author.When.UtcDateTime;
+                            var latestTime = latestCommit.Commit.Author.When.UtcDateTime;
+
+                            DraftStatus status = latestTime > draftTime ? DraftStatus.UndraftedEdits : DraftStatus.UpToDate;
+                            return new DraftInfo(draftCommit.Author.When.LocalDateTime, status, file);
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

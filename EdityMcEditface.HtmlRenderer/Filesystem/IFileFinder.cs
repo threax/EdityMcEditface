@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer.FileInfo;
+using EdityMcEditface.HtmlRenderer.Filesystem;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -74,10 +75,24 @@ namespace EdityMcEditface.HtmlRenderer
         void ErasePage(string file);
 
         /// <summary>
-        /// Call this to prepublish a page by moving it to the prepublished files.
+        /// Call this to draft a page or file.
         /// </summary>
-        /// <param name="file">The page's html file to move.</param>
+        /// <param name="file">The html file of the page or the file to draft.</param>
         void SendToDraft(String file);
+
+        /// <summary>
+        /// Get all files that are draftable from the file finder.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<String> GetAllDraftables();
+
+        /// <summary>
+        /// Get the draft status of a file. This will tell you if the file's draft matches its latest version
+        /// and when the file was last drafted.
+        /// </summary>
+        /// <param name="file">The file to lookup draft status for.</param>
+        /// <returns>The DraftInfo with the file's draft status.</returns>
+        DraftInfo GetDraftStatus(String file);
 
         /// <summary>
         /// Get the definition for the specified page.

@@ -1,4 +1,5 @@
-﻿using EdityMcEditface.Mvc.Controllers;
+﻿using EdityMcEditface.HtmlRenderer.Filesystem;
+using EdityMcEditface.Mvc.Controllers;
 using Halcyon.HAL.Attributes;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,10 @@ namespace EdityMcEditface.Mvc.Models
     [HalActionLink(DraftController.Rels.SubmitLatestDraft, typeof(DraftController))]
     public class Draft
     {
+        public DateTime? LastUpdate { get; set; }
+
+        public DraftStatus Status { get; set; }
+
         public String File { get; set; }
     }
 }

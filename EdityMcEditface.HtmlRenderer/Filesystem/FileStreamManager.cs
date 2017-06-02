@@ -13,12 +13,12 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// from the file system.
         /// This function does not chain.
         /// </summary>
-        /// <param name="originalFile">The original path to the file.</param>
-        /// <param name="normalizedFile">The path to the file normalized by NormalizePath.</param>
+        /// <param name="file">The original requested path to the file.</param>
+        /// <param name="physicalFile">The path to the file on the physical drive.</param>
         /// <returns></returns>
-        public virtual Stream OpenReadStream(String originalFile, String normalizedFile)
+        public virtual Stream OpenReadStream(String file, String physicalFile)
         {
-            return File.Open(normalizedFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+            return File.Open(physicalFile, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
         /// <summary>

@@ -19,17 +19,19 @@ namespace EdityMcEditface.Mvc.Models.Page
             this.publishedFileManager = publishedFileManager;
         }
 
-        public override Stream OpenReadStream(String originalFile, String normalizedFile)
+        public override Stream OpenReadStream(String originalFile, String physicalFile)
         {
-            if (publishedFileManager.IsDraftedFile(normalizedFile))
+            if (publishedFileManager.IsDraftedFile(physicalFile))
             {
-                GitDraftInfo publishInfo = publishedFileManager.LoadDraftInfo(normalizedFile);
+                GitDraftInfo publishInfo = publishedFileManager.LoadDraftInfo(physicalFile);
                 if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version
                 {
-                    using (var repo = new Repository(Repository.Discover(normalizedFile)))
+                    var repoPath = Path.GetFullPath(Repository.Discover(physicalFile) + "../");
+                    var fileInRepoPath = physicalFile.Substring(repoPath.Length);
+                    using (var repo = new Repository(repoPath))
                     {
                         var commit = repo.Lookup<Commit>(publishInfo.Sha);
-                        var treeEntry = commit[originalFile.TrimStartingPathChars()];
+                        var treeEntry = commit[fileInRepoPath.TrimStartingPathChars()];
                         var blob = treeEntry.Target as Blob;
 
                         return blob.GetContentStream();
@@ -40,7 +42,7 @@ namespace EdityMcEditface.Mvc.Models.Page
             }
             else
             {
-                return base.OpenReadStream(originalFile, normalizedFile);
+                return base.OpenReadStream(originalFile, physicalFile);
             }
         }
 

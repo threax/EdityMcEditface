@@ -26,16 +26,7 @@ namespace EdityMcEditface.Mvc.Models.Page
                 GitDraftInfo publishInfo = publishedFileManager.LoadDraftInfo(physicalFile);
                 if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version
                 {
-                    var repoPath = Path.GetFullPath(Repository.Discover(physicalFile) + "../");
-                    var fileInRepoPath = physicalFile.Substring(repoPath.Length);
-                    using (var repo = new Repository(repoPath))
-                    {
-                        var commit = repo.Lookup<Commit>(publishInfo.Sha);
-                        var treeEntry = commit[fileInRepoPath.TrimStartingPathChars()];
-                        var blob = treeEntry.Target as Blob;
-
-                        return blob.GetContentStream();
-                    }
+                    return OpenRepoStream(physicalFile, publishInfo);
                 }
 
                 throw new FileNotFoundException($"Cannot find draft version of {originalFile}.");
@@ -53,18 +44,11 @@ namespace EdityMcEditface.Mvc.Models.Page
                 GitDraftInfo publishInfo = publishedFileManager.LoadDraftInfo(physicalSource);
                 if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version
                 {
-                    using (var repo = new Repository(Repository.Discover(physicalSource)))
+                    using (var destStream = File.Open(physicalDest, FileMode.Create, FileAccess.Write, FileShare.None))
                     {
-                        var commit = repo.Lookup<Commit>(publishInfo.Sha);
-                        var treeEntry = commit[source.TrimStartingPathChars()];
-                        var blob = treeEntry.Target as Blob;
-
-                        using(var destStream = File.Open(physicalDest, FileMode.Create, FileAccess.Write, FileShare.None))
+                        using (var srcStream = OpenRepoStream(physicalSource, publishInfo))
                         {
-                            using(var srcStream = blob.GetContentStream())
-                            {
-                                srcStream.CopyTo(destStream);
-                            }
+                            srcStream.CopyTo(destStream);
                         }
                     }
                 }
@@ -76,6 +60,20 @@ namespace EdityMcEditface.Mvc.Models.Page
             else
             {
                 base.CopyFile(source, physicalSource, physicalDest);
+            }
+        }
+
+        private static Stream OpenRepoStream(string physicalFile, GitDraftInfo publishInfo)
+        {
+            var repoPath = Path.GetFullPath(Repository.Discover(physicalFile) + "../");
+            var fileInRepoPath = physicalFile.Substring(repoPath.Length);
+            using (var repo = new Repository(repoPath))
+            {
+                var commit = repo.Lookup<Commit>(publishInfo.Sha);
+                var treeEntry = commit[fileInRepoPath.TrimStartingPathChars()];
+                var blob = treeEntry.Target as Blob;
+
+                return blob.GetContentStream();
             }
         }
     }

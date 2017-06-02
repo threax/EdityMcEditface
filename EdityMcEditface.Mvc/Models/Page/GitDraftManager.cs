@@ -77,12 +77,7 @@ namespace EdityMcEditface.Mvc.Models.Page
 
         public IEnumerable<String> GetAllDraftables(IFileFinder fileFinder)
         {
-            yield break;
-        }
-
-        public IEnumerable<String> GetDrafts(IFileFinder fileFinder)
-        {
-            yield break;
+            return fileFinder.EnumerateContentFiles("", "*.html");
         }
     }
 }

@@ -381,7 +381,22 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
 
         public IEnumerable<String> EnumerateContentFiles(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
-            return EnumerateContentFiles(new HashSet<String>(), path, searchPattern, searchOption);
+            var seenPaths = new HashSet<String>();
+            return EnumerateContentFiles(seenPaths, path, searchPattern, searchOption)
+                .Concat(ResetHashes<String>(seenPaths));
+        }
+
+        /// <summary>
+        /// This funciton looks like an enumerable, but really we concat it with the end of EnumerateContentFiles or EnumerateContentDirectories to reset the hashset
+        /// that stores the visited file names.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="hashes"></param>
+        /// <returns></returns>
+        private IEnumerable<T> ResetHashes<T>(HashSet<T> hashes)
+        {
+            hashes.Clear();
+            yield break;
         }
 
         private IEnumerable<String> EnumerateContentFiles(HashSet<String> seenPaths, String path, String searchPattern, SearchOption searchOption)
@@ -409,7 +424,9 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
 
         public IEnumerable<String> EnumerateContentDirectories(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
-            return EnumerateContentDirectories(new HashSet<String>(), path, searchPattern, searchOption);
+            var seenPaths = new HashSet<String>();
+            return EnumerateContentDirectories(seenPaths, path, searchPattern, searchOption)
+                .Concat(ResetHashes<String>(seenPaths));
         }
 
         public IEnumerable<String> EnumerateContentDirectories(HashSet<String> seenPaths, String path, String searchPattern, SearchOption searchOption)

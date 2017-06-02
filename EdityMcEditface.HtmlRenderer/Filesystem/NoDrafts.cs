@@ -20,10 +20,5 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         {
             yield break;
         }
-
-        public IEnumerable<String> GetDrafts(IFileFinder fileFinder)
-        {
-            yield break;
-        }
     }
 }

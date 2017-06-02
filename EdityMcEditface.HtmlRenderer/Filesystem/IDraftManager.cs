@@ -32,11 +32,5 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// </summary>
         /// <returns>A list of all pages.</returns>
         IEnumerable<String> GetAllDraftables(IFileFinder fileFinder);
-
-        /// <summary>
-        /// Get all draftable items that have a draft.
-        /// </summary>
-        /// <returns>All pages with a draft.</returns>
-        IEnumerable<String> GetDrafts(IFileFinder fileFinder);
     }
 }

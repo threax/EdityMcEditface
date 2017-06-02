@@ -2,6 +2,7 @@
 using EdityMcEditface.HtmlRenderer.FileInfo;
 using EdityMcEditface.Mvc.Models;
 using EdityMcEditface.Mvc.Models.Page;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace EdityMcEditface.Mvc.Controllers
     [ResponseCache(NoStore = true)]
     [ProducesHal]
     [TypeFilter(typeof(HalModelResultFilterAttribute))]
+    [Authorize(Roles = Roles.CreateDrafts)]
     public class DraftController : Controller
     {
         public static class Rels

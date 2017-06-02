@@ -1,5 +1,6 @@
 ﻿using EdityMcEditface.Mvc.Models.Branch;
 using EdityMcEditface.Mvc.Models.Page;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace EdityMcEditface.Mvc.Controllers
     [ResponseCache(NoStore = true)]
     [ProducesHal]
     [TypeFilter(typeof(HalModelResultFilterAttribute))]
+    [Authorize]
     public class PhaseController : Controller
     {
         /// <summary>

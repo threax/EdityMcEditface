@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +12,7 @@ namespace EdityMcEditface.Mvc.Controllers
 {
     [Route("edity/[controller]")]
     [ResponseCache(NoStore = true)]
+    [Authorize]
     public class ClientGenController : Controller
     {
         [HttpGet]

@@ -25,7 +25,8 @@
     "editComponents/history.html",
     "editComponents/edittreemenu.html",
     "editComponents/phase.html",
-    "editComponents/draft.html"
+    "editComponents/draft.html",
+    "editComponents/compile.html"
   ],
   "draftComponents": [
     "editComponents/edittreemenu.html",

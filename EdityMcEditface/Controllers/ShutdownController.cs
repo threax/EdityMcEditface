@@ -15,6 +15,7 @@ namespace EdityMcEditface.Controllers
     /// </summary>
     [Route("edity/[controller]/[action]")]
     [Authorize(Roles = LocalEdityRoles.Shutdown)]
+    [ResponseCache(NoStore = true)]
     public class ShutdownController : Controller
     {
         /// <summary>

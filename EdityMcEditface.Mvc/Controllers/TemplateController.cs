@@ -16,6 +16,7 @@ namespace EdityMcEditface.Mvc.Controllers
     /// </summary>
     [Authorize(Roles = Roles.EditPages)]
     [Route("edity/[controller]/[action]")]
+    [ResponseCache(NoStore = true)]
     public class TemplateController : Controller
     {
         private IFileFinder fileFinder;

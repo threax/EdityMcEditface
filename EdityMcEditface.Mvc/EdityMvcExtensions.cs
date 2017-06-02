@@ -53,6 +53,9 @@ namespace EdityMcEditface.Mvc
                     projectFolder = projectFinder.GetUserProjectPath(userInfo.UniqueUserName);
                 }
 
+                //Any folders that can write should use these permissions, they will prevent the writing of .draft files.
+                var sharedWritePermissions = new DraftFilePermissions(s.GetRequiredService<IHttpContextAccessor>());
+
                 //Folder blacklist
                 var edityFolderList = new PathList();
                 edityFolderList.AddDirectory("edity");
@@ -78,7 +81,7 @@ namespace EdityMcEditface.Mvc
                 //Project location
                 var contentFolderPermissions = new DefaultFileFinderPermissions();
                 contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
-                contentFolderPermissions.WritePermission.Permissions = new DraftFilePermissions(s.GetRequiredService<IHttpContextAccessor>());
+                contentFolderPermissions.WritePermission.Permissions = sharedWritePermissions;
 
                 //Always use the git draft manager for the project content, this way you can actually create drafts.
                 GitDraftManager draftManager = new GitDraftManager();

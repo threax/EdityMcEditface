@@ -22,6 +22,7 @@ namespace EdityMcEditface.Mvc.Controllers
     /// </summary>
     [Authorize(Roles = Roles.UploadAnything)]
     [Route("edity/[controller]/[action]")]
+    [ResponseCache(NoStore = true)]
     public class UploadController : Controller
     {
         private IFileFinder fileFinder;

@@ -22,6 +22,7 @@ namespace EdityMcEditface.Mvc.Controllers
 {
     [Authorize(Roles=Roles.EditPages)]
     [ApiExplorerSettings(IgnoreApi = true)]
+    [ResponseCache(NoStore = true)]
     public class HomeController : Controller
     {
         private IFileFinder fileFinder;

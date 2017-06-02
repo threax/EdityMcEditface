@@ -19,6 +19,7 @@ namespace EdityMcEditface.Controllers
     /// </summary>
     [Authorize]
     [Route("edity/auth/[action]")]
+    [ResponseCache(NoStore = true)]
     public class NoAuthController : ControllerBase
     {
         /// <summary>
@@ -57,6 +58,7 @@ namespace EdityMcEditface.Controllers
             yield return new Claim("role", Roles.EditPages);
             yield return new Claim("role", Roles.Compile);
             yield return new Claim("role", Roles.UploadAnything);
+            yield return new Claim("role", Roles.CreateDrafts);
             yield return new Claim("role", LocalEdityRoles.Shutdown);
         }
 

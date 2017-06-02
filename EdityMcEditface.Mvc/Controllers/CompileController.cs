@@ -18,6 +18,7 @@ namespace EdityMcEditface.Mvc.Controllers
     /// </summary>
     [Route("edity/[controller]/[action]")]
     [Authorize(Roles=Roles.Compile)]
+    [ResponseCache(NoStore = true)]
     public class CompileController : Controller
     {
         private SiteBuilder builder;

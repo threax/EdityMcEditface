@@ -3,11 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "devDependencies": {
-    "@types/node": "^6.0.69",
-    "jsns": ">=4.2.0"
+    "@types/node": "^6.0.69"
   },
   "dependencies": {
-    "editymceditface.client": ">=6.3.0"
+    "editymceditface.client": ">=6.3.1"
   },
   "scripts": {
     "build": "node Build/build.js",

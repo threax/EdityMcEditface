@@ -74,5 +74,15 @@ namespace EdityMcEditface.Mvc.Models.Page
             var htmlFile = Path.ChangeExtension(normalizedFile, "html");
             return File.Exists(htmlFile);
         }
+
+        public IEnumerable<String> GetAllDraftables(IFileFinder fileFinder)
+        {
+            yield break;
+        }
+
+        public IEnumerable<String> GetDrafts(IFileFinder fileFinder)
+        {
+            yield break;
+        }
     }
 }

@@ -10,13 +10,17 @@ using System.Text;
 
 namespace EdityMcEditface.Mvc.Models.Page
 {
-    public class PublishedFileStreamManager : FileStreamManager
+    public class GitDraftFileStreamManager : FileStreamManager
     {
         GitDraftManager publishedFileManager;
     
-        public PublishedFileStreamManager(GitDraftManager publishedFileManager)
+        public GitDraftFileStreamManager(IDraftManager publishedFileManager)
         {
-            this.publishedFileManager = publishedFileManager;
+            this.publishedFileManager = publishedFileManager as GitDraftManager;
+            if(this.publishedFileManager == null)
+            {
+                throw new InvalidCastException("Cannot cast the IDraftManager provided to a GitDraftManager when creating a GitDraftFileStreamManager. Please make sure your custom draft manager is a subclass of GitDraftManager or use a different FileStreamManager implementation");
+            }
         }
 
         public override Stream OpenReadStream(String originalFile, String normalizedFile)

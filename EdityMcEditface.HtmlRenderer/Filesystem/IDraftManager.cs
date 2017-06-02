@@ -26,5 +26,17 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// <param name="fileFinder">The file finder to use to write. Using this will check permissions correctly.</param>
         /// <returns></returns>
         bool SendPageToDraft(String file, String physicalFile, IFileFinder fileFinder);
+
+        /// <summary>
+        /// Get all items that can be drafted no matter if they are currently drafted or not.
+        /// </summary>
+        /// <returns>A list of all pages.</returns>
+        IEnumerable<String> GetAllDraftables(IFileFinder fileFinder);
+
+        /// <summary>
+        /// Get all draftable items that have a draft.
+        /// </summary>
+        /// <returns>All pages with a draft.</returns>
+        IEnumerable<String> GetDrafts(IFileFinder fileFinder);
     }
 }

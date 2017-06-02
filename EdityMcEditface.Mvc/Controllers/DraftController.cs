@@ -1,11 +1,13 @@
 ﻿using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.HtmlRenderer.FileInfo;
+using EdityMcEditface.HtmlRenderer.Filesystem;
 using EdityMcEditface.Mvc.Models;
 using EdityMcEditface.Mvc.Models.Page;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Threax.AspNetCore.Halcyon.Ext;
@@ -28,28 +30,45 @@ namespace EdityMcEditface.Mvc.Controllers
         IFileFinder fileFinder;
         ITargetFileInfoProvider fileInfoProvider;
         ProjectFinder projectFinder;
+        IDraftManager draftManager;
 
-        public DraftController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, ProjectFinder projectFinder)
+        public DraftController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, ProjectFinder projectFinder, IDraftManager draftManager)
         {
             this.fileFinder = fileFinder;
             this.fileInfoProvider = fileInfoProvider;
             this.projectFinder = projectFinder;
+            this.draftManager = draftManager;
         }
 
         /// <summary>
-        /// Get the list of files in draft.
+        /// Get the list of pages in draft.
         /// </summary>
         /// <returns>The list of drafted files.</returns>
         [HttpGet]
         [HalRel(Rels.List)]
         public Task<DraftCollection> List([FromQuery]DraftQuery query)
         {
-            var fileInfo = fileInfoProvider.GetFileInfo(query.File, HttpContext.Request.PathBase);
+            DraftCollection collection;
 
-            var collection = new DraftCollection(query, 1, new Draft[] { new Draft()
+            if (!String.IsNullOrEmpty(query.File) || HttpContext.Request.Query.Any(i => "file".Equals(i.Key, StringComparison.OrdinalIgnoreCase))) //Check query, if file was in it we are looking for index
             {
-                File = fileInfo.DerivedFileName
-            } });
+                var fileInfo = fileInfoProvider.GetFileInfo(query.File, HttpContext.Request.PathBase);
+
+                collection = new DraftCollection(query, 1, new Draft[] { new Draft()
+                {
+                    File = fileInfo.DerivedFileName
+                } });
+            }
+            else
+            {
+                var draftQuery = draftManager.GetAllDraftables(fileFinder);
+                var total = draftQuery.Count();
+                var draftConvert = draftQuery.Skip(query.SkipTo(total)).Take(query.Limit).Select(i => new Draft()
+                {
+                    File = i
+                });
+                collection = new DraftCollection(query, total, draftConvert);
+            }
 
             return Task.FromResult(collection);
         }

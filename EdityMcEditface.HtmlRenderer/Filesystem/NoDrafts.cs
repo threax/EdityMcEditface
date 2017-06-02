@@ -15,5 +15,15 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         {
             return false;
         }
+
+        public IEnumerable<String> GetAllDraftables(IFileFinder fileFinder)
+        {
+            yield break;
+        }
+
+        public IEnumerable<String> GetDrafts(IFileFinder fileFinder)
+        {
+            yield break;
+        }
     }
 }

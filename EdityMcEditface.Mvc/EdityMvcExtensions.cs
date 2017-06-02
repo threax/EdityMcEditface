@@ -78,6 +78,7 @@ namespace EdityMcEditface.Mvc
                 //Project location
                 var contentFolderPermissions = new DefaultFileFinderPermissions();
                 contentFolderPermissions.TreatAsContentPermission.Permissions = new PathBlacklist(edityFolderList);
+                contentFolderPermissions.WritePermission.Permissions = new DraftFilePermissions(s.GetRequiredService<IHttpContextAccessor>());
 
                 //Always use the git draft manager for the project content, this way you can actually create drafts.
                 GitDraftManager draftManager = new GitDraftManager();

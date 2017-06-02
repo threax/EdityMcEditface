@@ -94,9 +94,11 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// <param name="file"></param>
         public void SendToDraft(String file)
         {
-            //Send the page to the registered published file manager
             var normalized = NormalizePath(file);
-            if (!draftManager.SendPageToDraft(normalized) && next != null)
+
+            var goNext = !draftManager.SendPageToDraft(file, normalized, this);
+
+            if (goNext && next != null)
             {
                 next.SendToDraft(file);
             }

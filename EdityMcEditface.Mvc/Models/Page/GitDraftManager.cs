@@ -14,19 +14,23 @@ namespace EdityMcEditface.Mvc.Models.Page
     {
         private JsonSerializer serializer = JsonSerializer.CreateDefault();
 
-        public bool SendPageToDraft(String normalizedPath)
+        public bool SendPageToDraft(String file, String physicalFile, IFileFinder fileFinder)
         {
-            if (File.Exists(normalizedPath))
+            if (File.Exists(physicalFile))
             {
-                using (var repo = new Repository(Repository.Discover(normalizedPath)))
+                using (var repo = new Repository(Repository.Discover(physicalFile)))
                 {
                     var latestCommit = repo.Commits.FirstOrDefault();
                     if (latestCommit != null)
                     {
-                        DraftInfo publishInfo = LoadDraftInfo(normalizedPath);
+                        DraftInfo publishInfo = LoadDraftInfo(physicalFile);
 
                         publishInfo.Sha = latestCommit.Sha;
-                        WriteDraftInfo(normalizedPath, publishInfo);
+
+                        using (var writer = new JsonTextWriter(new StreamWriter(fileFinder.WriteFile(GetDraftInfoFileName(file)))))
+                        {
+                            serializer.Serialize(writer, publishInfo);
+                        }
                     }
                 }
                 return true;
@@ -58,15 +62,6 @@ namespace EdityMcEditface.Mvc.Models.Page
             }
 
             return publishInfo;
-        }
-
-        public void WriteDraftInfo(string file, DraftInfo publishInfo)
-        {
-            //write files directly.
-            using (var writer = new JsonTextWriter(new StreamWriter(File.Open(GetDraftInfoFileName(file), FileMode.Create, FileAccess.Write, FileShare.None))))
-            {
-                serializer.Serialize(writer, publishInfo);
-            }
         }
 
         public String GetDraftInfoFileName(String file)

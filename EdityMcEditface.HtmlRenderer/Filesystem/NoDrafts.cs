@@ -11,7 +11,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             return false;
         }
 
-        public bool SendPageToDraft(string normalizedPath)
+        public bool SendPageToDraft(String file, String physicalFile, IFileFinder fileFinder)
         {
             return false;
         }

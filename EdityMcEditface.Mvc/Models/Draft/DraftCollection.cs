@@ -9,6 +9,10 @@ namespace EdityMcEditface.Mvc.Models
 {
     [HalModel]
     [HalSelfActionLink(DraftController.Rels.List, typeof(DraftController))]
+    [DeclareHalLink(PagedCollectionView<Object>.Rels.Next, DraftController.Rels.List, typeof(DraftController), ResponseOnly = true)]
+    [DeclareHalLink(PagedCollectionView<Object>.Rels.Previous, DraftController.Rels.List, typeof(DraftController), ResponseOnly = true)]
+    [DeclareHalLink(PagedCollectionView<Object>.Rels.First, DraftController.Rels.List, typeof(DraftController), ResponseOnly = true)]
+    [DeclareHalLink(PagedCollectionView<Object>.Rels.Last, DraftController.Rels.List, typeof(DraftController), ResponseOnly = true)]
     public class DraftCollection : PagedCollectionView<Draft>
     {
         private DraftQuery query;

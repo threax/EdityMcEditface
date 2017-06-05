@@ -89,6 +89,7 @@ namespace EdityMcEditface.Mvc.Models.Page
             {
                 using (var repo = new Repository(Repository.Discover(physicalFile)))
                 {
+                    //This is close, lookup the draft commit for the settings, css and js files also
                     var draftCommit = repo.Lookup<Commit>(gitDraftInfo.Sha);
                     if (draftCommit != null)
                     {

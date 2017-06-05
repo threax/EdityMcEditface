@@ -10,6 +10,7 @@ namespace EdityMcEditface.Mvc.Models
 {
     [HalModel]
     [HalActionLink(DraftController.Rels.SubmitLatestDraft, typeof(DraftController))]
+    [HalActionLink(DraftController.Rels.SubmitAllDrafts, typeof(DraftController))]
     public class Draft
     {
         public DateTime? LastUpdate { get; set; }
@@ -17,5 +18,7 @@ namespace EdityMcEditface.Mvc.Models
         public DraftStatus Status { get; set; }
 
         public String File { get; set; }
+
+        public String Title { get; set; }
     }
 }

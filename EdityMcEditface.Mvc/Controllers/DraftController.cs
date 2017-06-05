@@ -25,6 +25,7 @@ namespace EdityMcEditface.Mvc.Controllers
         {
             public const String List = "ListDrafts";
             public const String SubmitLatestDraft = "SubmitLatestDraft";
+            public const String SubmitAllDrafts = "SubmitAllDrafts";
         }
 
         IFileFinder fileFinder;
@@ -65,17 +66,42 @@ namespace EdityMcEditface.Mvc.Controllers
                     .Skip(query.SkipTo(total))
                     .Take(query.Limit)
                     .Select(i => fileFinder.GetDraftStatus(i))
-                    .Select(i => new Draft()
+                    .Select(i =>
                     {
-                        File = i.File,
-                        LastUpdate = i.LastUpdate,
-                        Status = i.Status
+                        var fileInfo = fileInfoProvider.GetFileInfo(i.File, HttpContext.Request.PathBase);
+                        var pageSettings = fileFinder.GetProjectPageDefinition(fileInfo);
+                        return new Draft()
+                        {
+                            File = i.File,
+                            LastUpdate = i.LastUpdate,
+                            Status = i.Status,
+                            Title = pageSettings.Title
+                        };
                     });
 
                 collection = new DraftCollection(query, total, draftConvert);
             }
 
             return Task.FromResult(collection);
+        }
+
+        /// <summary>
+        /// Update all pages and files with never drafted out of date status to their latest draft.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut("[action]")]
+        [HalRel(Rels.SubmitAllDrafts)]
+        public Task SubmitAll()
+        {
+            var draftQuery = fileFinder.GetAllDraftables().Select(i => fileFinder.GetDraftStatus(i)).Where(i => i.Status != DraftStatus.UpToDate);
+
+            foreach(var status in draftQuery)
+            {
+                var fileInfo = fileInfoProvider.GetFileInfo(status.File, HttpContext.Request.PathBase);
+                fileFinder.SendToDraft(fileInfo.DerivedFileName);
+            }
+
+            return Task.FromResult(0);
         }
 
         /// <summary>

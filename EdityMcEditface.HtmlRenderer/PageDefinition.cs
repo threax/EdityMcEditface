@@ -22,5 +22,22 @@ namespace EdityMcEditface.HtmlRenderer
         /// True if the page should be hidden and not included in output.
         /// </summary>
         public bool Hidden { get; set; }
+
+        /// <summary>
+        /// Get the title of the page from the Vars, if the title does not exist, "Untitled" will be returned.
+        /// </summary>
+        [JsonIgnore]
+        public String Title
+        {
+            get
+            {
+                String title;
+                if(!Vars.TryGetValue("title", out title))
+                {
+                    title = "Untitled";
+                }
+                return title;
+            }
+        }
     }
 }

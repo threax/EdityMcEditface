@@ -12,6 +12,7 @@ namespace EdityMcEditface.Mvc.Models
     [HalSelfActionLink(EntryPointController.Rels.Get, typeof(EntryPointController))]
     [HalActionLink(PhaseController.Rels.List, typeof(PhaseController))]
     [HalActionLink(DraftController.Rels.List, typeof(DraftController))]
+    [HalActionLink(DraftController.Rels.SubmitAllDrafts, typeof(DraftController))]
     public class EntryPoint
     {
     }

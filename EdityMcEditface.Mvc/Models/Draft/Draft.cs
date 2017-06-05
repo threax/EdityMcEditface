@@ -9,10 +9,24 @@ using Threax.AspNetCore.Halcyon.Ext;
 namespace EdityMcEditface.Mvc.Models
 {
     [HalModel]
+    [HalSelfActionLink(DraftController.Rels.Get, typeof(DraftController))]
     [HalActionLink(DraftController.Rels.SubmitLatestDraft, typeof(DraftController))]
     [HalActionLink(DraftController.Rels.SubmitAllDrafts, typeof(DraftController))]
     public class Draft
     {
+        public Draft()
+        {
+
+        }
+
+        public Draft(DraftInfo info, String title)
+        {
+            this.LastUpdate = info.LastUpdate;
+            this.Status = info.Status;
+            this.File = info.File;
+            this.Title = title;
+        }
+
         public DateTime? LastUpdate { get; set; }
 
         public DraftStatus Status { get; set; }

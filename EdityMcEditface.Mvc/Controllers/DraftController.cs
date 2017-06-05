@@ -24,6 +24,7 @@ namespace EdityMcEditface.Mvc.Controllers
         public static class Rels
         {
             public const String List = "ListDrafts";
+            public const String Get = "GetDraft";
             public const String SubmitLatestDraft = "SubmitLatestDraft";
             public const String SubmitAllDrafts = "SubmitAllDrafts";
         }
@@ -45,18 +46,13 @@ namespace EdityMcEditface.Mvc.Controllers
         /// <returns>The list of drafted files.</returns>
         [HttpGet]
         [HalRel(Rels.List)]
-        public Task<DraftCollection> List([FromQuery]DraftQuery query)
+        public async Task<DraftCollection> List([FromQuery]DraftQuery query)
         {
             DraftCollection collection;
 
             if (!String.IsNullOrEmpty(query.File) || HttpContext.Request.Query.Any(i => "file".Equals(i.Key, StringComparison.OrdinalIgnoreCase))) //Check query, if file was in it we are looking for index
             {
-                var fileInfo = fileInfoProvider.GetFileInfo(query.File, HttpContext.Request.PathBase);
-
-                collection = new DraftCollection(query, 1, new Draft[] { new Draft()
-                {
-                    File = fileInfo.DerivedFileName
-                } });
+                collection = new DraftCollection(query, 1, new Draft[] { await Get(query.File) });
             }
             else
             {
@@ -70,19 +66,29 @@ namespace EdityMcEditface.Mvc.Controllers
                     {
                         var fileInfo = fileInfoProvider.GetFileInfo(i.File, HttpContext.Request.PathBase);
                         var pageSettings = fileFinder.GetProjectPageDefinition(fileInfo);
-                        return new Draft()
-                        {
-                            File = i.File,
-                            LastUpdate = i.LastUpdate,
-                            Status = i.Status,
-                            Title = pageSettings.Title
-                        };
+                        return new Draft(i, pageSettings.Title);
                     });
 
                 collection = new DraftCollection(query, total, draftConvert);
             }
 
-            return Task.FromResult(collection);
+            return collection;
+        }
+
+        /// <summary>
+        /// Get the list of pages in draft.
+        /// </summary>
+        /// <returns>The list of drafted files.</returns>
+        [HttpGet("[action]/{*File}")]
+        [HalRel(Rels.Get)]
+        public Task<Draft> Get(String file)
+        {
+            var fileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
+
+            var status = fileFinder.GetDraftStatus(fileInfo.DerivedFileName);
+            var pageSettings = fileFinder.GetProjectPageDefinition(fileInfo);
+
+            return Task.FromResult(new Draft(status, pageSettings.Title));
         }
 
         /// <summary>

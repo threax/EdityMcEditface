@@ -25,5 +25,10 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         {
             return new DraftInfo(null, DraftStatus.NeverDrafted, file);
         }
+
+        public void PageErased(string file, string physicalPath)
+        {
+            
+        }
     }
 }

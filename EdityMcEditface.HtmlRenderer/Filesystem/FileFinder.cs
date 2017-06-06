@@ -67,11 +67,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                     {
                         File.Delete(cssFile);
                     }
-                    var draftSettings = getPageFile(file, ".draft");
-                    if (draftSettings != null)
-                    {
-                        File.Delete(draftSettings);
-                    }
+                    draftManager.PageErased(file, physicalPath);
                     var settingsFile = getPageDefinitionFile(file);
                     if (File.Exists(settingsFile))
                     {

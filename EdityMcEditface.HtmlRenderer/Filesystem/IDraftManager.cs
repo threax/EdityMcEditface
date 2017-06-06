@@ -40,5 +40,12 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// <param name="physicalFile">The full path to the file on the disk.</param>
         /// <returns>The draft info for the file or null if no status can be computed.</returns>
         DraftInfo GetDraftStatus(String file, String physicalFile);
+
+        /// <summary>
+        /// This function is called when a page is erased, the draft info should be cleaned up at this time.
+        /// </summary>
+        /// <param name="file">The file for the page to erase.</param>
+        /// <param name="physicalPath">The path on the operating system for the file.</param>
+        void PageErased(string file, string physicalPath);
     }
 }

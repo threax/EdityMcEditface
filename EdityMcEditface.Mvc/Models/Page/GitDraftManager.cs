@@ -108,5 +108,14 @@ namespace EdityMcEditface.Mvc.Models.Page
 
             return null;
         }
+
+        public void PageErased(string file, string physicalPath)
+        {
+            var draftFile = GetDraftInfoFileName(physicalPath);
+            if (draftFile != null && File.Exists(draftFile))
+            {
+                File.Delete(draftFile);
+            }
+        }
     }
 }

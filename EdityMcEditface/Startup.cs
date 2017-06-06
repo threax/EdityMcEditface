@@ -8,6 +8,11 @@ using Microsoft.Extensions.Logging;
 using System.IO;
 using EdityMcEditface.Mvc.Config;
 using EdityMcEditface.Mvc;
+using EdityMcEditface.HtmlRenderer;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Converters;
+using EdityMcEditface.Mvc.BuildTasks;
 
 namespace EdityMcEditface
 {
@@ -60,6 +65,21 @@ namespace EdityMcEditface
 
             EditySettings = new EditySettings();
             ConfigurationBinder.Bind(Configuration.GetSection("EditySettings"), EditySettings);
+
+            //Setup the menu publish task, this is done per project or configuration instead of in the core.
+            EditySettings.Events = new EdityEvents()
+            {
+                OnCustomizeSiteBuilder = args =>
+                {
+                    var fileFinder = args.Services.GetRequiredService<IFileFinder>();
+                    var serializer = new JsonSerializer()
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    };
+                    serializer.Converters.Add(new StringEnumConverter());
+                    args.SiteBuilder.addPostBuildTask(new PublishMenu(fileFinder, args.SiteBuilder, "menus/mainmenu.json", serializer));
+                }
+            };
 
 
             if (EdityRoot == null)

@@ -63,7 +63,6 @@ namespace EdityMcEditface.Mvc.BuildTasks
             }
         }
 
-        //This is really slow
         public void cleanMenuItems(MenuItem parent)
         {
             if (parent.Children != null)
@@ -79,21 +78,7 @@ namespace EdityMcEditface.Mvc.BuildTasks
                         //Only fix absolute paths into this website
                         if (item.Link[0] == '\\' || item.Link[0] == '/')
                         {
-                            PageDefinition def;
-
-                            try
-                            {
-                                using (var stream = new JsonTextReader(new StreamReader(this.fileFinder.ReadFile(item.Link + ".json"))))
-                                {
-                                    def = serializer.Deserialize<PageDefinition>(stream);
-                                }
-                            }
-                            catch (IOException)
-                            {
-                                def = new PageDefinition();
-                            }
-
-                            if (def.Hidden)
+                            if (!siteBuilder.DoesOutputFileExist(item.Link + ".html"))
                             {
                                 itemsToRemove.Add(item);
                             }

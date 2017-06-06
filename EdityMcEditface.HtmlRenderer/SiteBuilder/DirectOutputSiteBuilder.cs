@@ -105,5 +105,11 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             }
             return File.Open(fullPath, FileMode.Create, FileAccess.Write, FileShare.None);
         }
+
+        public bool DoesOutputFileExist(String file)
+        {
+            var fullPath = Path.Combine(settings.OutDir, StringPathExtensions.TrimStartingPathChars(file));
+            return File.Exists(fullPath);
+        }
     }
 }

@@ -80,7 +80,7 @@ namespace EdityMcEditface.Mvc.Models.Page
             return fileFinder.EnumerateContentFiles("", "*.html");
         }
 
-        public DraftInfo GetDraftStatus(String file, string physicalFile)
+        public DraftInfo GetDraftStatus(String file, string physicalFile, IFileFinder fileFinder)
         {
             GitDraftInfo gitDraftInfo = LoadDraftInfo(physicalFile);
 
@@ -96,6 +96,15 @@ namespace EdityMcEditface.Mvc.Models.Page
                         var latestCommit = repo.Commits.QueryBy(file.TrimStartingPathChars()).FirstOrDefault();
                         if (latestCommit != null)
                         {
+                            foreach (var contentFile in fileFinder.GetPageContentFiles(file))
+                            {
+                                var contentCommit = repo.Commits.QueryBy(contentFile.TrimStartingPathChars()).FirstOrDefault();
+                                if(contentCommit != null && contentCommit.Commit.Author.When.UtcDateTime > latestCommit.Commit.Author.When.UtcDateTime)
+                                {
+                                    latestCommit = contentCommit;
+                                }
+                            }
+
                             var draftTime = draftCommit.Author.When.UtcDateTime;
                             var latestTime = latestCommit.Commit.Author.When.UtcDateTime;
 

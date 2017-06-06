@@ -21,7 +21,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             yield break;
         }
 
-        public DraftInfo GetDraftStatus(String file, String physicalFile)
+        public DraftInfo GetDraftStatus(String file, String physicalFile, IFileFinder fileFinder)
         {
             return new DraftInfo(null, DraftStatus.NeverDrafted, file);
         }

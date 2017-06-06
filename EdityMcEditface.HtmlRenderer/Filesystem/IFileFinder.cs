@@ -81,6 +81,13 @@ namespace EdityMcEditface.HtmlRenderer
         void SendToDraft(String file);
 
         /// <summary>
+        /// Get an enumerator over all the content files for a page. Only files that exist
+        /// will be returned.
+        /// </summary>
+        /// <returns>An enumerable over all page content files (javascript, css etc) that are linked to the given file.</returns>
+        IEnumerable<String> GetPageContentFiles(String file);
+
+        /// <summary>
         /// Get all files that are draftable from the file finder.
         /// </summary>
         /// <returns></returns>

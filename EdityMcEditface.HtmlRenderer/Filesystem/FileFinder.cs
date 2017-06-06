@@ -62,18 +62,22 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                     {
                         File.Delete(jsFile);
                     }
+
                     var cssFile = getPageFile(file, ".css");
                     if (cssFile != null)
                     {
                         File.Delete(cssFile);
                     }
-                    draftManager.PageErased(file, physicalPath);
+
                     var settingsFile = getPageDefinitionFile(file);
                     if (File.Exists(settingsFile))
                     {
                         File.Delete(settingsFile);
                     }
+
+                    draftManager.PageErased(file, physicalPath);
                     File.Delete(physicalPath);
+
                     goNext = false;
                 }
             }
@@ -124,7 +128,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         {
             var normalized = NormalizePath(file);
 
-            var status = draftManager.GetDraftStatus(file, normalized);
+            var status = draftManager.GetDraftStatus(file, normalized, this);
 
             //If the status was null and we have a next in the chain use it.
             if (status == null && next != null)
@@ -826,6 +830,25 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             using(var reader = new StreamReader(this.ReadFile(path)))
             {
                 return reader.ReadToEnd();
+            }
+        }
+
+        public IEnumerable<string> GetPageContentFiles(string file)
+        {
+            var linked = getPageFile(file, "js");
+            if(linked != null)
+            {
+                yield return linked;
+            }
+            linked = getPageFile(file, "css");
+            if (linked != null)
+            {
+                yield return linked;
+            }
+            linked = getPageFile(file, "json");
+            if (linked != null)
+            {
+                yield return linked;
             }
         }
     }

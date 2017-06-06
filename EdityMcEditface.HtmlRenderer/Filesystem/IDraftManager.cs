@@ -38,8 +38,9 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// </summary>
         /// <param name="file">The file to lookup draft status for.</param>
         /// <param name="physicalFile">The full path to the file on the disk.</param>
+        /// <param name="fileFinder">The file finder to lookup files with.</param>
         /// <returns>The draft info for the file or null if no status can be computed.</returns>
-        DraftInfo GetDraftStatus(String file, String physicalFile);
+        DraftInfo GetDraftStatus(String file, String physicalFile, IFileFinder fileFinder);
 
         /// <summary>
         /// This function is called when a page is erased, the draft info should be cleaned up at this time.

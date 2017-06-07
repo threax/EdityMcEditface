@@ -51,7 +51,8 @@ namespace EdityMcEditface.Mvc.Controllers
             }
             return new PageSettings()
             {
-                Title = title
+                Title = title,
+                Visible = !definition.Hidden
             };
         }
 
@@ -67,6 +68,7 @@ namespace EdityMcEditface.Mvc.Controllers
             var targetFile = fileInfoProvider.GetFileInfo(page, HttpContext.Request.PathBase);
             var definition = fileFinder.GetProjectPageDefinition(targetFile);
             definition.Vars["title"] = settings.Title;
+            definition.Hidden = !settings.Visible;
             fileFinder.SavePageDefinition(definition, targetFile);
         }
 

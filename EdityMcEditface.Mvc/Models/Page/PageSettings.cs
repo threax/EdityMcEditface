@@ -10,5 +10,7 @@ namespace EdityMcEditface.Mvc.Models.Page
     {
         [Required]
         public String Title { get; set; }
+
+        public bool Visible { get; set; }
     }
 }

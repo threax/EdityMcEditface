@@ -10,6 +10,7 @@ using EdityMcEditface.Mvc.Controllers;
 using EdityMcEditface.Mvc.Models.Branch;
 using EdityMcEditface.Mvc.Models.Compiler;
 using EdityMcEditface.Mvc.Models.Page;
+using EdityMcEditface.Mvc.Repositories;
 using LibGit2Sharp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -112,6 +113,8 @@ namespace EdityMcEditface.Mvc
         /// <returns>The service collection.</returns>
         public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration)
         {
+            services.TryAddScoped<ICommitRepository, CommitRepository>();
+
             var baseUrl = HalcyonConventionOptions.HostVariable;
             if(editySettings.BaseUrl != null)
             {

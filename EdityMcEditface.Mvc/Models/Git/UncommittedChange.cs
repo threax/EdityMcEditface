@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LibGit2Sharp;
+using Halcyon.HAL.Attributes;
+using Threax.AspNetCore.Halcyon.Ext;
+using EdityMcEditface.Mvc.Controllers;
 
 namespace EdityMcEditface.Mvc.Models.Git
 {
@@ -22,6 +25,8 @@ namespace EdityMcEditface.Mvc.Models.Git
         Conflicted,
     }
 
+    [HalModel]
+    [HalActionLink(CommitController.Rels.GetUncommittedDiff, typeof(CommitController))]
     public class UncommittedChange
     {
         public UncommittedChange()

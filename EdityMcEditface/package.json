@@ -6,7 +6,8 @@
     "@types/node": "^6.0.69"
   },
   "dependencies": {
-    "editymceditface.client": "6.3.6"
+    "editymceditface.client": "6.3.6",
+    "htmlrapier.halcyon": "4.1.2"
   },
   "scripts": {
     "build": "node Build/build.js",

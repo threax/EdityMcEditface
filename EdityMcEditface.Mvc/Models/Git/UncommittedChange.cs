@@ -27,6 +27,7 @@ namespace EdityMcEditface.Mvc.Models.Git
 
     [HalModel]
     [HalActionLink(CommitController.Rels.GetUncommittedDiff, typeof(CommitController))]
+    [HalActionLink(CommitController.Rels.Revert, typeof(CommitController))]
     public class UncommittedChange
     {
         public UncommittedChange()

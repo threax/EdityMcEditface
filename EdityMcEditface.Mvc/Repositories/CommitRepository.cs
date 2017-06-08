@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EdityMcEditface.Mvc.Repositories
 {
@@ -48,7 +49,7 @@ namespace EdityMcEditface.Mvc.Repositories
         /// <returns>The file's diff info.</returns>
         public DiffInfo UncommittedDiff(ITargetFileInfo fileInfo)
         {
-            if (!IsWritablePath(fileInfo.OriginalFileName))
+            if (!IsWritablePath(fileInfo.DerivedFileName))
             {
                 throw new FileNotFoundException($"Cannot access file '{fileInfo.OriginalFileName}'");
             }
@@ -101,6 +102,39 @@ namespace EdityMcEditface.Mvc.Repositories
                     Commands.Stage(repo, path);
                 }
                 repo.Commit(newCommit.Message, signature, signature);
+            }
+        }
+
+        /// <summary>
+        /// Revert a file to its unmodified version.
+        /// </summary>
+        /// <param name="fileInfo">The file info for the file to revert.</param>
+        /// <returns></returns>
+        public async Task Revert(ITargetFileInfo fileInfo)
+        {
+            if (!IsWritablePath(fileInfo.DerivedFileName))
+            {
+                throw new FileNotFoundException($"Cannot access file '{fileInfo.OriginalFileName}'");
+            }
+
+            //Original File
+            var historyCommits = repo.Commits.QueryBy(fileInfo.DerivedFileName);
+            var latestCommit = historyCommits.FirstOrDefault();
+            if (latestCommit != null)
+            {
+                var blob = latestCommit.Commit[fileInfo.DerivedFileName].Target as Blob;
+                if (blob != null)
+                {
+                    //Changed file
+                    var repoPath = Path.Combine(repo.Info.WorkingDirectory, fileInfo.DerivedFileName);
+                    using (var dest = fileFinder.WriteFile(fileFinder.GetProjectRelativePath(repoPath)))
+                    {
+                        using (var source = blob.GetContentStream())
+                        {
+                            await source.CopyToAsync(dest);
+                        }
+                    }
+                }
             }
         }
 

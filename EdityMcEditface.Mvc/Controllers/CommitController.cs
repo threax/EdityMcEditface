@@ -21,8 +21,9 @@ namespace EdityMcEditface.Mvc.Controllers
         public static class Rels
         {
             public const String GetUncommittedChanges = "GetUncommittedChanges";
-            public const String Commit = "Commit";
             public const String GetUncommittedDiff = "GetUncommittedDiff";
+            public const String Commit = "Commit";
+            public const String Revert = "Revert";
         }
 
         private ICommitRepository commitRepository;
@@ -48,7 +49,7 @@ namespace EdityMcEditface.Mvc.Controllers
             return this.commitRepository.UncommittedChanges();
         }
 
-        [HttpGet("{FilePath}")]
+        [HttpGet("{*FilePath}")]
         [HalRel(Rels.GetUncommittedDiff)]
         public DiffInfo UncommittedDiff(String filePath)
         {
@@ -56,6 +57,14 @@ namespace EdityMcEditface.Mvc.Controllers
             var diff = commitRepository.UncommittedDiff(targetFileInfo);
             diff.FilePath = filePath;
             return diff;
+        }
+
+        [HttpPut("revert/{*FilePath}")]
+        [HalRel(Rels.Revert)]
+        public void Revert(String filePath)
+        {
+            var targetFileInfo = fileInfoProvider.GetFileInfo(filePath, HttpContext.Request.PathBase);
+            this.commitRepository.Revert(targetFileInfo);
         }
     }
 }

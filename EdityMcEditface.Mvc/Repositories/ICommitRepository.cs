@@ -2,6 +2,7 @@
 using EdityMcEditface.HtmlRenderer.FileInfo;
 using EdityMcEditface.Mvc.Models.Git;
 using LibGit2Sharp;
+using System.Threading.Tasks;
 
 namespace EdityMcEditface.Mvc.Repositories
 {
@@ -29,5 +30,12 @@ namespace EdityMcEditface.Mvc.Repositories
         /// <param name="fileInfo">The file info for the file to get a diff for.</param>
         /// <returns>The file's diff info.</returns>
         DiffInfo UncommittedDiff(ITargetFileInfo fileInfo);
+
+        /// <summary>
+        /// Revert a file to its unmodified version.
+        /// </summary>
+        /// <param name="fileInfo">The file info for the file to revert.</param>
+        /// <returns>Void task.</returns>
+        Task Revert(ITargetFileInfo fileInfo);
     }
 }

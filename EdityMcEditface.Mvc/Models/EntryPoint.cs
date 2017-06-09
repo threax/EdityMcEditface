@@ -18,6 +18,8 @@ namespace EdityMcEditface.Mvc.Models
 
     [HalActionLink(CommitController.Rels.Commit, typeof(CommitController))]
     [HalActionLink(CommitController.Rels.GetUncommittedChanges, typeof(CommitController))]
+
+    [HalActionLink(SyncController.Rels.BeginSync, typeof(SyncController))]
     public class EntryPoint
     {
     }

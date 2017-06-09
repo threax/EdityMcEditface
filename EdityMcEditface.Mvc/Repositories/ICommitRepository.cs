@@ -19,6 +19,12 @@ namespace EdityMcEditface.Mvc.Repositories
         void Commit(Signature signature, NewCommit newCommit);
 
         /// <summary>
+        /// Check to see if there are any uncommitted changes.
+        /// </summary>
+        /// <returns>True if there are uncommitted changes, false otherwise.</returns>
+        bool HasUncommittedChanges();
+
+        /// <summary>
         /// Get an enumerable over all uncommitted changes.
         /// </summary>
         /// <returns></returns>

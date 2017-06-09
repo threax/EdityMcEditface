@@ -114,6 +114,7 @@ namespace EdityMcEditface.Mvc
         public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration)
         {
             services.TryAddScoped<ICommitRepository, CommitRepository>();
+            services.TryAddScoped<ISyncRepository, SyncRepository>();
 
             var baseUrl = HalcyonConventionOptions.HostVariable;
             if(editySettings.BaseUrl != null)

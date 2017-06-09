@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LibGit2Sharp;
+using Halcyon.HAL.Attributes;
 
 namespace EdityMcEditface.Mvc.Models.Git
 {
+    [HalModel]
     public class History
     {
         public History()

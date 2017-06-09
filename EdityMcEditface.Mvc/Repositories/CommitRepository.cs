@@ -43,6 +43,15 @@ namespace EdityMcEditface.Mvc.Repositories
         }
 
         /// <summary>
+        /// Check to see if there are any uncommitted changes.
+        /// </summary>
+        /// <returns>True if there are uncommitted changes, false otherwise.</returns>
+        public bool HasUncommittedChanges()
+        {
+            return QueryChanges(repo.RetrieveStatus()).Any();
+        }
+
+        /// <summary>
         /// Get the diff of the file between its original and modified version.
         /// </summary>
         /// <param name="fileInfo">The file info for the file to get a diff for.</param>

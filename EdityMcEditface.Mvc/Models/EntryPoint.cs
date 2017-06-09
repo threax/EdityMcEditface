@@ -13,6 +13,7 @@ namespace EdityMcEditface.Mvc.Models
 
     [HalActionLink(PhaseController.Rels.List, typeof(PhaseController))]
 
+    [HalActionLink(DraftController.Rels.Begin, typeof(DraftController))]
     [HalActionLink(DraftController.Rels.List, typeof(DraftController))]
     [HalActionLink(DraftController.Rels.SubmitAllDrafts, typeof(DraftController))]
 

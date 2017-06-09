@@ -36,7 +36,7 @@ namespace EdityMcEditface.Mvc.Repositories
         {
             DraftCollection collection;
 
-            if (!String.IsNullOrEmpty(query.File)) //If file is not null, looking for specific file.
+            if (query.File != null) //If file is not null, looking for specific file.
             {
                 collection = new DraftCollection(query, 1, new Draft[] { await GetInfo(query.File) });
             }

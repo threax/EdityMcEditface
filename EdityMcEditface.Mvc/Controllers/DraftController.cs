@@ -24,6 +24,7 @@ namespace EdityMcEditface.Mvc.Controllers
     {
         public static class Rels
         {
+            public const String Begin = "BeginDraft";
             public const String List = "ListDrafts";
             public const String Get = "GetDraft";
             public const String SubmitLatestDraft = "SubmitLatestDraft";
@@ -38,6 +39,21 @@ namespace EdityMcEditface.Mvc.Controllers
         }
 
         /// <summary>
+        /// Start the draft process, this will determine if you can draft and what you should do if you can't.
+        /// </summary>
+        /// <param name="commitRepo">The commit repo.</param>
+        /// <returns>The entry point for drafts.</returns>
+        [HttpGet("[action]")]
+        [HalRel(Rels.Begin)]
+        public DraftEntryPoint Begin([FromServices] ICommitRepository commitRepo)
+        {
+            return new DraftEntryPoint()
+            {
+                HasUncommittedChanges = commitRepo.HasUncommittedChanges()
+            };
+        }
+
+        /// <summary>
         /// Get the list of pages in draft.
         /// </summary>
         /// <returns>The list of drafted files.</returns>
@@ -45,6 +61,15 @@ namespace EdityMcEditface.Mvc.Controllers
         [HalRel(Rels.List)]
         public Task<DraftCollection> List([FromQuery]DraftQuery query)
         {
+            if (query.File == null)
+            {
+                //Check url query, if file was in it we are looking for the default file (index usually)
+                var hasFile = HttpContext.Request.Query.Any(i => "file".Equals(i.Key, StringComparison.OrdinalIgnoreCase));
+                if (hasFile)
+                {
+                    query.File = "";
+                }
+            }
             return draftRepo.List(query);
         }
 

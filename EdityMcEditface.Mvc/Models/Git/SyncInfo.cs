@@ -13,6 +13,7 @@ namespace EdityMcEditface.Mvc.Models.Git
     [HalSelfActionLink(SyncController.Rels.BeginSync, typeof(SyncController))]
     [DeclareHalLink(SyncController.Rels.Pull, typeof(SyncController))]
     [DeclareHalLink(SyncController.Rels.Push, typeof(SyncController))]
+    [DeclareHalLink(CommitController.Rels.Commit, typeof(CommitController))]
     public class SyncInfo : IHalLinkProvider
     {
         public int AheadBy { get; set; }
@@ -28,14 +29,21 @@ namespace EdityMcEditface.Mvc.Models.Git
 
         public IEnumerable<HalLinkAttribute> CreateHalLinks(ILinkProviderContext context)
         {
-            if(AheadBy != 0)
+            if (HasUncomittedChanges)
             {
-                yield return new HalActionLinkAttribute(SyncController.Rels.Push, typeof(SyncController));
+                yield return new HalActionLinkAttribute(CommitController.Rels.Commit, typeof(CommitController));
             }
-
-            if (BehindBy != 0)
+            else
             {
-                yield return new HalActionLinkAttribute(SyncController.Rels.Pull, typeof(SyncController));
+                if (AheadBy != 0)
+                {
+                    yield return new HalActionLinkAttribute(SyncController.Rels.Push, typeof(SyncController));
+                }
+
+                if (BehindBy != 0)
+                {
+                    yield return new HalActionLinkAttribute(SyncController.Rels.Pull, typeof(SyncController));
+                }
             }
         }
     }

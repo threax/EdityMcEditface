@@ -3,6 +3,7 @@ using EdityMcEditface.HtmlRenderer.FileInfo;
 using EdityMcEditface.HtmlRenderer.Filesystem;
 using EdityMcEditface.Mvc.Models;
 using EdityMcEditface.Mvc.Models.Page;
+using EdityMcEditface.Mvc.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -29,15 +30,11 @@ namespace EdityMcEditface.Mvc.Controllers
             public const String SubmitAllDrafts = "SubmitAllDrafts";
         }
 
-        IFileFinder fileFinder;
-        ITargetFileInfoProvider fileInfoProvider;
-        ProjectFinder projectFinder;
+        private IDraftRepository draftRepo;
 
-        public DraftController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, ProjectFinder projectFinder)
+        public DraftController(IDraftRepository draftRepo)
         {
-            this.fileFinder = fileFinder;
-            this.fileInfoProvider = fileInfoProvider;
-            this.projectFinder = projectFinder;
+            this.draftRepo = draftRepo;
         }
 
         /// <summary>
@@ -46,49 +43,21 @@ namespace EdityMcEditface.Mvc.Controllers
         /// <returns>The list of drafted files.</returns>
         [HttpGet]
         [HalRel(Rels.List)]
-        public async Task<DraftCollection> List([FromQuery]DraftQuery query)
+        public Task<DraftCollection> List([FromQuery]DraftQuery query)
         {
-            DraftCollection collection;
-
-            if (!String.IsNullOrEmpty(query.File) || HttpContext.Request.Query.Any(i => "file".Equals(i.Key, StringComparison.OrdinalIgnoreCase))) //Check query, if file was in it we are looking for index
-            {
-                collection = new DraftCollection(query, 1, new Draft[] { await Get(query.File) });
-            }
-            else
-            {
-                var draftQuery = fileFinder.GetAllDraftables();
-                var total = draftQuery.Count();
-                var draftConvert = draftQuery
-                    .Skip(query.SkipTo(total))
-                    .Take(query.Limit)
-                    .Select(i => fileFinder.GetDraftStatus(i))
-                    .Select(i =>
-                    {
-                        var fileInfo = fileInfoProvider.GetFileInfo(i.File, HttpContext.Request.PathBase);
-                        var pageSettings = fileFinder.GetProjectPageDefinition(fileInfo);
-                        return new Draft(i, pageSettings.Title);
-                    });
-
-                collection = new DraftCollection(query, total, draftConvert);
-            }
-
-            return collection;
+            return draftRepo.List(query);
         }
 
         /// <summary>
-        /// Get the list of pages in draft.
+        /// Get the draft info for a single file.
         /// </summary>
-        /// <returns>The list of drafted files.</returns>
+        /// <param name="file">The file to lookup.</param>
+        /// <returns>The draft info for the file.</returns>
         [HttpGet("[action]/{*File}")]
         [HalRel(Rels.Get)]
         public Task<Draft> Get(String file)
         {
-            var fileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
-
-            var status = fileFinder.GetDraftStatus(fileInfo.DerivedFileName);
-            var pageSettings = fileFinder.GetProjectPageDefinition(fileInfo);
-
-            return Task.FromResult(new Draft(status, pageSettings.Title));
+            return draftRepo.GetInfo(file);
         }
 
         /// <summary>
@@ -99,15 +68,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [HalRel(Rels.SubmitAllDrafts)]
         public Task SubmitAll()
         {
-            var draftQuery = fileFinder.GetAllDraftables().Select(i => fileFinder.GetDraftStatus(i)).Where(i => i.Status != DraftStatus.UpToDate);
-
-            foreach(var status in draftQuery)
-            {
-                var fileInfo = fileInfoProvider.GetFileInfo(status.File, HttpContext.Request.PathBase);
-                fileFinder.SendToDraft(fileInfo.DerivedFileName);
-            }
-
-            return Task.FromResult(0);
+            return draftRepo.SubmitAll();
         }
 
         /// <summary>
@@ -119,9 +80,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [HalRel(Rels.SubmitLatestDraft)]
         public Task Put(String file)
         {
-            var fileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
-            fileFinder.SendToDraft(fileInfo.DerivedFileName);
-            return Task.FromResult(0);
+            return draftRepo.Submit(file);
         }
     }
 }

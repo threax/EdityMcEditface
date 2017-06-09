@@ -11,6 +11,7 @@ using EdityMcEditface.Mvc.Models.Branch;
 using EdityMcEditface.Mvc.Models.Compiler;
 using EdityMcEditface.Mvc.Models.Page;
 using EdityMcEditface.Mvc.Repositories;
+using EdityMcEditface.Mvc.Services;
 using LibGit2Sharp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -115,6 +116,8 @@ namespace EdityMcEditface.Mvc
         {
             services.TryAddScoped<ICommitRepository, CommitRepository>();
             services.TryAddScoped<ISyncRepository, SyncRepository>();
+            services.TryAddScoped<IPathBaseInjector, PathBaseInjector>();
+            services.TryAddScoped<IDraftRepository, DraftRepository>();
 
             var baseUrl = HalcyonConventionOptions.HostVariable;
             if(editySettings.BaseUrl != null)

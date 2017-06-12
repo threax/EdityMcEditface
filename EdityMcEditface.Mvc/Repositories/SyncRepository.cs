@@ -1,4 +1,5 @@
-﻿using EdityMcEditface.Mvc.Models.Git;
+﻿using EdityMcEditface.Mvc.Models;
+using EdityMcEditface.Mvc.Models.Git;
 using LibGit2Sharp;
 using System;
 using System.Collections.Generic;

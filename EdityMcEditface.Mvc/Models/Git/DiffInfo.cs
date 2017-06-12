@@ -10,6 +10,7 @@ namespace EdityMcEditface.Mvc.Models.Git
 {
     [HalModel]
     [HalSelfActionLink(CommitController.Rels.GetUncommittedDiff, typeof(CommitController))]
+    [HalActionLink(HistoryController.Rels.ListPageHistory, typeof(HistoryController))]
     public class DiffInfo
     {
         public DiffInfo()

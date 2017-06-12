@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using LibGit2Sharp;
 using Halcyon.HAL.Attributes;
+using Threax.AspNetCore.Halcyon.Ext;
+using EdityMcEditface.Mvc.Controllers;
 
-namespace EdityMcEditface.Mvc.Models.Git
+namespace EdityMcEditface.Mvc.Models
 {
     [HalModel]
+    [HalActionLink(EntryPointController.Rels.Get, typeof(EntryPointController))]
     public class History
     {
         public History()

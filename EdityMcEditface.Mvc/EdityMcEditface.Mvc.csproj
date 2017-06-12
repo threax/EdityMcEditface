@@ -25,6 +25,7 @@
     <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="1.0.4" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="2.3.3" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="3.0.3" />
+    <PackageReference Include="Threax.AspNetCore.Crud" Version="1.0.5" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">

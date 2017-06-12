@@ -1,5 +1,6 @@
 ﻿using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using EdityMcEditface.Mvc.Models;
 using EdityMcEditface.Mvc.Models.Compiler;
 using EdityMcEditface.Mvc.Models.Git;
 using EdityMcEditface.Mvc.Models.Page;

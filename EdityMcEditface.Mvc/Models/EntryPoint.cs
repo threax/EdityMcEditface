@@ -24,6 +24,8 @@ namespace EdityMcEditface.Mvc.Models
 
     [HalActionLink(PublishController.Rels.PublishStatus, typeof(PublishController))]
     [HalActionLink(PublishController.Rels.Compile, typeof(PublishController))]
+
+    [HalActionLink(HistoryController.Rels.ListHistory, typeof(HistoryController))]
     public class EntryPoint
     {
     }

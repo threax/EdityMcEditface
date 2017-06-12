@@ -8,7 +8,15 @@ import * as jsnsTools from 'threax-npm-tk/jsnstools';
 
 var filesDir = __dirname + "/..";
 
-build(filesDir + "/ClientBin/Site", filesDir + "/wwwroot", filesDir + "/node_modules");
+(async function () {
+    try {
+        await build(filesDir + "/ClientBin/Site", filesDir + "/wwwroot", filesDir + "/node_modules");
+        console.log("Build SUCCEEDED");
+    }
+    catch (err) {
+        console.log("Build FAILED " + err.message);
+    }
+})();
 
 export function build(outDir, iconOutPath, moduleDir): Promise<any> {
     var promises = [];

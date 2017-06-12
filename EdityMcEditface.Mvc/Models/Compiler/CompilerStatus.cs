@@ -10,6 +10,7 @@ namespace EdityMcEditface.Mvc.Models.Compiler
 {
     [HalModel]
     [HalSelfActionLink(PublishController.Rels.PublishStatus, typeof(PublishController))]
+    [HalActionLink(PublishController.Rels.Compile, typeof(PublishController))]
     public class CompilerStatus
     {
         public int BehindBy { get; internal set; }

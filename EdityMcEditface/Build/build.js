@@ -41,7 +41,27 @@ var less = require("threax-npm-tk/less");
 var typescript_1 = require("threax-npm-tk/typescript");
 var jsnsTools = require("threax-npm-tk/jsnstools");
 var filesDir = __dirname + "/..";
-build(filesDir + "/ClientBin/Site", filesDir + "/wwwroot", filesDir + "/node_modules");
+(function () {
+    return __awaiter(this, void 0, void 0, function () {
+        var err_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, build(filesDir + "/ClientBin/Site", filesDir + "/wwwroot", filesDir + "/node_modules")];
+                case 1:
+                    _a.sent();
+                    console.log("Build SUCCEEDED");
+                    return [3 /*break*/, 3];
+                case 2:
+                    err_1 = _a.sent();
+                    console.log("Build FAILED " + err_1.message);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+})();
 function build(outDir, iconOutPath, moduleDir) {
     var promises = [];
     promises.push(edityCoreBuild.build(filesDir + "/ClientBin/EdityMcEditface", filesDir + "/wwwroot", filesDir + "/node_modules"));

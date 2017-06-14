@@ -1,145 +1,105 @@
-﻿using EdityMcEditface.HtmlRenderer;
-using EdityMcEditface.HtmlRenderer.FileInfo;
-using EdityMcEditface.Mvc.Models.CKEditor;
-using EdityMcEditface.Mvc.Models.Page;
+﻿using EdityMcEditface.Mvc.Models.Page;
+using EdityMcEditface.Mvc.Repositories;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using Threax.AspNetCore.Halcyon.Ext;
 
 namespace EdityMcEditface.Mvc.Controllers
 {
-    /// <summary>
-    /// This controller handles properties of a page.
-    /// </summary>
-    [Route("edity/[controller]/[action]")]
-    [Authorize(Roles = Roles.EditPages)]
+    [Route("edity/[controller]")]
     [ResponseCache(NoStore = true)]
+    [ProducesHal]
+    [TypeFilter(typeof(HalModelResultFilterAttribute))]
+    [Authorize(Roles = Roles.EditPages)]
     public class PageController : Controller
     {
-        private IFileFinder fileFinder;
-        private ITargetFileInfoProvider fileInfoProvider;
-
-        public PageController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider)
+        public static class Rels
         {
-            this.fileFinder = fileFinder;
-            this.fileInfoProvider = fileInfoProvider;
+            public const String GetSettings = "GetSettings";
+            public const String UpdateSettings = "UpdateSettings";
+            public const String Save = "SavePage";
+            public const String Delete = "DeletePage";
+            public const String List = "ListPages";
+        }
+
+        private IPageRepository pageRepo;
+
+        public PageController(IPageRepository pageRepo)
+        {
+            this.pageRepo = pageRepo;
+        }
+
+        /// <summary>
+        /// Get the list of pages in draft.
+        /// </summary>
+        /// <returns>The list of drafted files.</returns>
+        [HttpGet]
+        [HalRel(Rels.List)]
+        public Task<PageInfoCollection> List([FromQuery]PageQuery query)
+        {
+            if (query.File == null)
+            {
+                //Check url query, if file was in it we are looking for the default file (index usually)
+                var hasFile = HttpContext.Request.Query.Any(i => "file".Equals(i.Key, StringComparison.OrdinalIgnoreCase));
+                if (hasFile)
+                {
+                    query.File = "";
+                }
+            }
+            return pageRepo.List(query);
         }
 
         /// <summary>
         /// Get the current page settings.
         /// </summary>
-        /// <param name="page">The name of the file to lookup.</param>
+        /// <param name="filePath">The name of the file to lookup.</param>
         /// <returns>The PageSettings for the file.</returns>
-        [HttpGet]
-        public PageSettings GetSettings([FromQuery] String page)
+        [HttpGet("Settings/{*FilePath}")]
+        [HalRel(Rels.GetSettings)]
+        public PageSettings Settings(String filePath)
         {
-            var targetFile = fileInfoProvider.GetFileInfo(page, HttpContext.Request.PathBase);
-            var definition = fileFinder.GetProjectPageDefinition(targetFile);
-            String title;
-            if(!definition.Vars.TryGetValue("title", out title))
-            {
-                title = "Untitled";
-            }
-            return new PageSettings()
-            {
-                Title = title,
-                Visible = !definition.Hidden
-            };
+            return pageRepo.GetSettings(filePath);
         }
 
         /// <summary>
         /// Update the settings for the page.
         /// </summary>
-        /// <param name="page">The file who's pages to upload.</param>
+        /// <param name="filePath">The file path to the page to change settings.</param>
         /// <param name="settings">The page settings to set.</param>
-        [HttpPut]
+        [HttpPut("Settings/{*FilePath}")]
         [AutoValidate("Cannot update page settings.")]
-        public void UpdateSettings([FromQuery] String page, [FromBody]PageSettings settings)
+        [HalRel(Rels.UpdateSettings)]
+        public void UpdateSettings(String filePath, [FromBody]PageSettings settings)
         {
-            var targetFile = fileInfoProvider.GetFileInfo(page, HttpContext.Request.PathBase);
-            var definition = fileFinder.GetProjectPageDefinition(targetFile);
-            definition.Vars["title"] = settings.Title;
-            definition.Hidden = !settings.Visible;
-            fileFinder.SavePageDefinition(definition, targetFile);
+            pageRepo.UpdateSettings(filePath, settings);
         }
 
         /// <summary>
         /// Save a page.
         /// </summary>
-        /// <param name="page">The file to save.</param>
-        /// <param name="content">The file content.</param>
-        [HttpPut]
-        public async Task Save([FromQuery] String page, IFormFile content)
+        /// <param name="filePath">The file to save.</param>
+        /// <param name="arg">The file content.</param>
+        [HttpPut("{*FilePath}")]
+        [HalRel(Rels.Save)]
+        public Task Save(String filePath, [FromForm] SavePageInput arg)
         {
-            var fileInfo = fileInfoProvider.GetFileInfo(page, HttpContext.Request.PathBase);
-            if (fileInfo.IsProjectFile)
-            {
-                throw new ValidationException("Cannot update project files with the save function.");
-            }
-            using (Stream stream = fileFinder.WriteFile(fileInfo.DerivedFileName))
-            {
-                await content.CopyToAsync(stream);
-            }
+            return pageRepo.Save(filePath, arg.Content);
         }
 
         /// <summary>
         /// Delete a page.
         /// </summary>
-        /// <param name="page">The name of the page to delete.</param>
-        [HttpDelete]
-        public void Delete([FromQuery] String page)
+        /// <param name="filePath">The name of the page to delete.</param>
+        [HttpDelete("{*FilePath}")]
+        [HalRel(Rels.Delete)]
+        public void Delete(String filePath)
         {
-            var fileInfo = fileInfoProvider.GetFileInfo(page, HttpContext.Request.PathBase);
-            if (fileInfo.IsProjectFile)
-            {
-                throw new ValidationException("Cannot delete project files with the delete function.");
-            }
-
-            fileFinder.ErasePage(fileInfo.HtmlFile);
-        }
-
-        /// <summary>
-        /// Add an asset to a page.
-        /// </summary>
-        /// <param name="page">The page to add the asset to.</param>
-        /// <param name="upload">The file content.</param>
-        /// <returns>The ImageUplaodResponse with the result.</returns>
-        [HttpPost]
-        public async Task<ImageUploadResponse> AddAsset([FromQuery] String page, IFormFile upload)
-        {
-            ImageUploadResponse imageResponse = new ImageUploadResponse();
-
-            try
-            {
-                var fileInfo = fileInfoProvider.GetFileInfo(page, HttpContext.Request.PathBase);
-                string autoFileFolder = "AutoUploads";
-                var autoFileFile = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
-                var autoPath = Path.Combine(autoFileFolder, autoFileFile);
-                using (Stream stream = fileFinder.WriteFile(autoPath))
-                {
-                    await upload.CopyToAsync(stream);
-                }
-
-                imageResponse.Uploaded = 1;
-                imageResponse.FileName = autoFileFile;
-                imageResponse.Url = HttpContext.Request.PathBase + autoPath.EnsureStartingPathSlash();
-            }
-            catch (Exception ex)
-            {
-                imageResponse.Message = ex.Message;
-                imageResponse.Uploaded = 0;
-            }
-
-            return imageResponse;
+            this.pageRepo.Delete(filePath);
         }
     }
 }

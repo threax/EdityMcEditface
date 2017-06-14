@@ -69,7 +69,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
                         File.Delete(cssFile);
                     }
 
-                    var settingsFile = getPageDefinitionFile(file);
+                    var settingsFile = NormalizePath(getPageDefinitionFile(file));
                     if (File.Exists(settingsFile))
                     {
                         File.Delete(settingsFile);

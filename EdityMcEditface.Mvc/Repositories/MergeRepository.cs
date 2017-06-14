@@ -59,7 +59,8 @@ namespace EdityMcEditface.Mvc.Repositories
                 await content.CopyToAsync(stream);
             }
 
-            repo.Index.Add(file);
+            //Staging clears the conflict status
+            Commands.Stage(repo, file);
         }
     }
 }

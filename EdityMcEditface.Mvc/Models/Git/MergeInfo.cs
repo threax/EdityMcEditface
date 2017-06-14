@@ -1,13 +1,19 @@
-﻿using System;
+﻿using EdityMcEditface.Mvc.Controllers;
+using Halcyon.HAL.Attributes;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Threax.AspNetCore.Halcyon.Ext;
 
 namespace EdityMcEditface.Mvc.Models.Git
 {
-    public class MergeInfo
+    [HalModel]
+    [HalSelfActionLink(MergeController.Rels.GetMergeInfo, typeof(MergeController))]
+    [HalActionLink(MergeController.Rels.Resolve, typeof(MergeController))]
+    public class MergeInfo : IQueryStringProvider
     {
         [Flags]
         enum AppendMode
@@ -22,8 +28,10 @@ namespace EdityMcEditface.Mvc.Models.Git
         private AppendMode topHalfMode = AppendMode.Mine | AppendMode.Merged;
         private AppendMode bottomHalfMode = AppendMode.Theirs;
 
-        public MergeInfo(TextReader content)
+        public MergeInfo(TextReader content, String file = null)
         {
+            this.File = file;
+
             AppendMode appendMode = AppendMode.All;
             String line;
             StringBuilder merged = new StringBuilder();
@@ -72,5 +80,15 @@ namespace EdityMcEditface.Mvc.Models.Git
         public String Theirs { get; set; }
 
         public String Mine { get; set; }
+
+        public String File { get; set; }
+
+        public void AddQuery(string rel, QueryStringBuilder queryString)
+        {
+            if(File != null && rel == HalSelfActionLinkAttribute.SelfRelName)
+            {
+                queryString.AppendItem("file", File);
+            }
+        }
     }
 }

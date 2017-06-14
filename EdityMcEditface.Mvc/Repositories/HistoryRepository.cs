@@ -39,39 +39,5 @@ namespace EdityMcEditface.Mvc.Repositories
 
             return Task.FromResult(new HistoryCollection(query, total, items));
         }
-
-        /// <summary>
-        /// Get a particluar file version.
-        /// </summary>
-        /// <param name="sha">The sha to lookup.</param>
-        /// <param name="file">The file.</param>
-        /// <returns>The file for the given sha version.</returns>
-        public Stream FileVersion(String sha, String file)
-        {
-            var commit = repo.Lookup<Commit>(sha);
-            var treeEntry = commit[file];
-            var blob = treeEntry.Target as Blob;
-            if (blob == null)
-            {
-                throw new FileNotFoundException($"Could not find {file} in version {sha}.");
-            }
-            return blob.GetContentStream();
-
-            //if (!IsWritablePath(file))
-            //{
-            //    throw new ErrorResultException($"Cannot access file '{file}'");
-            //}
-
-            //var contentTypeProvider = new FileExtensionContentTypeProvider();
-            //String contentType;
-            //if (contentTypeProvider.TryGetContentType(file, out contentType))
-            //{
-            //  return File(blob.GetContentStream(), contentType);
-            //}
-            //else
-            //{
-            //    throw new NotSupportedException($"Files with extension {Path.GetExtension(file)} not supported.");
-            //}
-        }
     }
 }

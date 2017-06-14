@@ -26,6 +26,8 @@ namespace EdityMcEditface.Mvc.Models
     [HalActionLink(PublishController.Rels.Compile, typeof(PublishController))]
 
     [HalActionLink(HistoryController.Rels.ListHistory, typeof(HistoryController))]
+
+    [HalActionLink(MergeController.Rels.GetMergeInfo, typeof(MergeController))]
     public class EntryPoint
     {
     }

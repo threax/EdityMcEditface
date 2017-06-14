@@ -120,6 +120,7 @@ namespace EdityMcEditface.Mvc
             services.TryAddScoped<IDraftRepository, DraftRepository>();
             services.TryAddScoped<IPublishRepository, PublishRepository>();
             services.TryAddScoped<IHistoryRepository, HistoryRepository>();
+            services.TryAddScoped<IMergeRepository, MergeRepository>();
 
             var baseUrl = HalcyonConventionOptions.HostVariable;
             if(editySettings.BaseUrl != null)

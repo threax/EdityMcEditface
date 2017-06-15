@@ -1,13 +1,20 @@
-﻿using System;
+﻿using EdityMcEditface.Mvc.Controllers;
+using Halcyon.HAL.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Threax.AspNetCore.Halcyon.Ext;
 
 namespace EdityMcEditface.Mvc.Models.Upload
 {
     /// <summary>
     /// A list of files in a directory.
     /// </summary>
+    [HalModel]
+    [HalActionLink(UploadController.Rels.ListUploadedFiles, typeof(UploadController))]
+    [HalActionLink(UploadController.Rels.UploadFile, typeof(UploadController))]
+    [HalActionLink(UploadController.Rels.DeleteFile, typeof(UploadController))]
     public class FileList
     {
         /// <summary>

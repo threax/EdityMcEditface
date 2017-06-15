@@ -444,17 +444,25 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         {
             var fullPath = NormalizePath(path);
             var removeLength = projectPath.Length;
-            var query = Directory.EnumerateFiles(fullPath, searchPattern, searchOption).Where(physicalPath =>
+            IEnumerable<String> query;
+            if (Directory.Exists(fullPath))
             {
-                var relativePath = physicalPath.Substring(removeLength);
-                if (seenPaths.Contains(relativePath) || !permissions.TreatAsContent(this, relativePath, physicalPath))
+                query = Directory.EnumerateFiles(fullPath, searchPattern, searchOption).Where(physicalPath =>
                 {
-                    return false;
-                }
-                seenPaths.Add(relativePath);
-                return true;
-            })
-            .Select(s => s.Substring(removeLength));
+                    var relativePath = physicalPath.Substring(removeLength);
+                    if (seenPaths.Contains(relativePath) || !permissions.TreatAsContent(this, relativePath, physicalPath))
+                    {
+                        return false;
+                    }
+                    seenPaths.Add(relativePath);
+                    return true;
+                })
+                .Select(s => s.Substring(removeLength));
+            }
+            else
+            {
+                query = new String[0];
+            }
 
             if (next != null)
             {
@@ -474,17 +482,25 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         {
             var fullPath = NormalizePath(path);
             var removeLength = projectPath.Length;
-            var query = Directory.EnumerateDirectories(fullPath, searchPattern, searchOption).Where(physicalPath =>
+            IEnumerable<String> query;
+            if (Directory.Exists(fullPath))
             {
-                var relativePath = physicalPath.Substring(removeLength);
-                if (seenPaths.Contains(relativePath) || !permissions.TreatAsContent(this, relativePath, physicalPath))
+                query = Directory.EnumerateDirectories(fullPath, searchPattern, searchOption).Where(physicalPath =>
                 {
-                    return false;
-                }
-                seenPaths.Add(relativePath);
-                return true;
-            })
-            .Select(s => s.Substring(removeLength));
+                    var relativePath = physicalPath.Substring(removeLength);
+                    if (seenPaths.Contains(relativePath) || !permissions.TreatAsContent(this, relativePath, physicalPath))
+                    {
+                        return false;
+                    }
+                    seenPaths.Add(relativePath);
+                    return true;
+                })
+                .Select(s => s.Substring(removeLength));
+            }
+            else
+            {
+                query = new String[0];
+            }
 
             if (next != null)
             {

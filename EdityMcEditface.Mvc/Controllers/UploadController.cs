@@ -14,8 +14,6 @@ using EdityMcEditface.Mvc.Models.Upload;
 using EdityMcEditface.HtmlRenderer.FileInfo;
 using Threax.AspNetCore.Halcyon.Ext;
 
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace EdityMcEditface.Mvc.Controllers
 {
     /// <summary>
@@ -30,7 +28,9 @@ namespace EdityMcEditface.Mvc.Controllers
     {
         public static class Rels
         {
-            public const String Upload = "Upload";
+            public const String UploadFile = "UploadFile";
+            public const String ListUploadedFiles = "ListUploadedFiles";
+            public const String DeleteFile = "DeleteFile";
         }
 
         private IFileFinder fileFinder;
@@ -50,11 +50,14 @@ namespace EdityMcEditface.Mvc.Controllers
         /// <summary>
         /// List the files in dir.
         /// </summary>
-        /// <param name="dir">The directory to list the files under.</param>
+        /// <param name="query">The query with the directory to list the files under.</param>
         /// <returns>A list of files under dir.</returns>
         [HttpGet]
-        public FileList ListFiles([FromQuery] String dir)
+        [HalRel(Rels.ListUploadedFiles)]
+        public FileList List([FromQuery] ListFileQuery query)
         {
+            var dir = query.Dir;
+
             if(dir == null)
             {
                 dir = "";
@@ -76,7 +79,7 @@ namespace EdityMcEditface.Mvc.Controllers
         /// <param name="input">The upload input data.</param>
         /// <returns></returns>
         [HttpPost]
-        [HalRel(Rels.Upload)]
+        [HalRel(Rels.UploadFile)]
         public async Task Upload([FromForm] UploadInput input)
         {
             var fileInfo = fileInfoProvider.GetFileInfo(input.File, HttpContext.Request.PathBase);
@@ -89,12 +92,13 @@ namespace EdityMcEditface.Mvc.Controllers
         /// <summary>
         /// Delete a file.
         /// </summary>
-        /// <param name="file">The file to delete.</param>
+        /// <param name="query">The query.</param>
         /// <returns></returns>
         [HttpDelete]
-        public void Delete([FromQuery] String file)
+        [HalRel(Rels.DeleteFile)]
+        public void Delete([FromQuery] DeleteFileQuery query)
         {
-            var fileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
+            var fileInfo = fileInfoProvider.GetFileInfo(query.File, HttpContext.Request.PathBase);
             if (fileInfo.PointsToHtmlFile)
             {
                 fileFinder.ErasePage(fileInfo.HtmlFile);

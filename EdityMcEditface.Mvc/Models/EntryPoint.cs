@@ -33,7 +33,9 @@ namespace EdityMcEditface.Mvc.Models
 
     [HalActionLink(TemplateController.Rels.List, typeof(TemplateController))]
 
-    [HalActionLink(UploadController.Rels.Upload, typeof(UploadController))]
+    [HalActionLink(UploadController.Rels.UploadFile, typeof(UploadController))]
+    [HalActionLink(UploadController.Rels.DeleteFile, typeof(UploadController))]
+    [HalActionLink(UploadController.Rels.ListUploadedFiles, typeof(UploadController))]
     public class EntryPoint
     {
     }

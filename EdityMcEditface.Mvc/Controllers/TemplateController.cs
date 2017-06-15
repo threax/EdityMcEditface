@@ -1,4 +1,7 @@
 ﻿using EdityMcEditface.HtmlRenderer;
+using EdityMcEditface.Mvc.Models.Page;
+using EdityMcEditface.Mvc.Models.Templates;
+using EdityMcEditface.Mvc.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -8,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Threax.AspNetCore.Halcyon.Ext;
 
 namespace EdityMcEditface.Mvc.Controllers
 {
@@ -15,19 +19,27 @@ namespace EdityMcEditface.Mvc.Controllers
     /// This api controls templates.
     /// </summary>
     [Authorize(Roles = Roles.EditPages)]
-    [Route("edity/[controller]/[action]")]
+    [Route("edity/[controller]")]
     [ResponseCache(NoStore = true)]
+    [ProducesHal]
+    [TypeFilter(typeof(HalModelResultFilterAttribute))]
     public class TemplateController : Controller
     {
-        private IFileFinder fileFinder;
+        private ITemplateRepository templateRepo;
+
+        public static class Rels
+        {
+            public const String List = "ListTemplates";
+            public const String GetContent = "GetContent";
+        }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="fileFinder"></param>
-        public TemplateController(IFileFinder fileFinder)
+        /// <param name="templateRepo"></param>
+        public TemplateController(ITemplateRepository templateRepo)
         {
-            this.fileFinder = fileFinder;
+            this.templateRepo = templateRepo;
         }
 
         /// <summary>
@@ -35,32 +47,34 @@ namespace EdityMcEditface.Mvc.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IEnumerable<Template> ListAll()
+        [HalRel(Rels.List)]
+        public TemplateCollection ListAll()
         {
-            return fileFinder.Templates;
-
+            return templateRepo.ListAll();
         }
 
         /// <summary>
         /// Get a single template's content.
         /// </summary>
-        /// <param name="file"></param>
+        /// <param name="path"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("Content/{*Path}")]
         [Produces("text/html")]
-        public FileStreamResult GetContent([FromQuery] String file)
+        [HalRel(Rels.GetContent)]
+        public FileStreamResult GetContent(String path)
         {
-            var template = fileFinder.Templates.First(i => i.Path == file);
-            return returnFile(Path.ChangeExtension(template.Path, "html"));
+            var template = templateRepo.GetTemplate(path);
+            var htmlFile = Path.ChangeExtension(template.Path, "html");
+            return returnFile(htmlFile, templateRepo.GetContent(template.Path)); //This stream will be closed by the result, do not need to using it
         }
 
-        private FileStreamResult returnFile(String file)
+        private FileStreamResult returnFile(String file, Stream stream)
         {
             var content = new FileExtensionContentTypeProvider();
             String contentType;
             if (content.TryGetContentType(file, out contentType))
             {
-                return new FileStreamResult(fileFinder.ReadFile(file), contentType);
+                return new FileStreamResult(stream, contentType);
             }
             throw new FileNotFoundException($"Cannot find file type for '{file}'", file);
         }

@@ -1,4 +1,5 @@
-﻿using EdityMcEditface.BuildTasks;
+﻿using AutoMapper;
+using EdityMcEditface.BuildTasks;
 using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.HtmlRenderer.Compiler;
 using EdityMcEditface.HtmlRenderer.FileInfo;
@@ -10,6 +11,7 @@ using EdityMcEditface.Mvc.Controllers;
 using EdityMcEditface.Mvc.Models.Branch;
 using EdityMcEditface.Mvc.Models.Compiler;
 using EdityMcEditface.Mvc.Models.Page;
+using EdityMcEditface.Mvc.Models.Templates;
 using EdityMcEditface.Mvc.Repositories;
 using EdityMcEditface.Mvc.Services;
 using LibGit2Sharp;
@@ -105,6 +107,24 @@ namespace EdityMcEditface.Mvc
         }
 
         /// <summary>
+        /// Setup mappings, this is separate so it can be called by a unit test without
+        /// spinning up the whole system. No need to call manually unless needed in a unit test.
+        /// </summary>
+        /// <returns></returns>
+        private static MapperConfiguration SetupMappings()
+        {
+            //Setup mappings between your objects here
+            //Check out the AutoMapper docs for more info
+            //https://github.com/AutoMapper/AutoMapper/wiki
+            var mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Template, TemplateView>();
+            });
+
+            return mapperConfig;
+        }
+
+        /// <summary>
         /// Add the main edity services. If you call this and can use the default IFileFinder, you don't need to
         /// do anything else, if you want to customize the file finder add it before calling this function.
         /// </summary>
@@ -114,6 +134,11 @@ namespace EdityMcEditface.Mvc
         /// <returns>The service collection.</returns>
         public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration)
         {
+            //Setup the mapper
+            var mapperConfig = SetupMappings();
+            services.AddScoped<IMapper>(i => mapperConfig.CreateMapper());
+
+            //Setup repos
             services.TryAddScoped<ICommitRepository, CommitRepository>();
             services.TryAddScoped<ISyncRepository, SyncRepository>();
             services.TryAddScoped<IPathBaseInjector, PathBaseInjector>();
@@ -122,6 +147,7 @@ namespace EdityMcEditface.Mvc
             services.TryAddScoped<IHistoryRepository, HistoryRepository>();
             services.TryAddScoped<IMergeRepository, MergeRepository>();
             services.TryAddScoped<IPageRepository, PageRepository>();
+            services.TryAddScoped<ITemplateRepository, TemplateRepository>();
 
             var baseUrl = HalcyonConventionOptions.HostVariable;
             if(editySettings.BaseUrl != null)

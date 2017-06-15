@@ -30,6 +30,8 @@ namespace EdityMcEditface.Mvc.Models
     [HalActionLink(MergeController.Rels.GetMergeInfo, typeof(MergeController))]
 
     [HalActionLink(PageController.Rels.List, typeof(PageController))]
+
+    [HalActionLink(TemplateController.Rels.List, typeof(TemplateController))]
     public class EntryPoint
     {
     }

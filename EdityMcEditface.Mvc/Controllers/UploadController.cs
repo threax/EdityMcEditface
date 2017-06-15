@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using EdityMcEditface.Mvc.Models.Upload;
 using EdityMcEditface.HtmlRenderer.FileInfo;
+using Threax.AspNetCore.Halcyon.Ext;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,8 +24,15 @@ namespace EdityMcEditface.Mvc.Controllers
     [Authorize(Roles = Roles.UploadAnything)]
     [Route("edity/[controller]/[action]")]
     [ResponseCache(NoStore = true)]
+    [ProducesHal]
+    [TypeFilter(typeof(HalModelResultFilterAttribute))]
     public class UploadController : Controller
     {
+        public static class Rels
+        {
+            public const String Upload = "Upload";
+        }
+
         private IFileFinder fileFinder;
         private ITargetFileInfoProvider fileInfoProvider;
 
@@ -65,16 +73,16 @@ namespace EdityMcEditface.Mvc.Controllers
         /// <summary>
         /// Uplaod a new file.
         /// </summary>
-        /// <param name="file">The file name of the uploaded file.</param>
-        /// <param name="content">The file content.</param>
+        /// <param name="input">The upload input data.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task Upload([FromQuery] String file, IFormFile content)
+        [HalRel(Rels.Upload)]
+        public async Task Upload([FromForm] UploadInput input)
         {
-            var fileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
+            var fileInfo = fileInfoProvider.GetFileInfo(input.File, HttpContext.Request.PathBase);
             using (Stream stream = fileFinder.WriteFile(fileInfo.DerivedFileName))
             {
-                await content.CopyToAsync(stream);
+                await input.Content.CopyToAsync(stream);
             }
         }
 

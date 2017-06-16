@@ -42,20 +42,36 @@ namespace EdityMcEditface.Mvc.Repositories
             }
             else
             {
-                var draftQuery = fileFinder.GetAllDraftables();
-                var total = draftQuery.Count();
-                var draftConvert = draftQuery
-                    .Skip(query.SkipTo(total))
-                    .Take(query.Limit)
-                    .Select(i => fileFinder.GetDraftStatus(i))
-                    .Select(i =>
-                    {
-                        var fileInfo = fileInfoProvider.GetFileInfo(i.File, pathBase);
-                        var pageSettings = fileFinder.GetProjectPageDefinition(fileInfo);
-                        return new Draft(i, pageSettings.Title);
-                    });
+                IEnumerable<DraftInfo> draftQuery;
+                int total = 0;
+                if (query.ShowChangedOnly)
+                {
+                    draftQuery = fileFinder.GetAllDraftables()
+                        .Select(i => fileFinder.GetDraftStatus(i))
+                        .Where(i => i.Status != DraftStatus.UpToDate)
+                        .ToList(); //Cache this in a list, it is slow
+                    total = draftQuery.Count();
+                    draftQuery = draftQuery
+                        .Skip(query.SkipTo(total))
+                        .Take(query.Limit);
+                }
+                else
+                {
+                    var draftables = fileFinder.GetAllDraftables();
+                    total = draftables.Count();
+                    draftQuery = draftables
+                        .Skip(query.SkipTo(total))
+                        .Take(query.Limit)
+                        .Select(i => fileFinder.GetDraftStatus(i));
+                }
 
-                collection = new DraftCollection(query, total, draftConvert);
+                var convert = draftQuery.Select(i =>
+                 {
+                     var fileInfo = fileInfoProvider.GetFileInfo(i.File, pathBase);
+                     var pageSettings = fileFinder.GetProjectPageDefinition(fileInfo);
+                     return new Draft(i, pageSettings.Title);
+                 });
+                collection = new DraftCollection(query, total, convert);
             }
 
             return collection;

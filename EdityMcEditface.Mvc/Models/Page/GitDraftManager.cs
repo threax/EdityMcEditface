@@ -87,13 +87,14 @@ namespace EdityMcEditface.Mvc.Models.Page
             //If the file has a sha, 
             if(gitDraftInfo.Sha != null)
             {
-                using (var repo = new Repository(Repository.Discover(physicalFile)))
+                var repoPath = Path.GetFullPath(Repository.Discover(physicalFile) + "/..");
+                using (var repo = new Repository(repoPath))
                 {
                     //This is close, lookup the draft commit for the settings, css and js files also
                     var draftCommit = repo.Lookup<Commit>(gitDraftInfo.Sha);
                     if (draftCommit != null)
                     {
-                        var latestCommit = repo.Commits.QueryBy(file.TrimStartingPathChars()).FirstOrDefault();
+                        var latestCommit = repo.Commits.QueryBy((physicalFile.Substring(repoPath.Length)).TrimStartingPathChars()).FirstOrDefault();
                         if (latestCommit != null)
                         {
                             foreach (var contentFile in fileFinder.GetPageContentFiles(file))

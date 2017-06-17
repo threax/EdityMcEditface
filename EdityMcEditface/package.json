@@ -6,12 +6,15 @@
     "@types/node": "^6.0.69"
   },
   "dependencies": {
-    "editymceditface.client": "8.0.0"
+    "editymceditface.client": "8.0.1"
   },
   "scripts": {
     "build": "node Build/build.js",
     "yarn-install": "yarn install --flat",
     "link-tk": "yarn link threax-npm-tk",
     "clean": "powershell -Command Remove-Item 'ClientBin\\*' -Recurse -Force"
+  },
+  "resolutions": {
+    "htmlrapier": "7.0.3"
   }
 }

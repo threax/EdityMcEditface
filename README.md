@@ -13,7 +13,7 @@ You can also press b in the console window.
  1. npm install -g yarn
  1. yarn global add typescript
  1. yarn global add threax-npm-tk
- 1. %localappdata%Yarn\bin on path (expand it with explorer first and paste in the full path)
+ 1. %localappdata%\Yarn\bin on path (expand it with explorer first and paste in the full path)
  1. cd %localappdata%\Yarn\config\global\node_modules\threax-npm-tk
  1. yarn link
  1. then you can yarn link threax-npm-tk from your projects

@@ -16,6 +16,7 @@ namespace EdityMcEditface.HtmlRenderer
         private PageDefinition pageDefinition = new PageDefinition();
         private String pathBase;
         private IFileFinder fileFinder;
+        private String contentFileQuery = "";
 
         public TemplateEnvironment(String docLink, IFileFinder fileFinder)
         {
@@ -61,8 +62,8 @@ namespace EdityMcEditface.HtmlRenderer
             vars["pathBase"] = pathBase; //This ensure we use what was in the edity settings, so pages can't overwrite this.
 
             List<LinkedContentEntry> links = new List<LinkedContentEntry>(linkedContent.buildResourceList(findLinkedContent(pages.Select(p => p.PageDefinition))));
-            vars["css"] = linkedContent.renderCss(links, pages.Where(p => p.PageCssPath != null).Select(p => "~" + p.PageCssPath));
-            vars["javascript"] = linkedContent.renderJavascript(links, pages.Where(p => p.PageScriptPath != null).Select(p => new JavascriptEntry() { File = "~" + p.PageScriptPath }));
+            vars["css"] = linkedContent.renderCss(links, pages.Where(p => p.PageCssPath != null).Select(p => "~" + p.PageCssPath), contentFileQuery);
+            vars["javascript"] = linkedContent.renderJavascript(links, pages.Where(p => p.PageScriptPath != null).Select(p => new JavascriptEntry() { File = "~" + p.PageScriptPath }), contentFileQuery);
         }
 
         public IEnumerable<String> findLinkedContent(IEnumerable<PageDefinition> pages)

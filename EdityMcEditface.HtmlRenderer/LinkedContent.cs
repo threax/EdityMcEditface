@@ -69,53 +69,57 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
-        private const String cssHtml = "<link rel=\"stylesheet\" href=\"{0}\" type=\"text/css\" />";
+        private const String cssHtml = "<link rel=\"stylesheet\" href=\"{{0}}{0}\" type=\"text/css\" />";
 
-        public String renderCss(IEnumerable<LinkedContentEntry> entries, IEnumerable<String> additionalFiles)
+        public String renderCss(IEnumerable<LinkedContentEntry> entries, IEnumerable<String> additionalFiles, String queryString)
         {
+            var queriedCssHtml = String.Format(cssHtml, queryString);
+
             StringBuilder sb = new StringBuilder();
             foreach (var entry in entries)
             {
                 foreach (var css in entry.Css)
                 {
-                    sb.AppendFormat(cssHtml, css);
+                    sb.AppendFormat(queriedCssHtml, css);
                     sb.AppendLine();
                 }
             }
             foreach(var file in additionalFiles)
             {
-                sb.AppendFormat(cssHtml, file);
+                sb.AppendFormat(queriedCssHtml, file);
                 sb.AppendLine();
             }
             return sb.ToString();
         }
 
-        private const String javascriptHtml = "<script type=\"text/javascript\" src=\"{0}\"></script>";
-        private const String javascriptAsyncHtml = "<script type=\"text/javascript\" src=\"{0}\" async></script>";
+        private const String javascriptHtml = "<script type=\"text/javascript\" src=\"{{0}}{0}\"></script>";
+        private const String javascriptAsyncHtml = "<script type=\"text/javascript\" src=\"{{0}}{0}\" async></script>";
 
-        public String renderJavascript(IEnumerable<LinkedContentEntry> entries, IEnumerable<JavascriptEntry> additionalFiles)
+        public String renderJavascript(IEnumerable<LinkedContentEntry> entries, IEnumerable<JavascriptEntry> additionalFiles, String queryString)
         {
             StringBuilder sb = new StringBuilder();
             String currentFormat;
+            String localHtml = String.Format(javascriptHtml, queryString);
+            String localAsyncHtml = String.Format(javascriptAsyncHtml, queryString);
             foreach (var entry in entries)
             {
                 foreach (var js in entry.Js)
                 {
-                    currentFormat = getTag(js);
+                    currentFormat = getTag(js, localHtml, localAsyncHtml);
                     sb.AppendFormat(currentFormat, js.File);
                     sb.AppendLine();
                 }
             }
             foreach(var js in additionalFiles)
             {
-                currentFormat = getTag(js);
+                currentFormat = getTag(js, localHtml, localAsyncHtml);
                 sb.AppendFormat(currentFormat, js.File);
                 sb.AppendLine();
             }
             return sb.ToString();
         }
 
-        private static string getTag(JavascriptEntry js)
+        private static string getTag(JavascriptEntry js, String javascriptHtml, String javascriptAsyncHtml)
         {
             string currentFormat;
             if (js.Async)

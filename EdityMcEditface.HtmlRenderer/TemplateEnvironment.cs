@@ -16,11 +16,12 @@ namespace EdityMcEditface.HtmlRenderer
         private PageDefinition pageDefinition = new PageDefinition();
         private String pathBase;
         private IFileFinder fileFinder;
-        private String contentFileQuery = "";
+        private String version; //The version of the website, helps generate query strings for files to get around cache issues
 
-        public TemplateEnvironment(String docLink, IFileFinder fileFinder)
+        public TemplateEnvironment(String docLink, IFileFinder fileFinder, String version = null)
         {
             this.project = fileFinder.Project;
+            this.version = version;
 
             if (!project.Vars.TryGetValue("pathBase", out this.pathBase))
             {
@@ -62,8 +63,8 @@ namespace EdityMcEditface.HtmlRenderer
             vars["pathBase"] = pathBase; //This ensure we use what was in the edity settings, so pages can't overwrite this.
 
             List<LinkedContentEntry> links = new List<LinkedContentEntry>(linkedContent.buildResourceList(findLinkedContent(pages.Select(p => p.PageDefinition))));
-            vars["css"] = linkedContent.renderCss(links, pages.Where(p => p.PageCssPath != null).Select(p => "~" + p.PageCssPath), contentFileQuery);
-            vars["javascript"] = linkedContent.renderJavascript(links, pages.Where(p => p.PageScriptPath != null).Select(p => new JavascriptEntry() { File = "~" + p.PageScriptPath }), contentFileQuery);
+            vars["css"] = linkedContent.renderCss(links, pages.Where(p => p.PageCssPath != null).Select(p => "~" + p.PageCssPath), version);
+            vars["javascript"] = linkedContent.renderJavascript(links, pages.Where(p => p.PageScriptPath != null).Select(p => new JavascriptEntry() { File = "~" + p.PageScriptPath }), version);
         }
 
         public IEnumerable<String> findLinkedContent(IEnumerable<PageDefinition> pages)

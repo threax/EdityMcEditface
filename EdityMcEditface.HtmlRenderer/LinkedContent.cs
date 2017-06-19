@@ -9,6 +9,8 @@ namespace EdityMcEditface.HtmlRenderer
 {
     public class LinkedContent
     {
+        private const String VersionQuery = "ver";
+
         private Dictionary<String, LinkedContentEntry> entries = new Dictionary<String, LinkedContentEntry>();
 
         public LinkedContent()
@@ -69,57 +71,71 @@ namespace EdityMcEditface.HtmlRenderer
             }
         }
 
-        private const String cssHtml = "<link rel=\"stylesheet\" href=\"{{0}}{0}\" type=\"text/css\" />";
+        private const String cssHtml = "<link rel=\"stylesheet\" href=\"{0}\" type=\"text/css\" />";
 
-        public String renderCss(IEnumerable<LinkedContentEntry> entries, IEnumerable<String> additionalFiles, String queryString)
+        public String renderCss(IEnumerable<LinkedContentEntry> entries, IEnumerable<String> additionalFiles, String version)
         {
-            var queriedCssHtml = String.Format(cssHtml, queryString);
-
             StringBuilder sb = new StringBuilder();
             foreach (var entry in entries)
             {
                 foreach (var css in entry.Css)
                 {
-                    sb.AppendFormat(queriedCssHtml, css);
+                    sb.AppendFormat(cssHtml, GetVersionedPath(version, css));
                     sb.AppendLine();
                 }
             }
             foreach(var file in additionalFiles)
             {
-                sb.AppendFormat(queriedCssHtml, file);
+                sb.AppendFormat(cssHtml, GetVersionedPath(version, file));
                 sb.AppendLine();
             }
             return sb.ToString();
         }
 
-        private const String javascriptHtml = "<script type=\"text/javascript\" src=\"{{0}}{0}\"></script>";
-        private const String javascriptAsyncHtml = "<script type=\"text/javascript\" src=\"{{0}}{0}\" async></script>";
+        private const String javascriptHtml = "<script type=\"text/javascript\" src=\"{0}\"></script>";
+        private const String javascriptAsyncHtml = "<script type=\"text/javascript\" src=\"{0}\" async></script>";
 
-        public String renderJavascript(IEnumerable<LinkedContentEntry> entries, IEnumerable<JavascriptEntry> additionalFiles, String queryString)
+        public String renderJavascript(IEnumerable<LinkedContentEntry> entries, IEnumerable<JavascriptEntry> additionalFiles, String version)
         {
             StringBuilder sb = new StringBuilder();
             String currentFormat;
-            String localHtml = String.Format(javascriptHtml, queryString);
-            String localAsyncHtml = String.Format(javascriptAsyncHtml, queryString);
             foreach (var entry in entries)
             {
                 foreach (var js in entry.Js)
                 {
-                    currentFormat = getTag(js, localHtml, localAsyncHtml);
-                    sb.AppendFormat(currentFormat, js.File);
+                    currentFormat = getTag(js);
+                    sb.AppendFormat(currentFormat, GetVersionedPath(version, js.File));
                     sb.AppendLine();
                 }
             }
             foreach(var js in additionalFiles)
             {
-                currentFormat = getTag(js, localHtml, localAsyncHtml);
-                sb.AppendFormat(currentFormat, js.File);
+                currentFormat = getTag(js);
+                sb.AppendFormat(currentFormat, GetVersionedPath(version, js.File));
                 sb.AppendLine();
             }
             return sb.ToString();
         }
 
-        private static string getTag(JavascriptEntry js, String javascriptHtml, String javascriptAsyncHtml)
+        private static String GetVersionedPath(string version, string filePath)
+        {
+            var realFilePath = filePath;
+            if (!String.IsNullOrEmpty(version))
+            {
+                var queryIndex = filePath.IndexOf('?');
+                if (queryIndex != -1)
+                {
+                    realFilePath = filePath.Insert(queryIndex + 1, $"{VersionQuery}={version}&");
+                }
+                else
+                {
+                    realFilePath = filePath + $"?{VersionQuery}={version}";
+                }
+            }
+            return realFilePath;
+        }
+
+        private static string getTag(JavascriptEntry js)
         {
             string currentFormat;
             if (js.Async)

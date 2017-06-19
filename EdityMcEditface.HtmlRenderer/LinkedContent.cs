@@ -9,7 +9,7 @@ namespace EdityMcEditface.HtmlRenderer
 {
     public class LinkedContent
     {
-        private const String VersionQuery = "ver";
+        private const String VersionQuery = "linkver";
 
         private Dictionary<String, LinkedContentEntry> entries = new Dictionary<String, LinkedContentEntry>();
 

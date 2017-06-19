@@ -15,6 +15,7 @@ namespace EdityMcEditface.HtmlRenderer.FileInfo
         private String htmlFile;
         private String directory;
         private bool isDirectory = false;
+        private String pathBase;
 
         /// <summary>
         /// Use the specified file as the actual page. This must be called before
@@ -26,6 +27,18 @@ namespace EdityMcEditface.HtmlRenderer.FileInfo
         public DefaultTargetFileInfo(String file, String pathBase, String defaultFileName)
         {
             this.defaultFileName = defaultFileName;
+            this.pathBase = pathBase;
+
+            //Ensure leading slash
+            if(file != null)
+            {
+                file = file.EnsureStartingPathSlash();
+            }
+
+            if(pathBase != null)
+            {
+                pathBase.EnsureStartingPathSlash();
+            }
 
             //Remove path base
             file = RemovePathBase(file, pathBase);
@@ -140,7 +153,8 @@ namespace EdityMcEditface.HtmlRenderer.FileInfo
         }
 
         /// <summary>
-        /// Redirect to the file without an html extension
+        /// Redirect to the file without an html extension, unlike most methods here
+        /// this will also include the original path base.
         /// </summary>
         public String NoHtmlRedirect
         {
@@ -148,15 +162,16 @@ namespace EdityMcEditface.HtmlRenderer.FileInfo
             {
                 var path = Path.GetDirectoryName(originalFileName);
                 var file = Path.GetFileNameWithoutExtension(originalFileName);
-                if (String.IsNullOrEmpty(path))
+                var pathBase = this.pathBase;
+                if(String.IsNullOrEmpty(pathBase))
                 {
-                    path = "/";
+                    pathBase = "/";
                 }
                 if (defaultFileName.Equals(file, StringComparison.OrdinalIgnoreCase))
                 {
                     file = "";
                 }
-                return  Path.Combine("/", path, file);
+                return  Path.Combine(pathBase, path, file);
             }
         }
 

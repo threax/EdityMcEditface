@@ -9,6 +9,9 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
 {
     public class FixRelativeUrls : ServerSideTransform
     {
+        private const String TestHost = "http://www.test.com";
+        private static readonly Uri TestHostUri = new Uri(TestHost);
+
         private String baseUrl;
         private String fullBaseUrl; //Will be filesystem path, but only for comparison
 
@@ -34,12 +37,18 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
                 {
                     var path = node.GetAttributeValue(attr, "");
                     bool singleSlash = path.Length > 0 && (path[0] == '\\' || path[0] == '/');
-                    bool doubleSlash = path.Length > 1 && ((path[0] == '\\' && path[1] == '\\') || (path[0] == '/' && path[1] == '/'));
-                    var fullPath = Path.GetFullPath(path);
-                    bool startsWithBasePath = fullPath.StartsWith(fullBaseUrl, StringComparison.OrdinalIgnoreCase);
-                    if (singleSlash && !doubleSlash && !startsWithBasePath)
+                    if (singleSlash)
                     {
-                        node.SetAttributeValue(attr, baseUrl + path);
+                        bool doubleSlash = path.Length > 1 && ((path[0] == '\\' && path[1] == '\\') || (path[0] == '/' && path[1] == '/'));
+                        if (!doubleSlash)
+                        {
+                            var uri = new Uri(TestHostUri, path);
+                            var fullPath = Path.GetFullPath(uri.AbsolutePath);
+                            if (!fullPath.StartsWith(fullBaseUrl, StringComparison.OrdinalIgnoreCase))
+                            {
+                                node.SetAttributeValue(attr, baseUrl + path);
+                            }
+                        }
                     }
                 }
                 catch (NotSupportedException)

@@ -20,6 +20,16 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         /// <summary>
+        /// Trim leading / and \ from a string.
+        /// </summary>
+        /// <param name="input">The path to trim.</param>
+        /// <returns>The path without any leading / or \.</returns>
+        public static String TrimTrailingPathChars(this String input)
+        {
+            return input.TrimEnd(PathTrimChars);
+        }
+
+        /// <summary>
         /// Ensure that the path starts with a / or \. If a character needs to be added it will add separatorChar.
         /// </summary>
         /// <param name="input">The string to modify.</param>

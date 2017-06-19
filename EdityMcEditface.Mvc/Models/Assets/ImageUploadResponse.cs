@@ -1,10 +1,15 @@
-﻿using System;
+﻿using EdityMcEditface.Mvc.Controllers;
+using Halcyon.HAL.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Threax.AspNetCore.Halcyon.Ext;
 
-namespace EdityMcEditface.Mvc.Models.CKEditor
+namespace EdityMcEditface.Mvc.Models.Assets
 {
+    [HalModel]
+    [DeclareHalLink(EntryPointController.Rels.Get)]
     public class ImageUploadResponse
     {
         /// <summary>

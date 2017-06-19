@@ -29,7 +29,8 @@ export function createBaseBuilder(): controller.InjectedControllerBuilder {
         var services = mainBuilder.Services;
         services.addShared(Fetcher, s => new WithCredentialsFetcher(new CacheBuster(new WindowFetch())));
         services.addShared(urlInjector.IBaseUrlInjector, s => new urlInjector.BaseUrlInjector(pageSettings.baseUrl));
-        services.addShared(client.EntryPointInjector, s => new client.EntryPointInjector(pageSettings.baseUrl ? pageSettings.baseUrl : '/' + 'edity/entrypoint', s.getRequiredService(Fetcher)));
+        var baseUrl = pageSettings.baseUrl ? pageSettings.baseUrl : '';
+        mainBuilder.Services.addShared(client.EntryPointInjector, s => new client.EntryPointInjector(baseUrl + '/edity/entrypoint', s.getRequiredService(Fetcher)));
     }
     return mainBuilder;
 }

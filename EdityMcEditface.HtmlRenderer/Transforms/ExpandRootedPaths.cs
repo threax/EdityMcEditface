@@ -21,6 +21,7 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
             replaceUrlInAttributes("src", document);
             replaceUrlInAttributes("data-hr-model-src", document);
             replaceUrlInAttributes("data-hr-config-urlroot", document);
+            replaceUrlInAttributes("data-hr-config-menu", document);
         }
 
         private void replaceUrlInAttributes(String attr, HtmlDocument document)

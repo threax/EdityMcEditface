@@ -6,7 +6,7 @@
     "@types/node": "^6.0.69"
   },
   "dependencies": {
-    "editymceditface.client": "8.0.4"
+    "editymceditface.client": "8.1.0"
   },
   "scripts": {
     "build": "node Build/build.js",

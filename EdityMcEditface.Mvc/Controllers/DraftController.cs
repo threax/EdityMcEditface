@@ -41,15 +41,17 @@ namespace EdityMcEditface.Mvc.Controllers
         /// <summary>
         /// Start the draft process, this will determine if you can draft and what you should do if you can't.
         /// </summary>
-        /// <param name="commitRepo">The commit repo.</param>
+        /// <param name="syncRepo"></param>
         /// <returns>The entry point for drafts.</returns>
         [HttpGet("[action]")]
         [HalRel(Rels.Begin)]
-        public DraftEntryPoint Begin([FromServices] ICommitRepository commitRepo)
+        public async Task<DraftEntryPoint> Begin([FromServices] ISyncRepository syncRepo)
         {
+            var syncInfo = await syncRepo.SyncInfo();
             return new DraftEntryPoint()
             {
-                HasUncommittedChanges = commitRepo.HasUncommittedChanges()
+                HasUncommittedChanges = syncInfo.HasUncomittedChanges,
+                HasUnsyncedChanges = syncInfo.NeedsPull || syncInfo.NeedsPush
             };
         }
 

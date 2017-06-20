@@ -27,6 +27,24 @@ namespace EdityMcEditface.Mvc.Models.Git
         [JsonIgnore]
         public bool HasUncomittedChanges { get; set; }
 
+        [JsonIgnore]
+        public bool NeedsPull
+        {
+            get
+            {
+                return BehindBy != 0;
+            }
+        }
+
+        [JsonIgnore]
+        public bool NeedsPush
+        {
+            get
+            {
+                return AheadBy != 0;
+            }
+        }
+
         public IEnumerable<HalLinkAttribute> CreateHalLinks(ILinkProviderContext context)
         {
             if (HasUncomittedChanges)
@@ -35,12 +53,12 @@ namespace EdityMcEditface.Mvc.Models.Git
             }
             else
             {
-                if (AheadBy != 0)
+                if (NeedsPush)
                 {
                     yield return new HalActionLinkAttribute(SyncController.Rels.Push, typeof(SyncController));
                 }
 
-                if (BehindBy != 0)
+                if (NeedsPull)
                 {
                     yield return new HalActionLinkAttribute(SyncController.Rels.Pull, typeof(SyncController));
                 }

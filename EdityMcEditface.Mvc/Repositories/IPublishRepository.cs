@@ -6,8 +6,10 @@ namespace EdityMcEditface.Mvc.Repositories
 {
     public interface IPublishRepository
     {
-        Task<CompileResult> Compile();
+        void Compile();
 
-        Task<PublishEntryPoint> Status(ISyncRepository syncRepo);
+        Task<PublishEntryPoint> GetPublishInfo(ISyncRepository syncRepo);
+
+        CompileProgress Progress();
     }
 }

@@ -113,12 +113,10 @@ namespace EdityMcEditface.Mvc
         /// <returns></returns>
         private static MapperConfiguration SetupMappings()
         {
-            //Setup mappings between your objects here
-            //Check out the AutoMapper docs for more info
-            //https://github.com/AutoMapper/AutoMapper/wiki
             var mapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Template, TemplateView>();
+                cfg.CreateMap<BuildProgress, CompileProgress>();
             });
 
             return mapperConfig;
@@ -193,7 +191,8 @@ namespace EdityMcEditface.Mvc
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddSingleton<WorkQueue, WorkQueue>();
+            services.TryAddSingleton<WorkQueue, WorkQueue>();
+            services.TryAddSingleton<ICompileService, CompileService>();
 
             services.TryAddScoped<IUserInfo, DefaultUserInfo>();
 

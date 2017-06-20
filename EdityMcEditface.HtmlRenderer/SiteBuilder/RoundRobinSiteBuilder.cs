@@ -66,5 +66,10 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         {
             return directOutput.DoesOutputFileExist(file);
         }
+
+        public BuildProgress GetCurrentProgress()
+        {
+            return directOutput.GetCurrentProgress();
+        }
     }
 }

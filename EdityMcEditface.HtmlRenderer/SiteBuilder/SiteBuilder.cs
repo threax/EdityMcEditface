@@ -38,5 +38,11 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         /// <param name="file">The file to check.</param>
         /// <returns>True if the output contains the file, false otherwise.</returns>
         bool DoesOutputFileExist(String file);
+
+        /// <summary>
+        /// Get the current progress of the build. The object returned will be thread safe.
+        /// </summary>
+        /// <returns></returns>
+        BuildProgress GetCurrentProgress();
     }
 }

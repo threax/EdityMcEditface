@@ -24,6 +24,7 @@ namespace EdityMcEditface.Mvc.Controllers
         {
             public const String BeginPublish = "BeginPublish";
             public const String Compile = "Compile";
+            public const String Progress = "Progress";
         }
 
         private IPublishRepository publishRepo;
@@ -45,7 +46,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [HalRel(Rels.BeginPublish)]
         public Task<PublishEntryPoint> Get([FromServices] ISyncRepository syncRepo)
         {
-            return publishRepo.Status(syncRepo);
+            return publishRepo.GetPublishInfo(syncRepo);
         }
 
         /// <summary>
@@ -54,9 +55,21 @@ namespace EdityMcEditface.Mvc.Controllers
         /// <returns>The time statistics when the compilation is complete.</returns>
         [HttpPost("[action]")]
         [HalRel(Rels.Compile)]
-        public Task<CompileResult> Compile()
+        public CompileProgress Compile()
         {
-            return publishRepo.Compile();
+            publishRepo.Compile();
+            return publishRepo.Progress();
+        }
+
+        /// <summary>
+        /// Run the compiler.
+        /// </summary>
+        /// <returns>The time statistics when the compilation is complete.</returns>
+        [HttpPost("[action]")]
+        [HalRel(Rels.Progress)]
+        public CompileProgress Progress()
+        {
+            return publishRepo.Progress();
         }
     }
 }

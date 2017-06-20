@@ -4,6 +4,7 @@ using EdityMcEditface.Mvc.Models;
 using EdityMcEditface.Mvc.Models.Compiler;
 using EdityMcEditface.Mvc.Models.Git;
 using EdityMcEditface.Mvc.Models.Page;
+using EdityMcEditface.Mvc.Services;
 using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,13 @@ namespace EdityMcEditface.Mvc.Repositories
     public class PublishRepository : IPublishRepository
     {
         private SiteBuilder builder;
-        private WorkQueue workQueue;
+        private ICompileService compileService;
         private ProjectFinder projectFinder;
 
-        public PublishRepository(SiteBuilder builder, WorkQueue workQueue, ProjectFinder projectFinder)
+        public PublishRepository(SiteBuilder builder, ICompileService compileService, ProjectFinder projectFinder)
         {
             this.builder = builder;
-            this.workQueue = workQueue;
+            this.compileService = compileService;
             this.projectFinder = projectFinder;
         }
 
@@ -31,7 +32,7 @@ namespace EdityMcEditface.Mvc.Repositories
         /// Get the current status of the compiler.
         /// </summary>
         /// <returns></returns>
-        public async Task<PublishEntryPoint> Status(ISyncRepository syncRepo)
+        public async Task<PublishEntryPoint> GetPublishInfo(ISyncRepository syncRepo)
         {
             var publishRepoPath = projectFinder.PublishedProjectPath;
             var masterRepoPath = projectFinder.MasterRepoPath;
@@ -79,21 +80,17 @@ namespace EdityMcEditface.Mvc.Repositories
         /// Run the compiler.
         /// </summary>
         /// <returns>The time statistics when the compilation is complete.</returns>
-        public async Task<CompileResult> Compile()
+        public void Compile()
         {
-            Stopwatch sw = new Stopwatch();
+            this.compileService.Compile(builder);
+        }
 
-            await workQueue.FireAsync(() =>
-            {
-                sw.Start();
-                builder.BuildSite();
-                sw.Stop();
-            });
-
-            return new CompileResult()
-            {
-                ElapsedSeconds = sw.Elapsed.TotalSeconds
-            };
+        /// <summary>
+        /// Run the compiler.
+        /// </summary>
+        public CompileProgress Progress()
+        {
+            return this.compileService.Progress();
         }
     }
 }

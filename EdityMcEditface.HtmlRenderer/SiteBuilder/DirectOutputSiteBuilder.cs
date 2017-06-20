@@ -16,6 +16,9 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         private IContentCompilerFactory contentCompilerFactory;
         private IFileFinder fileFinder;
 
+        private int currentFile;
+        private int totalFiles;
+
         public DirectOutputSiteBuilder(SiteBuilderSettings settings, IContentCompilerFactory contentCompilerFactory, IFileFinder fileFinder)
         {
             this.contentCompilerFactory = contentCompilerFactory;
@@ -64,9 +67,13 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             Directory.CreateDirectory(settings.OutDir);
 
             var compilers = contentCompilerFactory.CreateCompilers(fileFinder, settings.OutDir, fileFinder.Project.Compilers);
+            var query = fileFinder.EnumerateContentFiles("/", "*.html", SearchOption.AllDirectories);
 
-            foreach (var file in fileFinder.EnumerateContentFiles("/", "*.html", SearchOption.AllDirectories))
+            totalFiles = query.Count();
+
+            foreach (var file in query)
             {
+                ++currentFile;
                 foreach (var compiler in compilers)
                 {
                     compiler.buildPage(file);
@@ -110,6 +117,15 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         {
             var fullPath = Path.Combine(settings.OutDir, StringPathExtensions.TrimStartingPathChars(file));
             return File.Exists(fullPath);
+        }
+
+        public BuildProgress GetCurrentProgress()
+        {
+            return new BuildProgress()
+            {
+                CurrentFile = this.currentFile,
+                TotalFiles = this.totalFiles
+            };
         }
     }
 }

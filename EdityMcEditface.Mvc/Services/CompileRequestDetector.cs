@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EdityMcEditface.Mvc.Models.Compiler
+namespace EdityMcEditface.Mvc.Services
 {
     public class CompileRequestDetector : ICompileRequestDetector
     {

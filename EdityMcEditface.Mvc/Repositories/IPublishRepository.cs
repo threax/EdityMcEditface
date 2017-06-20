@@ -6,7 +6,8 @@ namespace EdityMcEditface.Mvc.Repositories
 {
     public interface IPublishRepository
     {
-        Task<CompilerResult> Compile();
-        CompilerStatus Status();
+        Task<CompileResult> Compile();
+
+        Task<PublishEntryPoint> Status(ISyncRepository syncRepo);
     }
 }

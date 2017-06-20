@@ -31,10 +31,16 @@ namespace EdityMcEditface.Mvc.Repositories
         /// Get the current status of the compiler.
         /// </summary>
         /// <returns></returns>
-        public CompilerStatus Status()
+        public async Task<PublishEntryPoint> Status(ISyncRepository syncRepo)
         {
             var publishRepoPath = projectFinder.PublishedProjectPath;
             var masterRepoPath = projectFinder.MasterRepoPath;
+
+            var compilerStatus = new PublishEntryPoint()
+            {
+                BehindBy = -1,
+                BehindHistory = null
+            };
 
             if (publishRepoPath != masterRepoPath)
             {
@@ -58,26 +64,22 @@ namespace EdityMcEditface.Mvc.Repositories
                         ExcludeReachableFrom = divergence.CommonAncestor
                     });
 
-                    return new CompilerStatus()
-                    {
-                        BehindBy = divergence.BehindBy.GetValueOrDefault(),
-                        BehindHistory = behindCommits.Select(c => new History(c)).ToList()
-                    };
+                    compilerStatus.BehindBy = divergence.BehindBy.GetValueOrDefault();
+                    compilerStatus.BehindHistory = behindCommits.Select(c => new History(c)).ToList();
+                    var syncInfo = await syncRepo.SyncInfo();
+                    compilerStatus.HasUncommittedChanges = syncInfo.HasUncomittedChanges;
+                    compilerStatus.HasUnsyncedChanges = syncInfo.NeedsPull || syncInfo.NeedsPush;
                 }
             }
 
-            return new CompilerStatus()
-            {
-                BehindBy = -1,
-                BehindHistory = null
-            };
+            return compilerStatus;
         }
 
         /// <summary>
         /// Run the compiler.
         /// </summary>
         /// <returns>The time statistics when the compilation is complete.</returns>
-        public async Task<CompilerResult> Compile()
+        public async Task<CompileResult> Compile()
         {
             Stopwatch sw = new Stopwatch();
 
@@ -88,7 +90,7 @@ namespace EdityMcEditface.Mvc.Repositories
                 sw.Stop();
             });
 
-            return new CompilerResult()
+            return new CompileResult()
             {
                 ElapsedSeconds = sw.Elapsed.TotalSeconds
             };

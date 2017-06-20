@@ -3,18 +3,23 @@ using Halcyon.HAL.Attributes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 using Threax.AspNetCore.Halcyon.Ext;
 
-namespace EdityMcEditface.Mvc.Models
+namespace EdityMcEditface.Mvc.Models.Compiler
 {
     [HalModel]
-    [HalSelfActionLink(DraftController.Rels.Begin, typeof(DraftController))]
-    [DeclareHalLink(CommitController.Rels.Commit, typeof(CommitController))]
-    [DeclareHalLink(DraftController.Rels.List, typeof(DraftController))]
+    [HalSelfActionLink(PublishController.Rels.BeginPublish, typeof(PublishController))]
+    [DeclareHalLink(PublishController.Rels.Compile, typeof(PublishController))]
     [DeclareHalLink(SyncController.Rels.BeginSync, typeof(SyncController))]
-    public class DraftEntryPoint : IHalLinkProvider
+    [DeclareHalLink(CommitController.Rels.Commit, typeof(CommitController))]
+    public class PublishEntryPoint : IHalLinkProvider
     {
+        public int BehindBy { get; internal set; }
+
+        public IEnumerable<History> BehindHistory { get; internal set; }
+
         [JsonIgnore]
         public bool HasUncommittedChanges { get; set; }
 
@@ -33,7 +38,7 @@ namespace EdityMcEditface.Mvc.Models
             }
             else
             {
-                yield return new HalActionLinkAttribute(DraftController.Rels.List, typeof(DraftController));
+                yield return new HalActionLinkAttribute(PublishController.Rels.Compile, typeof(PublishController));
             }
         }
     }

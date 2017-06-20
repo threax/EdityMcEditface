@@ -13,7 +13,7 @@ namespace EdityMcEditface.Mvc.Controllers
     /// <summary>
     /// This controller publishes / compiles the static website.
     /// </summary>
-    [Route("edity/[controller]/[action]")]
+    [Route("edity/[controller]")]
     [Authorize(Roles = Roles.Compile)]
     [ResponseCache(NoStore = true)]
     [ProducesHal]
@@ -22,7 +22,7 @@ namespace EdityMcEditface.Mvc.Controllers
     {
         public static class Rels
         {
-            public const String PublishStatus = "PublishStatus";
+            public const String BeginPublish = "BeginPublish";
             public const String Compile = "Compile";
         }
 
@@ -42,19 +42,19 @@ namespace EdityMcEditface.Mvc.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [HalRel(Rels.PublishStatus)]
-        public CompilerStatus Status()
+        [HalRel(Rels.BeginPublish)]
+        public Task<PublishEntryPoint> Get([FromServices] ISyncRepository syncRepo)
         {
-            return publishRepo.Status();
+            return publishRepo.Status(syncRepo);
         }
 
         /// <summary>
         /// Run the compiler.
         /// </summary>
         /// <returns>The time statistics when the compilation is complete.</returns>
-        [HttpPost]
+        [HttpPost("[action]")]
         [HalRel(Rels.Compile)]
-        public Task<CompilerResult> Compile()
+        public Task<CompileResult> Compile()
         {
             return publishRepo.Compile();
         }

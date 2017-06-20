@@ -9,8 +9,8 @@ using Threax.AspNetCore.Halcyon.Ext;
 namespace EdityMcEditface.Mvc.Models.Compiler
 {
     [HalModel]
-    [HalActionLink(PublishController.Rels.PublishStatus, typeof(PublishController))]
-    public class CompilerResult
+    [HalActionLink(PublishController.Rels.BeginPublish, typeof(PublishController))]
+    public class CompileResult
     {
         public double ElapsedSeconds { get; set; }
     }

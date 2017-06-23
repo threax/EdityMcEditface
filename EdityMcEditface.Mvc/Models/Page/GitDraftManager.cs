@@ -77,7 +77,7 @@ namespace EdityMcEditface.Mvc.Models.Page
 
         public IEnumerable<String> GetAllDraftables(IFileFinder fileFinder)
         {
-            return fileFinder.EnumerateContentFiles("", "*.html");
+            return fileFinder.EnumerateContentFiles("", "*.html", SearchOption.AllDirectories);
         }
 
         public DraftInfo GetDraftStatus(String file, string physicalFile, IFileFinder fileFinder)

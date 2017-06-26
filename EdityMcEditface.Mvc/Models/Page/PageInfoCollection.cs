@@ -1,4 +1,5 @@
-﻿using EdityMcEditface.Mvc.Controllers;
+﻿using EdityMcEditface.HtmlRenderer;
+using EdityMcEditface.Mvc.Controllers;
 using Halcyon.HAL.Attributes;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace EdityMcEditface.Mvc.Models.Page
         {
             if (query.File != null)
             {
-                queryString.AppendItem("file", query.File);
+                queryString.AppendItem("file", query.File.TrimStartingPathChars());
             }
 
             base.AddCustomQuery(rel, queryString);

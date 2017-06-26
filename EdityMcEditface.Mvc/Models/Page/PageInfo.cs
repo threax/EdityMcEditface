@@ -1,4 +1,5 @@
-﻿using EdityMcEditface.Mvc.Controllers;
+﻿using EdityMcEditface.HtmlRenderer;
+using EdityMcEditface.Mvc.Controllers;
 using Halcyon.HAL.Attributes;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,10 @@ namespace EdityMcEditface.Mvc.Models.Page
 
         public PageInfo(String filePath)
         {
-            this.FilePath = filePath;
+            if (filePath != null)
+            {
+                this.FilePath = filePath.TrimStartingPathChars();
+            }
         }
 
         public String FilePath { get; set; }

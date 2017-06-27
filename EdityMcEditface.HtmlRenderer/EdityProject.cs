@@ -9,18 +9,44 @@ namespace EdityMcEditface.HtmlRenderer
 {
     public class EdityProject
     {
+        /// <summary>
+        /// This map maps named content to a collection of javascript and css files.
+        /// </summary>
         public Dictionary<String, LinkedContentEntry> ContentMap { get; set; } = new Dictionary<string, LinkedContentEntry>();
 
+        /// <summary>
+        /// The main set of variables, this is always active.
+        /// </summary>
         public Dictionary<String, String> Vars { get; set; } = new Dictionary<string, string>();
 
+        /// <summary>
+        /// Variables that are used only during build / compile / publish. These can override the values in Vars.
+        /// </summary>
+        public Dictionary<String, String> BuildVars { get; set; } = new Dictionary<string, string>();
+
+        /// <summary>
+        /// The list of linked content for the entire project.
+        /// </summary>
         public List<String> LinkedContent { get; set; } = new List<string>();
 
+        /// <summary>
+        /// Additional content folders to copy.
+        /// </summary>
         public List<String> AdditionalContent { get; set; } = new List<string>();
 
+        /// <summary>
+        /// Definitions of the compilers.
+        /// </summary>
         public List<CompilerDefinition> Compilers { get; set; } = new List<CompilerDefinition>();
 
+        /// <summary>
+        /// The list of components to show when editing.
+        /// </summary>
         public List<String> EditComponents { get; set; } = new List<String>();
 
+        /// <summary>
+        /// The list of components to show in draft mode.
+        /// </summary>
         public List<String> DraftComponents { get; set; } = new List<String>();
 
         /// <summary>
@@ -33,6 +59,7 @@ namespace EdityMcEditface.HtmlRenderer
         {
             mergeDictionarys(backupProject.ContentMap, ContentMap);
             mergeDictionarys(backupProject.Vars, Vars);
+            mergeDictionarys(backupProject.BuildVars, BuildVars);
             mergeStringList(backupProject.LinkedContent, LinkedContent);
             mergeStringList(backupProject.AdditionalContent, AdditionalContent);
             mergeStringList(backupProject.EditComponents, EditComponents);

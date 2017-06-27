@@ -17,13 +17,15 @@ namespace EdityMcEditface.HtmlRenderer
         private String pathBase;
         private IFileFinder fileFinder;
         private String version; //The version of the website, helps generate query strings for files to get around cache issues
+        private bool useBuildVars;
 
-        public TemplateEnvironment(String docLink, IFileFinder fileFinder, String version = null)
+        public TemplateEnvironment(String docLink, IFileFinder fileFinder, String version = null, bool useBuildVars = false)
         {
+            this.useBuildVars = useBuildVars;
             this.project = fileFinder.Project;
             this.version = version;
 
-            if (!project.Vars.TryGetValue("pathBase", out this.pathBase))
+            if (!(useBuildVars && project.BuildVars.TryGetValue("pathBase", out this.pathBase)) && !project.Vars.TryGetValue("pathBase", out this.pathBase))
             {
                 pathBase = "";
             }
@@ -50,6 +52,17 @@ namespace EdityMcEditface.HtmlRenderer
                     mergeVar(var);
                 }
             }
+
+            //If active merge build vars first so they are the active variables
+            if (useBuildVars)
+            {
+                foreach (var var in project.BuildVars)
+                {
+                    mergeVar(var);
+                }
+            }
+
+            //Then merge in the project vars
             foreach (var var in project.Vars)
             {
                 mergeVar(var);

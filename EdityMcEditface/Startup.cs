@@ -77,7 +77,7 @@ namespace EdityMcEditface
                         ContractResolver = new CamelCasePropertyNamesContractResolver(),
                     };
                     serializer.Converters.Add(new StringEnumConverter());
-                    args.SiteBuilder.addPostBuildTask(new PublishMenu(fileFinder, args.SiteBuilder, "menus/mainmenu.json", serializer));
+                    args.SiteBuilder.addPostBuildTask(new PublishMenu(fileFinder, args.SiteBuilder, "menus/mainMenu.json", serializer));
                 }
             };
 

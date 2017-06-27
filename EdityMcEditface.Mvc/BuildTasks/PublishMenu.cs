@@ -75,8 +75,8 @@ namespace EdityMcEditface.Mvc.BuildTasks
 
                     if (item.Link != null)
                     {
-                        //Only fix absolute paths into this website
-                        if (item.Link[0] == '\\' || item.Link[0] == '/')
+                        //Only remove absolute paths into this website, also don't remove paths pointing to the site root
+                        if (item.Link.Length > 1 && (item.Link[0] == '\\' || item.Link[0] == '/'))
                         {
                             if (!siteBuilder.DoesOutputFileExist(item.Link + ".html"))
                             {

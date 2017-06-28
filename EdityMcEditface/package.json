@@ -6,15 +6,16 @@
     "@types/node": "^6.0.69"
   },
   "dependencies": {
-    "editymceditface.client": "9.2.1"
+    "editymceditface.client": "9.2.6"
   },
   "scripts": {
     "build": "node Build/build.js",
     "yarn-install": "yarn install --flat && yarn link threax-npm-tk",
     "clean": "powershell -Command Remove-Item 'ClientBin\\*' -Recurse -Force",
-    "trash-modules": "powershell -Command Remove-Item 'node_modules\\*' -Recurse -Force"
+    "trash-modules": "powershell -Command Remove-Item 'node_modules\\*' -Recurse -Force",
+    "import-tsconfig": "node node_modules\\threax-npm-tk\\tsimport.js"
   },
   "resolutions": {
-    "htmlrapier": "8.0.2"
+    "htmlrapier": "8.0.4"
   }
 }

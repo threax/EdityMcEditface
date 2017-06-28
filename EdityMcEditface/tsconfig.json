@@ -14,51 +14,52 @@
     "importHelpers": true,
     "moduleResolution": "node",
     "paths": {
-      "hr.*": [
-        "node_modules/HtmlRapier/src/*",
-        "node_modules/htmlrapier.json-editor/*"
-      ],
-      "hr.widgets.*": [
-        "node_modules/HtmlRapier.Widgets/src/*"
+      "edity.editorcore.*": [
+        "Editor\\*",
+        "node_modules\\editymceditface.client\\EditorCore\\*"
       ],
       "hr.bootstrap.*": [
-        "node_modules/HtmlRapier.Bootstrap/lib/*",
-        "node_modules/HtmlRapier.Bootstrap/*"
-      ],
-      "hr.treemenu.*": [
-        "node_modules/HtmlRapier.TreeMenu/src/*"
-      ],
-      "hr.sidebar.*": [
-        "node_modules/HtmlRapier.Sidebar/src/*"
-      ],
-      "edity.editorcore.*": [
-        "node_modules/editymceditface.client/EditorCore/*",
-        "Editor/*"
-      ],
-      "jdorn.*": [
-        "node_modules/htmlrapier.json-editor/*"
+        "node_modules\\htmlrapier.bootstrap\\lib\\*"
       ],
       "hr.halcyon.*": [
-        "node_modules/HtmlRapier.Halcyon/src/*"
+        "node_modules\\htmlrapier.halcyon\\src\\*"
+      ],
+      "jdorn.*": [
+        "node_modules\\htmlrapier.json-editor\\*"
+      ],
+      "hr.sidebar.*": [
+        "node_modules\\htmlrapier.sidebar\\src\\*"
+      ],
+      "hr.treemenu.*": [
+        "node_modules\\htmlrapier.treemenu\\src\\*"
+      ],
+      "hr.widgets.*": [
+        "node_modules\\htmlrapier.widgets\\src\\*"
+      ],
+      "hr.*": [
+        "node_modules\\htmlrapier\\src\\*"
       ]
     }
   },
+  "compileOnSave": true,
   "include": [
-    "./**/*.ts"
-  ],
-  "exclude": [
-    "./**/*.js",
-    "./**/Build/*.ts",
-    "node_modules/jsns",
-    "node_modules/*/node_modules/**/*.ts",
-    "wwwroot",
-    "node_modules/**/threax-npm-tk/*.ts"
+    "Editor\\**\\*.ts",
+    "node_modules\\editymceditface.client\\EditorCore\\**\\*.ts",
+    "node_modules\\editymceditface.client\\Views\\**\\*.ts",
+    "node_modules\\htmlrapier.bootstrap\\lib\\**\\*.ts",
+    "node_modules\\htmlrapier.halcyon\\src\\**\\*.ts",
+    "node_modules\\htmlrapier.sidebar\\src\\**\\*.ts",
+    "node_modules\\htmlrapier.treemenu\\src\\**\\*.ts",
+    "node_modules\\htmlrapier.widgets\\src\\**\\*.ts",
+    "node_modules\\htmlrapier\\src\\**\\*.ts"
   ],
   "files": [
-    "node_modules/jsns/jsns.ts",
-    "node_modules/htmlrapier/src/polyfill.js",
-    "node_modules/jsns/tslib.jsns.js",
-    "node_modules/htmlrapier.json-editor/bin/json-editor.js"
+    "node_modules\\jsns\\jsns.ts",
+    "node_modules\\htmlrapier.json-editor\\bin\\json-editor.js",
+    "node_modules\\htmlrapier\\src\\polyfill.js",
+    "node_modules\\jsns\\tslib.jsns.js"
   ],
-  "compileOnSave": true
+  "exclude": [
+    "node_modules\\threax-npm-tk\\**\\*.js"
+  ]
 }

@@ -6,7 +6,7 @@
     "@types/node": "^6.0.69"
   },
   "dependencies": {
-    "editymceditface.client": "9.1.4"
+    "editymceditface.client": "9.2.1"
   },
   "scripts": {
     "build": "node Build/build.js",
@@ -15,6 +15,6 @@
     "trash-modules": "powershell -Command Remove-Item 'node_modules\\*' -Recurse -Force"
   },
   "resolutions": {
-    "htmlrapier": "8.0.1"
+    "htmlrapier": "8.0.2"
   }
 }

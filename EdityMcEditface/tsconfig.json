@@ -19,7 +19,7 @@
         "node_modules\\editymceditface.client\\EditorCore\\*"
       ],
       "hr.bootstrap.*": [
-        "node_modules\\htmlrapier.bootstrap\\lib\\*"
+        "node_modules\\htmlrapier.bootstrap\\src\\*"
       ],
       "hr.halcyon.*": [
         "node_modules\\htmlrapier.halcyon\\src\\*"
@@ -46,7 +46,7 @@
     "Editor\\**\\*.ts",
     "node_modules\\editymceditface.client\\EditorCore\\**\\*.ts",
     "node_modules\\editymceditface.client\\Views\\**\\*.ts",
-    "node_modules\\htmlrapier.bootstrap\\lib\\**\\*.ts",
+    "node_modules\\htmlrapier.bootstrap\\src\\**\\*.ts",
     "node_modules\\htmlrapier.halcyon\\src\\**\\*.ts",
     "node_modules\\htmlrapier.sidebar\\src\\**\\*.ts",
     "node_modules\\htmlrapier.treemenu\\src\\**\\*.ts",
@@ -55,6 +55,7 @@
   ],
   "files": [
     "node_modules\\jsns\\jsns.ts",
+    "node_modules\\htmlrapier.bootstrap\\hr.bootstrap.js",
     "node_modules\\htmlrapier.json-editor\\bin\\json-editor.js",
     "node_modules\\htmlrapier\\src\\polyfill.js",
     "node_modules\\jsns\\tslib.jsns.js"

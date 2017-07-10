@@ -13,10 +13,16 @@ namespace EdityMcEditface.Mvc.Models.Page
     public class GitDraftManager : IDraftManager
     {
         private JsonSerializer serializer = JsonSerializer.CreateDefault();
+        private PathBlacklist ignoreDrafts;
+
+        public GitDraftManager(PathBlacklist ignoreDrafts)
+        {
+            this.ignoreDrafts = ignoreDrafts;
+        }
 
         public bool SendPageToDraft(String file, String physicalFile, IFileFinder fileFinder)
         {
-            if (File.Exists(physicalFile))
+            if (ignoreDrafts.AllowFile(file, physicalFile) && File.Exists(physicalFile))
             {
                 using (var repo = new Repository(Repository.Discover(physicalFile)))
                 {
@@ -72,7 +78,7 @@ namespace EdityMcEditface.Mvc.Models.Page
         public bool IsDraftedFile(string physicalFile)
         {
             var htmlFile = Path.ChangeExtension(physicalFile, "html");
-            return File.Exists(htmlFile);
+            return File.Exists(htmlFile) && ignoreDrafts.AllowFile(htmlFile, htmlFile);
         }
 
         public IEnumerable<String> GetAllDraftables(IFileFinder fileFinder)

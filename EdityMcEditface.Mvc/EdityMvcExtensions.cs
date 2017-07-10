@@ -88,7 +88,7 @@ namespace EdityMcEditface.Mvc
                 contentFolderPermissions.WritePermission.Permissions = sharedWritePermissions;
 
                 //Always use the git draft manager for the project content, this way you can actually create drafts.
-                var draftManager = new GitDraftManager();
+                var draftManager = new GitDraftManager(new PathBlacklist(edityFolderList));
                 IFileStreamManager streamManager = null;
 
                 if (phaseDetector.Phase == Phases.Draft || compileRequestDetector.IsCompileRequest)

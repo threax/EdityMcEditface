@@ -18,7 +18,7 @@ namespace EdityMcEditface.Mvc.Models.Page
         public override bool AllowFile(string path, String physicalPath)
         {
             bool valid = true;
-            if (draftManager.IsDraftedFile(physicalPath))
+            if (draftManager.IsDraftedFile(path, physicalPath))
             {
                 var draftInfo = draftManager.LoadDraftInfo(physicalPath);
                 valid = draftInfo.Sha != null;

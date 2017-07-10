@@ -13,9 +13,10 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// <summary>
         /// Determine if the path specified by the normalized file name is correct.
         /// </summary>
-        /// <param name="normalizedFile"></param>
+        /// <param name="file">The original file name.</param>
+        /// <param name="normalizedFile">The full path to the file. Can be used to check for existance of the file.</param>
         /// <returns></returns>
-        bool IsDraftedFile(String normalizedFile);
+        bool IsDraftedFile(String file, String normalizedFile);
 
         /// <summary>
         /// Send a page to draft. Will return true if the page is updated, false if 

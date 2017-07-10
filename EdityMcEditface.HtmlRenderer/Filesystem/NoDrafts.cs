@@ -6,7 +6,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
 {
     public class NoDrafts : IDraftManager
     {
-        public bool IsDraftedFile(string normalizedFile)
+        public bool IsDraftedFile(String file, string normalizedFile)
         {
             return false;
         }

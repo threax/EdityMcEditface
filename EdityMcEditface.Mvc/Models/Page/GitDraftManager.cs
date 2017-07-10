@@ -79,10 +79,11 @@ namespace EdityMcEditface.Mvc.Models.Page
             return Path.ChangeExtension(file, ".draft");
         }
 
-        public bool IsDraftedFile(string physicalFile)
+        public bool IsDraftedFile(String file, string physicalFile)
         {
-            var htmlFile = Path.ChangeExtension(physicalFile, "html");
-            return File.Exists(htmlFile) && draftIdentfier.AllowFile(htmlFile, htmlFile);
+            var html = Path.ChangeExtension(file, "html");
+            var physicalHtml = Path.ChangeExtension(physicalFile, "html");
+            return draftIdentfier.AllowFile(html, physicalHtml) && File.Exists(physicalHtml);
         }
 
         public IEnumerable<String> GetAllDraftables(IFileFinder fileFinder)

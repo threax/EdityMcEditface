@@ -21,7 +21,7 @@ namespace EdityMcEditface.Mvc.Models.Page
 
         public override Stream OpenReadStream(String originalFile, String physicalFile)
         {
-            if (publishedFileManager.IsDraftedFile(physicalFile))
+            if (publishedFileManager.IsDraftedFile(originalFile, physicalFile))
             {
                 GitDraftInfo publishInfo = publishedFileManager.LoadDraftInfo(physicalFile);
                 if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version
@@ -39,7 +39,7 @@ namespace EdityMcEditface.Mvc.Models.Page
 
         public override void CopyFile(String source, string physicalSource, string physicalDest)
         {
-            if(publishedFileManager.IsDraftedFile(physicalSource))
+            if(publishedFileManager.IsDraftedFile(source, physicalSource))
             {
                 GitDraftInfo publishInfo = publishedFileManager.LoadDraftInfo(physicalSource);
                 if (publishInfo.Sha != null) //If we have publish info and it specifies an earlier published version, load that version

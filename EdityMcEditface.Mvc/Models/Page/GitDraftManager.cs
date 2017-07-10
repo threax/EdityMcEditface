@@ -13,16 +13,20 @@ namespace EdityMcEditface.Mvc.Models.Page
     public class GitDraftManager : IDraftManager
     {
         private JsonSerializer serializer = JsonSerializer.CreateDefault();
-        private PathBlacklist ignoreDrafts;
+        private IPathPermissions draftIdentfier;
 
-        public GitDraftManager(PathBlacklist ignoreDrafts)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="draftIdentfier">The path permissions to use to determine if a path can be drafted. Blacklist paths you don't want to support drafting.</param>
+        public GitDraftManager(IPathPermissions draftIdentfier)
         {
-            this.ignoreDrafts = ignoreDrafts;
+            this.draftIdentfier = draftIdentfier;
         }
 
         public bool SendPageToDraft(String file, String physicalFile, IFileFinder fileFinder)
         {
-            if (ignoreDrafts.AllowFile(file, physicalFile) && File.Exists(physicalFile))
+            if (draftIdentfier.AllowFile(file, physicalFile) && File.Exists(physicalFile))
             {
                 using (var repo = new Repository(Repository.Discover(physicalFile)))
                 {
@@ -78,7 +82,7 @@ namespace EdityMcEditface.Mvc.Models.Page
         public bool IsDraftedFile(string physicalFile)
         {
             var htmlFile = Path.ChangeExtension(physicalFile, "html");
-            return File.Exists(htmlFile) && ignoreDrafts.AllowFile(htmlFile, htmlFile);
+            return File.Exists(htmlFile) && draftIdentfier.AllowFile(htmlFile, htmlFile);
         }
 
         public IEnumerable<String> GetAllDraftables(IFileFinder fileFinder)

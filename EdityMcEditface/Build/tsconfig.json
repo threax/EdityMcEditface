@@ -11,7 +11,7 @@
     "typeRoots": [ "../node_modules/@types" ]
   },
   "include": [
-    "../**/Build/*.ts"
+    "*.ts"
   ],
   "exclude": [
     "./**/*.js"

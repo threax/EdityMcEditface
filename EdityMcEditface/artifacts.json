@@ -1,0 +1,45 @@
+[
+  {
+    "outDir": "lib/bootstrap/dist/css",
+    "less": {
+      "importPaths": [ ".", "node_modules/bootstrap/less" ],
+      "input": "bootstrap/bootstrap-custom.less",
+      "compress": true,
+      "basePath": "bootstrap"
+    }
+  },
+  {
+    "outDir": "edity/layouts",
+    "pathBase": "Views",
+    "copy": [
+      "Views/**/*.css",
+      "Views/**/*.html",
+      "Views/**/*.json"
+    ],
+    "less": {
+      "importPaths": [ "../bootstrap/less" ],
+      "input": "Views/**/*.less",
+      "compress": true
+    }
+  },
+  {
+    "outDir": "edity/Templates",
+    "pathBase": "Templates",
+    "copy": [
+      "Templates/**/*.css",
+      "Templates/**/*.html",
+      "Templates/**/*.json"
+    ],
+    "less": {
+      "importPaths": [ "../bootstrap/less" ],
+      "input": "Templates/**/*.less",
+      "compress": true
+    }
+  },
+  {
+    "outDir": "edity",
+    "copy": [
+      "edity.json"
+    ]
+  }
+]

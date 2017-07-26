@@ -55,9 +55,7 @@
   ],
   "files": [
     "node_modules\\jsns\\jsns.ts",
-    "node_modules\\htmlrapier.bootstrap\\hr.bootstrap.js",
     "node_modules\\htmlrapier.json-editor\\bin\\json-editor.js",
-    "node_modules\\htmlrapier\\src\\polyfill.js",
     "node_modules\\jsns\\tslib.jsns.js"
   ],
   "exclude": [

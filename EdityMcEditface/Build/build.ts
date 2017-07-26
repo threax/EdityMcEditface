@@ -1,10 +1,8 @@
-﻿import * as edityCoreBuild from 'editymceditface.client/Build/build';
-import * as clientBuild from 'editymceditface.client/Build/clientbuild';
-
-import * as copy from 'threax-npm-tk/copy';
+﻿import * as copy from 'threax-npm-tk/copy';
 import * as less from 'threax-npm-tk/less';
 import { tsc } from 'threax-npm-tk/typescript';
 import * as jsnsTools from 'threax-npm-tk/jsnstools';
+import * as artifact from 'threax-npm-tk/artifacts';
 
 var filesDir = __dirname + "/..";
 
@@ -21,22 +19,10 @@ var filesDir = __dirname + "/..";
 export function build(outDir, iconOutPath, moduleDir): Promise<any> {
     var promises = [];
 
-    promises.push(edityCoreBuild.build(filesDir + "/ClientBin/EdityMcEditface", filesDir + "/wwwroot", filesDir + "/node_modules"));
-
-    //Build client
-    promises.push(clientBuild.build(outDir, iconOutPath, moduleDir, filesDir));
-
-    //Build bootstrap theme
-    promises.push(less.compile({
-        encoding: 'utf8',
-        importPaths: [moduleDir, moduleDir + '/bootstrap/less'],
-        input: filesDir + '/bootstrap/bootstrap-custom.less',
-        basePath: filesDir + '/bootstrap',
-        out: outDir + "/lib/bootstrap/dist/css",
-        compress: true,
-    }));
-
     promises.push(compileTypescript());
+
+    promises.push(artifact.importConfigs(filesDir, filesDir + "/ClientBin/EdityMcEditface", ["node_modules/*/edity-artifacts.json"]));
+    promises.push(artifact.importConfigs(filesDir, filesDir + "/ClientBin/Site", [filesDir + '/artifacts.json', artifact.getDefaultGlob(filesDir)]));
 
     //Return composite promise
     return Promise.all(promises);
@@ -47,5 +33,5 @@ async function compileTypescript() {
         projectFolder: filesDir
     });
 
-    await jsnsTools.saveLoadedModules(filesDir + '/wwwroot/lib/tsbin.js', ['edity.theme.layouts.default'], filesDir + '/ClientBin/Site/lib/tsbin.prod.js')
+    await jsnsTools.saveLoadedModules(filesDir + '/wwwroot/lib/tsbin.js', ['hr.runattributes', 'edity.theme.layouts.default'], filesDir + '/ClientBin/Site/lib/tsbin.prod.js')
 }

@@ -35,11 +35,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var edityCoreBuild = require("editymceditface.client/Build/build");
-var clientBuild = require("editymceditface.client/Build/clientbuild");
-var less = require("threax-npm-tk/less");
 var typescript_1 = require("threax-npm-tk/typescript");
 var jsnsTools = require("threax-npm-tk/jsnstools");
+var artifact = require("threax-npm-tk/artifacts");
 var filesDir = __dirname + "/..";
 (function () {
     return __awaiter(this, void 0, void 0, function () {
@@ -64,19 +62,9 @@ var filesDir = __dirname + "/..";
 })();
 function build(outDir, iconOutPath, moduleDir) {
     var promises = [];
-    promises.push(edityCoreBuild.build(filesDir + "/ClientBin/EdityMcEditface", filesDir + "/wwwroot", filesDir + "/node_modules"));
-    //Build client
-    promises.push(clientBuild.build(outDir, iconOutPath, moduleDir, filesDir));
-    //Build bootstrap theme
-    promises.push(less.compile({
-        encoding: 'utf8',
-        importPaths: [moduleDir, moduleDir + '/bootstrap/less'],
-        input: filesDir + '/bootstrap/bootstrap-custom.less',
-        basePath: filesDir + '/bootstrap',
-        out: outDir + "/lib/bootstrap/dist/css",
-        compress: true,
-    }));
     promises.push(compileTypescript());
+    promises.push(artifact.importConfigs(filesDir, filesDir + "/ClientBin/EdityMcEditface", ["node_modules/*/edity-artifacts.json"]));
+    promises.push(artifact.importConfigs(filesDir, filesDir + "/ClientBin/Site", [filesDir + '/artifacts.json', artifact.getDefaultGlob(filesDir)]));
     //Return composite promise
     return Promise.all(promises);
 }
@@ -90,7 +78,7 @@ function compileTypescript() {
                     })];
                 case 1:
                     _a.sent();
-                    return [4 /*yield*/, jsnsTools.saveLoadedModules(filesDir + '/wwwroot/lib/tsbin.js', ['edity.theme.layouts.default'], filesDir + '/ClientBin/Site/lib/tsbin.prod.js')];
+                    return [4 /*yield*/, jsnsTools.saveLoadedModules(filesDir + '/wwwroot/lib/tsbin.js', ['hr.runattributes', 'edity.theme.layouts.default'], filesDir + '/ClientBin/Site/lib/tsbin.prod.js')];
                 case 2:
                     _a.sent();
                     return [2 /*return*/];

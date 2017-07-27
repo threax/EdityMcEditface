@@ -11,7 +11,6 @@
     "module": "amd",
     "baseUrl": ".",
     "noEmitHelpers": true,
-    "importHelpers": true,
     "moduleResolution": "node",
     "paths": {
       "edity.editorcore.*": [
@@ -23,9 +22,6 @@
       ],
       "hr.halcyon.*": [
         "node_modules\\htmlrapier.halcyon\\src\\*"
-      ],
-      "jdorn.*": [
-        "node_modules\\htmlrapier.json-editor\\*"
       ],
       "hr.sidebar.*": [
         "node_modules\\htmlrapier.sidebar\\src\\*"
@@ -53,12 +49,10 @@
     "node_modules\\htmlrapier.widgets\\src\\**\\*.ts",
     "node_modules\\htmlrapier\\src\\**\\*.ts"
   ],
-  "files": [
-    "node_modules\\jsns\\jsns.ts",
-    "node_modules\\htmlrapier.json-editor\\bin\\json-editor.js",
-    "node_modules\\jsns\\tslib.jsns.js"
-  ],
   "exclude": [
     "node_modules\\threax-npm-tk\\**\\*.js"
+  ],
+  "files": [
+    "node_modules\\jsns\\jsns.ts"
   ]
 }

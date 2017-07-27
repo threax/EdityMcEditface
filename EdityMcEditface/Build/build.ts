@@ -12,7 +12,7 @@ var filesDir = __dirname + "/..";
         console.log("Build SUCCEEDED");
     }
     catch (err) {
-        console.log("Build FAILED " + err.message);
+        console.log("Build FAILED: " + err.message);
     }
 })();
 

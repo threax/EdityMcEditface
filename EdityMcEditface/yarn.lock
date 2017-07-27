@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@types/es6-promise/-/es6-promise-0.0.32.tgz#3bcf44fb1e429f3df76188c8c6d874463ba371fd"
 
 "@types/node@^6.0.69":
-  version "6.0.84"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.84.tgz#193ffe5a9f42864d425ffd9739d95b753c6a1eab"
+  version "6.0.85"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.85.tgz#ec02bfe54a61044f2be44f13b389c6a0e8ee05ae"
 
-bootstrap@~3.3.6:
+bootstrap@>=3.3.7, bootstrap@~3.3.6, bootstrap@~3.3.7:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
 
@@ -18,55 +18,50 @@ ckeditor-youtube-plugin@^2.1.5:
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/ckeditor-youtube-plugin/-/ckeditor-youtube-plugin-2.1.5.tgz#a0d491204dc4b54def475a910333041073e577ab"
 
-ckeditor@~4.6.0:
-  version "4.6.2"
-  resolved "https://registry.yarnpkg.com/ckeditor/-/ckeditor-4.6.2.tgz#b1552b7a2f9537e165d7afd2d29d3d4959ff6bad"
+ckeditor@~4.7.1:
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/ckeditor/-/ckeditor-4.7.1.tgz#9cfe03b7504049bcda839758d836e95bfc3a3598"
 
-codemirror@~5.25.2:
-  version "5.25.2"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.25.2.tgz#8c77677ca9c9248d757d3a07ed1e89a8404850b7"
+codemirror@~5.28.0:
+  version "5.28.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.28.0.tgz#2978d9280d671351a4f5737d06bbd681a0fd6f83"
 
-editymceditface.client@10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-10.0.0.tgz#fde95bf1e7d66273ac3c909ecc122851684ad867"
+editymceditface.client@11.0.3:
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-11.0.3.tgz#23f85f84db4b0dd168901e71d7592ea237daf724"
   dependencies:
-    bootstrap "~3.3.6"
-    ckeditor "~4.6.0"
+    bootstrap "~3.3.7"
+    ckeditor "~4.7.1"
     ckeditor-youtube-plugin "^2.1.5"
-    codemirror "~5.25.2"
-    htmlrapier ">=9.0.0"
-    htmlrapier.bootstrap ">=5.0.0"
-    htmlrapier.halcyon ">=6.0.1"
-    htmlrapier.sidebar ">=2.1.1"
+    codemirror "~5.28.0"
+    htmlrapier ">=10.0.2"
+    htmlrapier.bootstrap ">=6.0.1"
+    htmlrapier.halcyon ">=6.0.2"
+    htmlrapier.sidebar ">=3.0.0"
     htmlrapier.treemenu ">=6.0.1"
-    htmlrapier.widgets ">=6.1.2"
-    jsns ">=4.2.3"
+    htmlrapier.widgets ">=8.0.1"
+    jsns ">=5.0.0"
 
-htmlrapier.bootstrap@>=4.2.1, htmlrapier.bootstrap@>=5.0.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/htmlrapier.bootstrap/-/htmlrapier.bootstrap-5.3.0.tgz#97ceb15b895245be2e560855fecf2a3f36e1d653"
-  dependencies:
-    htmlrapier ">=8.1.0"
-
-htmlrapier.halcyon@>=6.0.1:
+htmlrapier.bootstrap@>=6.0.1:
   version "6.0.1"
-  resolved "https://registry.yarnpkg.com/htmlrapier.halcyon/-/htmlrapier.halcyon-6.0.1.tgz#03b46fcf484dd10ad25d35627225b58da4ee936d"
+  resolved "https://registry.yarnpkg.com/htmlrapier.bootstrap/-/htmlrapier.bootstrap-6.0.1.tgz#584b599d4801d43c81bb9ba1dc8a5f72c07f5fba"
   dependencies:
-    htmlrapier ">=7.0.0"
+    bootstrap ">=3.3.7"
+    htmlrapier ">=8.1.0"
+    jquery "^3.2.1"
 
-htmlrapier.json-editor@>=4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/htmlrapier.json-editor/-/htmlrapier.json-editor-4.2.1.tgz#4c04062dbe172d3739bc0c96453efef69d4d8392"
+htmlrapier.halcyon@>=6.0.1, htmlrapier.halcyon@>=6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/htmlrapier.halcyon/-/htmlrapier.halcyon-6.0.2.tgz#d14ffab0360d033c2597a00fb0fac87b2fbb19cc"
   dependencies:
-    htmlrapier ">=5.2.0"
-    json-editor "~0.7.28"
+    htmlrapier ">=10.0.2"
 
-htmlrapier.sidebar@>=2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/htmlrapier.sidebar/-/htmlrapier.sidebar-2.1.1.tgz#8228a5d5344636d5ea0ca39cefe82f68ade8e47c"
+htmlrapier.sidebar@>=3.0.0:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/htmlrapier.sidebar/-/htmlrapier.sidebar-3.0.2.tgz#df1f55a84bb56f63286d228463d1792f961788b0"
   dependencies:
     bootstrap "~3.3.6"
-    htmlrapier ">=5.1.6"
+    htmlrapier ">=10.0.0"
 
 htmlrapier.treemenu@>=6.0.1:
   version "6.0.1"
@@ -74,29 +69,27 @@ htmlrapier.treemenu@>=6.0.1:
   dependencies:
     htmlrapier ">=8.0.1"
 
-htmlrapier.widgets@>=6.1.2:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-7.1.0.tgz#98f59b8eee9435a1d03535a3722c14d27e92dcec"
+htmlrapier.widgets@>=8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-8.0.1.tgz#52361db38f9c8af208e1fe7ff166c054a865473e"
   dependencies:
-    htmlrapier ">=8.0.2"
-    htmlrapier.bootstrap ">=4.2.1"
+    htmlrapier ">=10.0.0"
     htmlrapier.halcyon ">=6.0.1"
-    htmlrapier.json-editor ">=4.2.1"
 
-htmlrapier@>=5.1.6, htmlrapier@>=5.2.0, htmlrapier@>=7.0.0, htmlrapier@>=8.0.1, htmlrapier@>=8.0.2, htmlrapier@>=8.1.0, htmlrapier@>=9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-9.0.0.tgz#4a499907cc17c71874a97be509eb17435e0f8bb3"
+htmlrapier@>=10.0.0, htmlrapier@>=10.0.2, htmlrapier@>=8.0.1, htmlrapier@>=8.1.0:
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-10.0.2.tgz#b0a4bfb61f072dfb1826aa98556cef6baeb83d21"
   dependencies:
     "@types/es6-promise" "^0.0.32"
     tslib "^1.6.1"
 
-jsns@>=4.2.3:
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/jsns/-/jsns-4.2.3.tgz#5a1857d3a2f4935b5475716b91676a82e87de0a7"
+jquery@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
-json-editor@~0.7.28:
-  version "0.7.28"
-  resolved "https://registry.yarnpkg.com/json-editor/-/json-editor-0.7.28.tgz#2aa5b0990a2b5076789158e7dd8a2d2108ce9cc5"
+jsns@>=5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/jsns/-/jsns-5.0.0.tgz#c76429b822a68100eef8d4b8d3f1172b028664e4"
 
 tslib@^1.6.1:
   version "1.7.1"

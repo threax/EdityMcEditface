@@ -614,7 +614,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
 
             if (permissions.AllowWrite(this, pageDefFile, physicalPath))
             {
-                using (var outStream = new StreamWriter(WriteFile(physicalPath)))
+                using (var outStream = new StreamWriter(WriteFile(pageDefFile)))
                 {
                     JsonWriter.Serialize(definition, outStream);
                 }

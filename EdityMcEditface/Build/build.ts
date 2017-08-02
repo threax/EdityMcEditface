@@ -33,5 +33,5 @@ async function compileTypescript() {
         projectFolder: filesDir
     });
 
-    await jsnsTools.saveLoadedModules(filesDir + '/wwwroot/lib/tsbin.js', ['hr.runattributes', 'edity.theme.layouts.default'], filesDir + '/ClientBin/Site/lib/tsbin.prod.js')
+    await jsnsTools.saveLoadedModules(filesDir + '/wwwroot/lib/tsbin.js', ['hr.runattributes', 'edity.theme.layouts.default'], filesDir + '/ClientBin/Site/lib/tsbin.prod.js');
 }

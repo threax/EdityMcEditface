@@ -26,25 +26,25 @@ codemirror@~5.28.0:
   version "5.28.0"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.28.0.tgz#2978d9280d671351a4f5737d06bbd681a0fd6f83"
 
-editymceditface.client@11.0.4:
-  version "11.0.4"
-  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-11.0.4.tgz#46c39bd9a8b39231405be8efc3c67e66380467b5"
+editymceditface.client@12.0.0:
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-12.0.0.tgz#e76e1f16e653ac7a55fd90433223f3a8b4865c76"
   dependencies:
     bootstrap "~3.3.7"
     ckeditor "~4.7.1"
     ckeditor-youtube-plugin "^2.1.5"
     codemirror "~5.28.0"
-    htmlrapier ">=10.0.2"
+    htmlrapier ">=11.0.0"
     htmlrapier.bootstrap ">=6.0.1"
     htmlrapier.halcyon ">=6.0.2"
     htmlrapier.sidebar ">=3.0.0"
     htmlrapier.treemenu ">=6.0.1"
-    htmlrapier.widgets ">=8.0.1"
+    htmlrapier.widgets ">=9.0.0"
     jsns ">=5.0.0"
 
 htmlrapier.bootstrap@>=6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/htmlrapier.bootstrap/-/htmlrapier.bootstrap-6.0.1.tgz#584b599d4801d43c81bb9ba1dc8a5f72c07f5fba"
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/htmlrapier.bootstrap/-/htmlrapier.bootstrap-6.0.2.tgz#475f7cb06c0a20bc9b4c02fd5841debb90a1c7f7"
   dependencies:
     bootstrap ">=3.3.7"
     htmlrapier ">=8.1.0"
@@ -69,16 +69,16 @@ htmlrapier.treemenu@>=6.0.1:
   dependencies:
     htmlrapier ">=8.0.1"
 
-htmlrapier.widgets@>=8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-8.0.1.tgz#52361db38f9c8af208e1fe7ff166c054a865473e"
+htmlrapier.widgets@>=9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-9.0.0.tgz#b5f906aecba97bd54a9b6ff660c0541b012a31f2"
   dependencies:
-    htmlrapier ">=10.0.0"
+    htmlrapier ">=11.0.0"
     htmlrapier.halcyon ">=6.0.1"
 
-htmlrapier@>=10.0.0, htmlrapier@>=10.0.2, htmlrapier@>=8.0.1, htmlrapier@>=8.1.0:
-  version "10.0.2"
-  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-10.0.2.tgz#b0a4bfb61f072dfb1826aa98556cef6baeb83d21"
+htmlrapier@>=10.0.0, htmlrapier@>=10.0.2, htmlrapier@>=11.0.0, htmlrapier@>=8.0.1, htmlrapier@>=8.1.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-11.0.0.tgz#7e998e2deffe5d3bb8d8bb5d24f0e625fd484591"
   dependencies:
     "@types/es6-promise" "^0.0.32"
     tslib "^1.6.1"

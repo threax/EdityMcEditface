@@ -70,15 +70,15 @@ htmlrapier.treemenu@>=6.0.1:
     htmlrapier ">=8.0.1"
 
 htmlrapier.widgets@>=9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-9.0.0.tgz#b5f906aecba97bd54a9b6ff660c0541b012a31f2"
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-9.0.1.tgz#2d152a03c15f9a96f1981500c41598713b50f7a6"
   dependencies:
     htmlrapier ">=11.0.0"
     htmlrapier.halcyon ">=6.0.1"
 
 htmlrapier@>=10.0.0, htmlrapier@>=10.0.2, htmlrapier@>=11.0.0, htmlrapier@>=8.0.1, htmlrapier@>=8.1.0:
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-11.0.0.tgz#7e998e2deffe5d3bb8d8bb5d24f0e625fd484591"
+  version "11.2.1"
+  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-11.2.1.tgz#5efb4c9d12bea32307c2e1d93056d34f74eb15a0"
   dependencies:
     "@types/es6-promise" "^0.0.32"
     tslib "^1.6.1"

@@ -39,6 +39,11 @@ namespace EdityMcEditface.Mvc.Controllers
         [HalRel(Rels.Commit)]
         public void Put([FromServices]Signature signature, [FromBody]NewCommit newCommit)
         {
+            if(newCommit == null) //Keep empty messages working for now.
+            {
+                newCommit = new NewCommit();
+            }
+
             this.commitRepository.Commit(signature, newCommit);
         }
 

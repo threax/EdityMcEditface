@@ -41,7 +41,10 @@ namespace EdityMcEditface.Mvc.Controllers
         {
             if(newCommit == null) //Keep empty messages working for now.
             {
-                newCommit = new NewCommit();
+                newCommit = new NewCommit()
+                {
+                    Message = ""
+                };
             }
 
             this.commitRepository.Commit(signature, newCommit);

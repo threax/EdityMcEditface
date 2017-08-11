@@ -310,10 +310,15 @@ namespace EdityMcEditface.Mvc
                     break;
             }
 
+            services.AddExceptionErrorFilters(new ExceptionFilterOptions()
+            {
+                DetailedErrors = editySettings.DetailedErrors
+            });
+
             // Add framework services.
             var mvcBuilder = services.AddMvc(o =>
             {
-                o.UseExceptionErrorFilters(editySettings.DetailedErrors);
+                o.UseExceptionErrorFilters();
                 o.UseConventionalHalcyon(halOptions);
             })
             .AddJsonOptions(o =>

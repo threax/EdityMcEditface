@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Threax.AspNetCore.Halcyon.Ext;
-using Threax.AspNetCore.Crud;
 
 namespace EdityMcEditface.Mvc.Models
 {

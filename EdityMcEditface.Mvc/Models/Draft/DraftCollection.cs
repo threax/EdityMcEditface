@@ -3,7 +3,6 @@ using Halcyon.HAL.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Threax.AspNetCore.Crud;
 using Threax.AspNetCore.Halcyon.Ext;
 
 namespace EdityMcEditface.Mvc.Models

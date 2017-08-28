@@ -96,7 +96,7 @@ namespace EdityMcEditface.Mvc.Models.Page
             GitDraftInfo gitDraftInfo = LoadDraftInfo(physicalFile);
 
             //If the file has a sha, 
-            if(gitDraftInfo.Sha != null)
+            if (gitDraftInfo.Sha != null)
             {
                 var repoPath = Path.GetFullPath(Repository.Discover(physicalFile) + "/..");
                 using (var repo = new Repository(repoPath))
@@ -105,24 +105,18 @@ namespace EdityMcEditface.Mvc.Models.Page
                     var draftCommit = repo.Lookup<Commit>(gitDraftInfo.Sha);
                     if (draftCommit != null)
                     {
-                        var latestCommit = repo.Commits.QueryBy((physicalFile.Substring(repoPath.Length)).TrimStartingPathChars()).FirstOrDefault();
-                        if (latestCommit != null)
+                        var compare = repo.Diff.Compare<TreeChanges>(draftCommit.Tree, repo.Head.Tip.Tree);
+
+                        foreach (var contentFile in new String[] { file }.Concat(fileFinder.GetPageContentFiles(file)))
                         {
-                            foreach (var contentFile in fileFinder.GetPageContentFiles(file))
+                            if (compare.Any(i => i.Path == contentFile))
                             {
-                                var contentCommit = repo.Commits.QueryBy(contentFile.TrimStartingPathChars()).FirstOrDefault();
-                                if(contentCommit != null && contentCommit.Commit.Author.When.UtcDateTime > latestCommit.Commit.Author.When.UtcDateTime)
-                                {
-                                    latestCommit = contentCommit;
-                                }
+                                return new DraftInfo(draftCommit.Author.When.LocalDateTime, DraftStatus.UndraftedEdits, file);
                             }
-
-                            var draftTime = draftCommit.Author.When.UtcDateTime;
-                            var latestTime = latestCommit.Commit.Author.When.UtcDateTime;
-
-                            DraftStatus status = latestTime > draftTime ? DraftStatus.UndraftedEdits : DraftStatus.UpToDate;
-                            return new DraftInfo(draftCommit.Author.When.LocalDateTime, status, file);
                         }
+
+                        //If we got here the draft is up to date
+                        return new DraftInfo(draftCommit.Author.When.LocalDateTime, DraftStatus.UpToDate, file);
                     }
                 }
             }

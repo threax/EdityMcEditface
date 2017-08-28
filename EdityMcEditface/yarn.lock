@@ -7,8 +7,8 @@
   resolved "https://registry.yarnpkg.com/@types/es6-promise/-/es6-promise-0.0.32.tgz#3bcf44fb1e429f3df76188c8c6d874463ba371fd"
 
 "@types/node@^6.0.69":
-  version "6.0.87"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.87.tgz#5ab5774f8351a33a935099fa6be850aa0b0ad564"
+  version "6.0.88"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.88.tgz#f618f11a944f6a18d92b5c472028728a3e3d4b66"
 
 bootstrap@>=3.3.7, bootstrap@~3.3.6, bootstrap@~3.3.7:
   version "3.3.7"
@@ -26,9 +26,9 @@ codemirror@~5.28.0:
   version "5.28.0"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.28.0.tgz#2978d9280d671351a4f5737d06bbd681a0fd6f83"
 
-editymceditface.client@12.1.0:
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-12.1.0.tgz#171fa5aa0c081274dc1e3c5d940a85b37964faac"
+editymceditface.client@12.1.1:
+  version "12.1.1"
+  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-12.1.1.tgz#c4b0571777bfa7a95e3e0d4bffdcb13c25be1092"
   dependencies:
     bootstrap "~3.3.7"
     ckeditor "~4.7.1"

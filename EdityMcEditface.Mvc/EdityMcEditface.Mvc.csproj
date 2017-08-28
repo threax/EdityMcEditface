@@ -24,8 +24,8 @@
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.2" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
     <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="3.0.3" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="4.0.3" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="5.0.3" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="4.3.0" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="5.1.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">

@@ -93,7 +93,7 @@ namespace EdityMcEditface.Mvc.Models.Page
 
         public DraftInfo GetDraftStatus(String file, string physicalFile, IFileFinder fileFinder)
         {
-            var trimmedfile = file.TrimStartingPathChars();
+            file = file.TrimStartingPathChars();
 
             GitDraftInfo gitDraftInfo = LoadDraftInfo(physicalFile);
 
@@ -109,7 +109,7 @@ namespace EdityMcEditface.Mvc.Models.Page
                     {
                         var compare = repo.Diff.Compare<TreeChanges>(draftCommit.Tree, repo.Head.Tip.Tree);
 
-                        foreach (var contentFile in new String[] { trimmedfile }.Concat(fileFinder.GetPageContentFiles(trimmedfile)))
+                        foreach (var contentFile in new String[] { file }.Concat(fileFinder.GetPageContentFiles(file)))
                         {
                             if (compare.Any(i => i.Path == contentFile))
                             {

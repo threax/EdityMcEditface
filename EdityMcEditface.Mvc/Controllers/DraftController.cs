@@ -105,9 +105,10 @@ namespace EdityMcEditface.Mvc.Controllers
         /// <returns></returns>
         [HttpPut("{*File}")]
         [HalRel(Rels.SubmitLatestDraft)]
-        public Task Put(String file)
+        public async Task<Draft> Put(String file)
         {
-            return draftRepo.Submit(file);
+            await draftRepo.Submit(file);
+            return await Get(file);
         }
     }
 }

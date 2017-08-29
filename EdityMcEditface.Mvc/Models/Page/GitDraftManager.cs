@@ -108,10 +108,13 @@ namespace EdityMcEditface.Mvc.Models.Page
                     if (draftCommit != null)
                     {
                         var compare = repo.Diff.Compare<TreeChanges>(draftCommit.Tree, repo.Head.Tip.Tree);
+                        var contentFiles = new List<String>(5);
+                        contentFiles.Add(file);
+                        contentFiles.AddRange(fileFinder.GetPageContentFiles(file));
 
-                        foreach (var contentFile in new String[] { file }.Concat(fileFinder.GetPageContentFiles(file)))
+                        foreach (var compareFile in compare.Added.Concat(compare.Modified))
                         {
-                            if (compare.Any(i => i.Path == contentFile))
+                            if (contentFiles.Contains(compareFile.Path))
                             {
                                 return new DraftInfo(draftCommit.Author.When.LocalDateTime, DraftStatus.UndraftedEdits, file);
                             }

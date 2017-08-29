@@ -139,7 +139,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
             //Check the next result, if it is still null create a default
             if (status == null)
             {
-                status = new DraftInfo(null, DraftStatus.NeverDrafted, file);
+                status = new DraftInfo(null, DraftStatus.NeverDrafted, file.TrimStartingPathChars());
             }
 
             return status;

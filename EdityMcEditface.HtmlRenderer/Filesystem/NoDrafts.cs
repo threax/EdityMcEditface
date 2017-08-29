@@ -23,7 +23,7 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
 
         public DraftInfo GetDraftStatus(String file, String physicalFile, IFileFinder fileFinder)
         {
-            return new DraftInfo(null, DraftStatus.NeverDrafted, file);
+            return new DraftInfo(null, DraftStatus.NeverDrafted, file.TrimStartingPathChars());
         }
 
         public void PageErased(string file, string physicalPath)

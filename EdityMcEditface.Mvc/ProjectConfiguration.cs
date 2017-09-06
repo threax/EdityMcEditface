@@ -31,5 +31,12 @@ namespace EdityMcEditface.Mvc
         /// The default page for the project. Defaults to "index".
         /// </summary>
         public String DefaultPage { get; set; } = "index";
+
+        /// <summary>
+        /// The override variables for the project. These variables take ultimate precidence over all other
+        /// variables defined in edity.json files. Mostly useful to override variables when working on the code.
+        /// Defaults to null, which means no overrides.
+        /// </summary>
+        public Dictionary<String, String> OverrideVars { get; set; } = null;
     }
 }

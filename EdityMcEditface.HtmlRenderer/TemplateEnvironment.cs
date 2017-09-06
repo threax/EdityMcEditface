@@ -10,6 +10,7 @@ namespace EdityMcEditface.HtmlRenderer
     public class TemplateEnvironment : ValueProvider
     {
         private Dictionary<String, String> vars = new Dictionary<string, string>();
+        private Dictionary<String, String> overrideVars;
         private LinkedContent linkedContent = new LinkedContent();
         private String docLink;
         private EdityProject project;
@@ -19,8 +20,9 @@ namespace EdityMcEditface.HtmlRenderer
         private String version; //The version of the website, helps generate query strings for files to get around cache issues
         private bool useBuildVars;
 
-        public TemplateEnvironment(String docLink, IFileFinder fileFinder, String version = null, bool useBuildVars = false)
+        public TemplateEnvironment(String docLink, IFileFinder fileFinder, String version = null, bool useBuildVars = false, Dictionary<String, String> overrideVars = null)
         {
+            this.overrideVars = overrideVars;
             this.useBuildVars = useBuildVars;
             this.project = fileFinder.Project;
             this.version = version;
@@ -45,6 +47,16 @@ namespace EdityMcEditface.HtmlRenderer
         public void buildVariables(IEnumerable<PageStackItem> pages)
         {
             vars.Clear();
+            //Bring in the override vars that were specified, if they were given
+            if(overrideVars != null)
+            {
+                foreach(var var in overrideVars)
+                {
+                    mergeVar(var);
+                }
+            }
+
+            //Bring in page vars, these will override build and project vars
             foreach(var page in pages)
             {
                 foreach(var var in page.PageDefinition.Vars)

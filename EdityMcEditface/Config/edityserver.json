@@ -5,5 +5,8 @@
   "CompiledVirtualFolder": null,
   "SiteName": null,
   "AppHostConfigPath": null,
-  "ProjectMode": "OneRepo"
+  "ProjectMode": "OneRepo",
+  "OverrideVars": {
+    
+  }
 }

@@ -17,6 +17,7 @@ using System.Collections.Concurrent;
 using EdityMcEditface.HtmlRenderer.FileInfo;
 using EdityMcEditface.Mvc.Models.Page;
 using EdityMcEditface.Mvc.Models.Branch;
+using EdityMcEditface.Mvc.Services;
 
 namespace EdityMcEditface.Mvc.Controllers
 {
@@ -32,9 +33,11 @@ namespace EdityMcEditface.Mvc.Controllers
         private ConcurrentBag<String> seenExtensions = new ConcurrentBag<string>();
         private ConcurrentBag<String> altLayoutExtensions = new ConcurrentBag<string>();
         private IPhaseDetector branchDetector;
+        private IOverrideValuesProvider overrideValuesProvider;
 
-        public HomeController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, IPhaseDetector branchDetector)
+        public HomeController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, IPhaseDetector branchDetector, IOverrideValuesProvider overrideValuesProvider)
         {
+            this.overrideValuesProvider = overrideValuesProvider;
             this.fileFinder = fileFinder;
             this.fileInfoProvider = fileInfoProvider;
             this.branchDetector = branchDetector;
@@ -88,7 +91,7 @@ namespace EdityMcEditface.Mvc.Controllers
 
         private PageStack CreatePageStack()
         {
-            templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder);
+            templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder, overrideVars: overrideValuesProvider.OverrideVars);
             PageStack pageStack = new PageStack(templateEnvironment, fileFinder);
             pageStack.ContentFile = targetFileInfo.HtmlFile;
             return pageStack;
@@ -102,7 +105,7 @@ namespace EdityMcEditface.Mvc.Controllers
             //for one page if requested, so whatever
 
             targetFileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
-            templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder);
+            templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder, overrideVars: overrideValuesProvider.OverrideVars);
             PageStack pageStack = new PageStack(templateEnvironment, fileFinder);
             pageStack.ContentFile = targetFileInfo.HtmlFile;
 

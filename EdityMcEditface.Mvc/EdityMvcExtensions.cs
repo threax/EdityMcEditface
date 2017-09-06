@@ -147,6 +147,7 @@ namespace EdityMcEditface.Mvc
             services.TryAddScoped<IPageRepository, PageRepository>();
             services.TryAddScoped<ITemplateRepository, TemplateRepository>();
             services.TryAddScoped<IAssetRepository, AssetRepository>();
+            services.TryAddSingleton<IOverrideValuesProvider>(s => new DefaultOverrideValuesProvider(projectConfiguration.OverrideVars));
 
             var baseUrl = HalcyonConventionOptions.HostVariable;
             if(editySettings.BaseUrl != null)

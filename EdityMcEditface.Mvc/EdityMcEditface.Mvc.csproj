@@ -10,7 +10,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>4.11.0</Version>
+    <Version>4.11.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,7 +25,7 @@
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
     <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="4.0.0" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="4.5.0" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="6.2.2" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="6.2.5" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">

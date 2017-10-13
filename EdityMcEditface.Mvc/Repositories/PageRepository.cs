@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Threax.AspNetCore.FileRepository;
 using Threax.AspNetCore.Halcyon.Ext;
 
 namespace EdityMcEditface.Mvc.Repositories
@@ -17,12 +18,14 @@ namespace EdityMcEditface.Mvc.Repositories
         private IFileFinder fileFinder;
         private ITargetFileInfoProvider fileInfoProvider;
         private String pathBase;
+        private IFileVerifier fileVerifier;
 
-        public PageRepository(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, IPathBaseInjector pathBaseInjector)
+        public PageRepository(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, IPathBaseInjector pathBaseInjector, IFileVerifier fileVerifier)
         {
             this.fileFinder = fileFinder;
             this.fileInfoProvider = fileInfoProvider;
             this.pathBase = pathBaseInjector.PathBase;
+            this.fileVerifier = fileVerifier;
         }
 
         /// <summary>
@@ -73,9 +76,13 @@ namespace EdityMcEditface.Mvc.Repositories
             {
                 throw new ValidationException("Cannot update project files with the save function.");
             }
-            using (Stream stream = fileFinder.WriteFile(fileInfo.DerivedFileName))
+            using (var contentStream = content.OpenReadStream())
             {
-                await content.CopyToAsync(stream);
+                fileVerifier.Validate(contentStream, fileInfo.DerivedFileName, content.ContentType);
+                using (Stream stream = fileFinder.WriteFile(fileInfo.DerivedFileName))
+                {
+                    await contentStream.CopyToAsync(stream);
+                }
             }
         }
 

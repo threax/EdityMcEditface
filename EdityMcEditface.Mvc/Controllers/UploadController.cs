@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using EdityMcEditface.Mvc.Models.Upload;
 using EdityMcEditface.HtmlRenderer.FileInfo;
 using Threax.AspNetCore.Halcyon.Ext;
+using Threax.AspNetCore.FileRepository;
 
 namespace EdityMcEditface.Mvc.Controllers
 {
@@ -76,15 +77,20 @@ namespace EdityMcEditface.Mvc.Controllers
         /// Uplaod a new file.
         /// </summary>
         /// <param name="input">The upload input data.</param>
+        /// <param name="fileVerifier">The file verifier.</param>
         /// <returns></returns>
         [HttpPost]
         [HalRel(Rels.UploadFile)]
-        public async Task Upload([FromForm] UploadInput input)
+        public async Task Upload([FromForm] UploadInput input, [FromServices] IFileVerifier fileVerifier)
         {
             var fileInfo = fileInfoProvider.GetFileInfo(input.File, HttpContext.Request.PathBase);
-            using (Stream stream = fileFinder.WriteFile(fileInfo.DerivedFileName))
+            using (var uploadStream = input.Content.OpenReadStream())
             {
-                await input.Content.CopyToAsync(stream);
+                fileVerifier.Validate(uploadStream, fileInfo.DerivedFileName, input.Content.ContentType);
+                using (Stream stream = fileFinder.WriteFile(fileInfo.DerivedFileName))
+                {
+                    await uploadStream.CopyToAsync(stream);
+                }
             }
         }
 

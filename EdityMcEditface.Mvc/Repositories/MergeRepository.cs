@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Threax.AspNetCore.FileRepository;
 
 namespace EdityMcEditface.Mvc.Repositories
 {
@@ -19,13 +20,15 @@ namespace EdityMcEditface.Mvc.Repositories
         private ITargetFileInfoProvider fileInfoProvider;
         private String pathBase;
         private Repository repo;
+        private IFileVerifier fileVerifier;
 
-        public MergeRepository(Repository repo, IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, IPathBaseInjector pathBaseInjector)
+        public MergeRepository(Repository repo, IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, IPathBaseInjector pathBaseInjector, IFileVerifier fileVerifier)
         {
             this.fileFinder = fileFinder;
             this.fileInfoProvider = fileInfoProvider;
             this.pathBase = pathBaseInjector.PathBase;
             this.repo = repo;
+            this.fileVerifier = fileVerifier;
         }
 
         public MergeInfo MergeInfo(String file)
@@ -53,10 +56,14 @@ namespace EdityMcEditface.Mvc.Repositories
             }
 
             var fileInfo = fileInfoProvider.GetFileInfo(file, pathBase);
-            var repoPath = Path.Combine(repo.Info.WorkingDirectory, fileInfo.DerivedFileName);
-            using (var stream = fileFinder.WriteFile(fileFinder.GetProjectRelativePath(repoPath)))
+            using (var contentStream = content.OpenReadStream())
             {
-                await content.CopyToAsync(stream);
+                fileVerifier.Validate(contentStream, fileInfo.DerivedFileName, content.ContentType);
+                var repoPath = Path.Combine(repo.Info.WorkingDirectory, fileInfo.DerivedFileName);
+                using (var stream = fileFinder.WriteFile(fileFinder.GetProjectRelativePath(repoPath)))
+                {
+                    await contentStream.CopyToAsync(stream);
+                }
             }
 
             //Staging clears the conflict status

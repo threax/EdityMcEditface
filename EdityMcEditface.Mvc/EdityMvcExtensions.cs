@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Threax.AspNetCore.FileRepository;
 using Threax.AspNetCore.Halcyon.ClientGen;
 using Threax.AspNetCore.Halcyon.Ext;
 
@@ -330,6 +331,18 @@ namespace EdityMcEditface.Mvc
             .AddEdityControllers(editySettings.AdditionalMvcLibraries);
 
             services.AddScoped<ICompileRequestDetector, CompileRequestDetector>();
+
+            services.AddSingleton<IFileVerifier>(s =>
+            {
+                return new FileVerifier()
+                    .AddPdf()
+                    .AddDocx()
+                    .AddDoc()
+                    .AddPptx()
+                    .AddPpt()
+                    .AddXlsx()
+                    .AddXls();
+            });
 
             return services;
         }

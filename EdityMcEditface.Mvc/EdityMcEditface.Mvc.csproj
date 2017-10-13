@@ -24,6 +24,7 @@
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.2" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
     <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="4.0.0" />
+    <PackageReference Include="Threax.AspNetCore.FileRepository" Version="1.1.0" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="4.5.0" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="6.3.1" />
   </ItemGroup>

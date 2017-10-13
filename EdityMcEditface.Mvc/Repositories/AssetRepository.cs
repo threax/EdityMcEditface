@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Threax.AspNetCore.FileRepository;
 
 namespace EdityMcEditface.Mvc.Repositories
 {
@@ -13,11 +14,13 @@ namespace EdityMcEditface.Mvc.Repositories
     {
         private IFileFinder fileFinder;
         private String pathBase;
+        private IFileVerifier fileVerifier;
 
-        public AssetRepository(IFileFinder fileFinder, IPathBaseInjector pathBaseInjector)
+        public AssetRepository(IFileFinder fileFinder, IPathBaseInjector pathBaseInjector, IFileVerifier fileVerifier)
         {
             this.fileFinder = fileFinder;
             this.pathBase = pathBaseInjector.PathBase;
+            this.fileVerifier = fileVerifier;
         }
 
         public async Task<ImageUploadResponse> AddAsset(ImageUploadInput arg)
@@ -26,17 +29,21 @@ namespace EdityMcEditface.Mvc.Repositories
 
             try
             {
-                string autoFileFolder = "AutoUploads";
-                var autoFileFile = Guid.NewGuid().ToString() + Path.GetExtension(arg.Upload.FileName);
-                var autoPath = Path.Combine(autoFileFolder, autoFileFile);
-                using (Stream stream = fileFinder.WriteFile(autoPath))
+                using (var uploadStream = arg.Upload.OpenReadStream())
                 {
-                    await arg.Upload.CopyToAsync(stream);
-                }
+                    fileVerifier.Validate(uploadStream, arg.Upload.FileName, arg.Upload.ContentType);
+                    string autoFileFolder = "AutoUploads";
+                    var autoFileFile = Guid.NewGuid().ToString() + Path.GetExtension(arg.Upload.FileName);
+                    var autoPath = Path.Combine(autoFileFolder, autoFileFile);
+                    using (Stream stream = fileFinder.WriteFile(autoPath))
+                    {
+                        await uploadStream.CopyToAsync(stream);
+                    }
 
-                imageResponse.Uploaded = 1;
-                imageResponse.FileName = autoFileFile;
-                imageResponse.Url = pathBase + autoPath.EnsureStartingPathSlash();
+                    imageResponse.Uploaded = 1;
+                    imageResponse.FileName = autoFileFile;
+                    imageResponse.Url = pathBase + autoPath.EnsureStartingPathSlash();
+                }
             }
             catch (Exception ex)
             {

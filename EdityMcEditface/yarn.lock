@@ -27,8 +27,8 @@ codemirror@~5.28.0:
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.28.0.tgz#2978d9280d671351a4f5737d06bbd681a0fd6f83"
 
 editymceditface.client@>=12.3.0:
-  version "12.3.0"
-  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-12.3.0.tgz#b3d8dc81dce329bf96c0d56df832207e98cd4f12"
+  version "12.3.2"
+  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-12.3.2.tgz#d080fc40594f7a75df1f994505aabaed39ead888"
   dependencies:
     bootstrap "~3.3.7"
     ckeditor "~4.7.1"

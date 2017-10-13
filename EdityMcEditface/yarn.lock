@@ -7,8 +7,8 @@
   resolved "https://registry.yarnpkg.com/@types/es6-promise/-/es6-promise-0.0.32.tgz#3bcf44fb1e429f3df76188c8c6d874463ba371fd"
 
 "@types/node@^6.0.69":
-  version "6.0.88"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.88.tgz#f618f11a944f6a18d92b5c472028728a3e3d4b66"
+  version "6.0.89"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.89.tgz#154be0e6a823760cd6083aa8c48f952e2e63e0b0"
 
 bootstrap@>=3.3.7, bootstrap@~3.3.6, bootstrap@~3.3.7:
   version "3.3.7"
@@ -77,8 +77,8 @@ htmlrapier.widgets@>=9.2.0:
     htmlrapier.halcyon ">=6.0.1"
 
 htmlrapier@>=10.0.0, htmlrapier@>=10.0.2, htmlrapier@>=11.0.0, htmlrapier@>=12.2.0, htmlrapier@>=8.0.1, htmlrapier@>=8.1.0:
-  version "12.7.3"
-  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-12.7.3.tgz#dc9b5bedb2cbc8192f24242d74ccdf9aaf48f08e"
+  version "12.7.4"
+  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-12.7.4.tgz#2ad7b0fc9c1584ba5ec8958a5714b005e66f1f02"
   dependencies:
     "@types/es6-promise" "^0.0.32"
     tslib "^1.6.1"
@@ -92,5 +92,5 @@ jsns@>=5.0.0:
   resolved "https://registry.yarnpkg.com/jsns/-/jsns-5.0.0.tgz#c76429b822a68100eef8d4b8d3f1172b028664e4"
 
 tslib@^1.6.1:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.7.1.tgz#bc8004164691923a79fe8378bbeb3da2017538ec"
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.8.0.tgz#dc604ebad64bcbf696d613da6c954aa0e7ea1eb6"

@@ -335,6 +335,12 @@ namespace EdityMcEditface.Mvc
             services.AddSingleton<IFileVerifier>(s =>
             {
                 return new FileVerifier()
+                    .AddHtml()
+                    .AddBitmap()
+                    .AddJpeg()
+                    .AddPng()
+                    .AddSvgXml()
+                    .AddGif()
                     .AddPdf()
                     .AddDocx()
                     .AddDoc()

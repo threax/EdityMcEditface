@@ -67,8 +67,8 @@ namespace EdityMcEditface.Mvc.Controllers
 
             return new FileList
             {
-                Directories = fileFinder.EnumerateContentDirectories(dir),
-                Files = fileFinder.EnumerateContentFiles(dir),
+                Directories = fileFinder.EnumerateContentDirectories(dir).Select(i => i.Replace('\\', '/')),
+                Files = fileFinder.EnumerateContentFiles(dir).Select(i => i.Replace('\\', '/')),
                 Path = dir
             };
         }

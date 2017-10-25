@@ -3,6 +3,7 @@ using EdityMcEditface.Mvc;
 using EdityMcEditface.Mvc.Auth;
 using EdityMcEditface.Mvc.Config;
 using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -42,9 +43,7 @@ namespace EdityMcEditface.Controllers
         {
 
             var identity = new ClaimsIdentity(AllClaims(settings), "Cookies", "name", "role");
-            await HttpContext.Authentication.SignInAsync("Cookies", new ClaimsPrincipal(identity));
-
-
+            await HttpContext.SignInAsync("Cookies", new ClaimsPrincipal(identity));
             return SafeRedirect(ref returnUrl);
         }
 
@@ -88,8 +87,7 @@ namespace EdityMcEditface.Controllers
         [HttpPost]
         public async Task<IActionResult> LogOut([FromServices] IAntiforgery antiforgery, String returnUrl)
         {
-            await HttpContext.Authentication.SignOutAsync("Cookies");
-
+            await HttpContext.SignOutAsync("Cookies");
             return SafeRedirect(ref returnUrl);
         }
 

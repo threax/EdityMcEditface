@@ -127,19 +127,19 @@ namespace EdityMcEditface
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddEdity(EditySettings, ProjectConfiguration);
+
+            services.AddAuthentication("Cookies")
+            .AddCookie("Cookies", o =>
+            {
+                o.LoginPath = "/edity/auth/login";
+                o.LogoutPath = "/edity/auth/logout";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseCookieAuthentication(new CookieAuthenticationOptions()
-            {
-                AuthenticationScheme = "Cookies",
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                LoginPath = "/edity/auth/login",
-                LogoutPath = "/edity/auth/logout"
-            });
+            app.UseAuthentication();
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();

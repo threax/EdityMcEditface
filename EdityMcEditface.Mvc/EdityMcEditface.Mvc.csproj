@@ -1,16 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>EdityMcEditface.Mvc</AssemblyName>
     <PackageId>EdityMcEditface.Mvc</PackageId>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>4.14.0</Version>
+    <Version>5.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,20 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.1.0" />
+    <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="LibGit2Sharp.Portable" Version="0.24.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.3" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
     <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="4.0.0" />
     <PackageReference Include="Threax.AspNetCore.FileRepository" Version="1.2.0" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="4.5.1" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="6.3.2" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
 </Project>

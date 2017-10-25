@@ -18,7 +18,7 @@ namespace EdityMcEditface.Mvc
         public String ProjectPath { get; set; }
 
         /// <summary>
-        /// The path to th edity core client side files.
+        /// The path to the edity core client side files.
         /// </summary>
         public String EdityCorePath { get; set; }
 

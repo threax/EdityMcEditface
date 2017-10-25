@@ -130,9 +130,13 @@ namespace EdityMcEditface.Mvc
         /// <param name="services">The services collection.</param>
         /// <param name="editySettings">The edity settings.</param>
         /// <param name="projectConfiguration">The edity project configuration.</param>
+        /// <param name="setupServiceOptions">Callback to configure additional options for setting up services.</param>
         /// <returns>The service collection.</returns>
-        public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration)
+        public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration, Action<EdityServiceOptions> setupServiceOptions = null)
         {
+            var serviceOptions = new EdityServiceOptions();
+            setupServiceOptions?.Invoke(serviceOptions);
+
             //Setup the mapper
             var mapperConfig = SetupMappings();
             services.AddScoped<IMapper>(i => mapperConfig.CreateMapper());
@@ -329,12 +333,13 @@ namespace EdityMcEditface.Mvc
                 o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             })
             .AddEdityControllers(editySettings.AdditionalMvcLibraries);
+            serviceOptions.CustomizeMvcBuilder?.Invoke(mvcBuilder);
 
             services.AddScoped<ICompileRequestDetector, CompileRequestDetector>();
 
             services.AddSingleton<IFileVerifier>(s =>
             {
-                return new FileVerifier()
+                var verifier = new FileVerifier()
                     .AddHtml()
                     .AddBitmap()
                     .AddJpeg()
@@ -349,6 +354,10 @@ namespace EdityMcEditface.Mvc
                     .AddXlsx()
                     .AddXls()
                     .AddJson();
+
+                serviceOptions.CustomizeFileVerifier?.Invoke(verifier);
+
+                return verifier;
             });
 
             return services;

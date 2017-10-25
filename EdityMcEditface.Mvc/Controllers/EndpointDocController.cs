@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
+using Threax.AspNetCore.ExceptionFilter;
 using Threax.AspNetCore.Halcyon.Ext;
 
 namespace EdityMcEditface.Mvc.Controllers
@@ -27,7 +25,14 @@ namespace EdityMcEditface.Mvc.Controllers
         [HalRel(HalDocEndpointInfo.DefaultRels.Get)]
         public EndpointDoc Get(String groupName, String method, String relativePath)
         {
-            return descriptionProvider.GetDoc(groupName, method, relativePath);
+            try
+            {
+                return descriptionProvider.GetDoc(groupName, method, relativePath, User);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw new ErrorResultException("Unauthorized", HttpStatusCode.Unauthorized);
+            }
         }
     }
 }

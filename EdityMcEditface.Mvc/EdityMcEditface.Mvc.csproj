@@ -9,7 +9,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>5.1.0</Version>
+    <Version>5.1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,7 +27,7 @@
     <PackageReference Include="Threax.AspNetCore.FileRepository" Version="1.2.0" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="4.5.1" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen.Tools" Version="1.0.0" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="6.3.2" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="6.4.0" />
   </ItemGroup>
 
 </Project>

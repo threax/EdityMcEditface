@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Threax.AspNetCore.BuiltInTools;
 using Threax.AspNetCore.FileRepository;
 using Threax.AspNetCore.Halcyon.ClientGen;
 using Threax.AspNetCore.Halcyon.Ext;
@@ -358,6 +359,16 @@ namespace EdityMcEditface.Mvc
                 serviceOptions.CustomizeFileVerifier?.Invoke(verifier);
 
                 return verifier;
+            });
+
+            services.AddScoped<IToolRunner>(s =>
+            {
+                var tools = new ToolRunner()
+                    .UseClientGenTools();
+
+                serviceOptions.CustomizeTools?.Invoke(tools);
+
+                return tools;
             });
 
             return services;

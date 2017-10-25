@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Threax.AspNetCore.BuiltInTools;
 using Threax.AspNetCore.FileRepository;
 
 namespace EdityMcEditface.Mvc
@@ -21,5 +22,10 @@ namespace EdityMcEditface.Mvc
         /// If you need to add additional file type support use this action.
         /// </summary>
         public Action<IFileVerifier> CustomizeFileVerifier { get; set; }
+
+        /// <summary>
+        /// Customize the tool runner. It will already be configured with the client generator tools.
+        /// </summary>
+        public Action<IToolRunner> CustomizeTools { get; set; }
     }
 }

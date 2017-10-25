@@ -347,7 +347,8 @@ namespace EdityMcEditface.Mvc
                     .AddPptx()
                     .AddPpt()
                     .AddXlsx()
-                    .AddXls();
+                    .AddXls()
+                    .AddJson();
             });
 
             return services;

@@ -14,7 +14,7 @@ namespace EdityMcEditface.Mvc.Controllers
     [ResponseCache(NoStore = true)]
     [ProducesHal]
     [TypeFilter(typeof(HalModelResultFilterAttribute))]
-    [Authorize(Roles = Roles.EditPages)]
+    [Authorize(AuthenticationSchemes = AuthCoreSchemes.Bearer, Roles = Roles.EditPages)]
     public class PhaseController : Controller
     {
         /// <summary>

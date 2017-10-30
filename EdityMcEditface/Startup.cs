@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using EdityMcEditface.Mvc.BuildTasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EdityMcEditface
 {
@@ -128,8 +129,8 @@ namespace EdityMcEditface
         {
             services.AddEdity(EditySettings, ProjectConfiguration);
 
-            services.AddAuthentication("Cookies")
-            .AddCookie("Cookies", o =>
+            services.AddAuthentication(AuthCoreSchemes.Bearer)
+            .AddCookie(AuthCoreSchemes.Bearer, o =>
             {
                 o.LoginPath = "/edity/auth/login";
                 o.LogoutPath = "/edity/auth/logout";

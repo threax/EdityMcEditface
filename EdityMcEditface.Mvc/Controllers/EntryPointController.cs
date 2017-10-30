@@ -12,7 +12,7 @@ namespace EdityMcEditface.Mvc.Controllers
     [ResponseCache(NoStore = true)]
     [ProducesHal]
     [TypeFilter(typeof(HalModelResultFilterAttribute))]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = AuthCoreSchemes.Bearer)]
     public class EntryPointController : Controller
     {
         public class Rels

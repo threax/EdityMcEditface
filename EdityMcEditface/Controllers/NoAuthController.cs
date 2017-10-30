@@ -42,8 +42,8 @@ namespace EdityMcEditface.Controllers
         public async Task<IActionResult> LogIn([FromServices] EditySettings settings, String returnUrl)
         {
 
-            var identity = new ClaimsIdentity(AllClaims(settings), "Cookies", "name", "role");
-            await HttpContext.SignInAsync("Cookies", new ClaimsPrincipal(identity));
+            var identity = new ClaimsIdentity(AllClaims(settings), AuthCoreSchemes.Bearer, "name", "role");
+            await HttpContext.SignInAsync(AuthCoreSchemes.Bearer, new ClaimsPrincipal(identity));
             return SafeRedirect(ref returnUrl);
         }
 
@@ -87,7 +87,7 @@ namespace EdityMcEditface.Controllers
         [HttpPost]
         public async Task<IActionResult> LogOut([FromServices] IAntiforgery antiforgery, String returnUrl)
         {
-            await HttpContext.SignOutAsync("Cookies");
+            await HttpContext.SignOutAsync(AuthCoreSchemes.Bearer);
             return SafeRedirect(ref returnUrl);
         }
 

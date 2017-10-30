@@ -19,7 +19,7 @@ namespace EdityMcEditface.Mvc.Controllers
     /// <summary>
     /// This controller handles file uploads.
     /// </summary>
-    [Authorize(Roles = Roles.UploadAnything)]
+    [Authorize(AuthenticationSchemes = AuthCoreSchemes.Bearer, Roles = Roles.UploadAnything)]
     [Route("edity/[controller]/[action]")]
     [ResponseCache(NoStore = true)]
     [ProducesHal]

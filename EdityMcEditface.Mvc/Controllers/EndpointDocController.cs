@@ -11,7 +11,7 @@ namespace EdityMcEditface.Mvc.Controllers
     [ResponseCache(NoStore = true)]
     [ProducesHal]
     [TypeFilter(typeof(HalModelResultFilterAttribute))]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = AuthCoreSchemes.Bearer)]
     public class EndpointDocController : Controller
     {
         IEndpointDocBuilder descriptionProvider;

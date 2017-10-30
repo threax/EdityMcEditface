@@ -18,7 +18,7 @@ namespace EdityMcEditface.Mvc.Controllers
     /// <summary>
     /// This api controls templates.
     /// </summary>
-    [Authorize(Roles = Roles.EditPages)]
+    [Authorize(AuthenticationSchemes = AuthCoreSchemes.Bearer, Roles = Roles.EditPages)]
     [Route("edity/[controller]")]
     [ResponseCache(NoStore = true)]
     [ProducesHal]

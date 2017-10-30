@@ -14,7 +14,7 @@ namespace EdityMcEditface.Mvc.Controllers
     /// This controller publishes / compiles the static website.
     /// </summary>
     [Route("edity/[controller]")]
-    [Authorize(Roles = Roles.Compile)]
+    [Authorize(AuthenticationSchemes = AuthCoreSchemes.Bearer, Roles = Roles.Compile)]
     [ResponseCache(NoStore = true)]
     [ProducesHal]
     [TypeFilter(typeof(HalModelResultFilterAttribute))]

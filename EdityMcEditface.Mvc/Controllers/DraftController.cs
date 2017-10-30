@@ -19,7 +19,7 @@ namespace EdityMcEditface.Mvc.Controllers
     [ResponseCache(NoStore = true)]
     [ProducesHal]
     [TypeFilter(typeof(HalModelResultFilterAttribute))]
-    [Authorize(Roles = Roles.CreateDrafts)]
+    [Authorize(AuthenticationSchemes = AuthCoreSchemes.Bearer, Roles = Roles.CreateDrafts)]
     public class DraftController : Controller
     {
         public static class Rels

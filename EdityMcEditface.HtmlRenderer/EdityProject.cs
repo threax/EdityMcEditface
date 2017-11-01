@@ -25,6 +25,14 @@ namespace EdityMcEditface.HtmlRenderer
         public Dictionary<String, String> BuildVars { get; set; } = new Dictionary<string, string>();
 
         /// <summary>
+        /// This dictionary holds settings that will be echoed to the page as a javascript object. It is used to
+        /// store client side configuration. These variables cannot be directly output to the page, but instead must
+        /// be written by calling the editPageSettings() macro. These values will be written in plain text to the page,
+        /// so do not include secret info here.
+        /// </summary>
+        public Dictionary<String, Object> EditPageSettings { get; set; } = new Dictionary<string, object>();
+
+        /// <summary>
         /// The list of linked content for the entire project.
         /// </summary>
         public List<String> LinkedContent { get; set; } = new List<string>();
@@ -60,6 +68,7 @@ namespace EdityMcEditface.HtmlRenderer
             mergeDictionarys(backupProject.ContentMap, ContentMap);
             mergeDictionarys(backupProject.Vars, Vars);
             mergeDictionarys(backupProject.BuildVars, BuildVars);
+            mergeDictionarys(backupProject.EditPageSettings, EditPageSettings);
             mergeStringList(backupProject.LinkedContent, LinkedContent);
             mergeStringList(backupProject.AdditionalContent, AdditionalContent);
             mergeStringList(backupProject.EditComponents, EditComponents);

@@ -6,9 +6,12 @@ import { WithCredentialsFetcher } from 'edity.editorcore.WithCredentialsFetcher'
 import * as urlInjector from 'edity.editorcore.BaseUrlInjector';
 import * as controller from 'hr.controller';
 import * as client from 'edity.editorcore.EdityHypermediaClient';
+import * as pageConfig from 'hr.pageconfig';
 
-interface PageSettings {
-    baseUrl;
+interface Config {
+    editSettings?: {
+        baseUrl: string;
+    };
 }
 
 var mainBuilder: controller.InjectedControllerBuilder = null;
@@ -19,17 +22,20 @@ export function createBaseBuilder(): controller.InjectedControllerBuilder {
 
         bootstrap.activate();
 
-        var pageSettings = <PageSettings>(<any>window).editPageSettings;
-        if (!pageSettings) {
-            pageSettings = {
+        var config = pageConfig.read<Config>();
+        if (!config) {
+            config = {};
+        }
+        if (!config.editSettings) {
+            config.editSettings = {
                 baseUrl: '/'
             };
         }
 
         var services = mainBuilder.Services;
         services.addShared(Fetcher, s => new WithCredentialsFetcher(new CacheBuster(new WindowFetch())));
-        services.addShared(urlInjector.IBaseUrlInjector, s => new urlInjector.BaseUrlInjector(pageSettings.baseUrl));
-        var baseUrl = pageSettings.baseUrl ? pageSettings.baseUrl : '';
+        services.addShared(urlInjector.IBaseUrlInjector, s => new urlInjector.BaseUrlInjector(config.editSettings.baseUrl));
+        var baseUrl = config.editSettings.baseUrl ? config.editSettings.baseUrl : '';
         mainBuilder.Services.addShared(client.EntryPointInjector, s => new client.EntryPointInjector(baseUrl + '/edity/entrypoint', s.getRequiredService(Fetcher)));
     }
     return mainBuilder;

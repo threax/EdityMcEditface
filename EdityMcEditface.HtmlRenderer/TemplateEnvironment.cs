@@ -35,6 +35,9 @@ namespace EdityMcEditface.HtmlRenderer
             {
                 pathBase = pathBase.EnsureStartingPathSlash();
             }
+
+            this.project.EditPageSettings["baseUrl"] = pathBase;
+
             this.docLink = docLink.EnsureStartingPathSlash();
             this.fileFinder = fileFinder;
             linkedContent.mergeEntries(project.ContentMap);
@@ -116,6 +119,7 @@ namespace EdityMcEditface.HtmlRenderer
         }
 
         private const String sectionOpen = "section(";
+        private const String editPageSettings = "editPageSettings()";
         private const String macroClose = ")";
 
         public String getValue(String key, String defaultVal)
@@ -132,6 +136,19 @@ namespace EdityMcEditface.HtmlRenderer
                     //Return an error message
                     return $"{ex.GetType().Name} Message: {ex.Message}";
                 }
+            }
+            else if (key.Equals(editPageSettings))
+            {
+                return 
+$@"<script type=""text/javascript"">
+window.hr_config = (function(next){{
+    return function(config)
+    {{
+        config.editSettings = {JsonWriter.Serialize(this.project.EditPageSettings)};
+        return next ? next(config) : config;
+    }}
+}})(window.hr_config);
+</script>";
             }
             else
             {
@@ -162,7 +179,7 @@ namespace EdityMcEditface.HtmlRenderer
         public bool shouldEncodeOutput(String key)
         {
             //The css and javascript tags should be written insecurly, also the section macro
-            return key != "css" && key != "javascript" && !key.StartsWith(sectionOpen);
+            return key != "css" && key != "javascript" && !key.StartsWith(sectionOpen) && !key.Equals(editPageSettings);
         }
 
         /// <summary>

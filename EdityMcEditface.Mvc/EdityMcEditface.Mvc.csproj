@@ -9,7 +9,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>6.1.1</Version>
+    <Version>6.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,13 +22,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
-    <PackageReference Include="Threax.AspNetCore.AuthCore" Version="1.1.0" />
-    <PackageReference Include="Threax.AspNetCore.BuiltInTools" Version="4.0.3" />
-    <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="4.0.0" />
-    <PackageReference Include="Threax.AspNetCore.FileRepository" Version="1.2.0" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="4.5.1" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen.Tools" Version="1.0.0" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="6.4.0" />
+    <PackageReference Include="Threax.AspNetCore.AuthCore" Version="2.0.0" />
+    <PackageReference Include="Threax.AspNetCore.BuiltInTools" Version="5.0.0" />
+    <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="5.0.0" />
+    <PackageReference Include="Threax.AspNetCore.FileRepository" Version="2.0.0" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="5.0.0" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen.Tools" Version="2.0.0" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="7.0.0" />
   </ItemGroup>
 
 </Project>

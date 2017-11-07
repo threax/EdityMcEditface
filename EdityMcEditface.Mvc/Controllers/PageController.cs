@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Threax.AspNetCore.Halcyon.Ext;
 
 namespace EdityMcEditface.Mvc.Controllers
@@ -88,6 +89,7 @@ namespace EdityMcEditface.Mvc.Controllers
         [HalRel(Rels.Save)]
         public Task Save(String filePath, [FromForm] SavePageInput arg)
         {
+            filePath = HttpUtility.UrlDecode(filePath); //This will come in encoded, so need to decode
             return pageRepo.Save(filePath, arg.Content);
         }
 

@@ -109,12 +109,12 @@ namespace EdityMcEditface.Mvc.Models.Page
                     {
                         var compare = repo.Diff.Compare<TreeChanges>(draftCommit.Tree, repo.Head.Tip.Tree);
                         var contentFiles = new List<String>(5);
-                        contentFiles.Add(file);
-                        contentFiles.AddRange(fileFinder.GetPageContentFiles(file));
+                        contentFiles.Add(file.Replace('\\', '/'));
+                        contentFiles.AddRange(fileFinder.GetPageContentFiles(file).Select(i => i.Replace('\\', '/')));
 
-                        foreach (var compareFile in compare.Added.Concat(compare.Modified))
+                        foreach (var compareFile in compare.Added.Concat(compare.Modified).Select(i => i.Path.Replace('\\', '/')))
                         {
-                            if (contentFiles.Contains(compareFile.Path))
+                            if (contentFiles.Contains(compareFile))
                             {
                                 return new DraftInfo(draftCommit.Author.When.LocalDateTime, DraftStatus.UndraftedEdits, file);
                             }

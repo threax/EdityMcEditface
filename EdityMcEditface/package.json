@@ -6,10 +6,10 @@
     "@types/node": "^6.0.69"
   },
   "dependencies": {
-    "editymceditface.client": ">=12.3.0"
+    "editymceditface.client": ">=12.6.0"
   },
   "scripts": {
-    "build": "node Build/build.js",
+    "build": "node Build/build.js && dotnet bundle",
     "yarn-install": "yarn install --flat && yarn link threax-npm-tk",
     "clean": "powershell -Command Remove-Item 'ClientBin\\*' -Recurse -Force",
     "trash-modules": "powershell -Command Remove-Item 'node_modules\\*' -Recurse -Force",

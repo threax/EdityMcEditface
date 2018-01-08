@@ -8,7 +8,7 @@ using Threax.AspNetCore.Halcyon.Ext;
 
 namespace EdityMcEditface.Mvc.Repositories
 {
-    public class BranchRepository
+    public class BranchRepository : IBranchRepository
     {
         private LibGit2Sharp.Repository repo;
         private string localRefRoot;

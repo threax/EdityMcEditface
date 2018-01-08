@@ -59,5 +59,43 @@ namespace EdityMcEditface.Mvc.Tests
                 }
             }
         }
+
+        [Fact]
+        public void ListUpstream()
+        {
+            using (var dir = new SelfDeletingDirectory(Path.GetFullPath(Path.Combine(basePath, nameof(this.ListAutoMaster)))))
+            {
+                var upstreamPath = Path.Combine(dir.Path, "Upstream");
+                var authorPath = Path.Combine(dir.Path, "Author");
+                var downstreamPath = Path.Combine(dir.Path, "Downstream");
+
+                Repository.Init(upstreamPath, true);
+                Repository.Clone(upstreamPath, authorPath);
+                using (var repo = new Repository(authorPath))
+                {
+                    var testFilePath = Path.Combine(dir.Path, "Author/test.txt");
+                    File.WriteAllText(testFilePath, "Some test data.");
+                    Commands.Stage(repo, testFilePath);
+                    var signature = new Signature("Test Bot", "testbot@editymceditface.com", DateTime.Now);
+                    repo.Commit("Added test data", signature, signature);
+
+                    var remote = repo.Network.Remotes["origin"];
+                    var branch = repo.CreateBranch("sidebranch");
+                    repo.Branches.Update(branch, b => b.Remote = remote.Name, b => b.UpstreamBranch = branch.CanonicalName);
+
+                    repo.Network.Push(repo.Branches, new PushOptions() {  });
+                }
+
+                Repository.Clone(upstreamPath, downstreamPath);
+                using (var repo = new Repository(downstreamPath))
+                {
+                    var branchRepo = new BranchRepository(repo);
+                    var branches = branchRepo.List();
+                    Assert.NotEmpty(branches.Items);
+                    Assert.Equal("master", branches.Items.First().FriendlyName);
+                    Assert.Equal("refs/heads/master", branches.Items.First().CanonicalName);
+                }
+            }
+        }
     }
 }

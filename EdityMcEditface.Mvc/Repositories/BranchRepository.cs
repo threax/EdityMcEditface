@@ -43,22 +43,30 @@ namespace EdityMcEditface.Mvc.Repositories
             repo.Branches.Update(branch, b => b.Remote = remote.Name, b => b.UpstreamBranch = branch.CanonicalName);
         }
 
-        public void Checkout(String name)
+        public void Checkout(String name, LibGit2Sharp.Signature sig)
         {
             var localRef = localRefRoot + name;
             LibGit2Sharp.Branch branch = repo.Branches[localRef];
-            if(branch != null)
+
+            var remoteRef = remoteRefRoot + name;
+            var remoteBranch = repo.Branches[remoteRef];
+
+            //Found a local branch, use it
+            if (branch != null)
             {
                 LibGit2Sharp.Commands.Checkout(repo, branch);
+                if(remoteBranch != null && remoteBranch.Tip != repo.Head.Tip)
+                {
+                    repo.Merge(remoteBranch, sig, new LibGit2Sharp.MergeOptions());
+                }
                 return; //Was able to do a simple checkout to a local branch
             }
 
-            var remoteRef = remoteRefRoot + name;
-            branch = repo.Branches[remoteRef];
-            if(branch != null)
+            //No local branch, use the remote branch and create a new local branch
+            if(remoteBranch != null)
             {
                 //Since we already know there is not a local branch, create it
-                var localBranch = repo.Branches.Add(name, branch.Tip);
+                var localBranch = repo.Branches.Add(name, remoteBranch.Tip);
                 LinkBranchToRemote(localBranch);
                 LibGit2Sharp.Commands.Checkout(repo, localBranch);
                 return; //Was able to find branch in remote repo. Checkout to it

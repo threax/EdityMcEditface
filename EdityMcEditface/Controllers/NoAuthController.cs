@@ -58,6 +58,7 @@ namespace EdityMcEditface.Controllers
             yield return new Claim("role", Roles.Compile);
             yield return new Claim("role", Roles.UploadAnything);
             yield return new Claim("role", Roles.CreateDrafts);
+            yield return new Claim("role", Roles.AddBranch);
             yield return new Claim("role", LocalEdityRoles.Shutdown);
         }
 

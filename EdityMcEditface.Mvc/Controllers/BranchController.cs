@@ -15,7 +15,7 @@ namespace EdityMcEditface.Mvc.Controllers
     [ProducesHal]
     [TypeFilter(typeof(HalModelResultFilterAttribute))]
     [Authorize(AuthenticationSchemes = AuthCoreSchemes.Bearer, Roles = Roles.EditPages)]
-    public class BranchController
+    public class BranchController : Controller
     {
         public static class Rels
         {
@@ -46,11 +46,11 @@ namespace EdityMcEditface.Mvc.Controllers
             branchRepo.Add(input.Name);
         }
 
-        [HttpPost("[action]")]
+        [HttpPost("[action]/{FriendlyName}")]
         [HalRel(Rels.Checkout)]
-        public void Checkout(BranchInput input, [FromServices] LibGit2Sharp.Signature sig)
+        public void Checkout(String friendlyName, [FromServices] LibGit2Sharp.Signature sig)
         {
-            branchRepo.Checkout(input.Name, sig);
+            branchRepo.Checkout(friendlyName, sig);
         }
     }
 }

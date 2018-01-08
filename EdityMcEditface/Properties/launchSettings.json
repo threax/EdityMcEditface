@@ -17,7 +17,7 @@
     },
     "EdityMcEditface": {
       "commandName": "Project",
-      "commandLineArgs": "--workingDir=\"..\\..\\HtmlRapier\\docs\"",
+      "commandLineArgs": "--workingDir=\"..\\..\\HtmlRapierDocsCopy\"",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/",
       "environmentVariables": {

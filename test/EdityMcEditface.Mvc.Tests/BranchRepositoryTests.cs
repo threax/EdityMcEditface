@@ -62,7 +62,67 @@ namespace EdityMcEditface.Mvc.Tests
         }
 
         [Fact]
-        public void ListUpstreamOnlyMaster()
+        public void ListCreated()
+        {
+            using (var dir = new SelfDeletingDirectory(Path.GetFullPath(Path.Combine(basePath, nameof(this.ListCreated)))))
+            {
+                Repository.Init(dir.Path, false);
+                using (var repo = new Repository(dir.Path))
+                {
+                    var testFilePath = Path.Combine(dir.Path, "test.txt");
+                    File.WriteAllText(testFilePath, "Some test data.");
+                    Commands.Stage(repo, testFilePath);
+                    var signature = new Signature("Test Bot", "testbot@editymceditface.com", DateTime.Now);
+                    repo.Commit("Added test data", signature, signature);
+
+                    var branchRepo = new BranchRepository(repo);
+
+                    branchRepo.Add("side");
+                    branchRepo.Add("anotherbranch");
+
+                    var branches = branchRepo.List();
+                    Assert.Equal(3, branches.Items.Count());
+                }
+            }
+        }
+
+        [Fact]
+        public async Task ListUpstreamOnlyMaster()
+        {
+            using (var dir = new SelfDeletingDirectory(Path.GetFullPath(Path.Combine(basePath, nameof(this.ListUpstreamOnlyMaster)))))
+            {
+                var upstreamPath = Path.Combine(dir.Path, "Upstream");
+                var authorPath = Path.Combine(dir.Path, "Author");
+                var downstreamPath = Path.Combine(dir.Path, "Downstream");
+
+                Repository.Init(upstreamPath, true);
+                Repository.Clone(upstreamPath, authorPath);
+                using (var repo = new Repository(authorPath))
+                {
+                    var testFilePath = Path.Combine(dir.Path, "Author/test.txt");
+                    File.WriteAllText(testFilePath, "Some test data.");
+                    Commands.Stage(repo, testFilePath);
+                    var signature = new Signature("Test Bot", "testbot@editymceditface.com", DateTime.Now);
+                    repo.Commit("Added test data", signature, signature);
+
+                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>());
+                    await syncRepo.Push();
+                }
+
+                Repository.Clone(upstreamPath, downstreamPath);
+                using (var repo = new Repository(downstreamPath))
+                {
+                    var branchRepo = new BranchRepository(repo);
+                    var branches = branchRepo.List();
+                    Assert.Single(branches.Items);
+                    Assert.Equal("master", branches.Items.First().FriendlyName);
+                    Assert.Equal("refs/heads/master", branches.Items.First().CanonicalName);
+                }
+            }
+        }
+
+        [Fact]
+        public async Task ListUpstreamMultiple()
         {
             using (var dir = new SelfDeletingDirectory(Path.GetFullPath(Path.Combine(basePath, nameof(this.ListUpstreamOnlyMaster)))))
             {
@@ -82,8 +142,10 @@ namespace EdityMcEditface.Mvc.Tests
 
                     var authorBranchRepo = new BranchRepository(repo);
                     authorBranchRepo.Add("sidebranch");
+                    authorBranchRepo.Add("another");
 
-                    repo.Network.Push(repo.Branches, new PushOptions() {  });
+                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>());
+                    await syncRepo.Push();
                 }
 
                 Repository.Clone(upstreamPath, downstreamPath);
@@ -91,13 +153,16 @@ namespace EdityMcEditface.Mvc.Tests
                 {
                     var branchRepo = new BranchRepository(repo);
                     var branches = branchRepo.List();
-                    Assert.Single(branches.Items);
-                    Assert.Equal("master", branches.Items.First().FriendlyName);
-                    Assert.Equal("refs/heads/master", branches.Items.First().CanonicalName);
+                    Assert.Equal(3, branches.Items.Count());
                 }
             }
         }
 
+        /// <summary>
+        /// Do a complete process to see if a file can go from an author, pushed to a common source and edited by another author
+        /// and then pulled back into the original author's work with changes.
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task UpstreamWithCheckout()
         {

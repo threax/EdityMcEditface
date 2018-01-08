@@ -1,6 +1,7 @@
 ﻿using EdityMcEditface.Mvc.Models.Branch;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Threax.AspNetCore.Halcyon.Ext;
@@ -20,15 +21,31 @@ namespace EdityMcEditface.Mvc.Repositories
             this.remoteRefRoot = remoteRefRoot;
         }
 
+        /// <summary>
+        /// Get a list of branch names that can be activated.
+        /// </summary>
+        /// <returns></returns>
         public BranchCollection List()
         {
-            IEnumerable<LibGit2Sharp.Branch> branches = this.repo.Branches;
-            if(localRefRoot != null)
+            //This will look at all local refs first, and then add remotes that have not already been identified.
+
+            var branches = new List<LibGit2Sharp.Branch>();
+            var ignoredRemoteBranches = new HashSet<LibGit2Sharp.Branch>();
+            foreach(var branch in this.repo.Branches.Where((i => i.CanonicalName.StartsWith(localRefRoot))))
             {
-                branches = branches.Where(b => b.CanonicalName.StartsWith(localRefRoot));
+                branches.Add(branch);
+                if (branch.TrackedBranch != null)
+                {
+                    ignoredRemoteBranches.Add(branch.TrackedBranch);
+                }
             }
 
-            return new BranchCollection(branches.Select(b => new BranchView() { CanonicalName = b.CanonicalName, FriendlyName = b.FriendlyName }));
+            foreach(var branch in this.repo.Branches.Where((i => i.CanonicalName.StartsWith(remoteRefRoot) && !ignoredRemoteBranches.Contains(i))))
+            {
+                branches.Add(branch);
+            }
+
+            return new BranchCollection(branches.Select(b => new BranchView() { CanonicalName = b.CanonicalName, FriendlyName = Path.GetFileName(b.FriendlyName) }));
         }
 
         public void Add(String name)
@@ -40,7 +57,10 @@ namespace EdityMcEditface.Mvc.Repositories
         private void LinkBranchToRemote(LibGit2Sharp.Branch branch)
         {
             var remote = repo.Network.Remotes["origin"];
-            repo.Branches.Update(branch, b => b.Remote = remote.Name, b => b.UpstreamBranch = branch.CanonicalName);
+            if (remote != null)
+            {
+                repo.Branches.Update(branch, b => b.Remote = remote.Name, b => b.UpstreamBranch = branch.CanonicalName);
+            }
         }
 
         public void Checkout(String name, LibGit2Sharp.Signature sig)

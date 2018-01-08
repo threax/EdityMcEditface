@@ -79,9 +79,8 @@ namespace EdityMcEditface.Mvc.Tests
                     var signature = new Signature("Test Bot", "testbot@editymceditface.com", DateTime.Now);
                     repo.Commit("Added test data", signature, signature);
 
-                    var remote = repo.Network.Remotes["origin"];
-                    var branch = repo.CreateBranch("sidebranch");
-                    repo.Branches.Update(branch, b => b.Remote = remote.Name, b => b.UpstreamBranch = branch.CanonicalName);
+                    var authorBranchRepo = new BranchRepository(repo);
+                    authorBranchRepo.Add("sidebranch");
 
                     repo.Network.Push(repo.Branches, new PushOptions() {  });
                 }

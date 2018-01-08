@@ -1,5 +1,4 @@
 ﻿using EdityMcEditface.Mvc.Models.Branch;
-using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,14 +8,14 @@ namespace EdityMcEditface.Mvc.Repositories
 {
     public class BranchRepository
     {
-        private Repository repository;
+        private LibGit2Sharp.Repository repository;
 
-        public BranchRepository(Repository repository)
+        public BranchRepository(LibGit2Sharp.Repository repository)
         {
             this.repository = repository;
         }
 
-        public Models.Branch.BranchCollection List()
+        public BranchCollection List()
         {
             var branchEnum = this.repository.Branches.GetEnumerator();
             var branches = new List<BranchView>();
@@ -24,7 +23,14 @@ namespace EdityMcEditface.Mvc.Repositories
             {
                 branches.Add(new BranchView() { CanonicalName = branchEnum.Current.CanonicalName, FriendlyName = branchEnum.Current.FriendlyName });
             }
-            return new Models.Branch.BranchCollection(branches);
+            return new BranchCollection(branches);
+        }
+
+        public void Add(String name)
+        {
+            var remote = repository.Network.Remotes["origin"];
+            var branch = LibGit2Sharp.RepositoryExtensions.CreateBranch(repository, name);
+            repository.Branches.Update(branch, b => b.Remote = remote.Name, b => b.UpstreamBranch = branch.CanonicalName);
         }
     }
 }

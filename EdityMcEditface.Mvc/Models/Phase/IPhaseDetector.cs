@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EdityMcEditface.Mvc.Models.Branch
+namespace EdityMcEditface.Mvc.Models.Phase
 {
     /// <summary>
     /// This interface will determine which branch the user is requesting.

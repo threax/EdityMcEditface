@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace EdityMcEditface.Mvc.Models.Branch
+namespace EdityMcEditface.Mvc.Models.Phase
 {
     public class CookiePhaseDetector : IPhaseDetector
     {

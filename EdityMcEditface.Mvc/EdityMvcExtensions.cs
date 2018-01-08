@@ -8,7 +8,7 @@ using EdityMcEditface.HtmlRenderer.SiteBuilder;
 using EdityMcEditface.Mvc.Auth;
 using EdityMcEditface.Mvc.Config;
 using EdityMcEditface.Mvc.Controllers;
-using EdityMcEditface.Mvc.Models.Branch;
+using EdityMcEditface.Mvc.Models.Phase;
 using EdityMcEditface.Mvc.Models.Compiler;
 using EdityMcEditface.Mvc.Models.Page;
 using EdityMcEditface.Mvc.Models.Templates;

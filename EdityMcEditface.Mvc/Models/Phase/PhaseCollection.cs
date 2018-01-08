@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Threax.AspNetCore.Halcyon.Ext;
 
-namespace EdityMcEditface.Mvc.Models.Branch
+namespace EdityMcEditface.Mvc.Models.Phase
 {
     [HalModel]
     [HalSelfActionLink(PhaseController.Rels.List, typeof(PhaseController))]

@@ -9,10 +9,15 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>5.1.0</Version>
+    <Version>6.3.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
+    <Authors>Andrew Piper</Authors>
+    <Description>The html renderer portion of Edity McEditface.</Description>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/threax/Threax.AspNetCore.Hypermedia/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/threax/EdityMcEditface</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/threax/EdityMcEditface</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

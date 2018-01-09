@@ -19,6 +19,7 @@ namespace EdityMcEditface.Mvc.Controllers
     {
         public static class Rels
         {
+            public const String Current = "GetCurrentBranch";
             public const String List = "ListBranches";
             public const String Add = "AddBranch";
             public const String Checkout = "CheckoutBranch";
@@ -36,6 +37,13 @@ namespace EdityMcEditface.Mvc.Controllers
         public BranchCollection List()
         {
             return branchRepo.List();
+        }
+
+        [HttpGet("[action]")]
+        [HalRel(Rels.Current)]
+        public BranchView Current()
+        {
+            return branchRepo.GetCurrent();
         }
 
         [HttpPost]

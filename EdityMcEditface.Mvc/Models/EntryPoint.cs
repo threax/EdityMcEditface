@@ -41,6 +41,7 @@ namespace EdityMcEditface.Mvc.Models
 
     [HalActionLink(typeof(BranchController), nameof(BranchController.List))]
     [HalActionLink(typeof(BranchController), nameof(BranchController.Add))]
+    [HalActionLink(typeof(BranchController), nameof(BranchController.Current))]
     public class EntryPoint
     {
     }

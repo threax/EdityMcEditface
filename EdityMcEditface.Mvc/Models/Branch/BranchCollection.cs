@@ -10,6 +10,7 @@ namespace EdityMcEditface.Mvc.Models.Branch
     [HalModel]
     [HalSelfActionLink(typeof(BranchController), nameof(BranchController.List))]
     [HalActionLink(typeof(BranchController), nameof(BranchController.Add))]
+    [HalActionLink(typeof(BranchController), nameof(BranchController.Current))]
     public class BranchCollection : CollectionView<BranchView>
     {
         public BranchCollection(IEnumerable<BranchView> items) : base(items)

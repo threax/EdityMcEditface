@@ -19,7 +19,8 @@
     "editComponents/edittreemenu.html",
     "editComponents/phase.html",
     "editComponents/draft.html",
-    "editComponents/compile.html"
+    "editComponents/compile.html",
+    "editComponents/branch.html"
   ],
   "draftComponents": [
     "editComponents/commit.html",

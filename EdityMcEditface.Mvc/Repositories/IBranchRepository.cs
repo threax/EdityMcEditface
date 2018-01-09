@@ -8,5 +8,6 @@ namespace EdityMcEditface.Mvc.Repositories
         void Add(string name);
         void Checkout(string name, Signature sig);
         Models.Branch.BranchCollection List();
+        BranchView GetCurrent();
     }
 }

@@ -24,6 +24,55 @@ namespace EdityMcEditface.Mvc.Tests
         }
 
         [Fact]
+        public void GetCurrentMaster()
+        {
+            using (var dir = new SelfDeletingDirectory(Path.GetFullPath(Path.Combine(basePath, nameof(this.GetCurrentMaster)))))
+            {
+                Repository.Init(dir.Path, false);
+                using (var repo = new Repository(dir.Path))
+                {
+                    var testFilePath = Path.Combine(dir.Path, "test.txt");
+                    File.WriteAllText(testFilePath, "Some test data.");
+                    Commands.Stage(repo, testFilePath);
+                    var signature = new Signature("Test Bot", "testbot@editymceditface.com", DateTime.Now);
+                    repo.Commit("Added test data", signature, signature);
+
+                    var branchRepo = new BranchRepository(repo);
+                    var current = branchRepo.GetCurrent();
+                    Assert.Equal("master", current.FriendlyName);
+                    Assert.Equal("refs/heads/master", current.CanonicalName);
+                }
+            }
+        }
+
+        [Fact]
+        public void GetCurrentNonMaster()
+        {
+            using (var dir = new SelfDeletingDirectory(Path.GetFullPath(Path.Combine(basePath, nameof(this.GetCurrentMaster)))))
+            {
+                Repository.Init(dir.Path, false);
+                using (var repo = new Repository(dir.Path))
+                {
+                    var testFilePath = Path.Combine(dir.Path, "test.txt");
+                    File.WriteAllText(testFilePath, "Some test data.");
+                    Commands.Stage(repo, testFilePath);
+                    var identity = new Identity("Test Bot", "testbot@editymceditface.com");
+                    var signature = new Signature(identity, DateTime.Now);
+                    repo.Commit("Added test data", signature, signature);
+
+                    var branchRepo = new BranchRepository(repo);
+
+                    branchRepo.Add("side");
+                    branchRepo.Checkout("side", new Signature(identity, DateTime.Now));
+
+                    var current = branchRepo.GetCurrent();
+                    Assert.Equal("side", current.FriendlyName);
+                    Assert.Equal("refs/heads/side", current.CanonicalName);
+                }
+            }
+        }
+
+        [Fact]
         public void ListEmpty()
         {
             using (var dir = new SelfDeletingDirectory(Path.GetFullPath(Path.Combine(basePath, nameof(this.ListEmpty)))))

@@ -48,6 +48,16 @@ namespace EdityMcEditface.Mvc.Repositories
             return new BranchCollection(branches.Select(b => new BranchView() { CanonicalName = b.CanonicalName, FriendlyName = Path.GetFileName(b.FriendlyName) }));
         }
 
+        public BranchView GetCurrent()
+        {
+            var head = repo.Head;
+            return new BranchView()
+            {
+                CanonicalName = head.CanonicalName,
+                FriendlyName = head.FriendlyName
+            };
+        }
+
         public void Add(String name)
         {
             var branch = LibGit2Sharp.RepositoryExtensions.CreateBranch(repo, name);

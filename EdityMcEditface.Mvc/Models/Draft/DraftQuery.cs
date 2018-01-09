@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Threax.AspNetCore.Halcyon.Ext;
-using Threax.AspNetCore.Halcyon.Ext.UIAttrs;
+using Threax.AspNetCore.Models;
 
 namespace EdityMcEditface.Mvc.Models
 {

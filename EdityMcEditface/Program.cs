@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Net.Sockets;
 using System.Net;
+using Threax.AspNetCore.BuiltInTools;
 
 namespace EdityMcEditface
 {
@@ -17,6 +18,15 @@ namespace EdityMcEditface
     {
         public static void Main(string[] args)
         {
+            var tools = new ToolManager(args);
+            var toolsEnv = tools.GetEnvironment();
+            var toolsConfigName = default(String);
+            if (toolsEnv != null)
+            {
+                //If we are running tools, clear the arguments (this causes an error if the tool args are passed) and set the tools config to the environment name
+                args = new String[0];
+                toolsConfigName = toolsEnv;
+            }
 
 #if LOCAL_RUN_ENABLED
             var commandLineConfig = new ConfigurationBuilder()
@@ -24,20 +34,20 @@ namespace EdityMcEditface
                 .Build();
 #endif
 
-            var host = new WebHostBuilder()
+            var webHostBuilder = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>();
 
 #if LOCAL_RUN_ENABLED
-            host.UseConfiguration(commandLineConfig);
+            webHostBuilder.UseConfiguration(commandLineConfig);
 
             var browseUrl = commandLineConfig["browse"];
             if (!String.IsNullOrEmpty(browseUrl))
             {
                 String hostUrl = "http://localhost:" + FreeTcpPort();
-                host.UseUrls(hostUrl);
+                webHostBuilder.UseUrls(hostUrl);
                 var uri = new Uri(new Uri(hostUrl), browseUrl);
                 ThreadPool.QueueUserWorkItem((a) =>
                 {
@@ -65,7 +75,12 @@ namespace EdityMcEditface
             }
 #endif
 
-            host.Build().Run();
+            var host = webHostBuilder.Build();
+
+            if (tools.ProcessTools(host))
+            {
+                host.Run();
+            }
         }
 
 #if LOCAL_RUN_ENABLED

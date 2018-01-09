@@ -13,10 +13,12 @@ namespace EdityMcEditface.Mvc.Repositories
         private LibGit2Sharp.Repository repo;
         private string localRefRoot;
         private string remoteRefRoot;
+        private ICommitRepository commitRepo;
 
-        public BranchRepository(LibGit2Sharp.Repository repository, string localRefRoot = "refs/heads/", String remoteRefRoot = "refs/remotes/origin/")
+        public BranchRepository(LibGit2Sharp.Repository repository, ICommitRepository commitRepo, string localRefRoot = "refs/heads/", String remoteRefRoot = "refs/remotes/origin/")
         {
             this.repo = repository;
+            this.commitRepo = commitRepo;
             this.localRefRoot = localRefRoot;
             this.remoteRefRoot = remoteRefRoot;
         }
@@ -75,6 +77,11 @@ namespace EdityMcEditface.Mvc.Repositories
 
         public void Checkout(String name, LibGit2Sharp.Signature sig)
         {
+            if (commitRepo.HasUncommittedChanges())
+            {
+                throw new InvalidOperationException("Cannot change branches with uncommitted changes. Please commit first and try again.");
+            }
+
             var localRef = localRefRoot + name;
             LibGit2Sharp.Branch branch = repo.Branches[localRef];
 

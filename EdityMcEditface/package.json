@@ -15,5 +15,8 @@
     "trash-modules": "powershell -Command Remove-Item 'node_modules\\*' -Recurse -Force",
     "import-tsconfig": "node node_modules\\threax-npm-tk\\tsimport.js",
     "yarn-upgrade": "yarn upgrade --flat"
+  },
+  "resolutions": {
+    "bootstrap": "3.3.7"
   }
 }

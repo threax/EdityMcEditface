@@ -11,8 +11,8 @@ using Threax.AspNetCore.Halcyon.Ext;
 namespace EdityMcEditface.Mvc.Models.Page
 {
     [HalModel]
-    [HalSelfActionLink(PageController.Rels.GetSettings, typeof(PageController))]
-    [HalActionLink(PageController.Rels.UpdateSettings, typeof(PageController))]
+    [HalSelfActionLink(PageSettingsController.Rels.GetSettings, typeof(PageSettingsController))]
+    [HalActionLink(PageSettingsController.Rels.UpdateSettings, typeof(PageSettingsController))]
     [HalActionLink(PageController.Rels.Save, typeof(PageController))]
     [HalActionLink(PageController.Rels.Delete, typeof(PageController))]
     public class PageSettings

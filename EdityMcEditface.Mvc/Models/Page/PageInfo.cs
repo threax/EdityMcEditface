@@ -11,8 +11,8 @@ namespace EdityMcEditface.Mvc.Models.Page
     [HalModel]
     [HalActionLink(PageController.Rels.Save, typeof(PageController))]
     [HalActionLink(PageController.Rels.Delete, typeof(PageController))]
-    [HalActionLink(PageController.Rels.GetSettings, typeof(PageController))]
-    [HalActionLink(PageController.Rels.UpdateSettings, typeof(PageController))]
+    [HalActionLink(PageSettingsController.Rels.GetSettings, typeof(PageSettingsController))]
+    [HalActionLink(PageSettingsController.Rels.UpdateSettings, typeof(PageSettingsController))]
     public class PageInfo
     {
         public PageInfo()

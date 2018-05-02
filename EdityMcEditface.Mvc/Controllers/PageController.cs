@@ -21,8 +21,6 @@ namespace EdityMcEditface.Mvc.Controllers
     {
         public static class Rels
         {
-            public const String GetSettings = "GetSettings";
-            public const String UpdateSettings = "UpdateSettings";
             public const String Save = "SavePage";
             public const String Delete = "DeletePage";
             public const String List = "ListPages";
@@ -53,31 +51,6 @@ namespace EdityMcEditface.Mvc.Controllers
                 }
             }
             return pageRepo.List(query);
-        }
-
-        /// <summary>
-        /// Get the current page settings.
-        /// </summary>
-        /// <param name="filePath">The name of the file to lookup.</param>
-        /// <returns>The PageSettings for the file.</returns>
-        [HttpGet("Settings/{*FilePath}")]
-        [HalRel(Rels.GetSettings)]
-        public PageSettings Settings(String filePath)
-        {
-            return pageRepo.GetSettings(filePath);
-        }
-
-        /// <summary>
-        /// Update the settings for the page.
-        /// </summary>
-        /// <param name="filePath">The file path to the page to change settings.</param>
-        /// <param name="settings">The page settings to set.</param>
-        [HttpPut("Settings/{*FilePath}")]
-        [AutoValidate("Cannot update page settings.")]
-        [HalRel(Rels.UpdateSettings)]
-        public void UpdateSettings(String filePath, [FromBody]PageSettings settings)
-        {
-            pageRepo.UpdateSettings(filePath, settings);
         }
 
         /// <summary>

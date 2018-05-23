@@ -108,7 +108,7 @@ namespace EdityMcEditface.Mvc.Repositories
 
                 try
                 {
-                    repo.Network.Push(repo.Branches, new PushOptions());
+                    repo.Network.Push(repo.Head, new PushOptions());
                 }
                 catch (LibGit2SharpException ex)
                 {

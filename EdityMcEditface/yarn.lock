@@ -7,16 +7,16 @@
   resolved "https://registry.yarnpkg.com/@types/es6-promise/-/es6-promise-0.0.32.tgz#3bcf44fb1e429f3df76188c8c6d874463ba371fd"
 
 "@types/node@^6.0.69":
-  version "6.0.101"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.101.tgz#0c5911cfb434af4a51c0a499931fe6423207d921"
+  version "6.0.111"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.111.tgz#85f880a1bab78d395a5de9bcb5319e73a0c31400"
 
 bootstrap@3.3.7, bootstrap@>=3.3.7, bootstrap@~3.3.6, bootstrap@~3.3.7:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
 
 ckeditor-youtube-plugin@^2.1.5:
-  version "2.1.9"
-  resolved "https://registry.yarnpkg.com/ckeditor-youtube-plugin/-/ckeditor-youtube-plugin-2.1.9.tgz#2ef332bc98dc729300c8d45b2735b1eebd7b7ad5"
+  version "2.1.10"
+  resolved "https://registry.yarnpkg.com/ckeditor-youtube-plugin/-/ckeditor-youtube-plugin-2.1.10.tgz#30069792f4439f73a42463f70aeb576ec6d8cdea"
 
 ckeditor@~4.7.1:
   version "4.7.3"
@@ -43,8 +43,8 @@ editymceditface.client@>=12.8.0:
     jsns ">=5.0.0"
 
 htmlrapier.bootstrap@>=6.0.4:
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/htmlrapier.bootstrap/-/htmlrapier.bootstrap-6.0.4.tgz#8687526023a12441508336a03a8c7b657e1eebc7"
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/htmlrapier.bootstrap/-/htmlrapier.bootstrap-6.1.0.tgz#26501ad6eab9a51db8f8af9c0c88961ea6979fac"
   dependencies:
     bootstrap ">=3.3.7"
     htmlrapier ">=8.1.0"
@@ -70,15 +70,15 @@ htmlrapier.treemenu@>=6.0.1:
     htmlrapier ">=8.0.1"
 
 htmlrapier.widgets@>=9.2.0:
-  version "12.3.0"
-  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-12.3.0.tgz#d45a834c1af22b75db876f2c0b42d1b267885ca9"
+  version "14.1.0"
+  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-14.1.0.tgz#2d4d62b51fb97addf34eaa77cb7596f9ecd40279"
   dependencies:
     htmlrapier ">=14.3.0"
     htmlrapier.halcyon ">=6.0.1"
 
 htmlrapier@>=10.0.0, htmlrapier@>=10.0.2, htmlrapier@>=14.3.0, htmlrapier@>=14.5.0, htmlrapier@>=8.0.1, htmlrapier@>=8.1.0:
-  version "14.5.0"
-  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-14.5.0.tgz#e043d5e42111f977b5a3d7b2a7864be22a7069fb"
+  version "15.4.2"
+  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-15.4.2.tgz#c6971b7fe2bdb8094adf2d79f78b53f46562ece9"
   dependencies:
     "@types/es6-promise" "^0.0.32"
     tslib "^1.6.1"
@@ -92,5 +92,5 @@ jsns@>=5.0.0:
   resolved "https://registry.yarnpkg.com/jsns/-/jsns-5.0.0.tgz#c76429b822a68100eef8d4b8d3f1172b028664e4"
 
 tslib@^1.6.1:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.0.tgz#e37a86fda8cbbaf23a057f473c9f4dc64e5fc2e8"
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.1.tgz#a5d1f0532a49221c87755cfcc89ca37197242ba7"

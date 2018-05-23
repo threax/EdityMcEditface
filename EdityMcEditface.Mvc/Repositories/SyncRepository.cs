@@ -117,23 +117,26 @@ namespace EdityMcEditface.Mvc.Repositories
             });
 
             //Garbage collect using git gc, if it is not installed this will silently fail
-            try
-            {
-                await Task.Run(() =>
-                {
-                    var p = Process.Start(new ProcessStartInfo()
-                    {
-                        FileName = "git",
-                        Arguments = "gc --auto",
-                        CreateNoWindow = true
-                    });
-                    p.WaitForExit(300000); //Wait for 5 minutes, may need adjustment
-                });
-            }
-            catch (Exception)
-            {
+            //This kind of works, but can hang waiting for input, so disabled for now.
+            //try
+            //{
+            //    await Task.Run(() =>
+            //    {
+            //        var p = Process.Start(new ProcessStartInfo()
+            //        {
+            //            FileName = "git",
+            //            Arguments = "gc",
+            //            CreateNoWindow = true,
+            //            WorkingDirectory = repo.Info.WorkingDirectory,
+            //            UseShellExecute = true
+            //        });
+            //        p.WaitForExit(300000); //Wait for 5 minutes, may need adjustment
+            //    });
+            //}
+            //catch (Exception)
+            //{
 
-            }
+            //}
         }
     }
 }

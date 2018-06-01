@@ -64,8 +64,8 @@ htmlrapier.sidebar@>=3.0.2:
     htmlrapier ">=10.0.0"
 
 htmlrapier.treemenu@>=6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/htmlrapier.treemenu/-/htmlrapier.treemenu-6.0.1.tgz#d0c9a11f21bcac597f4008fb25d3bc30c1abf0c2"
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/htmlrapier.treemenu/-/htmlrapier.treemenu-6.1.0.tgz#8971d3ed1b0b76683da662e9398f87bc5fe4fcec"
   dependencies:
     htmlrapier ">=8.0.1"
 

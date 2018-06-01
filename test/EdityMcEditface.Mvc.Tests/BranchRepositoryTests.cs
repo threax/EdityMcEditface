@@ -211,6 +211,7 @@ namespace EdityMcEditface.Mvc.Tests
                 var upstreamPath = Path.Combine(dir.Path, "Upstream");
                 var authorPath = Path.Combine(dir.Path, "Author");
                 var downstreamPath = Path.Combine(dir.Path, "Downstream");
+                var identity = new Identity("Test Bot", "testbot@editymceditface.com");
 
                 Repository.Init(upstreamPath, true);
                 Repository.Clone(upstreamPath, authorPath);
@@ -219,14 +220,31 @@ namespace EdityMcEditface.Mvc.Tests
                     var testFilePath = Path.Combine(dir.Path, "Author/test.txt");
                     File.WriteAllText(testFilePath, "Some test data.");
                     Commands.Stage(repo, testFilePath);
-                    var signature = new Signature("Test Bot", "testbot@editymceditface.com", DateTime.Now);
+                    var signature = new Signature(identity, DateTime.Now);
                     repo.Commit("Added test data", signature, signature);
 
-                    var authorBranchRepo = new BranchRepository(repo, mockup.Get<ICommitRepository>());
-                    authorBranchRepo.Add("sidebranch");
-                    authorBranchRepo.Add("another");
-
+                    //Sync main branch
                     var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>());
+                    await syncRepo.Push();
+
+                    var authorBranchRepo = new BranchRepository(repo, mockup.Get<ICommitRepository>());
+
+                    //Create side branch
+                    authorBranchRepo.Add("sidebranch");
+                    authorBranchRepo.Checkout("sidebranch", new Signature(identity, DateTime.Now));
+                    File.WriteAllText(testFilePath, "Some test data sidebranch.");
+                    Commands.Stage(repo, testFilePath);
+                    signature = new Signature(identity, DateTime.Now);
+                    repo.Commit("Added test data", signature, signature);
+                    await syncRepo.Push();
+
+                    //Create another branch
+                    authorBranchRepo.Add("another");
+                    authorBranchRepo.Checkout("another", new Signature(identity, DateTime.Now));
+                    File.WriteAllText(testFilePath, "Some test data another.");
+                    Commands.Stage(repo, testFilePath);
+                    signature = new Signature(identity, DateTime.Now);
+                    repo.Commit("Added test data", signature, signature);
                     await syncRepo.Push();
                 }
 
@@ -278,13 +296,14 @@ namespace EdityMcEditface.Mvc.Tests
                     Commands.Stage(repo, testFilePath);
                     sig = new Signature(identity, DateTime.Now);
                     repo.Commit("Updated branch data", sig, sig);
+                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>());
+                    //Push side branch
+                    await syncRepo.Push();
 
                     //Back to master
                     authorBranchRepo.Checkout("master", new Signature(identity, DateTime.Now));
                     String masterText = File.ReadAllText(testFilePath);
                     Assert.Equal(contents, masterText);
-
-                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>());
                     await syncRepo.Push();
                 }
 

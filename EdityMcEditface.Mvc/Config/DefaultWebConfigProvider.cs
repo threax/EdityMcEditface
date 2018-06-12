@@ -55,6 +55,9 @@ namespace EdityMcEditface.Mvc.Config
         </rule>
       </rules>
     </rewrite>
+    <staticContent>
+        <mimeMap fileExtension="".json"" mimeType=""application/json"" />
+    </staticContent>
   </system.webServer>
 </configuration>";
     }

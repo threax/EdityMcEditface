@@ -23,7 +23,7 @@ namespace EdityMcEditface.Mvc.Models.Page
             this.query = query;
         }
 
-        protected override void AddCustomQuery(string rel, QueryStringBuilder queryString)
+        protected override void AddCustomQuery(string rel, RequestDataBuilder queryString)
         {
             if (query.File != null)
             {

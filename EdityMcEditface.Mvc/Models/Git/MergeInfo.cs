@@ -83,7 +83,7 @@ namespace EdityMcEditface.Mvc.Models.Git
 
         public String File { get; set; }
 
-        public void AddQuery(string rel, QueryStringBuilder queryString)
+        public void AddQuery(string rel, RequestDataBuilder queryString)
         {
             if(File != null && rel == HalSelfActionLinkAttribute.SelfRelName)
             {

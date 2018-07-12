@@ -9,7 +9,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>7.1.0</Version>
+    <Version>8.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
@@ -18,7 +18,7 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/threax/Threax.AspNetCore.Hypermedia/master/LICENSE</PackageLicenseUrl>
     <Description>The mvc portion of Edity McEditface.</Description>
     <Authors>Andrew Piper</Authors>
-    <PackageReleaseNotes>Added json mime type to written web.config.</PackageReleaseNotes>
+    <PackageReleaseNotes>Relies on Threax.AspNetCore.Halcyon.Ext version 10.0.0 or greater.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="7.0.0" />
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="LibGit2Sharp.Portable" Version="0.24.10" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.0" />
@@ -35,10 +35,10 @@
     <PackageReference Include="Threax.AspNetCore.BuiltInTools" Version="5.1.0" />
     <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="5.0.2" />
     <PackageReference Include="Threax.AspNetCore.FileRepository" Version="2.0.1" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="7.2.1" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="8.0.0" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen.Tools" Version="4.0.0" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="9.5.1" />
-    <PackageReference Include="Threax.AspNetCore.Models" Version="4.0.0" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="10.0.1" />
+    <PackageReference Include="Threax.AspNetCore.Models" Version="6.0.1" />
   </ItemGroup>
 
 </Project>

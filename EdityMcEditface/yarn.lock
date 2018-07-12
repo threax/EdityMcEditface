@@ -15,8 +15,8 @@ bootstrap@3.3.7, bootstrap@>=3.3.7, bootstrap@~3.3.6, bootstrap@~3.3.7:
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
 
 ckeditor-youtube-plugin@^2.1.5:
-  version "2.1.10"
-  resolved "https://registry.yarnpkg.com/ckeditor-youtube-plugin/-/ckeditor-youtube-plugin-2.1.10.tgz#30069792f4439f73a42463f70aeb576ec6d8cdea"
+  version "2.1.11"
+  resolved "https://registry.yarnpkg.com/ckeditor-youtube-plugin/-/ckeditor-youtube-plugin-2.1.11.tgz#784baec24845933096fc1162f3f11027a3735735"
 
 ckeditor@~4.7.1:
   version "4.7.3"
@@ -51,8 +51,8 @@ htmlrapier.bootstrap@>=6.0.4:
     jquery ">=3.2.1"
 
 htmlrapier.halcyon@>=6.0.1, htmlrapier.halcyon@>=6.0.3:
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/htmlrapier.halcyon/-/htmlrapier.halcyon-6.0.4.tgz#26f6d3cb8c46a976a4a8f0b93ded1ffe3a72d0b9"
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/htmlrapier.halcyon/-/htmlrapier.halcyon-6.2.0.tgz#59ef07f962e9274fdf056437c1b381709fb5dc2d"
   dependencies:
     htmlrapier ">=10.0.2"
 
@@ -70,8 +70,8 @@ htmlrapier.treemenu@>=6.0.1:
     htmlrapier ">=8.0.1"
 
 htmlrapier.widgets@>=9.2.0:
-  version "14.4.0"
-  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-14.4.0.tgz#fb201b283baae741f0a0feafd88b114f78bedbe8"
+  version "14.5.0"
+  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-14.5.0.tgz#49e6c11f248e40beaddfa7395df681ccba0e6775"
   dependencies:
     htmlrapier ">=14.3.0"
     htmlrapier.halcyon ">=6.0.1"

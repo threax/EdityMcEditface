@@ -34,7 +34,7 @@
     <PackageReference Include="Threax.AspNetCore.AuthCore" Version="2.0.3" />
     <PackageReference Include="Threax.AspNetCore.BuiltInTools" Version="5.1.0" />
     <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="5.0.2" />
-    <PackageReference Include="Threax.AspNetCore.FileRepository" Version="2.0.1" />
+    <PackageReference Include="Threax.AspNetCore.FileRepository" Version="3.0.1" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="8.0.0" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen.Tools" Version="4.0.0" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="10.0.1" />

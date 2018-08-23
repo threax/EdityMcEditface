@@ -9,11 +9,11 @@
     "editymceditface.client": ">=12.8.0"
   },
   "scripts": {
-    "build": "node Build/build.js && dotnet bundle",
-    "yarn-install": "yarn install --flat && yarn link threax-npm-tk",
-    "clean": "powershell -Command Remove-Item 'ClientBin\\*' -Recurse -Force",
-    "trash-modules": "powershell -Command Remove-Item 'node_modules\\*' -Recurse -Force",
-    "import-tsconfig": "node node_modules\\threax-npm-tk\\tsimport.js",
+    "build": "threax-npm-tk build -o ClientBin/Site && threax-npm-tk build -o ClientBin/EdityMcEditface -a node_modules/*/edity-artifacts.json && dotnet bundle",
+    "yarn-install": "yarn install --flat",
+    "clean": "threax-npm-tk clean -o ClientBin && threax-npm-tk clean -o wwwroot",
+    "trash-modules": "threax-npm-tk clean -o node_modules",
+    "import-tsconfig": "threax-npm-tk tsconfig",
     "yarn-upgrade": "yarn upgrade --flat"
   },
   "resolutions": {

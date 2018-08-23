@@ -1,5 +1,15 @@
 [
   {
+    "outDir": "lib",
+    "typescript": {
+      "compile": true,
+      "shakeModules": {
+        "runners": [ "hr.runattributes", "edity.theme.layouts.default" ],
+        "outFile": "tsbin.prod.js"
+      }
+    }
+  },
+  {
     "outDir": "lib/bootstrap/dist/css",
     "less": {
       "importPaths": [ ".", "node_modules/bootstrap/less" ],

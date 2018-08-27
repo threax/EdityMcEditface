@@ -28,6 +28,7 @@ using Threax.AspNetCore.BuiltInTools;
 using Threax.AspNetCore.FileRepository;
 using Threax.AspNetCore.Halcyon.ClientGen;
 using Threax.AspNetCore.Halcyon.Ext;
+using Threax.SharedHttpClient;
 
 namespace EdityMcEditface.Mvc
 {
@@ -135,6 +136,8 @@ namespace EdityMcEditface.Mvc
         /// <returns>The service collection.</returns>
         public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration, Action<EdityServiceOptions> setupServiceOptions = null)
         {
+            services.AddThreaxSharedHttpClient();
+
             var serviceOptions = new EdityServiceOptions();
             setupServiceOptions?.Invoke(serviceOptions);
 
@@ -216,14 +219,14 @@ namespace EdityMcEditface.Mvc
 
             switch (projectConfiguration.ProjectMode)
             {
-                case "SingleRepo":
+                case ProjectMode.OneRepo:
                 default:
                     services.AddTransient<ProjectFinder, OneRepo>(s =>
                     {
                         return new OneRepo(projectConfiguration.ProjectPath, projectConfiguration.EdityCorePath, projectConfiguration.SitePath);
                     });
                     break;
-                case "OneRepoPerUser":
+                case ProjectMode.OneRepoPerUser:
                     services.AddTransient<ProjectFinder, OneRepoPerUser>(s =>
                     {
                         return new OneRepoPerUser(projectConfiguration, s.GetRequiredService<IPhaseDetector>());
@@ -247,8 +250,6 @@ namespace EdityMcEditface.Mvc
 
             services.AddTransient<SiteBuilderSettings, SiteBuilderSettings>(s =>
             {
-                var projectFinder = s.GetRequiredService<ProjectFinder>();
-
                 return new SiteBuilderSettings()
                 {
                     OutDir = projectConfiguration.OutputPath,
@@ -268,7 +269,7 @@ namespace EdityMcEditface.Mvc
 
             switch (projectConfiguration.Compiler)
             {
-                case "RoundRobin":
+                case Compilers.RoundRobin:
                     services.AddTransient<SiteBuilder, RoundRobinSiteBuilder>(s =>
                     {
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
@@ -278,7 +279,7 @@ namespace EdityMcEditface.Mvc
                         var webConfigProvider = s.GetRequiredService<IWebConfigProvider>();
                         var builder = new RoundRobinSiteBuilder(settings, compilerFactory, fileFinder, new WebConfigRoundRobinDeployer(webConfigProvider));
 
-                        if (projectConfiguration.ProjectMode == "OneRepoPerUser")
+                        if (projectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
                         {
                             builder.addPreBuildTask(s.GetRequiredService<PullPublish>());
                         }
@@ -292,7 +293,30 @@ namespace EdityMcEditface.Mvc
                         return builder;
                     });
                     break;
-                case "Direct":
+                case Compilers.RestEndpoint:
+                    services.AddTransient<SiteBuilder, RestSiteBuilder>(s =>
+                    {
+                        var projectFinder = s.GetRequiredService<ProjectFinder>();
+                        var settings = s.GetRequiredService<SiteBuilderSettings>();
+                        var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
+                        var fileFinder = s.GetRequiredService<IFileFinder>();
+                        var builder = new RestSiteBuilder(projectConfiguration.RemotePublish, settings, compilerFactory, fileFinder, s.GetRequiredService<ISharedHttpClient>());
+
+                        if (projectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
+                        {
+                            builder.addPreBuildTask(s.GetRequiredService<PullPublish>());
+                        }
+
+                        editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()
+                        {
+                            SiteBuilder = builder,
+                            Services = s
+                        });
+
+                        return builder;
+                    });
+                    break;
+                case Compilers.Direct:
                 default:
                     services.AddTransient<SiteBuilder, DirectOutputSiteBuilder>(s =>
                     {
@@ -302,7 +326,7 @@ namespace EdityMcEditface.Mvc
                         var fileFinder = s.GetRequiredService<IFileFinder>();
                         var builder = new DirectOutputSiteBuilder(settings, compilerFactory, fileFinder);
 
-                        if (projectConfiguration.ProjectMode == "OneRepoPerUser")
+                        if (projectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
                         {
                             builder.addPreBuildTask(s.GetRequiredService<PullPublish>());
                         }

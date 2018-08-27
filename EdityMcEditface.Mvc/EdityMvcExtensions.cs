@@ -29,6 +29,7 @@ using Threax.AspNetCore.FileRepository;
 using Threax.AspNetCore.Halcyon.ClientGen;
 using Threax.AspNetCore.Halcyon.Ext;
 using Threax.SharedHttpClient;
+using System.IO;
 
 namespace EdityMcEditface.Mvc
 {
@@ -294,13 +295,14 @@ namespace EdityMcEditface.Mvc
                     });
                     break;
                 case Compilers.RestEndpoint:
-                    services.AddTransient<SiteBuilder, RestSiteBuilder>(s =>
+                    services.AddTransient<SiteBuilder, DirectOutputSiteBuilder>(s =>
                     {
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var settings = s.GetRequiredService<SiteBuilderSettings>();
+                        settings.OutDir = Path.GetFullPath(Path.Combine(settings.OutDir, "azurezip")); //Change site to output to azurezip folder, that folder will be zipped
                         var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
                         var fileFinder = s.GetRequiredService<IFileFinder>();
-                        var builder = new RestSiteBuilder(projectConfiguration.RemotePublish, settings, compilerFactory, fileFinder, s.GetRequiredService<ISharedHttpClient>());
+                        var builder = new DirectOutputSiteBuilder(settings, compilerFactory, fileFinder); //Don't need a special site builder
 
                         if (projectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
                         {
@@ -312,6 +314,9 @@ namespace EdityMcEditface.Mvc
                             SiteBuilder = builder,
                             Services = s
                         });
+
+                        //Add the RestPublisher last so any custom steps add their files correctly
+                        builder.addPostBuildTask(new RestPublisher(projectConfiguration.RemotePublish, s.GetRequiredService<ISharedHttpClient>(), settings.OutDir));
 
                         return builder;
                     });

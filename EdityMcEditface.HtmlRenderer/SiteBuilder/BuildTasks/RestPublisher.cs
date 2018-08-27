@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Threax.SharedHttpClient;
 
-namespace EdityMcEditface.HtmlRenderer.SiteBuilder
+namespace EdityMcEditface.HtmlRenderer.SiteBuilder.BuildTasks
 {
     public class RestPublisher : BuildTask
     {

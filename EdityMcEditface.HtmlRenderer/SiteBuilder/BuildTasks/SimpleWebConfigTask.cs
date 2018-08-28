@@ -18,24 +18,33 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder.BuildTasks
 
         public void execute()
         {
-            String contents = webConfigContents + homePage + webConfigContentsEnd;
             using (var writer = new StreamWriter(siteBuilder.OpenOutputWriteStream("web.config")))
             {
-                writer.Write(contents);
+                writer.Write(CreateWebConfig());
             }
         }
 
-        private const String webConfigContents =
+        public String CreateWebConfig()
+        {
+            var webConfig =
 @"<?xml version=""1.0"" encoding=""UTF-8""?>
 <configuration>
-  <system.webServer>
+  <system.webServer>";
+
+            //Don't add index.html since iis will define that by default. This reduces the server configuration.
+            if(!homePage.Equals("index", StringComparison.InvariantCultureIgnoreCase))
+            {
+                webConfig +=
+$@"
     <defaultDocument>
       <files>
-        <add value=""";
-
-        private const String webConfigContentsEnd = @"""/>
+        <add value=""{homePage}.html""/>
       </files>
-    </defaultDocument>
+    </defaultDocument>";
+            }
+
+            webConfig +=
+@"
     <rewrite>
       <rules>
         <rule name=""RewriteToHtml"">
@@ -54,5 +63,8 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder.BuildTasks
     </staticContent>
   </system.webServer>
 </configuration>";
+
+            return webConfig;
+        }
     }
 }

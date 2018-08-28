@@ -14,6 +14,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         private List<IBuildTask> preBuildTasks = new List<IBuildTask>();
         private List<IBuildTask> postBuildTasks = new List<IBuildTask>();
         private List<IPublishTask> publishTasks = new List<IPublishTask>();
+        private List<IPublishTask> postPublishTasks = new List<IPublishTask>();
         private IContentCompilerFactory contentCompilerFactory;
         private IFileFinder fileFinder;
 
@@ -97,6 +98,12 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             {
                 await task.Execute();
             }
+
+            //PostPublish tasks
+            foreach (var task in postPublishTasks)
+            {
+                await task.Execute();
+            }
         }
 
         public void AddPreBuildTask(IBuildTask task)
@@ -112,6 +119,11 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         public void AddPublishTask(IPublishTask task)
         {
             publishTasks.Add(task);
+        }
+
+        public void AddPostPublishTask(IPublishTask task)
+        {
+            postPublishTasks.Add(task);
         }
 
         public Stream OpenOutputWriteStream(string file)

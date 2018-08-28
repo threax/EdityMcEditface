@@ -29,6 +29,14 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         void AddPublishTask(IPublishTask task);
 
         /// <summary>
+        /// Add a task runs after publishing is complete. This will run after PublishTasks. If you
+        /// need to communicate with another service that expects all files to be copied to the
+        /// published output add it here.
+        /// </summary>
+        /// <param name="task">The task to add.</param>
+        void AddPostPublishTask(IPublishTask task);
+
+        /// <summary>
         /// Build the site. This will run the PreBuild Tasks, then the main site build then the PostBuild
         /// tasks and then the Publish tasks.
         /// </summary>

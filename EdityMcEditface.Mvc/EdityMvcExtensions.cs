@@ -30,6 +30,7 @@ using Threax.AspNetCore.Halcyon.ClientGen;
 using Threax.AspNetCore.Halcyon.Ext;
 using Threax.SharedHttpClient;
 using System.IO;
+using EdityMcEditface.PublishTasks;
 
 namespace EdityMcEditface.Mvc
 {
@@ -192,10 +193,6 @@ namespace EdityMcEditface.Mvc
                 editySettings.Events = new EdityEvents();
             }
 
-            services.TryAddScoped<IWebConfigProvider>(s =>
-            {
-                return new DefaultWebConfigProvider(projectConfiguration.DefaultPage);
-            });
             services.TryAddScoped<ITargetFileInfoProvider>(s =>
             {
                 return new DefaultTargetFileInfoProvider(projectConfiguration.DefaultPage);
@@ -268,82 +265,43 @@ namespace EdityMcEditface.Mvc
                 return new PullPublish(projectFinder.MasterRepoPath, projectFinder.PublishedProjectPath);
             });
 
-            switch (projectConfiguration.Compiler)
+            services.AddTransient<ISiteBuilder>(s =>
             {
-                case Compilers.RoundRobin:
-                    services.AddTransient<ISiteBuilder, RoundRobinSiteBuilder>(s =>
-                    {
-                        var projectFinder = s.GetRequiredService<ProjectFinder>();
-                        var settings = s.GetRequiredService<SiteBuilderSettings>();
-                        var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
-                        var fileFinder = s.GetRequiredService<IFileFinder>();
-                        var webConfigProvider = s.GetRequiredService<IWebConfigProvider>();
-                        var builder = new RoundRobinSiteBuilder(settings, compilerFactory, fileFinder, new WebConfigRoundRobinDeployer(webConfigProvider));
+                var projectFinder = s.GetRequiredService<ProjectFinder>();
+                var settings = s.GetRequiredService<SiteBuilderSettings>();
+                var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
+                var fileFinder = s.GetRequiredService<IFileFinder>();
+                var builder = new DirectOutputSiteBuilder(settings, compilerFactory, fileFinder);
 
-                        if (projectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
-                        {
-                            builder.AddPreBuildTask(s.GetRequiredService<PullPublish>());
-                        }
-
-                        editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()
-                        {
-                            SiteBuilder = builder,
-                            Services = s
-                        });
-
-                        return builder;
-                    });
-                    break;
-                case Compilers.RestEndpoint:
-                    services.AddTransient<ISiteBuilder, DirectOutputSiteBuilder>(s =>
-                    {
-                        var projectFinder = s.GetRequiredService<ProjectFinder>();
-                        var settings = s.GetRequiredService<SiteBuilderSettings>();
-                        settings.OutDir = Path.GetFullPath(Path.Combine(settings.OutDir, "azurezip")); //Change site to output to azurezip folder, that folder will be zipped
-                        var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
-                        var fileFinder = s.GetRequiredService<IFileFinder>();
-                        var builder = new DirectOutputSiteBuilder(settings, compilerFactory, fileFinder); //Don't need a special site builder
+                //Customize settings depending on compiler setting
+                switch (projectConfiguration.Compiler)
+                {
+                    case Compilers.RestEndpoint:
+                        //Change site to output to azurezip folder, that folder will be zipped
+                        settings.OutDir = Path.GetFullPath(Path.Combine(settings.OutDir, "azurezip"));
                         builder.AddPublishTask(new RestPublisher(projectConfiguration.RemotePublish, s.GetRequiredService<ISharedHttpClient>(), settings.OutDir));
+                        break;
+                    case Compilers.RoundRobin:
+                        var newDeployId = Guid.NewGuid().ToString();
+                        var outputBaseFolder = settings.OutDir;
+                        settings.OutDir = Path.GetFullPath(Path.Combine(settings.OutDir, newDeployId));
+                        builder.AddPublishTask(new RoundRobinPublisher(settings.OutDir, projectConfiguration.DefaultPage));
+                        break;
+                }
 
-                        if (projectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
-                        {
-                            builder.AddPreBuildTask(s.GetRequiredService<PullPublish>());
-                        }
+                if (projectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
+                {
+                    builder.AddPreBuildTask(s.GetRequiredService<PullPublish>());
+                }
 
-                        editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()
-                        {
-                            SiteBuilder = builder,
-                            Services = s
-                        });
+                editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()
+                {
+                    SiteBuilder = builder,
+                    Services = s
+                });
 
-                        return builder;
-                    });
-                    break;
-                case Compilers.Direct:
-                default:
-                    services.AddTransient<ISiteBuilder, DirectOutputSiteBuilder>(s =>
-                    {
-                        var projectFinder = s.GetRequiredService<ProjectFinder>();
-                        var settings = s.GetRequiredService<SiteBuilderSettings>();
-                        var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
-                        var fileFinder = s.GetRequiredService<IFileFinder>();
-                        var builder = new DirectOutputSiteBuilder(settings, compilerFactory, fileFinder);
-
-                        if (projectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
-                        {
-                            builder.AddPreBuildTask(s.GetRequiredService<PullPublish>());
-                        }
-
-                        editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()
-                        {
-                            SiteBuilder = builder,
-                            Services = s
-                        });
-
-                        return builder;
-                    });
-                    break;
-            }
+                return builder;
+            });
 
             services.AddExceptionErrorFilters(new ExceptionFilterOptions()
             {

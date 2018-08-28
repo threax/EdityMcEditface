@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Threax.SharedHttpClient;
 
-namespace EdityMcEditface.BuildTasks
+namespace EdityMcEditface.PublishTasks
 {
     public class RestPublisher : IPublishTask
     {

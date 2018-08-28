@@ -52,13 +52,14 @@ namespace EdityMcEditface.Mvc.Services
                         return ex;
                     }
                 });
-                var runException = task.Result;
-                //TODO: Do something to report the exception here.
+                var runException = task.Result; //This line has threading implications, don't move it
                 sw.Stop();
                 lock (locker)
                 {
                     this.lastProgress = mapper.Map<CompileProgress>(builder.GetCurrentProgress());
                     this.lastProgress.Completed = true;
+                    this.lastProgress.Success = runException == null; //If the run exception is null, the process was sucessful.
+                    this.lastProgress.ErrorMessage = runException?.Message;
                     this.currentBuilder = null;
                 }
             });

@@ -17,11 +17,11 @@ namespace EdityMcEditface.Mvc.Repositories
 {
     public class PublishRepository : IPublishRepository
     {
-        private SiteBuilder builder;
+        private ISiteBuilder builder;
         private ICompileService compileService;
         private ProjectFinder projectFinder;
 
-        public PublishRepository(SiteBuilder builder, ICompileService compileService, ProjectFinder projectFinder)
+        public PublishRepository(ISiteBuilder builder, ICompileService compileService, ProjectFinder projectFinder)
         {
             this.builder = builder;
             this.compileService = compileService;

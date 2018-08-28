@@ -14,7 +14,7 @@ namespace EdityMcEditface.BuildTasks
     /// <remarks>
     /// This task is in the mvc library since that is where libgit is included.
     /// </remarks>
-    public class PullPublish : BuildTask
+    public class PullPublish : IBuildTask
     {
         private String masterRepoPath;
         private String publishRepoPath;
@@ -25,7 +25,7 @@ namespace EdityMcEditface.BuildTasks
             this.publishRepoPath = publishRepoPath;
         }
 
-        public Task execute()
+        public Task Execute()
         {
             if (!Directory.Exists(publishRepoPath))
             {

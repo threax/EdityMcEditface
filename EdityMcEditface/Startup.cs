@@ -78,8 +78,8 @@ namespace EdityMcEditface
                         ContractResolver = new CamelCasePropertyNamesContractResolver(),
                     };
                     serializer.Converters.Add(new StringEnumConverter());
-                    args.SiteBuilder.addPostBuildTask(new PublishMenu(fileFinder, args.SiteBuilder, "menus/mainMenu.json", serializer));
-                    args.SiteBuilder.addPostBuildTask(new SimpleWebConfigTask(args.SiteBuilder, ProjectConfiguration.DefaultPage));
+                    args.SiteBuilder.AddPostBuildTask(new PublishMenu(fileFinder, args.SiteBuilder, "menus/mainMenu.json", serializer));
+                    args.SiteBuilder.AddPostBuildTask(new SimpleWebConfigTask(args.SiteBuilder, ProjectConfiguration.DefaultPage));
                 }
             };
 

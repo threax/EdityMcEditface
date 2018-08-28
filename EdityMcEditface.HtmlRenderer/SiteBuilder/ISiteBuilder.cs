@@ -6,22 +6,31 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 {
-    public interface SiteBuilder
+    public interface ISiteBuilder
     {
         /// <summary>
         /// Add a task that runs before build.
         /// </summary>
         /// <param name="task">The task to add.</param>
-        void addPreBuildTask(BuildTask task);
+        void AddPreBuildTask(IBuildTask task);
 
         /// <summary>
         /// Add a task that runs after the build.
         /// </summary>
         /// <param name="task">The task to add.</param>
-        void addPostBuildTask(BuildTask task);
+        void AddPostBuildTask(IBuildTask task);
 
         /// <summary>
-        /// Build the site.
+        /// Add a task that does publishing steps. This phase will run after the build phases.
+        /// All files that you wish to publish should have been copied by this point during the
+        /// build phases.
+        /// </summary>
+        /// <param name="task">The task to add.</param>
+        void AddPublishTask(IPublishTask task);
+
+        /// <summary>
+        /// Build the site. This will run the PreBuild Tasks, then the main site build then the PostBuild
+        /// tasks and then the Publish tasks.
         /// </summary>
         Task BuildSite();
 

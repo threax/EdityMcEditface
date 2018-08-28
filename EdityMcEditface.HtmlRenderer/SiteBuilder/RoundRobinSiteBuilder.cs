@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 {
-    public class RoundRobinSiteBuilder : SiteBuilder
+    public class RoundRobinSiteBuilder : ISiteBuilder
     {
         private SiteBuilderSettings settings;
         private DirectOutputSiteBuilder directOutput;
@@ -47,14 +47,19 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             }
         }
 
-        public void addPreBuildTask(BuildTask task)
+        public void AddPreBuildTask(IBuildTask task)
         {
-            directOutput.addPreBuildTask(task);
+            directOutput.AddPreBuildTask(task);
         }
 
-        public void addPostBuildTask(BuildTask task)
+        public void AddPostBuildTask(IBuildTask task)
         {
-            directOutput.addPostBuildTask(task);
+            directOutput.AddPostBuildTask(task);
+        }
+
+        public void AddPublishTask(IPublishTask task)
+        {
+            directOutput.AddPublishTask(task);
         }
 
         public Stream OpenOutputWriteStream(string file)

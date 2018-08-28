@@ -11,7 +11,7 @@ namespace EdityMcEditface.Mvc.Config
         /// <summary>
         /// The site builder to customize.
         /// </summary>
-        public SiteBuilder SiteBuilder { get; set; }
+        public ISiteBuilder SiteBuilder { get; set; }
 
         /// <summary>
         /// The service provider.

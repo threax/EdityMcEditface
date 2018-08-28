@@ -11,7 +11,7 @@ using Threax.SharedHttpClient;
 
 namespace EdityMcEditface.BuildTasks
 {
-    public class RestPublisher : BuildTask
+    public class RestPublisher : IPublishTask
     {
         ISharedHttpClient httpClient;
         RemotePublishOptions publishOptions;
@@ -26,7 +26,7 @@ namespace EdityMcEditface.BuildTasks
             this.zipOutputPath = outputPath + ".zip"; //Just append .zip to the out dir, that will create the correct zip file in the same folder as the source folder.
         }
 
-        public async Task execute()
+        public async Task Execute()
         {
             try
             {

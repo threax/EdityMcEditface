@@ -9,7 +9,7 @@ namespace EdityMcEditface.Mvc.Services
         /// Run the compiler.
         /// </summary>
         /// <returns>The time statistics when the compilation is complete.</returns>
-        void Compile(SiteBuilder builder);
+        void Compile(ISiteBuilder builder);
 
         /// <summary>
         /// Get the status of the current build.

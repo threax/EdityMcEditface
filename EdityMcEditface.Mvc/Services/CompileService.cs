@@ -14,7 +14,7 @@ namespace EdityMcEditface.Mvc.Services
     {
         private Object locker = new object(); //Object to act as a lock
         private WorkQueue workQueue;
-        private SiteBuilder currentBuilder;
+        private ISiteBuilder currentBuilder;
         private IMapper mapper;
         private CompileProgress lastProgress = null;
 
@@ -27,7 +27,7 @@ namespace EdityMcEditface.Mvc.Services
         /// <summary>
         /// Run the compiler.
         /// </summary>
-        public void Compile(SiteBuilder builder)
+        public void Compile(ISiteBuilder builder)
         {
             workQueue.Fire(() =>
             {

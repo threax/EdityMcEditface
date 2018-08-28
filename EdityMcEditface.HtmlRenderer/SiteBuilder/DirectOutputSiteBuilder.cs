@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 {
-    public class DirectOutputSiteBuilder : SiteBuilder
+    public class DirectOutputSiteBuilder : ISiteBuilder
     {
         private SiteBuilderSettings settings;
-        private List<BuildTask> preBuildTasks = new List<BuildTask>();
-        private List<BuildTask> postBuildTasks = new List<BuildTask>();
+        private List<IBuildTask> preBuildTasks = new List<IBuildTask>();
+        private List<IBuildTask> postBuildTasks = new List<IBuildTask>();
+        private List<IPublishTask> publishTasks = new List<IPublishTask>();
         private IContentCompilerFactory contentCompilerFactory;
         private IFileFinder fileFinder;
 
@@ -58,7 +59,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             //Pre build tasks
             foreach(var task in preBuildTasks)
             {
-                await task.execute();
+                await task.Execute();
             }
 
             //Handle output folder
@@ -88,18 +89,29 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             //Post build tasks
             foreach (var task in postBuildTasks)
             {
-                await task.execute();
+                await task.Execute();
+            }
+
+            //Publish tasks
+            foreach (var task in publishTasks)
+            {
+                await task.Execute();
             }
         }
 
-        public void addPreBuildTask(BuildTask task)
+        public void AddPreBuildTask(IBuildTask task)
         {
             preBuildTasks.Add(task);
         }
 
-        public void addPostBuildTask(BuildTask task)
+        public void AddPostBuildTask(IBuildTask task)
         {
             postBuildTasks.Add(task);
+        }
+
+        public void AddPublishTask(IPublishTask task)
+        {
+            publishTasks.Add(task);
         }
 
         public Stream OpenOutputWriteStream(string file)

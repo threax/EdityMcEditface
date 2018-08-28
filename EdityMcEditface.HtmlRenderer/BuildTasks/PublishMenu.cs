@@ -24,14 +24,14 @@ namespace EdityMcEditface.BuildTasks
         public List<MenuItem> Children { get; set; }
     }
 
-    public class PublishMenu : BuildTask
+    public class PublishMenu : IBuildTask
     {
         private IFileFinder fileFinder;
         private JsonSerializer serializer;
         private String menuFile;
-        private SiteBuilder siteBuilder;
+        private ISiteBuilder siteBuilder;
 
-        public PublishMenu(IFileFinder fileFinder, SiteBuilder siteBuilder, String menuFile, JsonSerializer jsonSerializer)
+        public PublishMenu(IFileFinder fileFinder, ISiteBuilder siteBuilder, String menuFile, JsonSerializer jsonSerializer)
         {
             this.fileFinder = fileFinder;
             this.serializer = jsonSerializer;
@@ -39,7 +39,7 @@ namespace EdityMcEditface.BuildTasks
             this.siteBuilder = siteBuilder;
         }
 
-        public Task execute()
+        public Task Execute()
         {
             try
             {

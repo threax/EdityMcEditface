@@ -271,7 +271,7 @@ namespace EdityMcEditface.Mvc
             switch (projectConfiguration.Compiler)
             {
                 case Compilers.RoundRobin:
-                    services.AddTransient<SiteBuilder, RoundRobinSiteBuilder>(s =>
+                    services.AddTransient<ISiteBuilder, RoundRobinSiteBuilder>(s =>
                     {
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var settings = s.GetRequiredService<SiteBuilderSettings>();
@@ -282,7 +282,7 @@ namespace EdityMcEditface.Mvc
 
                         if (projectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
                         {
-                            builder.addPreBuildTask(s.GetRequiredService<PullPublish>());
+                            builder.AddPreBuildTask(s.GetRequiredService<PullPublish>());
                         }
 
                         editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()
@@ -295,7 +295,7 @@ namespace EdityMcEditface.Mvc
                     });
                     break;
                 case Compilers.RestEndpoint:
-                    services.AddTransient<SiteBuilder, DirectOutputSiteBuilder>(s =>
+                    services.AddTransient<ISiteBuilder, DirectOutputSiteBuilder>(s =>
                     {
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var settings = s.GetRequiredService<SiteBuilderSettings>();
@@ -303,10 +303,11 @@ namespace EdityMcEditface.Mvc
                         var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
                         var fileFinder = s.GetRequiredService<IFileFinder>();
                         var builder = new DirectOutputSiteBuilder(settings, compilerFactory, fileFinder); //Don't need a special site builder
+                        builder.AddPublishTask(new RestPublisher(projectConfiguration.RemotePublish, s.GetRequiredService<ISharedHttpClient>(), settings.OutDir));
 
                         if (projectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
                         {
-                            builder.addPreBuildTask(s.GetRequiredService<PullPublish>());
+                            builder.AddPreBuildTask(s.GetRequiredService<PullPublish>());
                         }
 
                         editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()
@@ -315,15 +316,12 @@ namespace EdityMcEditface.Mvc
                             Services = s
                         });
 
-                        //Add the RestPublisher last so any custom steps add their files correctly
-                        builder.addPostBuildTask(new RestPublisher(projectConfiguration.RemotePublish, s.GetRequiredService<ISharedHttpClient>(), settings.OutDir));
-
                         return builder;
                     });
                     break;
                 case Compilers.Direct:
                 default:
-                    services.AddTransient<SiteBuilder, DirectOutputSiteBuilder>(s =>
+                    services.AddTransient<ISiteBuilder, DirectOutputSiteBuilder>(s =>
                     {
                         var projectFinder = s.GetRequiredService<ProjectFinder>();
                         var settings = s.GetRequiredService<SiteBuilderSettings>();
@@ -333,7 +331,7 @@ namespace EdityMcEditface.Mvc
 
                         if (projectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
                         {
-                            builder.addPreBuildTask(s.GetRequiredService<PullPublish>());
+                            builder.AddPreBuildTask(s.GetRequiredService<PullPublish>());
                         }
 
                         editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()

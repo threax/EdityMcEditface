@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.BuildTasks
 {
-    public class SimpleWebConfigTask : BuildTask
+    public class SimpleWebConfigTask : IBuildTask
     {
-        private SiteBuilder siteBuilder;
+        private ISiteBuilder siteBuilder;
         private String homePage;
 
-        public SimpleWebConfigTask(SiteBuilder siteBuilder, String homePage)
+        public SimpleWebConfigTask(ISiteBuilder siteBuilder, String homePage)
         {
             this.siteBuilder = siteBuilder;
             this.homePage = homePage;
         }
 
-        public Task execute()
+        public Task Execute()
         {
             using (var writer = new StreamWriter(siteBuilder.OpenOutputWriteStream("web.config")))
             {

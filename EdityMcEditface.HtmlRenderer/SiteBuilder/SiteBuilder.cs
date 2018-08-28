@@ -23,7 +23,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         /// <summary>
         /// Build the site.
         /// </summary>
-        void BuildSite();
+        Task BuildSite();
 
         /// <summary>
         /// Open a write stream to file in the destination folder.

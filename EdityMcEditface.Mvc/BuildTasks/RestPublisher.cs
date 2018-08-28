@@ -26,7 +26,7 @@ namespace EdityMcEditface.BuildTasks
             this.zipOutputPath = outputPath + ".zip"; //Just append .zip to the out dir, that will create the correct zip file in the same folder as the source folder.
         }
 
-        public void execute()
+        public async Task execute()
         {
             try
             {
@@ -48,10 +48,7 @@ namespace EdityMcEditface.BuildTasks
                         message.Headers.Authorization = new AuthenticationHeaderValue("Basic", auth);
                     }
 
-                    //Method is async, but the builders run on a background thread, go ahead and run SendAsync on the thread pool.
-                    //This does not need to be high performance, it is only happening in 1 thread.
-                    var resultTask = Task.Run(async () => await httpClient.Client.SendAsync(message));
-                    var result = resultTask.Result;
+                    var result = await httpClient.Client.SendAsync(message);                    
                     if (!result.IsSuccessStatusCode)
                     {
                         throw new InvalidOperationException($"{result.StatusCode} Error publishing site.");

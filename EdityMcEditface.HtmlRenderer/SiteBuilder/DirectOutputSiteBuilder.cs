@@ -53,12 +53,12 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             }
         }
 
-        public void BuildSite()
+        public async Task BuildSite()
         {
             //Pre build tasks
             foreach(var task in preBuildTasks)
             {
-                task.execute();
+                await task.execute();
             }
 
             //Handle output folder
@@ -88,7 +88,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             //Post build tasks
             foreach (var task in postBuildTasks)
             {
-                task.execute();
+                await task.execute();
             }
         }
 

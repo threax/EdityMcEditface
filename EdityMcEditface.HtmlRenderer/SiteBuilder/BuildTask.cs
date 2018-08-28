@@ -7,6 +7,6 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 {
     public interface BuildTask
     {
-        void execute();
+        Task execute();
     }
 }

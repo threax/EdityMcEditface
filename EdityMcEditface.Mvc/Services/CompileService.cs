@@ -38,7 +38,22 @@ namespace EdityMcEditface.Mvc.Services
                 }
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                builder.BuildSite();
+                //Do the build process on the thread pool, this way async will work correctly, this thread
+                //will then wait for the result and process any exceptions that occur.
+                var task = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await builder.BuildSite();
+                        return default(Exception);
+                    }
+                    catch(Exception ex)
+                    {
+                        return ex;
+                    }
+                });
+                var runException = task.Result;
+                //TODO: Do something to report the exception here.
                 sw.Stop();
                 lock (locker)
                 {

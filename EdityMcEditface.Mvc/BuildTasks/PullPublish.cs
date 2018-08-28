@@ -22,7 +22,7 @@ namespace EdityMcEditface.BuildTasks
             this.publishRepoPath = publishRepoPath;
         }
 
-        public void execute()
+        public Task execute()
         {
             if (!Directory.Exists(publishRepoPath))
             {
@@ -44,6 +44,7 @@ namespace EdityMcEditface.BuildTasks
                     }
                 }
             }
+            return Task.FromResult(0);
         }
     }
 }

@@ -27,9 +27,9 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             directOutput = new DirectOutputSiteBuilder(settings, contentCompilerFactory, fileFinder);
         }
 
-        public void BuildSite()
+        public async Task BuildSite()
         {
-            directOutput.BuildSite();
+            await directOutput.BuildSite();
 
             deployer.Deploy(settings.OutDir);
 

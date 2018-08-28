@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EdityMcEditface.BuildTasks
 {
@@ -17,12 +18,13 @@ namespace EdityMcEditface.BuildTasks
             this.homePage = homePage;
         }
 
-        public void execute()
+        public Task execute()
         {
             using (var writer = new StreamWriter(siteBuilder.OpenOutputWriteStream("web.config")))
             {
                 writer.Write(CreateWebConfig());
             }
+            return Task.FromResult(0);
         }
 
         public String CreateWebConfig()

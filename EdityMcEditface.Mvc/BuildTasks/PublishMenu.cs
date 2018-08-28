@@ -39,7 +39,7 @@ namespace EdityMcEditface.Mvc.BuildTasks
             this.siteBuilder = siteBuilder;
         }
 
-        public void execute()
+        public Task execute()
         {
             try
             {
@@ -61,6 +61,7 @@ namespace EdityMcEditface.Mvc.BuildTasks
             {
                 //Ignore file not found exceptions and copy nothing.
             }
+            return Task.FromResult(0);
         }
 
         public void cleanMenuItems(MenuItem parent)

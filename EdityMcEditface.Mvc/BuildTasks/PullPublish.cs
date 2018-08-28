@@ -9,8 +9,11 @@ using System.Threading.Tasks;
 namespace EdityMcEditface.BuildTasks
 {
     /// <summary>
-    /// This build task ensures a publish repo exists and pulls in any updates.
+    /// This build task ensures a publish repo exists and pulls in any updates. 
     /// </summary>
+    /// <remarks>
+    /// This task is in the mvc library since that is where libgit is included.
+    /// </remarks>
     public class PullPublish : BuildTask
     {
         private String masterRepoPath;

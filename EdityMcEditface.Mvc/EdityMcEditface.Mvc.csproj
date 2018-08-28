@@ -9,7 +9,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>9.1.0-pre6</Version>
+    <Version>10.0.0-pre1</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
@@ -18,7 +18,8 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/threax/Threax.AspNetCore.Hypermedia/master/LICENSE</PackageLicenseUrl>
     <Description>The mvc portion of Edity McEditface.</Description>
     <Authors>Andrew Piper</Authors>
-    <PackageReleaseNotes>Added a RestEndpoint compiler that will upload a zip file to a specified rest endpoint.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added a RestEndpoint compiler that will upload a zip file to a specified rest endpoint.
+Cleaned up the api a bit and location of some build classes. Also made build process use async.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

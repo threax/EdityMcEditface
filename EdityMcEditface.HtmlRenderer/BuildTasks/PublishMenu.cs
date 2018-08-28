@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EdityMcEditface.Mvc.BuildTasks
+namespace EdityMcEditface.BuildTasks
 {
     public class MenuItem
     {

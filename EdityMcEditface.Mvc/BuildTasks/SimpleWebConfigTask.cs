@@ -1,9 +1,10 @@
-﻿using System;
+﻿using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace EdityMcEditface.HtmlRenderer.SiteBuilder.BuildTasks
+namespace EdityMcEditface.BuildTasks
 {
     public class SimpleWebConfigTask : BuildTask
     {

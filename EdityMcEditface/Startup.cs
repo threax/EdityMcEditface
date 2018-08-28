@@ -14,6 +14,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using EdityMcEditface.Mvc.BuildTasks;
 using Microsoft.AspNetCore.Authorization;
+using EdityMcEditface.BuildTasks;
 
 namespace EdityMcEditface
 {
@@ -79,6 +80,7 @@ namespace EdityMcEditface
                     };
                     serializer.Converters.Add(new StringEnumConverter());
                     args.SiteBuilder.addPostBuildTask(new PublishMenu(fileFinder, args.SiteBuilder, "menus/mainMenu.json", serializer));
+                    args.SiteBuilder.addPostBuildTask(new SimpleWebConfigTask(args.SiteBuilder, ProjectConfiguration.DefaultPage));
                 }
             };
 

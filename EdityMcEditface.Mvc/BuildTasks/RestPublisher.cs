@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -8,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Threax.SharedHttpClient;
 
-namespace EdityMcEditface.HtmlRenderer.SiteBuilder.BuildTasks
+namespace EdityMcEditface.BuildTasks
 {
     public class RestPublisher : BuildTask
     {

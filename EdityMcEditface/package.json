@@ -6,7 +6,11 @@
     "@types/node": "^6.0.69"
   },
   "dependencies": {
-    "editymceditface.client": ">=12.8.0"
+    "editymceditface.client": ">=12.8.0",
+    "htmlrapier": "^18.1.1",
+    "htmlrapier.halcyon": "^7.0.0",
+    "htmlrapier.widgets": "^15.0.0",
+    "jsns": "^5.0.0"
   },
   "scripts": {
     "build": "threax-npm-tk build -o ClientBin/Site && threax-npm-tk build -o ClientBin/EdityMcEditface -a node_modules/*/edity-artifacts.json && dotnet bundle",

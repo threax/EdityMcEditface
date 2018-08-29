@@ -55,7 +55,7 @@ $@"<?xml version=""1.0"" encoding=""UTF-8""?>
   <system.webServer>
     <defaultDocument>
       <files>
-        <add value=""{currentDeploymentFolder}/{homePage}.html
+        <add value=""{currentDeploymentFolder}/{homePage}.html""/>
       </files>
     </defaultDocument>
     <rewrite>

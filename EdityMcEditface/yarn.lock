@@ -77,8 +77,8 @@ htmlrapier.widgets@>=9.2.0, htmlrapier.widgets@^15.0.0:
     htmlrapier.halcyon ">=7.0.0"
 
 htmlrapier@>=10.0.0, htmlrapier@>=10.0.2, htmlrapier@>=14.3.0, htmlrapier@>=14.5.0, htmlrapier@>=8.0.1, htmlrapier@>=8.1.0, htmlrapier@^18.1.1:
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-18.1.1.tgz#8272468e252b52c4e793e104b494c6ca6371d81a"
+  version "18.1.2"
+  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-18.1.2.tgz#263fc1025c9a8c6bfd0e52dec6ec23e4c86ebb1e"
   dependencies:
     "@types/es6-promise" "^0.0.32"
     tslib "^1.6.1"

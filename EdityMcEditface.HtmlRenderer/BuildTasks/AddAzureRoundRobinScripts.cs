@@ -35,7 +35,7 @@ namespace EdityMcEditface.BuildTasks
                 writer.Write(deployPs1);
             }
 
-            using (var writer = new StreamWriter(siteBuilder.OpenOutputWriteStream("template.txt")))
+            using (var writer = new StreamWriter(siteBuilder.OpenOutputWriteStream("webconfig.txt")))
             {
                 writer.Write(GetWebConfigTemplate());
             }
@@ -60,9 +60,9 @@ $DeploymentTarget=$env:DEPLOYMENT_TARGET
 $DeploymentSource=$env:DEPLOYMENT_SOURCE
 
 New-Item -ItemType Directory -Path $DeploymentTarget\$DeploymentId
-Copy-Item $DeploymentSource\* -Destination $DeploymentTarget\$DeploymentId -Recurse -Exclude @("".deployment"",""deploy.ps1"",""template.txt"")
+Copy-Item $DeploymentSource\* -Destination $DeploymentTarget\$DeploymentId -Recurse -Exclude @("".deployment"",""deploy.ps1"",""webconfig.txt"")
 
-FindAndReplace ""template.txt"" ""$DeploymentTarget\web.config"" ""EDITY_DEPLOYMENT_ID"" $DeploymentId;
+FindAndReplace ""webconfig.txt"" ""$DeploymentTarget\web.config"" ""EDITY_DEPLOYMENT_ID"" $DeploymentId;
 
 Get-ChildItem $DeploymentTarget -Exclude $DeploymentId,web.config | Remove-Item -Recurse
 ";

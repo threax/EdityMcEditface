@@ -9,7 +9,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>7.0.0-pre3</Version>
+    <Version>7.0.0-pre5</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
@@ -19,7 +19,8 @@
     <PackageProjectUrl>https://github.com/threax/EdityMcEditface</PackageProjectUrl>
     <RepositoryUrl>https://github.com/threax/EdityMcEditface</RepositoryUrl>
     <PackageReleaseNotes>Added a RestEndpoint compiler that will upload a zip file to a specified rest endpoint.
-Cleaned up the api a bit and location of some build classes. Also made build process use async.</PackageReleaseNotes>
+Cleaned up the api a bit and location of some build classes. Also made build process use async.
+Changed Compiler in the config file to Publisher. This better reflects that phase.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

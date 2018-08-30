@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using EdityMcEditface.PublishTasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,9 @@ namespace EdityMcEditface.Mvc
     }
 
     /// <summary>
-    /// The different compilers.
+    /// The different publishers.
     /// </summary>
-    public enum Compilers
+    public enum Publishers
     {
         /// <summary>
         /// Directly publish the website to a target folder.
@@ -39,7 +40,7 @@ namespace EdityMcEditface.Mvc
         /// by entering https://{site}.scm.azurewebsites.net/api/zipdeploy where {site} is your azure website name as your Host
         /// along with the username and password.
         /// </summary>
-        RestEndpoint = 1,
+        AzureZip = 1,
 
         /// <summary>
         /// Publish the website to folder, but put the content in a subdirectory. This subdirectory is a guid. The webserver
@@ -57,9 +58,9 @@ namespace EdityMcEditface.Mvc
         public ProjectMode ProjectMode { get; set; } = ProjectMode.OneRepo;
 
         /// <summary>
-        /// The compiler to use when publishing.
+        /// The publisher to use.
         /// </summary>
-        public Compilers Compiler { get; set; } = Compilers.Direct;
+        public Publishers Publisher { get; set; } = Publishers.Direct;
 
         /// <summary>
         /// The output folder for published files.
@@ -101,6 +102,6 @@ namespace EdityMcEditface.Mvc
         /// <summary>
         /// Options when publishing remotely. Used with the RestCompiler.
         /// </summary>
-        public RemotePublishOptions RemotePublish { get; set; }
+        public AzurePublishOptions AzureZipOptions { get; set; }
     }
 }

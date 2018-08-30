@@ -274,14 +274,14 @@ namespace EdityMcEditface.Mvc
                 var builder = new DirectOutputSiteBuilder(settings, compilerFactory, fileFinder);
 
                 //Customize settings depending on compiler setting
-                switch (projectConfiguration.Compiler)
+                switch (projectConfiguration.Publisher)
                 {
-                    case Compilers.RestEndpoint:
+                    case Publishers.AzureZip:
                         //Change site to output to azurezip folder, that folder will be zipped
                         settings.OutDir = Path.GetFullPath(Path.Combine(settings.OutDir, "azurezip"));
-                        builder.AddPublishTask(new RestPublisher(projectConfiguration.RemotePublish, s.GetRequiredService<ISharedHttpClient>(), settings.OutDir));
+                        builder.AddPublishTask(new AzureZipPublisher(projectConfiguration.AzureZipOptions, s.GetRequiredService<ISharedHttpClient>(), settings.OutDir));
                         break;
-                    case Compilers.RoundRobin:
+                    case Publishers.RoundRobin:
                         var newDeployId = Guid.NewGuid().ToString();
                         var outputBaseFolder = settings.OutDir;
                         settings.OutDir = Path.GetFullPath(Path.Combine(settings.OutDir, newDeployId));

@@ -79,7 +79,15 @@ namespace EdityMcEditface
                     };
                     serializer.Converters.Add(new StringEnumConverter());
                     args.SiteBuilder.AddPostBuildTask(new PublishMenu(fileFinder, args.SiteBuilder, "menus/mainMenu.json", serializer));
-                    args.SiteBuilder.AddPostBuildTask(new SimpleWebConfigTask(args.SiteBuilder, ProjectConfiguration.DefaultPage));
+                    switch (ProjectConfiguration.Publisher)
+                    {
+                        case Publishers.AzureZip:
+                            args.SiteBuilder.AddPostBuildTask(new AddAzureRoundRobinScripts(args.SiteBuilder, ProjectConfiguration.DefaultPage));
+                            break;
+                        case Publishers.Direct:
+                            args.SiteBuilder.AddPostBuildTask(new SimpleWebConfigTask(args.SiteBuilder, ProjectConfiguration.DefaultPage));
+                            break;
+                    }
                 }
             };
 

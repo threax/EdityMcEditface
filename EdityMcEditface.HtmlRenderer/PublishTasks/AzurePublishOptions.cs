@@ -2,22 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EdityMcEditface.HtmlRenderer.SiteBuilder
+namespace EdityMcEditface.PublishTasks
 {
     /// <summary>
     /// Options for remote publishing.
     /// </summary>
-    public class RemotePublishOptions
+    public class AzurePublishOptions
     {
         /// <summary>
-        /// The host url to publish to.
+        /// The name of the site to publish to. This is your part of the site.azurewebsites.net url.
+        /// The full url used will be https://{site}.scm.azurewebsites.net/api/zipdeploy?isAsync=true
         /// </summary>
-        public String Host { get; set; }
-
-        /// <summary>
-        /// The method to use when publishing, defaults to POST.
-        /// </summary>
-        public String Method { get; set; } = "POST";
+        public String SiteName { get; set; }
 
         /// <summary>
         /// The username. If present it is sent as base64(User:Password) in the Authorization header.

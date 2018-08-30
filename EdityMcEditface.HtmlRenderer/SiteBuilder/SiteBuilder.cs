@@ -40,6 +40,8 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
                 await task.Execute(args);
             }
 
+            args.Tracker.AddMessage("Building website.");
+
             //Handle output folder
             IOExtensions.MultiTryDirDelete(settings.OutDir);
 

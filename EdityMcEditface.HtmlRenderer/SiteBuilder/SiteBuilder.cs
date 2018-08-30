@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer.Compiler;
+using EdityMcEditface.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 {
-    public class DirectOutputSiteBuilder : ISiteBuilder
+    public class SiteBuilder : ISiteBuilder
     {
         private SiteBuilderSettings settings;
         private List<IBuildTask> preBuildTasks = new List<IBuildTask>();
@@ -21,38 +22,11 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         private int currentFile;
         private int totalFiles;
 
-        public DirectOutputSiteBuilder(SiteBuilderSettings settings, IContentCompilerFactory contentCompilerFactory, IFileFinder fileFinder)
+        public SiteBuilder(SiteBuilderSettings settings, IContentCompilerFactory contentCompilerFactory, IFileFinder fileFinder)
         {
             this.contentCompilerFactory = contentCompilerFactory;
             this.settings = settings;
             this.fileFinder = fileFinder;
-        }
-
-        /// <summary>
-        /// Try mulitplie times to delete a directory since this fails a lot.
-        /// </summary>
-        /// <param name="dir"></param>
-        public static void MultiTryDirDelete(String dir)
-        {
-            if (Directory.Exists(dir))
-            {
-                try
-                {
-                    Directory.Delete(dir, true);
-                }
-                catch (Exception)
-                {
-                    try
-                    {
-                        Directory.Delete(dir, true);
-                    }
-                    catch (Exception)
-                    {
-                        Thread.Sleep(100); //Small timeout if we got this far
-                        Directory.Delete(dir, true); //Last one will throw if needed
-                    }
-                }
-            }
         }
 
         public async Task BuildSite()
@@ -64,7 +38,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             }
 
             //Handle output folder
-            MultiTryDirDelete(settings.OutDir);
+            IOExtensions.MultiTryDirDelete(settings.OutDir);
 
             Directory.CreateDirectory(settings.OutDir);
 

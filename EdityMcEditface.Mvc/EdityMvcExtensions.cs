@@ -271,7 +271,7 @@ namespace EdityMcEditface.Mvc
                 var settings = s.GetRequiredService<SiteBuilderSettings>();
                 var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
                 var fileFinder = s.GetRequiredService<IFileFinder>();
-                var builder = new DirectOutputSiteBuilder(settings, compilerFactory, fileFinder);
+                var builder = new SiteBuilder(settings, compilerFactory, fileFinder);
 
                 //Customize settings depending on compiler setting
                 switch (projectConfiguration.Publisher)

@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using EdityMcEditface.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,7 +39,7 @@ namespace EdityMcEditface.PublishTasks
                 {
                     try
                     {
-                        DirectOutputSiteBuilder.MultiTryDirDelete(dir);
+                        IOExtensions.MultiTryDirDelete(dir);
                     }
                     catch (Exception) { }
                 }

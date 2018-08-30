@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using EdityMcEditface.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -90,7 +91,7 @@ namespace EdityMcEditface.PublishTasks
                 //Erase the output dir
                 if (Directory.Exists(outputPath))
                 {
-                    DirectOutputSiteBuilder.MultiTryDirDelete(outputPath);
+                    IOExtensions.MultiTryDirDelete(outputPath);
                 }
             }
         }

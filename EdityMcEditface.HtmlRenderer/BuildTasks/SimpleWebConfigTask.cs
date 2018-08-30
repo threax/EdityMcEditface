@@ -18,8 +18,10 @@ namespace EdityMcEditface.BuildTasks
             this.homePage = homePage;
         }
 
-        public Task Execute()
+        public Task Execute(BuildEventArgs args)
         {
+            args.Tracker.AddMessage("Creating web.config.");
+
             using (var writer = new StreamWriter(siteBuilder.OpenOutputWriteStream("web.config")))
             {
                 writer.Write(CreateWebConfig());

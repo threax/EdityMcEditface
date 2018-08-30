@@ -23,8 +23,10 @@ namespace EdityMcEditface.BuildTasks
             this.siteBuilder = siteBuilder;
         }
 
-        public Task Execute()
+        public Task Execute(BuildEventArgs args)
         {
+            args.Tracker.AddMessage("Adding Azure deployment scripts.");
+
             using (var writer = new StreamWriter(siteBuilder.OpenOutputWriteStream(".deployment")))
             {
                 writer.Write(dotDeployment);

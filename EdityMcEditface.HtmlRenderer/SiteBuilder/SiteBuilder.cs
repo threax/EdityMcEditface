@@ -21,9 +21,12 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 
         private int currentFile;
         private int totalFiles;
+        private IBuildStatusTracker buildStatusTracker = new BuildStatusTracker();
+        private BuildEventArgs args;
 
         public SiteBuilder(SiteBuilderSettings settings, IContentCompilerFactory contentCompilerFactory, IFileFinder fileFinder)
         {
+            this.args = new BuildEventArgs(buildStatusTracker);
             this.contentCompilerFactory = contentCompilerFactory;
             this.settings = settings;
             this.fileFinder = fileFinder;
@@ -34,7 +37,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             //Pre build tasks
             foreach(var task in preBuildTasks)
             {
-                await task.Execute();
+                await task.Execute(args);
             }
 
             //Handle output folder
@@ -64,19 +67,19 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             //Post build tasks
             foreach (var task in postBuildTasks)
             {
-                await task.Execute();
+                await task.Execute(args);
             }
 
             //Publish tasks
             foreach (var task in publishTasks)
             {
-                await task.Execute();
+                await task.Execute(args);
             }
 
             //PostPublish tasks
             foreach (var task in postPublishTasks)
             {
-                await task.Execute();
+                await task.Execute(args);
             }
         }
 
@@ -122,7 +125,8 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             return new BuildProgress()
             {
                 CurrentFile = this.currentFile,
-                TotalFiles = this.totalFiles
+                TotalFiles = this.totalFiles,
+                Messages = buildStatusTracker.GetMessages()
             };
         }
     }

@@ -9,5 +9,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         public int CurrentFile { get; set; }
 
         public int TotalFiles { get; set; }
+
+        public List<String> Messages { get; set; }
     }
 }

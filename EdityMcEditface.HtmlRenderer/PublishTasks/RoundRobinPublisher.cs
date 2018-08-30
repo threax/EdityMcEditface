@@ -19,8 +19,10 @@ namespace EdityMcEditface.PublishTasks
             this.homePage = homePage;
         }
 
-        public Task Execute()
+        public Task Execute(BuildEventArgs args)
         {
+            args.Tracker.AddMessage("Swapping active configurations.");
+
             var currentDeploymentFolder = Path.GetFileName(outputFolder);
             var outputParent = Path.GetDirectoryName(outputFolder);
 

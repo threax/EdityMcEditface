@@ -29,10 +29,12 @@ namespace EdityMcEditface.PublishTasks
             this.zipOutputPath = outputPath + ".zip"; //Just append .zip to the out dir, that will create the correct zip file in the same folder as the source folder.
         }
 
-        public async Task Execute()
+        public async Task Execute(BuildEventArgs args)
         {
             try
             {
+                args.Tracker.AddMessage("Creating deployment zip.");
+
                 //Check for zip file and erase it if it exists
                 if (File.Exists(zipOutputPath))
                 {
@@ -40,6 +42,8 @@ namespace EdityMcEditface.PublishTasks
                 }
 
                 ZipFile.CreateFromDirectory(outputPath, zipOutputPath);
+
+                args.Tracker.AddMessage("Uploading zip to azure.");
 
                 using (var file = File.Open(zipOutputPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
@@ -53,9 +57,12 @@ namespace EdityMcEditface.PublishTasks
                         throw new Exception($"Error uploading file. Message: {await response.Content.ReadAsStringAsync()}");
                     }
 
+                    args.Tracker.AddMessage("Starting deployment on Azure service.");
+
                     var jsonSerializer = JsonSerializer.CreateDefault();
                     var pollLocation = response.Headers.Location;
                     bool poll = true;
+                    String lastMessage = null;
                     while (poll)
                     {
                         Thread.Sleep(500);
@@ -76,6 +83,13 @@ namespace EdityMcEditface.PublishTasks
                         {
                             status = jsonSerializer.Deserialize<AzureStatus>(jsonReader);
                         }
+
+                        if(!String.IsNullOrEmpty(status.progress) && status.progress != lastMessage)
+                        {
+                            lastMessage = status.progress;
+                            args.Tracker.AddMessage(lastMessage);
+                        }
+
                         poll = !status.complete;
                     }
                 }

@@ -25,8 +25,10 @@ namespace EdityMcEditface.BuildTasks
             this.publishRepoPath = publishRepoPath;
         }
 
-        public Task Execute()
+        public Task Execute(BuildEventArgs args)
         {
+            args.Tracker.AddMessage("Pulling changes to publish repository.");
+
             if (!Directory.Exists(publishRepoPath))
             {
                 Directory.CreateDirectory(publishRepoPath);

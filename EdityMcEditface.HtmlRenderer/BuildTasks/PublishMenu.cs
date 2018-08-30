@@ -39,8 +39,10 @@ namespace EdityMcEditface.BuildTasks
             this.siteBuilder = siteBuilder;
         }
 
-        public Task Execute()
+        public Task Execute(BuildEventArgs args)
         {
+            args.Tracker.AddMessage($"Publishing menu {menuFile}.");
+
             try
             {
                 MenuItem root;

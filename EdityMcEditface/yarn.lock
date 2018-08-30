@@ -15,8 +15,8 @@ bootstrap@3.3.7, bootstrap@>=3.3.7, bootstrap@~3.3.6, bootstrap@~3.3.7:
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
 
 ckeditor-youtube-plugin@^2.1.5:
-  version "2.1.11"
-  resolved "https://registry.yarnpkg.com/ckeditor-youtube-plugin/-/ckeditor-youtube-plugin-2.1.11.tgz#784baec24845933096fc1162f3f11027a3735735"
+  version "2.1.12"
+  resolved "https://registry.yarnpkg.com/ckeditor-youtube-plugin/-/ckeditor-youtube-plugin-2.1.12.tgz#693e99f7d43dff0bc08b83565b57e138cb7ae757"
 
 ckeditor@~4.7.1:
   version "4.7.3"
@@ -27,8 +27,8 @@ codemirror@~5.28.0:
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.28.0.tgz#2978d9280d671351a4f5737d06bbd681a0fd6f83"
 
 editymceditface.client@>=12.8.0:
-  version "12.11.0"
-  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-12.11.0.tgz#0c6885e6f55f5df806ddc24b25dc8cfb95d115a3"
+  version "12.11.1"
+  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-12.11.1.tgz#a2911dafa6760c1719a9c65b578be47d535f8bf6"
   dependencies:
     bootstrap "~3.3.7"
     ckeditor "~4.7.1"

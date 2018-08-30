@@ -43,7 +43,7 @@ namespace EdityMcEditface.PublishTasks
 
                 ZipFile.CreateFromDirectory(outputPath, zipOutputPath);
 
-                args.Tracker.AddMessage("Uploading zip to azure.");
+                args.Tracker.AddMessage("Uploading zip to Azure.");
 
                 using (var file = File.Open(zipOutputPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
@@ -72,7 +72,7 @@ namespace EdityMcEditface.PublishTasks
                         var pollResponse = await httpClient.Client.SendAsync(pollMessage);
                         if (!pollResponse.IsSuccessStatusCode)
                         {
-                            throw new Exception($"An error occured checking the deployment status on azure. Message: {await pollResponse.Content.ReadAsStringAsync()}");
+                            throw new Exception($"An error occured checking the deployment status on Azure. Message: {await pollResponse.Content.ReadAsStringAsync()}");
                         }
 
                         AzureStatus status;

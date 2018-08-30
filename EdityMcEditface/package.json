@@ -6,8 +6,8 @@
     "@types/node": "^6.0.69"
   },
   "dependencies": {
-    "editymceditface.client": ">=12.8.0",
-    "htmlrapier": "^18.1.1",
+    "editymceditface.client": ">=13.0.0",
+    "htmlrapier": "^18.1.2",
     "htmlrapier.halcyon": "^7.0.0",
     "htmlrapier.widgets": "^15.0.0",
     "jsns": "^5.0.0"

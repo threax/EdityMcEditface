@@ -9,7 +9,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>7.0.0</Version>
+    <Version>8.0.0-pre1</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
@@ -18,9 +18,7 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/threax/Threax.AspNetCore.Hypermedia/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/threax/EdityMcEditface</PackageProjectUrl>
     <RepositoryUrl>https://github.com/threax/EdityMcEditface</RepositoryUrl>
-    <PackageReleaseNotes>Added a RestEndpoint compiler that will upload a zip file to a specified rest endpoint.
-Cleaned up the api a bit and location of some build classes. Also made build process use async.
-Changed Compiler in the config file to Publisher. This better reflects that phase.</PackageReleaseNotes>
+    <PackageReleaseNotes>Moved override vars into the html compiler, apply them during compilation.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

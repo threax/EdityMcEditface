@@ -20,7 +20,7 @@ namespace EdityMcEditface.HtmlRenderer
         private String version; //The version of the website, helps generate query strings for files to get around cache issues
         private bool useBuildVars;
 
-        public TemplateEnvironment(String docLink, IFileFinder fileFinder, String version = null, bool useBuildVars = false, Dictionary<String, String> overrideVars = null)
+        public TemplateEnvironment(String docLink, IFileFinder fileFinder, Dictionary<String, String> overrideVars, String version = null, bool useBuildVars = false)
         {
             this.overrideVars = overrideVars;
             this.useBuildVars = useBuildVars;

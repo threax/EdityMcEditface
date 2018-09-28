@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EdityMcEditface.Mvc.Services
+namespace EdityMcEditface.HtmlRenderer
 {
     public class DefaultOverrideValuesProvider : IOverrideValuesProvider
     {

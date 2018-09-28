@@ -18,13 +18,15 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
         private String outDir;
         private String layout;
         private ITargetFileInfoProvider fileInfoProvider;
+        private IOverrideValuesProvider overrideValuesProvider;
 
-        public JsonCompiler(IFileFinder fileFinder, String outDir, String layout, ITargetFileInfoProvider fileInfoProvider)
+        public JsonCompiler(IFileFinder fileFinder, String outDir, String layout, ITargetFileInfoProvider fileInfoProvider, IOverrideValuesProvider overrideValuesProvider)
         {
             this.fileFinder = fileFinder;
             this.outDir = outDir;
             this.layout = layout;
             this.fileInfoProvider = fileInfoProvider;
+            this.overrideValuesProvider = overrideValuesProvider;
         }
 
         public void buildPage(string relativeFile)
@@ -41,7 +43,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             outFile = Path.ChangeExtension(outFile, extension);
 
             var fileInfo = fileInfoProvider.GetFileInfo(relativeFile, null);
-            TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder, null, true);
+            TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder, overrideValuesProvider.OverrideVars, null, true);
             PageStack pageStack = new PageStack(environment, fileFinder);
             pageStack.ContentFile = fileInfo.HtmlFile;
             if (pageStack.Visible)

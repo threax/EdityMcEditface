@@ -10,10 +10,12 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
     public class ContentCompilerFactory : IContentCompilerFactory
     {
         ITargetFileInfoProvider fileInfoProvider;
+        IOverrideValuesProvider overrideValuesProvider;
 
-        public ContentCompilerFactory(ITargetFileInfoProvider fileInfoProvider)
+        public ContentCompilerFactory(ITargetFileInfoProvider fileInfoProvider, IOverrideValuesProvider overrideValuesProvider)
         {
             this.fileInfoProvider = fileInfoProvider;
+            this.overrideValuesProvider = overrideValuesProvider;
         }
 
         public List<IContentCompiler> CreateCompilers(IFileFinder fileFinder, String outDir, IEnumerable<CompilerDefinition> definition)
@@ -26,12 +28,12 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             switch (definition.Type)
             {
                 case CompilerTypes.Html:
-                    return new HtmlCompiler(fileFinder, outDir, definition.Template, fileInfoProvider)
+                    return new HtmlCompiler(fileFinder, outDir, definition.Template, fileInfoProvider, overrideValuesProvider)
                     {
                         OutputExtension = definition.Extension
                     };
                 case CompilerTypes.Json:
-                    return new JsonCompiler(fileFinder, outDir, definition.Template, fileInfoProvider)
+                    return new JsonCompiler(fileFinder, outDir, definition.Template, fileInfoProvider, overrideValuesProvider)
                     {
                         OutputExtension = definition.Extension
                     };

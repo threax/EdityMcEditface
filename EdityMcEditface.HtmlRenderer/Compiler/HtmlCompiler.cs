@@ -16,14 +16,16 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
         private String layout;
         private ITargetFileInfoProvider fileInfoProvider;
         private String version;
+        private IOverrideValuesProvider overrideValuesProvider;
 
-        public HtmlCompiler(IFileFinder fileFinder, String outDir, String layout, ITargetFileInfoProvider fileInfoProvider)
+        public HtmlCompiler(IFileFinder fileFinder, String outDir, String layout, ITargetFileInfoProvider fileInfoProvider, IOverrideValuesProvider overrideValuesProvider)
         {
             this.fileFinder = fileFinder;
             this.outDir = outDir;
             this.layout = layout;
             this.fileInfoProvider = fileInfoProvider;
             this.version = DateTime.Now.ToString("yyyyMMddhhmmss");
+            this.overrideValuesProvider = overrideValuesProvider;
         }
 
         public void buildPage(String relativeFile)
@@ -38,7 +40,7 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             }
 
             ITargetFileInfo fileInfo = fileInfoProvider.GetFileInfo(relativeFile, null);
-            TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder, version, true);
+            TemplateEnvironment environment = new TemplateEnvironment(fileInfo.FileNoExtension, fileFinder, overrideValuesProvider.OverrideVars, version, true);
             PageStack pageStack = new PageStack(environment, fileFinder);
             pageStack.ContentFile = fileInfo.HtmlFile;
             if (pageStack.Visible)

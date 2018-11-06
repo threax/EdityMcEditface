@@ -5,30 +5,37 @@
 "@types/es6-promise@^0.0.32":
   version "0.0.32"
   resolved "https://registry.yarnpkg.com/@types/es6-promise/-/es6-promise-0.0.32.tgz#3bcf44fb1e429f3df76188c8c6d874463ba371fd"
+  integrity sha1-O89E+x5Cnz33YYjIxth0Rjujcf0=
 
 "@types/node@^6.0.69":
-  version "6.0.117"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.117.tgz#ccfc2506001404708528d657aad9c1b931111646"
+  version "6.14.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.14.1.tgz#162b9001be0bb660708cd69e23f390abc1076fe5"
+  integrity sha512-lfydm+Ul6buYjF6AmcenFjqVYB+tpNlGlwWLr43J1Cok4ybLQimrM8rdB1MdrjtyWdYRceZNgsAeSRZhFxNajQ==
 
 bootstrap@3.3.7, bootstrap@>=3.3.7, bootstrap@~3.3.6, bootstrap@~3.3.7:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
+  integrity sha1-WjiTlFSfIzMIdaOxUGVldPip63E=
 
 ckeditor-youtube-plugin@^2.1.5:
-  version "2.1.12"
-  resolved "https://registry.yarnpkg.com/ckeditor-youtube-plugin/-/ckeditor-youtube-plugin-2.1.12.tgz#693e99f7d43dff0bc08b83565b57e138cb7ae757"
+  version "2.1.13"
+  resolved "https://registry.yarnpkg.com/ckeditor-youtube-plugin/-/ckeditor-youtube-plugin-2.1.13.tgz#2f5901ea15db7d730e5f9104827459daa2766bb7"
+  integrity sha512-V6EQjXtDzp1p4eGmkYHk1+YAwT76oWC9804W8+COBhRn6NlwPRahgVv7VTsSoahb9CPIaTb7QNdFNpUIP2BoIg==
 
 ckeditor@~4.7.1:
   version "4.7.3"
   resolved "https://registry.yarnpkg.com/ckeditor/-/ckeditor-4.7.3.tgz#b486fb9eb91af9532a0acfaea4a55374970254d5"
+  integrity sha1-tIb7nrka+VMqCs+upKVTdJcCVNU=
 
 codemirror@~5.28.0:
   version "5.28.0"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.28.0.tgz#2978d9280d671351a4f5737d06bbd681a0fd6f83"
+  integrity sha512-E/Z6050shti9v9ivl0dUClVRM4xaH204jsJmEpNYC6KDTlQwAz+5DdhLzn0tjaL/Mp1P0J1uhZokcSP2RFSwlA==
 
-editymceditface.client@^13.1.0:
-  version "13.1.0"
-  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-13.1.0.tgz#4757f802b78208686326147f8560ffa8769464c2"
+editymceditface.client@^14.0.0:
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-14.0.0.tgz#a7d2ca295002c77f8f8a6f9f560ad9bb95b431d2"
+  integrity sha512-mWXtcG3ffcnqcCfuO+R1NeK1Xd32sWLYU0byOZmYkb3j2oNNx4VenEh1wVH+V2dPHPaibvYHCBuhRTh5dNnyLw==
   dependencies:
     bootstrap "~3.3.7"
     ckeditor "~4.7.1"
@@ -36,7 +43,7 @@ editymceditface.client@^13.1.0:
     codemirror "~5.28.0"
     htmlrapier ">=14.5.0"
     htmlrapier.bootstrap ">=6.0.4"
-    htmlrapier.halcyon ">=7.0.0"
+    htmlrapier.halcyon ">=7.1.0"
     htmlrapier.sidebar ">=3.0.2"
     htmlrapier.treemenu ">=6.0.1"
     htmlrapier.widgets ">=9.2.0"
@@ -45,20 +52,23 @@ editymceditface.client@^13.1.0:
 htmlrapier.bootstrap@>=6.0.4:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/htmlrapier.bootstrap/-/htmlrapier.bootstrap-6.1.0.tgz#26501ad6eab9a51db8f8af9c0c88961ea6979fac"
+  integrity sha512-wh/1YmOJZKpALY9B02baA7vYmyppjzM1eCXISbKeXq68GSgULmu7deYAykRe4nuT3yCBXHbRi3uuxr7AILkzCg==
   dependencies:
     bootstrap ">=3.3.7"
     htmlrapier ">=8.1.0"
     jquery ">=3.2.1"
 
-htmlrapier.halcyon@>=7.0.0, htmlrapier.halcyon@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/htmlrapier.halcyon/-/htmlrapier.halcyon-7.0.0.tgz#3d2d46582a0f7bfbff059a2c72c0a0cb7a496ca3"
+htmlrapier.halcyon@>=7.0.0, htmlrapier.halcyon@>=7.1.0, htmlrapier.halcyon@^7.0.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/htmlrapier.halcyon/-/htmlrapier.halcyon-7.1.0.tgz#76391959e89ac0b688ae89f06ee05898c6c4213b"
+  integrity sha512-Kqni9nfT0KnaQ649gbAp8TZOTekHQvJISdJYP6HWHR0A9NabdcGvXJ1YYzi/6P2mDPoi3FhH6eKfl7GiZd0bvg==
   dependencies:
     htmlrapier ">=10.0.2"
 
 htmlrapier.sidebar@>=3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/htmlrapier.sidebar/-/htmlrapier.sidebar-3.0.2.tgz#df1f55a84bb56f63286d228463d1792f961788b0"
+  integrity sha1-3x9VqEu1b2MobSKEY9F5L5YXiLA=
   dependencies:
     bootstrap "~3.3.6"
     htmlrapier ">=10.0.0"
@@ -66,19 +76,22 @@ htmlrapier.sidebar@>=3.0.2:
 htmlrapier.treemenu@>=6.0.1:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/htmlrapier.treemenu/-/htmlrapier.treemenu-6.1.0.tgz#8971d3ed1b0b76683da662e9398f87bc5fe4fcec"
+  integrity sha512-HJNMxtuq3/6TC0aR0/9rXGSiRQ6MoxRir3b9qj8wthcQ3pQDYLsM1FFeZaUmz6FLf2dL3d810ze4knoNhXA46g==
   dependencies:
     htmlrapier ">=8.0.1"
 
 htmlrapier.widgets@>=9.2.0, htmlrapier.widgets@^15.0.0:
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-15.0.0.tgz#504aefee9a6a53dc65c398c38c4183ea793549a7"
+  version "15.2.0"
+  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-15.2.0.tgz#36c6753bfbb779a5e2402b730a906a07d5e13f5d"
+  integrity sha512-kAz7W5eG0bcgRYS+LRmQox37Pgt41BCFS9eoqsayH6MJmXd3f7o8eKrCcJ9nBB7lt8yuH5tt7N1SA4fwi64oRg==
   dependencies:
     htmlrapier ">=14.3.0"
     htmlrapier.halcyon ">=7.0.0"
 
 htmlrapier@>=10.0.0, htmlrapier@>=10.0.2, htmlrapier@>=14.3.0, htmlrapier@>=14.5.0, htmlrapier@>=8.0.1, htmlrapier@>=8.1.0, htmlrapier@^18.1.2:
-  version "18.1.2"
-  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-18.1.2.tgz#263fc1025c9a8c6bfd0e52dec6ec23e4c86ebb1e"
+  version "18.4.0"
+  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-18.4.0.tgz#1cb582813c6417bda657b24befdb9f0f93a4d37d"
+  integrity sha512-Ov4ufY6cLJzN8mK1I4tRCr4lK0uU3Qvtk0SYLCoCohWc+jB8aLeDeiTRlfvPZA1a2PIejgclvs0rgGxzrucwDQ==
   dependencies:
     "@types/es6-promise" "^0.0.32"
     tslib "^1.6.1"
@@ -86,11 +99,14 @@ htmlrapier@>=10.0.0, htmlrapier@>=10.0.2, htmlrapier@>=14.3.0, htmlrapier@>=14.5
 jquery@>=3.2.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
+  integrity sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg==
 
 jsns@>=5.0.0, jsns@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/jsns/-/jsns-5.0.0.tgz#c76429b822a68100eef8d4b8d3f1172b028664e4"
+  integrity sha1-x2QpuCKmgQDu+NS40/EXKwKGZOQ=
 
 tslib@^1.6.1:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.3.tgz#d7e4dd79245d85428c4d7e4822a79917954ca286"
+  integrity sha512-4krF8scpejhaOgqzBEcGM7yDIEfi0/8+8zDRZhNZZ2kjmHJ4hv3zCbQWxoJGz1iw5U0Jl0nma13xzHXcncMavQ==

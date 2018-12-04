@@ -6,10 +6,11 @@
     "@types/node": "^6.0.69"
   },
   "dependencies": {
-    "editymceditface.client": "^14.0.0",
-    "htmlrapier": "^18.1.2",
-    "htmlrapier.halcyon": "^7.0.0",
-    "htmlrapier.widgets": "^15.0.0",
+    "editymceditface.client": "^14.1.0",
+    "htmlrapier": "^19.0.2",
+    "htmlrapier.form.bootstrap3": "^1.0.0",
+    "htmlrapier.halcyon": "^7.1.0",
+    "htmlrapier.widgets": "^15.5.0",
     "jsns": "^5.0.0"
   },
   "scripts": {

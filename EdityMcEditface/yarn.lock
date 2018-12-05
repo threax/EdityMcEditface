@@ -33,9 +33,9 @@ codemirror@~5.28.0:
   integrity sha512-E/Z6050shti9v9ivl0dUClVRM4xaH204jsJmEpNYC6KDTlQwAz+5DdhLzn0tjaL/Mp1P0J1uhZokcSP2RFSwlA==
 
 editymceditface.client@^14.1.0:
-  version "14.1.0"
-  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-14.1.0.tgz#9d242cc7bd4dde8684ffc32e40a950a29c3ab81a"
-  integrity sha512-no0M5pXDYHk4TfyQbzwfyYd1vwCCj/M2mOtGIscqRih+qAU0m/CfGZj2J5f4QfJJctlDodrcz4hLIdY470wRrA==
+  version "14.1.1"
+  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-14.1.1.tgz#16923dc87569cd51f661283ce86967860da2466e"
+  integrity sha512-/wQZWbp16MYvytPrC345WplA/C5HBeXtMhe2+cnc2berVsMgLZPx1ccskfarvh6YZ1vBr3S93UUaueBRq8CRJQ==
   dependencies:
     bootstrap "~3.3.7"
     ckeditor "~4.7.1"

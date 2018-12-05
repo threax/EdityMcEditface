@@ -1,6 +1,8 @@
 # Edity McEditface
 Some tools to play around with static websites using .net.
 
+This guide has 2 parts. The first tells you how to build and run and assumes you have the dependencies installed. If you don't skip down to Setting Up Depenencies.
+
 ## How to Build
 After cloning the repository go to the root folder of the repo on your command line. Then run the following commands:
 ```
@@ -19,13 +21,24 @@ Replace your/target/dir with the path to the git repo for your website.
 
 This should run the app. It will print out the url that you should access it with using your browser. This should show you the site with the default menu. Visiting the url for any of the files in your git repo should show that page.
 
-## Setting up Yarn
- setting up yarn
- 1. npm install -g yarn
- 1. yarn global add typescript
- 1. yarn global add threax-npm-tk
- 1. %localappdata%\Yarn\bin on path (expand it with explorer first and paste in the full path)
- 1. cd %localappdata%\Yarn\config\global\node_modules\threax-npm-tk
- 1. yarn link
- 1. then you can yarn link threax-npm-tk from your projects
- 1. In visual studio type package restore in quick launch and turn off the automatic package restore for everything so it won't wipe out our yarn code
+## Basic Operation
+Edity McEditface will glue together all the directories it is presented and will then treat them as 1 giant directory with files in your project taking precidence over files in the Edity McEditface site itself. By default you will get a layout that has a menu on the side and the name of your site at the top. This theme will need Bootstrap 3.3.7 or greater, but still on version 3.
+
+If you want to override this or any file create it in your project and that version will be used instead.
+
+## Setting Up Dependencies
+There are a couple of things you will need to install to make everything work:
+
+### Install Dotnet Core
+First install Dotnet Core. The instructions for setting up the sdk on the [hello world tutorial](https://dotnet.microsoft.com/learn/dotnet/hello-world-tutorial) work well. You don't need to do the Create your app steps. Just install the sdk.
+
+### Install NodeJs
+You need to install a current version of [NodeJs](https://nodejs.org/).
+
+### Install Yarn and Build Tools
+Run the following commands to install everything:
+```
+ npm install -g yarn
+ yarn global add typescript
+ yarn global add threax-npm-tk
+ ```

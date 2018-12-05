@@ -112,7 +112,7 @@ namespace EdityMcEditface
             .SetBasePath(EdityRoot)
             .AddInMemoryCollection(new Dictionary<String, String>
             {
-                { "ProjectMode", "SingleRepo" },
+                { "ProjectMode", "OneRepo" },
                 { "Compiler", "Direct" },
                 { "OutputPath", Path.Combine(Directory.GetCurrentDirectory(), $"..\\{Path.GetFileName(Directory.GetCurrentDirectory())}-EdityOutput") },
                 { "SiteName", "" },

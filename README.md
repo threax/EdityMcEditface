@@ -1,12 +1,22 @@
 # Edity McEditface
 Some tools to play around with static websites using .net.
 
-## How to Use
-Run the program with the folder you want to use as your root project
-folder as the first argument.
+## How to Build
+After cloning the repository go to the root folder of the repo on your command line. Then run the following commands:
+```
+cd EdityMcEditface
+yarn run yarn-install
+yarn run build
+dotnet build
+```
 
-Run EdityMcEditface.exe and then go to localhost:9000 in your browser.
-You can also press b in the console window.
+To run the app use the following command:
+```
+dotnet run --workingDir="your/target/dir"
+```
+Replace your/target/dir with the path to the git repo for your website.
+
+This should run the app. It will print out the url that you should access it with using your browser. This should show you the site with the default menu. Visiting the url for any of the files in your git repo should show that page.
 
 ## Setting up Yarn
  setting up yarn

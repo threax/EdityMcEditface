@@ -27,7 +27,7 @@ Edity McEditface will glue together all the directories it is presented and will
 If you want to override this or any file create it in your project and that version will be used instead.
 
 ## Setting Up Dependencies
-There are a couple of things you will need to install to make everything work:
+There are a couple of things you will need to install to make everything work. Even though this section is last you will need to do it before you can build.
 
 ### Install Dotnet Core
 First install Dotnet Core. The instructions for setting up the sdk on the [hello world tutorial](https://dotnet.microsoft.com/learn/dotnet/hello-world-tutorial) work well. You don't need to do the Create your app steps. Just install the sdk.

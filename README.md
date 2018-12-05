@@ -5,6 +5,7 @@ Some tools to play around with static websites using .net.
 After cloning the repository go to the root folder of the repo on your command line. Then run the following commands:
 ```
 cd EdityMcEditface
+dotnet restore
 yarn run yarn-install
 yarn run build
 dotnet build

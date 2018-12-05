@@ -37,6 +37,20 @@ namespace EdityMcEditface.Mvc.Repositories
                 }
 
                 var head = repo.Head.Commits.First();
+                //No tracked branch, cannot sync anything, return empty result
+                if(repo.Head.TrackedBranch == null)
+                {
+                    return new SyncInfo()
+                    {
+                        HasUncomittedChanges = commitRepo.HasUncommittedChanges(),
+                        AheadBy = 0,
+                        BehindBy = 0,
+                        AheadHistory = Enumerable.Empty<History>(),
+                        BehindHistory = Enumerable.Empty<History>()
+                    };
+                }
+
+                //Head has a tracked branch, can handle sync
                 var tracked = repo.Head.TrackedBranch.Commits.First();
                 var divergence = repo.ObjectDatabase.CalculateHistoryDivergence(head, tracked);
 

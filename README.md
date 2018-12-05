@@ -17,7 +17,7 @@ To run the app use the following command:
 ```
 dotnet run --workingDir="your/target/dir"
 ```
-Replace your/target/dir with the path to the git repo for your website.
+Replace your/target/dir with the path to the git repo for your website. This folder should be a git repository with html files in it.
 
 This should run the app. It will print out the url that you should access it with using your browser. This should show you the site with the default menu. Visiting the url for any of the files in your git repo should show that page.
 

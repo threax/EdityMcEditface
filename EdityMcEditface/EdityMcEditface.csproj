@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <DefineConstants>$(DefineConstants);LOCAL_RUN_ENABLED</DefineConstants>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -13,10 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="NativeBinaries\amd64\git2-785d8c4.dll;NativeBinaries\x86\git2-785d8c4.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Views;NativeBinaries\**\*;Config\**\*">
+    <None Update="Views;Config\**\*">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
   </ItemGroup>

@@ -18,6 +18,8 @@ using EdityMcEditface.HtmlRenderer.FileInfo;
 using EdityMcEditface.Mvc.Models.Page;
 using EdityMcEditface.Mvc.Models.Phase;
 using EdityMcEditface.Mvc.Services;
+using Microsoft.Extensions.Logging;
+using System.Text;
 
 namespace EdityMcEditface.Mvc.Controllers
 {
@@ -34,52 +36,64 @@ namespace EdityMcEditface.Mvc.Controllers
         private ConcurrentBag<String> altLayoutExtensions = new ConcurrentBag<string>();
         private IPhaseDetector branchDetector;
         private IOverrideValuesProvider overrideValuesProvider;
+        private ILogger<HomeController> logger;
 
-        public HomeController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, IPhaseDetector branchDetector, IOverrideValuesProvider overrideValuesProvider)
+        public HomeController(IFileFinder fileFinder, ITargetFileInfoProvider fileInfoProvider, IPhaseDetector branchDetector, IOverrideValuesProvider overrideValuesProvider, ILogger<HomeController> logger)
         {
             this.overrideValuesProvider = overrideValuesProvider;
             this.fileFinder = fileFinder;
             this.fileInfoProvider = fileInfoProvider;
             this.branchDetector = branchDetector;
+            this.logger = logger;
         }
 
         [HttpGet]
         public IActionResult Index(String file)
         {
-            targetFileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
-
-            switch (targetFileInfo.Extension)
+            try
             {
-                case ".html":
-                    if (targetFileInfo.IsProjectFile)
-                    {
-                        return new FileStreamResult(fileFinder.ReadFile(targetFileInfo.HtmlFile), "text/html");
-                    }
-                    return Redirect(targetFileInfo.NoHtmlRedirect);
-                case "":
-                    var pageStack = CreatePageStack();
-                    return buildAsEditor(pageStack);
-                default:
-                    var cleanExtension = targetFileInfo.Extension.TrimStart('.') + ".html";
-                    bool seenBefore = seenExtensions.Contains(cleanExtension);
-                    if (seenBefore)
-                    {
-                        //Don't combine these if statements
-                        if (altLayoutExtensions.Contains(cleanExtension))
+                targetFileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
+
+                switch (targetFileInfo.Extension)
+                {
+                    case ".html":
+                        if (targetFileInfo.IsProjectFile)
                         {
-                            return BuildAsAltPage(cleanExtension);
+                            return new FileStreamResult(fileFinder.ReadFile(targetFileInfo.HtmlFile), "text/html");
                         }
-                    }
-                    else
-                    { 
-                        seenExtensions.Add(cleanExtension);
-                        if (fileFinder.DoesLayoutExist(cleanExtension))
+                        return Redirect(targetFileInfo.NoHtmlRedirect);
+                    case "":
+                        var pageStack = CreatePageStack();
+                        return buildAsEditor(pageStack);
+                    default:
+                        var cleanExtension = targetFileInfo.Extension.TrimStart('.') + ".html";
+                        bool seenBefore = seenExtensions.Contains(cleanExtension);
+                        if (seenBefore)
                         {
-                            altLayoutExtensions.Add(cleanExtension);
-                            return BuildAsAltPage(cleanExtension);
+                            //Don't combine these if statements
+                            if (altLayoutExtensions.Contains(cleanExtension))
+                            {
+                                return BuildAsAltPage(cleanExtension);
+                            }
                         }
-                    }
-                    return returnFile(file);
+                        else
+                        {
+                            seenExtensions.Add(cleanExtension);
+                            if (fileFinder.DoesLayoutExist(cleanExtension))
+                            {
+                                altLayoutExtensions.Add(cleanExtension);
+                                return BuildAsAltPage(cleanExtension);
+                            }
+                        }
+                        return returnFile(file);
+                }
+            }
+            catch(FileNotFoundException ex)
+            {
+                var sb = new StringBuilder($"Could not find file '{ex.FileName}' building page for '{file}'. Message:{ex.Message}");
+                WriteSearchLocations(sb, ex as PageStackFileNotFoundException);
+                logger.LogInformation(sb.ToString());
+                throw;
             }
         }
 
@@ -208,16 +222,31 @@ namespace EdityMcEditface.Mvc.Controllers
                     throw;
                 }
             }
-            catch (FileNotFoundException)
+            catch (FileNotFoundException ex)
             {
                 //If the source file cannot be read offer to create the new file instead.
                 if (targetFileInfo.PathCanCreateFile)
                 {
+                    var sb = new StringBuilder($"Could not find file '{ex.FileName}' Message: '{ex.Message}' building page '{pageStack.ContentFile}'. Showing new page.");
+                    WriteSearchLocations(sb, ex as PageStackFileNotFoundException);
+                    logger.LogInformation(sb.ToString());
                     return showNewPage(pageStack, dr);
                 }
                 else
                 {
                     throw;
+                }
+            }
+        }
+
+        private static void WriteSearchLocations(StringBuilder sb, PageStackFileNotFoundException pageStackEx)
+        {
+            if (pageStackEx != null)
+            {
+                sb.AppendLine(" Searched:");
+                foreach (var item in pageStackEx.SearchLocations)
+                {
+                    sb.AppendLine(item);
                 }
             }
         }

@@ -179,22 +179,30 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// <returns>A stream to the requested file.</returns>
         public Stream ReadFile(String file)
         {
-            var physicalPath = NormalizePath(file);
-            if (permissions.AllowRead(this, file, physicalPath))
+            try
             {
-                if (File.Exists(physicalPath))
+                var physicalPath = NormalizePath(file);
+                if (permissions.AllowRead(this, file, physicalPath))
                 {
-                    return this.fileStreamManager.OpenReadStream(file, physicalPath);
+                    if (File.Exists(physicalPath))
+                    {
+                        return this.fileStreamManager.OpenReadStream(file, physicalPath);
+                    }
+                }
+
+                if (next != null)
+                {
+                    return next.ReadFile(file);
+                }
+                else
+                {
+                    throw new PageStackFileNotFoundException($"Cannot find file to read {file}", file);
                 }
             }
-
-            if (next != null)
+            catch(PageStackFileNotFoundException ex)
             {
-                return next.ReadFile(file);
-            }
-            else
-            {
-                throw new FileNotFoundException($"Cannot find file to read {file}", file);
+                ex.AddSearchLocation(NormalizePath(file));
+                throw;
             }
         }
 
@@ -509,24 +517,32 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// <returns></returns>
         public PageStackItem LoadPageStackLayout(String layout)
         {
-            var layoutPath = getLayoutFile(layout);
-            var physicalPath = NormalizePath(layoutPath);
-            if (permissions.AllowRead(this, layoutPath, physicalPath))
+            try
             {
-                if (File.Exists(physicalPath))
+                var layoutPath = getLayoutFile(layout);
+                var physicalPath = NormalizePath(layoutPath);
+                if (permissions.AllowRead(this, layoutPath, physicalPath))
                 {
-                    layoutPath = layoutPath.EnsureStartingPathSlash();
-                    return loadPageStackFile(layoutPath, physicalPath);
+                    if (File.Exists(physicalPath))
+                    {
+                        layoutPath = layoutPath.EnsureStartingPathSlash();
+                        return loadPageStackFile(layoutPath, physicalPath);
+                    }
+                }
+
+                if (next != null)
+                {
+                    return next.LoadPageStackLayout(layout);
+                }
+                else
+                {
+                    throw new PageStackFileNotFoundException($"Cannot find page stack file {layoutPath}", layoutPath);
                 }
             }
-
-            if (next != null)
+            catch (PageStackFileNotFoundException ex)
             {
-                return next.LoadPageStackLayout(layout);
-            }
-            else
-            {
-                throw new FileNotFoundException($"Cannot find page stack file {layoutPath}", layoutPath);
+                ex.AddSearchLocation(NormalizePath(getLayoutFile(layout)));
+                throw;
             }
         }
 
@@ -537,22 +553,30 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
         /// <returns></returns>
         public PageStackItem LoadPageStackContent(String path)
         {
-            var physicalPath = NormalizePath(path);
-            if (permissions.AllowRead(this, path, physicalPath))
+            try
             {
-                if (File.Exists(physicalPath))
+                var physicalPath = NormalizePath(path);
+                if (permissions.AllowRead(this, path, physicalPath))
                 {
-                    return loadPageStackFile(path.EnsureStartingPathSlash(), physicalPath);
+                    if (File.Exists(physicalPath))
+                    {
+                        return loadPageStackFile(path.EnsureStartingPathSlash(), physicalPath);
+                    }
+                }
+
+                if (next != null)
+                {
+                    return next.LoadPageStackContent(path);
+                }
+                else
+                {
+                    throw new PageStackFileNotFoundException($"Cannot find page stack file {path}", path);
                 }
             }
-
-            if (next != null)
+            catch (PageStackFileNotFoundException ex)
             {
-                return next.LoadPageStackContent(path);
-            }
-            else
-            {
-                throw new FileNotFoundException($"Cannot find page stack file {path}", path);
+                ex.AddSearchLocation(NormalizePath(path));
+                throw;
             }
         }
 

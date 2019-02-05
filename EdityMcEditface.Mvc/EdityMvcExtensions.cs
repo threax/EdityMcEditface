@@ -31,6 +31,7 @@ using Threax.AspNetCore.Halcyon.Ext;
 using Threax.SharedHttpClient;
 using System.IO;
 using EdityMcEditface.PublishTasks;
+using Microsoft.Extensions.Logging;
 
 namespace EdityMcEditface.Mvc
 {
@@ -227,7 +228,7 @@ namespace EdityMcEditface.Mvc
                 case ProjectMode.OneRepoPerUser:
                     services.AddTransient<ProjectFinder, OneRepoPerUser>(s =>
                     {
-                        return new OneRepoPerUser(projectConfiguration, s.GetRequiredService<IPhaseDetector>());
+                        return new OneRepoPerUser(projectConfiguration, s.GetRequiredService<IPhaseDetector>(), s.GetRequiredService<ILogger<OneRepoPerUser>>());
                     });
                     break;
             }

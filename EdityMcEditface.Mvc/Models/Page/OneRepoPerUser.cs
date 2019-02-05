@@ -1,5 +1,6 @@
 ﻿using EdityMcEditface.Mvc.Models.Phase;
 using LibGit2Sharp;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,14 +13,16 @@ namespace EdityMcEditface.Mvc.Models.Page
     {
         private String projectFolder;
         private IPhaseDetector branchDetector;
+        private ILogger<OneRepoPerUser> logger;
 
-        public OneRepoPerUser(ProjectConfiguration projectConfig, IPhaseDetector branchDetector)
+        public OneRepoPerUser(ProjectConfiguration projectConfig, IPhaseDetector branchDetector, ILogger<OneRepoPerUser> logger)
         {
             this.projectFolder = projectConfig.ProjectPath;
             this.EdityCorePath = projectConfig.EdityCorePath;
             this.SitePath = projectConfig.SitePath;
             this.MasterRepoPath = Path.Combine(projectFolder, "Master");
             this.branchDetector = branchDetector;
+            this.logger = logger;
         }
 
         public String GetUserProjectPath(String user)
@@ -46,14 +49,16 @@ namespace EdityMcEditface.Mvc.Models.Page
         {
             get
             {
-                var publishRepoPath = Path.Combine(projectFolder, "Publish");
+                var publishRepoPath = Path.Combine(projectFolder, "Publish/Publish");
 
                 if (!Directory.Exists(publishRepoPath))
                 {
+                    logger.LogInformation($"Creating publish directory at {publishRepoPath}.");
                     Directory.CreateDirectory(publishRepoPath);
                 }
                 if (!Repository.IsValid(publishRepoPath))
                 {
+                    logger.LogInformation($"Cloning publish directory from {MasterRepoPath} to {publishRepoPath}.");
                     Repository.Clone(MasterRepoPath, publishRepoPath);
                 }
 

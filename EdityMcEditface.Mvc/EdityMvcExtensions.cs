@@ -201,7 +201,7 @@ namespace EdityMcEditface.Mvc
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.TryAddSingleton<WorkQueue, WorkQueue>();
-            services.TryAddSingleton<ICompileService, CompileService>();
+            services.TryAddSingleton<ICompileService>(s => new CompileService(s.GetRequiredService<WorkQueue>(), mapperConfig.CreateMapper()));
 
             services.TryAddScoped<IUserInfo, DefaultUserInfo>();
 

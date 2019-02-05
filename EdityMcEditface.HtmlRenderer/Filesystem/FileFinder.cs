@@ -753,16 +753,20 @@ namespace EdityMcEditface.HtmlRenderer.Filesystem
 
         private PageStackItem loadPageStackFile(string path, string realPath)
         {
-            using (var stream = new StreamReader(this.fileStreamManager.OpenReadStream(path, realPath)))
-            {
-                return new PageStackItem()
+            
+                return new PageStackItem(() =>
                 {
-                    Content = stream.ReadToEnd(),
+                    //Defer loading until later, this saves a lot of file reads
+                    using (var stream = new StreamReader(this.fileStreamManager.OpenReadStream(path, realPath)))
+                    {
+                        return stream.ReadToEnd();
+                    }
+                })
+                {
                     PageDefinition = getProjectPageDefinition(path),
                     PageScriptPath = getPageFile(path, "js"),
                     PageCssPath = getPageFile(path, "css"),
                 };
-            }
         }
 
         protected String NormalizePath(String path)

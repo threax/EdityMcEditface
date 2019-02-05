@@ -53,23 +53,34 @@ namespace EdityMcEditface.HtmlRenderer
         /// </summary>
         public Func<String, String> ContentTransformer { get; set; }
 
+        private IEnumerable<PageStackItem> pages;
         public IEnumerable<PageStackItem> Pages
         {
             get
             {
-                if (ContentFile != null)
+                //Caching the pages avoids a huge number of filesystem reads
+                if(pages == null)
                 {
-                    var content = fileFinder.LoadPageStackContent(ContentFile);
-                    if (ContentTransformer != null)
-                    {
-                        content.Content = ContentTransformer(content.Content);
-                    }
-                    yield return content;
+                    pages = LoadPageStack().ToList();
                 }
-                for (int i = layouts.Count - 1; i >= 0; --i)
+                return pages;
+            }
+        }
+
+        private IEnumerable<PageStackItem> LoadPageStack()
+        {
+            if (ContentFile != null)
+            {
+                var content = fileFinder.LoadPageStackContent(ContentFile);
+                if (ContentTransformer != null)
                 {
-                    yield return fileFinder.LoadPageStackLayout(layouts[i]);
+                    content.Content = ContentTransformer(content.Content);
                 }
+                yield return content;
+            }
+            for (int i = layouts.Count - 1; i >= 0; --i)
+            {
+                yield return fileFinder.LoadPageStackLayout(layouts[i]);
             }
         }
 

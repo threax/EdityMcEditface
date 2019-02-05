@@ -72,6 +72,10 @@ namespace EdityMcEditface.Mvc.Models.Page
             {
                 var commit = repo.Lookup<Commit>(publishInfo.Sha);
                 var treeEntry = commit[fileInRepoPath];
+                if(treeEntry == null)
+                {
+                    throw new FileNotFoundException($"Cannot find file {fileInRepoPath} in commit {publishInfo.Sha}.");
+                }
                 var blob = treeEntry.Target as Blob;
 
                 return blob.GetContentStream();

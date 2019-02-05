@@ -66,7 +66,11 @@ namespace EdityMcEditface.Mvc.Models.Page
         private static Stream OpenRepoStream(string physicalFile, GitDraftInfo publishInfo)
         {
             var discoverRepoPath = Repository.Discover(physicalFile);
-            var repoPath = Path.GetFullPath("../");
+            if(discoverRepoPath == null)
+            {
+                throw new FileNotFoundException($"Cannot find parent repository for file {physicalFile}.");
+            }
+            var repoPath = Path.GetFullPath(discoverRepoPath + "../");
             var fileInRepoPath = physicalFile.Substring(repoPath.Length).Replace('\\', '/').TrimStartingPathChars();
             using (var repo = new Repository(repoPath))
             {

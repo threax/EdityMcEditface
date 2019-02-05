@@ -65,12 +65,13 @@ namespace EdityMcEditface.Mvc.Models.Page
 
         private static Stream OpenRepoStream(string physicalFile, GitDraftInfo publishInfo)
         {
-            var repoPath = Path.GetFullPath(Repository.Discover(physicalFile) + "../");
-            var fileInRepoPath = physicalFile.Substring(repoPath.Length);
+            var discoverRepoPath = Repository.Discover(physicalFile);
+            var repoPath = Path.GetFullPath("../");
+            var fileInRepoPath = physicalFile.Substring(repoPath.Length).Replace('\\', '/').TrimStartingPathChars();
             using (var repo = new Repository(repoPath))
             {
                 var commit = repo.Lookup<Commit>(publishInfo.Sha);
-                var treeEntry = commit[fileInRepoPath.TrimStartingPathChars()];
+                var treeEntry = commit[fileInRepoPath];
                 var blob = treeEntry.Target as Blob;
 
                 return blob.GetContentStream();

@@ -83,9 +83,6 @@ $@"<?xml version=""1.0"" encoding=""UTF-8""?>
         </rule>
       </rules>
     </rewrite>
-    <staticContent>
-        <mimeMap fileExtension="".json"" mimeType=""application/json"" />
-    </staticContent>
   </system.webServer>
 </configuration>";
         }

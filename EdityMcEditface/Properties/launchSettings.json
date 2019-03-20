@@ -17,7 +17,7 @@
     },
     "EdityMcEditface": {
       "commandName": "Project",
-      "commandLineArgs": "--workingDir=\"..\\Manual\"",
+      "commandLineArgs": "--workingDir=\"../Manual\"",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/",
       "environmentVariables": {
@@ -27,7 +27,21 @@
     },
     "UpdateClient": {
       "commandName": "Project",
-      "commandLineArgs": "tools \"clientgen $(ProjectDir)node_modules\\editymceditface.client\\EditorCore\\EdityHypermediaClient.ts\"",
+      "commandLineArgs": "tools \"clientgen $(ProjectDir)node_modules/editymceditface.client/EditorCore/EdityHypermediaClient.ts\"",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Update Config Schema": {
+      "commandName": "Project",
+      "commandLineArgs": "tools updateConfigSchema",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Clone Repo": {
+      "commandName": "Project",
+      "commandLineArgs": "--workingDir=\"../CloneTest\" tools \"clone https://github.com/threax/EdityMcEditface.git\"",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

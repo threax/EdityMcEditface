@@ -14,6 +14,9 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using Microsoft.AspNetCore.Authorization;
 using EdityMcEditface.BuildTasks;
+using Threax.AspNetCore.BuiltInTools;
+using EdityMcEditface.ToolControllers;
+using Threax.Extensions.Configuration.SchemaBinder;
 
 namespace EdityMcEditface
 {
@@ -62,10 +65,10 @@ namespace EdityMcEditface
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = new SchemaConfigurationBinder(builder.Build());
 
             EditySettings = new EditySettings();
-            ConfigurationBinder.Bind(Configuration.GetSection("EditySettings"), EditySettings);
+            Configuration.Bind("EditySettings", EditySettings);
 
             //Setup the menu publish task, this is done per project or configuration instead of in the core.
             EditySettings.Events = new EdityEvents()
@@ -127,7 +130,7 @@ namespace EdityMcEditface
             ConfigurationBinder.Bind(edityProjectConfiguration, ProjectConfiguration);
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public SchemaConfigurationBinder Configuration { get; }
 
         public EditySettings EditySettings { get; private set; }
 
@@ -136,7 +139,24 @@ namespace EdityMcEditface
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEdity(EditySettings, ProjectConfiguration);
+            services.AddEdity(EditySettings, ProjectConfiguration, o=>
+            {
+                o.CustomizeTools = tools =>
+                {
+                    tools
+                    .AddTool("updateConfigSchema", new ToolCommand("Update the schema file for this application's configuration.", async a =>
+                    {
+                        var json = await Configuration.CreateSchema();
+                        File.WriteAllText("appsettings.schema.json", json);
+                    }))
+                    .AddTool("clone", new ToolCommand("Clone a git repo.", a => RepoTools.Clone(a, ProjectConfiguration)));
+
+                    if (ProjectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
+                    {
+                        tools.AddTool("pushmaster", new ToolCommand("Push a one repo per user shared repo to an origin. Only works in OneRepoPerUser mode.", a => RepoTools.PushMaster(a, ProjectConfiguration)));
+                    }
+                };
+            });
 
             services.AddAuthentication(AuthCoreSchemes.Bearer)
             .AddCookie(AuthCoreSchemes.Bearer, o =>

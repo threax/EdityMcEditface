@@ -9,14 +9,14 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>8.4.0</Version>
+    <Version>8.5.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Andrew Piper</Authors>
     <Description>The html renderer portion of Edity McEditface.</Description>
     <PackageLicenseUrl>https://raw.githubusercontent.com/threax/Threax.AspNetCore.Hypermedia/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/threax/EdityMcEditface</PackageProjectUrl>
     <RepositoryUrl>https://github.com/threax/EdityMcEditface</RepositoryUrl>
-    <PackageReleaseNotes>Improved compilation performance.</PackageReleaseNotes>
+    <PackageReleaseNotes>Removed static content section from round robin publisher.</PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>

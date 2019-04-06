@@ -6,6 +6,7 @@
     "@types/node": "^6.0.69"
   },
   "dependencies": {
+    "bootstrap": "^3.4.1",
     "editymceditface.client": "^14.1.0",
     "htmlrapier": "^19.0.2",
     "htmlrapier.form.bootstrap3": "^1.0.0",
@@ -23,6 +24,6 @@
     "yarn-upgrade": "yarn upgrade --flat"
   },
   "resolutions": {
-    "bootstrap": "3.3.7"
+    "bootstrap": "3.4.1"
   }
 }

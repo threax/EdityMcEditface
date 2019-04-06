@@ -8,9 +8,9 @@
   integrity sha1-O89E+x5Cnz33YYjIxth0Rjujcf0=
 
 "@types/node@^6.0.69":
-  version "6.14.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.14.2.tgz#40b3dbb1221c7d66802cbcc32fe3b85e54569c77"
-  integrity sha512-JWB3xaVfsfnFY8Ofc9rTB/op0fqqTSqy4vBcVk1LuRJvta7KTX+D//fCkiTMeLGhdr2EbFZzQjC97gvmPilk9Q==
+  version "6.14.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.14.4.tgz#d8de576bdeaaafcf54a158af1e38cbb6e6d3db46"
+  integrity sha512-UqB7h2dVJr/KdZXRMJIhNUWT0HXVe9UNvfLCOsqiSGKAVaAp0QniYHlU9yegxyG6Ug2rc7VdAD4hYj3VghqvAw==
 
 bootstrap@3.3.7, bootstrap@>=3.3.7, bootstrap@^3.3.7, bootstrap@~3.3.6, bootstrap@~3.3.7:
   version "3.3.7"
@@ -33,9 +33,9 @@ codemirror@~5.28.0:
   integrity sha512-E/Z6050shti9v9ivl0dUClVRM4xaH204jsJmEpNYC6KDTlQwAz+5DdhLzn0tjaL/Mp1P0J1uhZokcSP2RFSwlA==
 
 editymceditface.client@^14.1.0:
-  version "14.1.1"
-  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-14.1.1.tgz#16923dc87569cd51f661283ce86967860da2466e"
-  integrity sha512-/wQZWbp16MYvytPrC345WplA/C5HBeXtMhe2+cnc2berVsMgLZPx1ccskfarvh6YZ1vBr3S93UUaueBRq8CRJQ==
+  version "14.2.0"
+  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-14.2.0.tgz#b37e0be288dfca414de9985d8bc8f94546c48023"
+  integrity sha512-PM7hVzN2ZsLHZa76u5uNDeZX8aifrp3FAj/SSn0qR3ftYG27/3DlQNTMjmHbM1g7nvFA8zhUHdmh6HRGfy3Cdg==
   dependencies:
     bootstrap "~3.3.7"
     ckeditor "~4.7.1"
@@ -82,25 +82,25 @@ htmlrapier.sidebar@>=3.0.2:
     bootstrap "~3.3.6"
     htmlrapier ">=10.0.0"
 
-htmlrapier.treemenu@>=6.0.1:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/htmlrapier.treemenu/-/htmlrapier.treemenu-6.1.0.tgz#8971d3ed1b0b76683da662e9398f87bc5fe4fcec"
-  integrity sha512-HJNMxtuq3/6TC0aR0/9rXGSiRQ6MoxRir3b9qj8wthcQ3pQDYLsM1FFeZaUmz6FLf2dL3d810ze4knoNhXA46g==
+htmlrapier.treemenu@>=6.0.1, htmlrapier.treemenu@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/htmlrapier.treemenu/-/htmlrapier.treemenu-6.1.1.tgz#fa117df093f163e37fcd7d6c17b94b49164bbbb4"
+  integrity sha512-H4SAPitse3j5Y5k9kSpDq0BKPdoc7xlKtQksQBn7efctb1qwmkWnJ4w+uq451sOA51uoIFBW8pLPEZPyYEecNg==
   dependencies:
     htmlrapier ">=8.0.1"
 
 htmlrapier.widgets@>=9.2.0, htmlrapier.widgets@^15.5.0:
-  version "15.5.0"
-  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-15.5.0.tgz#aacc1a01e83bee21d57bef86154f94a32b4c390b"
-  integrity sha512-QFImjBlEdYpQwPXz5OaipOY+1UoeORz5N+D1zXt3OPoEd2qI942x8rDDn95NRmRReLwc3U7AzXqY/t+hePwNug==
+  version "15.7.1"
+  resolved "https://registry.yarnpkg.com/htmlrapier.widgets/-/htmlrapier.widgets-15.7.1.tgz#57d68903a5f911d4f87df64683b2a6baf7bc78c7"
+  integrity sha512-MA2Np9lCi7r2Vj6kUlg0WmKRdMknZZxCQopQU27oEnuyvJ4ZQAZnQ6zM0ybDhzHnx0XRxcescVve0RhpH02zJg==
   dependencies:
     htmlrapier ">=14.3.0"
     htmlrapier.halcyon ">=7.0.0"
 
 htmlrapier@>=10.0.0, htmlrapier@>=10.0.2, htmlrapier@>=14.3.0, htmlrapier@>=14.5.0, htmlrapier@>=19.0.0, htmlrapier@>=8.0.1, htmlrapier@>=8.1.0, htmlrapier@^19.0.2:
-  version "19.1.1"
-  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-19.1.1.tgz#b54d71d86bcb2a2c70a12d875bbe7ef82a2a193e"
-  integrity sha512-jicsuG9znSZojSrxhrj+a5tgEge+tmtp4f2ZaAgB260L+O6ZHV5xZczP5BQ8UqGCKaa8VOP1yIB6UBR0aUtZlQ==
+  version "19.4.0"
+  resolved "https://registry.yarnpkg.com/htmlrapier/-/htmlrapier-19.4.0.tgz#364a89df9ad70076ce1f0714159b65a2b0aa897f"
+  integrity sha512-U8+7kV+mY80LroqixjvQYHfkaZmHygyt6v6hlbQvkFIAvI29upjyhGvmb6rwDWO5VX//ER8mliovDXrlReUoiQ==
   dependencies:
     "@types/es6-promise" "^0.0.32"
     tslib "^1.6.1"

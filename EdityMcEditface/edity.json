@@ -36,7 +36,6 @@
   "compilers": [
     {
       "type": "Html",
-      "template": "default.html",
       "extension": ".html"
     }
   ]

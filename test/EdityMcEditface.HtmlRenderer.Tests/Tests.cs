@@ -18,7 +18,6 @@ namespace Tests
             project1.Compilers.Add(new CompilerDefinition()
             {
                 Type = CompilerTypes.Html,
-                Template = "default.html",
                 Extension = ".html",
             });
 
@@ -26,21 +25,18 @@ namespace Tests
             project2.Compilers.Add(new CompilerDefinition()
             {
                 Type = CompilerTypes.Html,
-                Template = "default.html",
                 Extension = ".html"
             });
 
             project2.Compilers.Add(new CompilerDefinition()
             {
                 Type = CompilerTypes.Html,
-                Template = "default.html",
                 Extension = ".print.html"
             });
 
             project2.Compilers.Add(new CompilerDefinition()
             {
                 Type = CompilerTypes.Json,
-                Template = "search.json",
                 Extension = ".search.json",
             });
 

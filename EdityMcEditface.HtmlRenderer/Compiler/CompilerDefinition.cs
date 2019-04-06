@@ -15,8 +15,6 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
     {
         public CompilerTypes Type { get; set; } = CompilerTypes.Html;
 
-        public String Template { get; set; } = "default";
-
         public String Extension { get; set; } = null;
     }
 }

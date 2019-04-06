@@ -39,5 +39,7 @@ namespace EdityMcEditface.HtmlRenderer
                 return title;
             }
         }
+
+        public String Layout { get; set; } = "default.html";
     }
 }

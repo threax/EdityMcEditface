@@ -46,7 +46,8 @@ namespace EdityMcEditface.Mvc.Repositories
             {
                 Title = title,
                 Visible = !definition.Hidden,
-                FilePath = page
+                FilePath = page,
+                Layout = definition.Layout
             };
         }
 
@@ -61,6 +62,7 @@ namespace EdityMcEditface.Mvc.Repositories
             var definition = fileFinder.GetProjectPageDefinition(targetFile);
             definition.Vars["title"] = settings.Title;
             definition.Hidden = !settings.Visible;
+            definition.Layout = settings.Layout;
             fileFinder.SavePageDefinition(definition, targetFile);
         }
 

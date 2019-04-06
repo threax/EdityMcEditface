@@ -28,12 +28,12 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
             switch (definition.Type)
             {
                 case CompilerTypes.Html:
-                    return new HtmlCompiler(fileFinder, outDir, definition.Template, fileInfoProvider, overrideValuesProvider)
+                    return new HtmlCompiler(fileFinder, outDir, fileInfoProvider, overrideValuesProvider)
                     {
                         OutputExtension = definition.Extension
                     };
                 case CompilerTypes.Json:
-                    return new JsonCompiler(fileFinder, outDir, definition.Template, fileInfoProvider, overrideValuesProvider)
+                    return new JsonCompiler(fileFinder, outDir, fileInfoProvider, overrideValuesProvider)
                     {
                         OutputExtension = definition.Extension
                     };

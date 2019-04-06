@@ -16,15 +16,13 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
     {
         private IFileFinder fileFinder;
         private String outDir;
-        private String layout;
         private ITargetFileInfoProvider fileInfoProvider;
         private IOverrideValuesProvider overrideValuesProvider;
 
-        public JsonCompiler(IFileFinder fileFinder, String outDir, String layout, ITargetFileInfoProvider fileInfoProvider, IOverrideValuesProvider overrideValuesProvider)
+        public JsonCompiler(IFileFinder fileFinder, String outDir, ITargetFileInfoProvider fileInfoProvider, IOverrideValuesProvider overrideValuesProvider)
         {
             this.fileFinder = fileFinder;
             this.outDir = outDir;
-            this.layout = layout;
             this.fileInfoProvider = fileInfoProvider;
             this.overrideValuesProvider = overrideValuesProvider;
         }
@@ -57,6 +55,12 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
                     escaped = escaped.SingleSpaceWhitespace();
                     return escaped.JsonEscape();
                 };
+                var pageSettings = fileFinder.GetProjectPageDefinition(fileInfo);
+                var layout = pageSettings.Layout;
+                if (OutputExtension != null)
+                {
+                    layout = Path.ChangeExtension(layout, OutputExtension);
+                }
                 pageStack.pushLayout(layout);
 
                 var dr = new PlainTextRenderer(environment, StringExtensions.JsonEscape);

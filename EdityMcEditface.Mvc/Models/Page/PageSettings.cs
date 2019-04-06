@@ -22,6 +22,9 @@ namespace EdityMcEditface.Mvc.Models.Page
 
         public bool Visible { get; set; }
 
+        [Required(ErrorMessage = "You must include a layout file.")]
+        public String Layout { get; set; }
+
         [JsonIgnore]
         public String FilePath { get; set; }
     }

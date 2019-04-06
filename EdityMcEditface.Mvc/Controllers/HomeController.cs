@@ -53,6 +53,7 @@ namespace EdityMcEditface.Mvc.Controllers
             try
             {
                 targetFileInfo = fileInfoProvider.GetFileInfo(file, HttpContext.Request.PathBase);
+                PageDefinition pageSettings;
 
                 switch (targetFileInfo.Extension)
                 {
@@ -64,25 +65,28 @@ namespace EdityMcEditface.Mvc.Controllers
                         return Redirect(targetFileInfo.NoHtmlRedirect);
                     case "":
                         var pageStack = CreatePageStack();
-                        return buildAsEditor(pageStack);
+                        pageSettings = fileFinder.GetProjectPageDefinition(targetFileInfo);
+                        return buildAsEditor(pageStack, pageSettings.Layout);
                     default:
-                        var cleanExtension = targetFileInfo.Extension.TrimStart('.') + ".html";
-                        bool seenBefore = seenExtensions.Contains(cleanExtension);
+                        pageSettings = fileFinder.GetProjectPageDefinition(targetFileInfo);
+                        var altExt = targetFileInfo.Extension.TrimStart('.') + ".html";
+                        var layout = Path.ChangeExtension(pageSettings.Layout, altExt);
+                        bool seenBefore = seenExtensions.Contains(layout);
                         if (seenBefore)
                         {
                             //Don't combine these if statements
-                            if (altLayoutExtensions.Contains(cleanExtension))
+                            if (altLayoutExtensions.Contains(layout))
                             {
-                                return BuildAsAltPage(cleanExtension);
+                                return BuildAsAltPage(layout);
                             }
                         }
                         else
                         {
-                            seenExtensions.Add(cleanExtension);
-                            if (fileFinder.DoesLayoutExist(cleanExtension))
+                            seenExtensions.Add(layout);
+                            if (fileFinder.DoesLayoutExist(layout))
                             {
-                                altLayoutExtensions.Add(cleanExtension);
-                                return BuildAsAltPage(cleanExtension);
+                                altLayoutExtensions.Add(layout);
+                                return BuildAsAltPage(layout);
                             }
                         }
                         return returnFile(file);
@@ -97,10 +101,10 @@ namespace EdityMcEditface.Mvc.Controllers
             }
         }
 
-        private IActionResult BuildAsAltPage(string cleanExtension)
+        private IActionResult BuildAsAltPage(string layout)
         {
             PageStack pageStack = CreatePageStack();
-            return buildAsPage(pageStack, cleanExtension);
+            return buildAsPage(pageStack, layout);
         }
 
         private PageStack CreatePageStack()
@@ -122,6 +126,7 @@ namespace EdityMcEditface.Mvc.Controllers
             templateEnvironment = new TemplateEnvironment(targetFileInfo.FileNoExtension, fileFinder, overrideVars: overrideValuesProvider.OverrideVars);
             PageStack pageStack = new PageStack(templateEnvironment, fileFinder);
             pageStack.ContentFile = targetFileInfo.HtmlFile;
+            var pageSettings = fileFinder.GetProjectPageDefinition(targetFileInfo);
 
             switch (targetFileInfo.Extension)
             {
@@ -132,7 +137,7 @@ namespace EdityMcEditface.Mvc.Controllers
                     }
                     return Redirect(targetFileInfo.NoHtmlRedirect);
                 case "":
-                    return buildAsPage(pageStack, "default.html");
+                    return buildAsPage(pageStack, pageSettings.Layout);
                 default:
                     var cleanExtension = targetFileInfo.Extension.TrimStart('.') + ".html";
                     if (fileFinder.DoesLayoutExist(cleanExtension))
@@ -159,8 +164,12 @@ namespace EdityMcEditface.Mvc.Controllers
             throw new FileNotFoundException($"Cannot find file type for '{file}'", file);
         }
 
-        private IActionResult buildAsEditor(PageStack pageStack)
+        private IActionResult buildAsEditor(PageStack pageStack, String layout)
         {
+            if (!fileFinder.DoesLayoutExist(layout))
+            {
+                layout = "default.html"; //Change layout to default.html if the layout does not exist, this way we at least return a page
+            }
             HtmlDocumentRenderer dr = new HtmlDocumentRenderer(templateEnvironment);            
 
             switch (branchDetector.Phase)
@@ -172,7 +181,7 @@ namespace EdityMcEditface.Mvc.Controllers
                         pageStack.pushLayout(editStackItem);
                     }
 
-                    pageStack.pushLayout("default.html");
+                    pageStack.pushLayout(layout);
                     pageStack.pushLayout("editarea-noedit.html");
                     break;
                 case Phases.Edit:
@@ -182,7 +191,7 @@ namespace EdityMcEditface.Mvc.Controllers
                         pageStack.pushLayout(editStackItem);
                     }
 
-                    pageStack.pushLayout("default.html");
+                    pageStack.pushLayout(layout);
                     pageStack.pushLayout("editarea-ckeditor.html");
                     dr.addTransform(new CreateSettingsForm());
                     dr.addTransform(new CreateTreeMenuEditor());

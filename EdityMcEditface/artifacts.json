@@ -19,6 +19,13 @@
     }
   },
   {
+    "outDir": "lib/bootstrap/dist/fonts",
+    "pathBase": "node_modules/bootstrap/dist/fonts",
+    "copy": [
+      "node_modules/bootstrap/dist/fonts/**/*"
+    ]
+  },
+  {
     "outDir": "edity/layouts",
     "pathBase": "Views",
     "copy": [

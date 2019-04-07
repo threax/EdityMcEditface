@@ -12,7 +12,7 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.14.4.tgz#d8de576bdeaaafcf54a158af1e38cbb6e6d3db46"
   integrity sha512-UqB7h2dVJr/KdZXRMJIhNUWT0HXVe9UNvfLCOsqiSGKAVaAp0QniYHlU9yegxyG6Ug2rc7VdAD4hYj3VghqvAw==
 
-bootstrap@>=3.3.7, bootstrap@^3.3.7, bootstrap@^3.4.1, bootstrap@~3.3.6, bootstrap@~3.3.7:
+bootstrap@3.4.1, bootstrap@>=3.3.7, bootstrap@^3.3.7, bootstrap@^3.4.1, bootstrap@~3.3.6, bootstrap@~3.3.7:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.4.1.tgz#c3a347d419e289ad11f4033e3c4132b87c081d72"
   integrity sha512-yN5oZVmRCwe5aKwzRj6736nSmKDX7pLYwsXiCj/EYmo16hODaBiT4En5btW/jhBF/seV+XMx3aYwukYC3A49DA==
@@ -33,9 +33,9 @@ codemirror@~5.28.0:
   integrity sha512-E/Z6050shti9v9ivl0dUClVRM4xaH204jsJmEpNYC6KDTlQwAz+5DdhLzn0tjaL/Mp1P0J1uhZokcSP2RFSwlA==
 
 editymceditface.client@^14.1.0:
-  version "14.2.0"
-  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-14.2.0.tgz#b37e0be288dfca414de9985d8bc8f94546c48023"
-  integrity sha512-PM7hVzN2ZsLHZa76u5uNDeZX8aifrp3FAj/SSn0qR3ftYG27/3DlQNTMjmHbM1g7nvFA8zhUHdmh6HRGfy3Cdg==
+  version "14.2.1"
+  resolved "https://registry.yarnpkg.com/editymceditface.client/-/editymceditface.client-14.2.1.tgz#3cd52d3b845e7b67e619858ef1bd21bd5a3139c5"
+  integrity sha512-KfNPJNaMwAlUpbraolGWFAAHE22/dSE44ITeF+EsuH+68r/JwGUz7eTFI18tKFoY9BaXQ0SifsTUMyqvyIRJig==
   dependencies:
     bootstrap "~3.3.7"
     ckeditor "~4.7.1"

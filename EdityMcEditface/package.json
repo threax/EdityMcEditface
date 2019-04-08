@@ -17,13 +17,8 @@
   },
   "scripts": {
     "build": "threax-npm-tk build -o ClientBin/Site && threax-npm-tk build -o ClientBin/EdityMcEditface -a node_modules/*/edity-artifacts.json && dotnet bundle",
-    "yarn-install": "yarn install --flat",
     "clean": "threax-npm-tk clean -o ClientBin && threax-npm-tk clean -o wwwroot",
     "trash-modules": "threax-npm-tk clean -o node_modules",
-    "import-tsconfig": "threax-npm-tk tsconfig",
-    "yarn-upgrade": "yarn upgrade --flat"
-  },
-  "resolutions": {
-    "bootstrap": "3.4.1"
+    "import-tsconfig": "threax-npm-tk tsconfig"
   }
 }

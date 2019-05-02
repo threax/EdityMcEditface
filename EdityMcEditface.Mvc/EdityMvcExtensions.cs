@@ -257,6 +257,14 @@ namespace EdityMcEditface.Mvc
 
             services.AddDefaultFileFinder();
 
+            services.AddSingleton<BuildTaskManager>(s =>
+            {
+                var buildTaskManager = new BuildTaskManager();
+                buildTaskManager.SetBuildTaskType("PublishMenu", typeof(PublishMenu));
+                editySettings.Events.CustomizeBuildTasks?.Invoke(buildTaskManager);
+                return buildTaskManager;
+            });
+
             services.TryAddTransient<PullPublish>(s =>
             {
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
@@ -269,6 +277,7 @@ namespace EdityMcEditface.Mvc
                 var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
                 var fileFinder = s.GetRequiredService<IFileFinder>();
                 var builder = new SiteBuilder(settings, compilerFactory, fileFinder);
+                var buildTaskManager = s.GetRequiredService<BuildTaskManager>();
 
                 //Customize settings depending on compiler setting
                 switch (editySettings.Publisher)
@@ -284,6 +293,16 @@ namespace EdityMcEditface.Mvc
                 if (editySettings.ProjectMode == ProjectMode.OneRepoPerUser)
                 {
                     builder.AddPreBuildTask(s.GetRequiredService<PullPublish>());
+                }
+
+                foreach(var preBuild in fileFinder.Project.PreBuildTasks)
+                {
+                    builder.AddPreBuildTask(buildTaskManager.CreateBuildTask(preBuild));
+                }
+
+                foreach (var postBuild in fileFinder.Project.PostBuildTasks)
+                {
+                    builder.AddPostBuildTask(buildTaskManager.CreateBuildTask(postBuild));
                 }
 
                 editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()

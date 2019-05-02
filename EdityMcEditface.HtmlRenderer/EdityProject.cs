@@ -43,9 +43,19 @@ namespace EdityMcEditface.HtmlRenderer
         public List<String> AdditionalContent { get; set; } = new List<string>();
 
         /// <summary>
+        /// Definitions for pre build tasks.
+        /// </summary>
+        public List<BuildTaskDefinition> PreBuildTasks { get; set; } = new List<BuildTaskDefinition>();
+
+        /// <summary>
         /// Definitions of the compilers.
         /// </summary>
         public List<CompilerDefinition> Compilers { get; set; } = new List<CompilerDefinition>();
+
+        /// <summary>
+        /// Definitions for post build tasks.
+        /// </summary>
+        public List<BuildTaskDefinition> PostBuildTasks { get; set; } = new List<BuildTaskDefinition>();
 
         /// <summary>
         /// The list of components to show when editing.

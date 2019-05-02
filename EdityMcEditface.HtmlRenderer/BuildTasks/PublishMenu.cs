@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer;
+using EdityMcEditface.HtmlRenderer.Compiler;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -31,9 +32,13 @@ namespace EdityMcEditface.BuildTasks
         private JsonSerializer serializer;
         private String menuFile;
 
-        public PublishMenu(String menuFile)
+        public PublishMenu(BuildTaskDefinition definition)
         {
-            this.menuFile = menuFile;
+            if (!definition.Settings.ContainsKey("menuFile"))
+            {
+                throw new InvalidOperationException("You must have a setting named 'menuFile' in your build task's settings that points to the menu to use the PublishMenu task.");
+            }
+            this.menuFile = definition.Settings["menuFile"] as String;
             this.serializer = new JsonSerializer()
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using EdityMcEditface.HtmlRenderer.Compiler;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,5 +39,10 @@ namespace EdityMcEditface.Mvc.Config
         /// Customize the tool runner. It will already be configured with the client generator tools.
         /// </summary>
         public Action<IToolRunner> CustomizeTools { get; set; }
+
+        /// <summary>
+        /// If you want to add custom named build tasks you can add them to the BuildTaskManager with this callback.
+        /// </summary>
+        public Action<BuildTaskManager> CustomizeBuildTasks { get; set; }
     }
 }

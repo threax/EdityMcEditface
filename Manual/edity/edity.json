@@ -1,0 +1,20 @@
+﻿{
+  "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
+  "vars": {
+    "siteTitle": "Edity McEditface Manual"
+  },
+  "compilers": [
+    {
+      "type": "Html",
+      "extension": ".html"
+    }
+  ],
+  "postBuildTasks": [
+    {
+      "name": "PublishMenu",
+      "settings": {
+        "menuFile": "menus/mainMenu.json"
+      }
+    }
+  ]
+}

@@ -75,8 +75,6 @@ namespace EdityMcEditface
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<PublishMenu>(s => new PublishMenu("menus/mainMenu.json"));
-
             services.AddEdity(o =>
             {
                 Configuration.Bind("EditySettings", o);
@@ -86,7 +84,6 @@ namespace EdityMcEditface
                 {
                     OnCustomizeSiteBuilder = args =>
                     {
-                        args.SiteBuilder.AddPostBuildTask(args.Services.GetRequiredService<PublishMenu>());
                         switch (o.Publisher)
                         {
                             case Publishers.Direct:

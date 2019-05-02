@@ -35,14 +35,6 @@ namespace EdityMcEditface.Mvc
         Direct = 0,
 
         /// <summary>
-        /// Publish the website to a rest endpoint. Settings in RemotePublish. The authentication will be sent in the Authorization header as a base64
-        /// encoded string of User:Password. This works well with Microsoft Azure and you can use this to zipdeploy websites
-        /// by entering https://{site}.scm.azurewebsites.net/api/zipdeploy where {site} is your azure website name as your Host
-        /// along with the username and password.
-        /// </summary>
-        AzureZip = 1,
-
-        /// <summary>
         /// Publish the website to folder, but put the content in a subdirectory. This subdirectory is a guid. The webserver
         /// should map the urls so that they go into the subdirectory, but keep that from being publicly accessible. This
         /// keeps the website running while it is compiling so there is less downtime.
@@ -93,10 +85,5 @@ namespace EdityMcEditface.Mvc
         /// Defaults to null, which means no overrides.
         /// </summary>
         public Dictionary<String, String> OverrideVars { get; set; } = null;
-
-        /// <summary>
-        /// Options when publishing remotely. Used with the RestCompiler.
-        /// </summary>
-        public AzurePublishOptions AzureZipOptions { get; set; }
     }
 }

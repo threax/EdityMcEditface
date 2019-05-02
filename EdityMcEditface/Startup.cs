@@ -92,9 +92,6 @@ namespace EdityMcEditface
                     args.SiteBuilder.AddPostBuildTask(new PublishMenu(fileFinder, args.SiteBuilder, "menus/mainMenu.json", serializer));
                     switch (ProjectConfiguration.Publisher)
                     {
-                        case Publishers.AzureZip:
-                            args.SiteBuilder.AddPostBuildTask(new AddAzureRoundRobinScripts(args.SiteBuilder, ProjectConfiguration.DefaultPage));
-                            break;
                         case Publishers.Direct:
                             args.SiteBuilder.AddPostBuildTask(new SimpleWebConfigTask(args.SiteBuilder, ProjectConfiguration.DefaultPage));
                             break;

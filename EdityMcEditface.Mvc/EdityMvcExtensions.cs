@@ -276,11 +276,6 @@ namespace EdityMcEditface.Mvc
                 //Customize settings depending on compiler setting
                 switch (projectConfiguration.Publisher)
                 {
-                    case Publishers.AzureZip:
-                        //Change site to output to azurezip folder, that folder will be zipped
-                        settings.OutDir = Path.GetFullPath(Path.Combine(settings.OutDir, "azurezip"));
-                        builder.AddPublishTask(new AzureZipPublisher(projectConfiguration.AzureZipOptions, s.GetRequiredService<ISharedHttpClient>(), settings.OutDir));
-                        break;
                     case Publishers.RoundRobin:
                         var newDeployId = Guid.NewGuid().ToString();
                         var outputBaseFolder = settings.OutDir;

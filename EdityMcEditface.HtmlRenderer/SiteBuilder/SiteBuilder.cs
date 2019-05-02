@@ -43,11 +43,27 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             }
 
             args.Tracker.AddMessage("Building website.");
+            //Look for .git folder, if one exists move it temporarily
+            var gitPath = Path.GetFullPath(Path.Combine(settings.OutDir, ".git"));
+            String tempGitPath = null;
+            if (Directory.Exists(gitPath))
+            {
+                //Move git folder out to a temp location
+                tempGitPath = Path.GetFullPath(settings.OutDir + "-Git-" + Guid.NewGuid().ToString());
+                Directory.Move(gitPath, tempGitPath);
+            }
 
-            //Handle output folder
+            //Erase output folder
             IOExtensions.MultiTryDirDelete(settings.OutDir);
 
+            //Create output folder
             Directory.CreateDirectory(settings.OutDir);
+
+            //Move git folder back if we moved it from the dest directory
+            if (tempGitPath != null)
+            {
+                Directory.Move(tempGitPath, gitPath);
+            }
 
             var compilers = contentCompilerFactory.CreateCompilers(fileFinder, settings.OutDir, fileFinder.Project.Compilers);
             var query = fileFinder.EnumerateContentFiles("/", "*.html", SearchOption.AllDirectories);

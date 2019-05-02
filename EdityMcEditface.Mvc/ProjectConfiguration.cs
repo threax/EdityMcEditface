@@ -68,11 +68,6 @@ namespace EdityMcEditface.Mvc
         public String OutputPath { get; set; }
 
         /// <summary>
-        /// The name of the site.
-        /// </summary>
-        public String SiteName { get; set; }
-
-        /// <summary>
         /// The path to the project.
         /// </summary>
         public String ProjectPath { get; set; }

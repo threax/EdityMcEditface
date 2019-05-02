@@ -251,8 +251,7 @@ namespace EdityMcEditface.Mvc
             {
                 return new SiteBuilderSettings()
                 {
-                    OutDir = projectConfiguration.OutputPath,
-                    SiteName = projectConfiguration.SiteName
+                    OutDir = projectConfiguration.OutputPath
                 };
             });
 

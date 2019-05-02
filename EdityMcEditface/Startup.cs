@@ -27,11 +27,6 @@ namespace EdityMcEditface
         /// </summary>
         public static String EdityRoot { get; set; }
 
-        /// <summary>
-        /// The file for project settings shared across all users for an edity project.
-        /// </summary>
-        public static String EdityProjectSettingsFile { get; set; } = "Config/edityserver.json";
-
         private String runningFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         private IHostingEnvironment env;
 
@@ -53,6 +48,13 @@ namespace EdityMcEditface
                 }
             }
 
+            var defaultProjectPath = Directory.GetCurrentDirectory();
+            //Check to see if this is our running folder, if so go into wwwroot
+            if (String.Compare(defaultProjectPath, siteRootPath.TrimEnd('/', '\\')) == 0)
+            {
+                defaultProjectPath = Path.Combine(defaultProjectPath, "wwwroot");
+            }
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(siteRootPath)
                 .AddInMemoryCollection(new Dictionary<String, String>
@@ -61,6 +63,11 @@ namespace EdityMcEditface
                     { "EditySettings:NoAuth", "false" },
                     { "EditySettings:NoAuthUser", "OnlyUser" },
                     { "EditySettings:DetailedErrors", env.IsEnvironment("Development").ToString() },
+                    { "EdityProject:ProjectMode", "OneRepo" },
+                    { "EdityProject:OutputPath", Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), $"..\\{Path.GetFileName(Directory.GetCurrentDirectory())}-EdityOutput")) },
+                    { "EdityProject:ProjectPath", defaultProjectPath },
+                    { "EdityProject:EdityCorePath", Path.Combine(siteRootPath, "ClientBin/EdityMcEditface") },
+                    { "EdityProject:SitePath", Path.Combine(siteRootPath, "ClientBin/Site") }
                 })
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
@@ -69,6 +76,7 @@ namespace EdityMcEditface
 
             EditySettings = new EditySettings();
             Configuration.Bind("EditySettings", EditySettings);
+            Configuration.Bind("EdityProject", ProjectConfiguration);
 
             //Setup the menu publish task, this is done per project or configuration instead of in the core.
             EditySettings.Events = new EdityEvents()
@@ -103,31 +111,6 @@ namespace EdityMcEditface
                     EdityRoot = Path.Combine(Directory.GetCurrentDirectory());
                 }
             }
-
-            var defaultProjectPath = Directory.GetCurrentDirectory();
-            //Check to see if this is our running folder, if so go into wwwroot
-            if (String.Compare(defaultProjectPath, siteRootPath.TrimEnd('/', '\\')) == 0)
-            {
-                defaultProjectPath = Path.Combine(defaultProjectPath, "wwwroot");
-            }
-
-            builder = new ConfigurationBuilder()
-            .SetBasePath(EdityRoot)
-            .AddInMemoryCollection(new Dictionary<String, String>
-            {
-                { "ProjectMode", "OneRepo" },
-                { "Compiler", "Direct" },
-                { "OutputPath", Path.Combine(Directory.GetCurrentDirectory(), $"..\\{Path.GetFileName(Directory.GetCurrentDirectory())}-EdityOutput") },
-                { "SiteName", "" },
-                { "ProjectPath", defaultProjectPath },
-                { "EdityCorePath", Path.Combine(siteRootPath, "ClientBin/EdityMcEditface") },
-                { "SitePath", Path.Combine(siteRootPath, "ClientBin/Site") }
-            })
-            .AddJsonFile(EdityProjectSettingsFile, optional: true, reloadOnChange: true)
-            .AddJsonFile($"{Path.GetFileNameWithoutExtension(EdityProjectSettingsFile)}.{env.EnvironmentName}.json", optional: true);
-
-            var edityProjectConfiguration = builder.Build();
-            ConfigurationBinder.Bind(edityProjectConfiguration, ProjectConfiguration);
         }
 
         public SchemaConfigurationBinder Configuration { get; }
@@ -139,7 +122,7 @@ namespace EdityMcEditface
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEdity(EditySettings, ProjectConfiguration, o=>
+            services.AddEdity(EditySettings, ProjectConfiguration, o =>
             {
                 o.CustomizeTools = tools =>
                 {

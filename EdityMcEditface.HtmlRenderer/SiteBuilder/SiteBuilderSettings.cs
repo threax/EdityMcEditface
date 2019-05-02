@@ -9,7 +9,5 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
     public class SiteBuilderSettings
     {
         public String OutDir { get; set; }
-
-        public string SiteName { get; set; }
     }
 }

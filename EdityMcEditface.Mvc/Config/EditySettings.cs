@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,11 +31,13 @@ namespace EdityMcEditface.Mvc.Config
         /// <summary>
         /// Some events that are fired during runtime.
         /// </summary>
+        [JsonIgnore]
         public IEdityEvents Events { get; set; } = new EdityEvents();
 
         /// <summary>
         /// Set this to an enumerable of assemblies to add them as application parts to mvc.
         /// </summary>
+        [JsonIgnore]
         public IEnumerable<Assembly> AdditionalMvcLibraries { get; set; }
 
         /// <summary>

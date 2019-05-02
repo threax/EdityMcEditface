@@ -22,11 +22,6 @@ namespace EdityMcEditface
 {
     public class Startup
     {
-        /// <summary>
-        /// The root directory to look for a project.
-        /// </summary>
-        public static String EdityRoot { get; set; }
-
         private String runningFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         private IHostingEnvironment env;
 
@@ -73,52 +68,39 @@ namespace EdityMcEditface
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = new SchemaConfigurationBinder(builder.Build());
-
-            EditySettings = new EditySettings();
-            Configuration.Bind("EditySettings", EditySettings);
-
-            //Setup the menu publish task, this is done per project or configuration instead of in the core.
-            EditySettings.Events = new EdityEvents()
-            {
-                OnCustomizeSiteBuilder = args =>
-                {
-                    var fileFinder = args.Services.GetRequiredService<IFileFinder>();
-                    var serializer = new JsonSerializer()
-                    {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    };
-                    serializer.Converters.Add(new StringEnumConverter());
-                    args.SiteBuilder.AddPostBuildTask(new PublishMenu(fileFinder, args.SiteBuilder, "menus/mainMenu.json", serializer));
-                    switch (EditySettings.Publisher)
-                    {
-                        case Publishers.Direct:
-                            args.SiteBuilder.AddPostBuildTask(new SimpleWebConfigTask(args.SiteBuilder, EditySettings.DefaultPage));
-                            break;
-                    }
-                }
-            };
-
-
-            if (EdityRoot == null)
-            {
-                EdityRoot = siteRootPath;
-                if (EditySettings.ReadFromCurrentDirectory)
-                {
-                    EdityRoot = Path.Combine(Directory.GetCurrentDirectory());
-                }
-            }
         }
 
         public SchemaConfigurationBinder Configuration { get; }
 
-        public EditySettings EditySettings { get; private set; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEdity(EditySettings, o =>
+            services.AddEdity(o =>
             {
-                o.CustomizeTools = tools =>
+                Configuration.Bind("EditySettings", o);
+
+                //Setup the menu publish task, this is done per project or configuration instead of in the core.
+                o.Events = new EdityEvents()
+                {
+                    OnCustomizeSiteBuilder = args =>
+                    {
+                        var fileFinder = args.Services.GetRequiredService<IFileFinder>();
+                        var serializer = new JsonSerializer()
+                        {
+                            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                        };
+                        serializer.Converters.Add(new StringEnumConverter());
+                        args.SiteBuilder.AddPostBuildTask(new PublishMenu(fileFinder, args.SiteBuilder, "menus/mainMenu.json", serializer));
+                        switch (o.Publisher)
+                        {
+                            case Publishers.Direct:
+                                args.SiteBuilder.AddPostBuildTask(new SimpleWebConfigTask(args.SiteBuilder, o.DefaultPage));
+                                break;
+                        }
+                    }
+                };
+
+                o.ServiceOptions.CustomizeTools = tools =>
                 {
                     tools
                     .AddTool("updateConfigSchema", new ToolCommand("Update the schema file for this application's configuration.", async a =>
@@ -126,11 +108,11 @@ namespace EdityMcEditface
                         var json = await Configuration.CreateSchema();
                         File.WriteAllText("appsettings.schema.json", json);
                     }))
-                    .AddTool("clone", new ToolCommand("Clone a git repo.", a => RepoTools.Clone(a, EditySettings)));
+                    .AddTool("clone", new ToolCommand("Clone a git repo.", a => RepoTools.Clone(a, o)));
 
-                    if (EditySettings.ProjectMode == ProjectMode.OneRepoPerUser)
+                    if (o.ProjectMode == ProjectMode.OneRepoPerUser)
                     {
-                        tools.AddTool("pushmaster", new ToolCommand("Push a one repo per user shared repo to an origin. Only works in OneRepoPerUser mode.", a => RepoTools.PushMaster(a, EditySettings)));
+                        tools.AddTool("pushmaster", new ToolCommand("Push a one repo per user shared repo to an origin. Only works in OneRepoPerUser mode.", a => RepoTools.PushMaster(a, o)));
                     }
                 };
             });

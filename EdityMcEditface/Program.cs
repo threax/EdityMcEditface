@@ -56,16 +56,6 @@ namespace EdityMcEditface
                 });
             }
 
-            var configPath = commandLineConfig["config"];
-            if (!String.IsNullOrEmpty(configPath))
-            {
-                configPath = Path.GetFullPath(configPath);
-                if (File.Exists(configPath))
-                {
-                    Startup.EdityRoot = Path.GetDirectoryName(configPath);
-                }
-            }
-
             var workingDirPath = commandLineConfig["workingDir"];
             if (!String.IsNullOrEmpty(workingDirPath))
             {

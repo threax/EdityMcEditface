@@ -133,15 +133,14 @@ namespace EdityMcEditface.Mvc
         /// do anything else, if you want to customize the file finder add it before calling this function.
         /// </summary>
         /// <param name="services">The services collection.</param>
-        /// <param name="editySettings">The edity settings.</param>
-        /// <param name="setupServiceOptions">Callback to configure additional options for setting up services.</param>
+        /// <param name="setupEditySettings">Callback to configure the edity settings.</param>
         /// <returns>The service collection.</returns>
-        public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, Action<EdityServiceOptions> setupServiceOptions = null)
+        public static IServiceCollection AddEdity(this IServiceCollection services, Action<EditySettings> setupEditySettings)
         {
             services.AddThreaxSharedHttpClient();
 
-            var serviceOptions = new EdityServiceOptions();
-            setupServiceOptions?.Invoke(serviceOptions);
+            var editySettings = new EditySettings();
+            setupEditySettings.Invoke(editySettings);
 
             //Setup the mapper
             var mapperConfig = SetupMappings();
@@ -314,7 +313,7 @@ namespace EdityMcEditface.Mvc
                 o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             })
             .AddEdityControllers(editySettings.AdditionalMvcLibraries);
-            serviceOptions.CustomizeMvcBuilder?.Invoke(mvcBuilder);
+            editySettings.ServiceOptions.CustomizeMvcBuilder?.Invoke(mvcBuilder);
 
             services.AddScoped<ICompileRequestDetector, CompileRequestDetector>();
 
@@ -336,7 +335,7 @@ namespace EdityMcEditface.Mvc
                     .AddXls()
                     .AddJson();
 
-                serviceOptions.CustomizeFileVerifier?.Invoke(verifier);
+                editySettings.ServiceOptions.CustomizeFileVerifier?.Invoke(verifier);
 
                 return verifier;
             });
@@ -346,7 +345,7 @@ namespace EdityMcEditface.Mvc
                 var tools = new ToolRunner()
                     .UseClientGenTools();
 
-                serviceOptions.CustomizeTools?.Invoke(tools);
+                editySettings.ServiceOptions.CustomizeTools?.Invoke(tools);
 
                 return tools;
             });

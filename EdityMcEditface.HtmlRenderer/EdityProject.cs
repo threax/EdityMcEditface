@@ -68,6 +68,11 @@ namespace EdityMcEditface.HtmlRenderer
         public List<String> DraftComponents { get; set; } = new List<String>();
 
         /// <summary>
+        /// The default page for the project. Defaults to "index".
+        /// </summary>
+        public String DefaultPage { get; set; } = "index";
+
+        /// <summary>
         /// Merge two projects together. Does not fully copy the other project and will use objects
         /// from inside it, don't keep making changes to the project merged into this one or the
         /// changes will be in both projects.

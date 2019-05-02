@@ -57,6 +57,15 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         Stream OpenOutputWriteStream(String file);
 
         /// <summary>
+        /// Open a write stream to a file in the parent destination folder. The meaning of this folder is different depending
+        /// on the publish mode. If the publish mode is Direct this will be the same as the normal output folder. If the publish
+        /// mode is RoundRobin this will be the parent folder that the round robin folder is going into.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        Stream OpenOutputParentWriteStream(string file);
+
+        /// <summary>
         /// Determine if a given file exists in the site output.
         /// </summary>
         /// <param name="file">The file to check.</param>
@@ -68,5 +77,16 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         /// </summary>
         /// <returns></returns>
         BuildProgress GetCurrentProgress();
+
+        /// <summary>
+        /// If the builder is outputting to a subfolder of the output directory, such as in the Round Robin deployment
+        /// method. This will return the name of that folder, otherwise it will be null.
+        /// </summary>
+        String DeploymentFolder { get; }
+
+        /// <summary>
+        /// The edity project settings for this Site Builder.
+        /// </summary>
+        EdityProject Project { get; }
     }
 }

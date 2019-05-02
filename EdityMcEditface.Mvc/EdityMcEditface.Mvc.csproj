@@ -9,14 +9,14 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>15.0.0</Version>
+    <Version>16.0.0-pre01</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/threax/EdityMcEditface</PackageProjectUrl>
     <RepositoryUrl>https://github.com/threax/EdityMcEditface</RepositoryUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/threax/Threax.AspNetCore.Hypermedia/master/LICENSE</PackageLicenseUrl>
     <Description>The mvc portion of Edity McEditface.</Description>
     <Authors>Andrew Piper</Authors>
-    <PackageReleaseNotes>Supports per page layouts. See EdityMcEditface.HtmlRenderer 9.0.0 for details.</PackageReleaseNotes>
+    <PackageReleaseNotes>Major changes to configuration. See EdityMcEditface.HtmlRenderer 10.0.0 for details.</PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>

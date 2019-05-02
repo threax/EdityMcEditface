@@ -79,20 +79,6 @@ namespace EdityMcEditface
             {
                 Configuration.Bind("EditySettings", o);
 
-                //Setup the menu publish task, this is done per project or configuration instead of in the core.
-                o.Events = new EdityEvents()
-                {
-                    OnCustomizeSiteBuilder = args =>
-                    {
-                        switch (o.Publisher)
-                        {
-                            case Publishers.Direct:
-                                args.SiteBuilder.AddPostBuildTask(new SimpleWebConfigTask(args.SiteBuilder, o.DefaultPage));
-                                break;
-                        }
-                    }
-                };
-
                 o.Events.CustomizeTools = tools =>
                 {
                     tools

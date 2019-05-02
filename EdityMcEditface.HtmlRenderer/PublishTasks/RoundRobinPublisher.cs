@@ -11,28 +11,17 @@ namespace EdityMcEditface.PublishTasks
     public class RoundRobinPublisher : IPublishTask
     {
         String outputFolder;
-        String homePage;
 
-        public RoundRobinPublisher(String outputFolder, String homePage)
+        public RoundRobinPublisher(String outputFolder)
         {
             this.outputFolder = outputFolder;
-            this.homePage = homePage;
         }
 
         public Task Execute(BuildEventArgs args)
         {
-            args.Tracker.AddMessage("Swapping active configurations.");
+            args.Tracker.AddMessage("Erasing old deployments.");
 
-            var currentDeploymentFolder = Path.GetFileName(outputFolder);
             var outputParent = Path.GetDirectoryName(outputFolder);
-
-            var webConfigFile = Path.Combine(outputParent, "web.config");
-            var webConfigOutput = CreateWebConfig(currentDeploymentFolder);
-
-            using (var writer = new StreamWriter(File.Open(webConfigFile, FileMode.Create, FileAccess.Write, FileShare.None)))
-            {
-                writer.Write(webConfigOutput);
-            }
 
             //Delete old virtual directories
             foreach (var dir in Directory.EnumerateDirectories(outputParent))
@@ -48,43 +37,6 @@ namespace EdityMcEditface.PublishTasks
             }
 
             return Task.FromResult(0);
-        }
-
-        private String CreateWebConfig(String currentDeploymentFolder)
-        {
-            return
-$@"<?xml version=""1.0"" encoding=""UTF-8""?>
-<configuration>
-  <system.webServer>
-    <defaultDocument>
-      <files>
-        <add value=""{currentDeploymentFolder}/{homePage}.html""/>
-      </files>
-    </defaultDocument>
-    <rewrite>
-      <rules>
-        <rule name=""RewriteToGuidDir"">
-          <match url=""^(.*)$"" ignoreCase=""false"" />
-          <conditions logicalGrouping=""MatchAll"" >
-            <add input=""{{REQUEST_FILENAME}}"" matchType=""IsFile"" ignoreCase=""false"" negate=""true"" />
-            <add input=""{{REQUEST_FILENAME}}"" matchType=""IsDirectory"" ignoreCase=""false"" negate=""true"" />
-            <add input=""{{REQUEST_URI}}"" pattern=""^/(EmbdSvcs-)"" negate=""true"" />
-          </conditions>
-          <action type=""Rewrite"" url=""{currentDeploymentFolder}/{{R:1}}"" />
-        </rule>
-        <rule name=""RewriteHtmlToGuidDir"">
-          <match url=""(.*)"" />
-          <conditions logicalGrouping=""MatchAll"" >
-            <add input=""{{REQUEST_FILENAME}}"" matchType=""IsFile"" negate=""true"" />
-            <add input=""{{REQUEST_FILENAME}}"" matchType=""IsDirectory"" negate=""true"" />
-            <add input=""{{REQUEST_URI}}"" pattern=""^/(EmbdSvcs-)"" negate=""true"" />
-          </conditions>
-          <action type=""Rewrite"" url=""{{R:1}}.html"" />
-        </rule>
-      </rules>
-    </rewrite>
-  </system.webServer>
-</configuration>";
         }
     }
 }

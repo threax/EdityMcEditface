@@ -9,15 +9,21 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>9.0.0</Version>
+    <Version>10.0.0-pre01</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Andrew Piper</Authors>
     <Description>The html renderer portion of Edity McEditface.</Description>
     <PackageLicenseUrl>https://raw.githubusercontent.com/threax/Threax.AspNetCore.Hypermedia/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/threax/EdityMcEditface</PackageProjectUrl>
     <RepositoryUrl>https://github.com/threax/EdityMcEditface</RepositoryUrl>
-    <PackageReleaseNotes>Made it possible for pages to have alternative layouts. Pages still use the layout default.html normally.
-This changes edity.json. Compiler definitions no longer define a layout and instead the extension is added to the individual page layouts. So a print layout would need default.print.html in the layouts folder.</PackageReleaseNotes>
+    <PackageReleaseNotes>Modified configuration to make it more flexible per app.
+Merged the EditySettings and ProjectConfiguration into 1 settings class.
+Merged EdityServiceOptions and EdityEvents.
+Moved default page configuration into the edity.json file.
+Modified how pre and post build tasks are setup. They are now defined in edity.json along with the compilers.
+Changed how edity services are registered.
+Made IFileFinder a scoped instance instead of a transient one. Downstream apps customizing this should also changed to scopes.
+Removed azure publish.</PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>

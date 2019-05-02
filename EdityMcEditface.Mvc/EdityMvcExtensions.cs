@@ -46,7 +46,7 @@ namespace EdityMcEditface.Mvc
         /// <returns></returns>
         public static IServiceCollection AddDefaultFileFinder(this IServiceCollection services)
         {
-            services.TryAddTransient<IFileFinder>(s =>
+            services.TryAddScoped<IFileFinder>(s =>
             {
                 var userInfo = s.GetRequiredService<IUserInfo>();
                 var projectFinder = s.GetRequiredService<ProjectFinder>();
@@ -194,7 +194,8 @@ namespace EdityMcEditface.Mvc
 
             services.TryAddScoped<ITargetFileInfoProvider>(s =>
             {
-                return new DefaultTargetFileInfoProvider(editySettings.DefaultPage);
+                var fileFinder = s.GetRequiredService<IFileFinder>();
+                return new DefaultTargetFileInfoProvider(fileFinder.Project.DefaultPage);
             });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -261,6 +262,7 @@ namespace EdityMcEditface.Mvc
             {
                 var buildTaskManager = new BuildTaskManager();
                 buildTaskManager.SetBuildTaskType("PublishMenu", typeof(PublishMenu));
+                buildTaskManager.SetBuildTaskType("CreateIISWebConfig", typeof(CreateIISWebConfig));
                 editySettings.Events.CustomizeBuildTasks?.Invoke(buildTaskManager);
                 return buildTaskManager;
             });
@@ -276,17 +278,21 @@ namespace EdityMcEditface.Mvc
                 var settings = s.GetRequiredService<SiteBuilderSettings>();
                 var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
                 var fileFinder = s.GetRequiredService<IFileFinder>();
-                var builder = new SiteBuilder(settings, compilerFactory, fileFinder);
+                String deploymentFolder = null;
+                if(editySettings.Publisher == Publishers.RoundRobin)
+                {
+                    deploymentFolder = Guid.NewGuid().ToString();
+                }
+                var builder = new SiteBuilder(settings, compilerFactory, fileFinder, deploymentFolder);
                 var buildTaskManager = s.GetRequiredService<BuildTaskManager>();
 
-                //Customize settings depending on compiler setting
+                //Customize publisher settings depending on compiler setting
                 switch (editySettings.Publisher)
                 {
                     case Publishers.RoundRobin:
-                        var newDeployId = Guid.NewGuid().ToString();
                         var outputBaseFolder = settings.OutDir;
-                        settings.OutDir = Path.GetFullPath(Path.Combine(settings.OutDir, newDeployId));
-                        builder.AddPublishTask(new RoundRobinPublisher(settings.OutDir, editySettings.DefaultPage));
+                        settings.OutDir = Path.GetFullPath(Path.Combine(settings.OutDir, deploymentFolder));
+                        builder.AddPublishTask(new RoundRobinPublisher(settings.OutDir));
                         break;
                 }
 

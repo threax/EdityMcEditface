@@ -156,7 +156,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             };
         }
 
-        public String DeploymentFolder
+        public String DeploymentSubFolder
         {
             get
             {

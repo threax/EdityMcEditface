@@ -82,7 +82,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         /// If the builder is outputting to a subfolder of the output directory, such as in the Round Robin deployment
         /// method. This will return the name of that folder, otherwise it will be null.
         /// </summary>
-        String DeploymentFolder { get; }
+        String DeploymentSubFolder { get; }
 
         /// <summary>
         /// The edity project settings for this Site Builder.

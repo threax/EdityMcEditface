@@ -30,9 +30,9 @@ namespace EdityMcEditface.BuildTasks
         {
             var usingDeploymentFolder = false;
             var homePage = siteBuilder.Project.DefaultPage;
-            if (siteBuilder.DeploymentFolder != null)
+            if (siteBuilder.DeploymentSubFolder != null)
             {
-                homePage = Path.Combine(siteBuilder.DeploymentFolder, homePage);
+                homePage = Path.Combine(siteBuilder.DeploymentSubFolder, homePage);
                 usingDeploymentFolder = true;
             }
 
@@ -66,7 +66,7 @@ $@"
             <add input=""{{REQUEST_FILENAME}}"" matchType=""IsDirectory"" ignoreCase=""false"" negate=""true"" />
             <add input=""{{REQUEST_URI}}"" pattern=""^/(EmbdSvcs-)"" negate=""true"" />
           </conditions>
-          <action type=""Rewrite"" url=""{siteBuilder.DeploymentFolder}/{{R:1}}"" />
+          <action type=""Rewrite"" url=""{siteBuilder.DeploymentSubFolder}/{{R:1}}"" />
         </rule>
         <rule name=""RewriteHtmlToGuidDir"">
           <match url=""(.*)"" />

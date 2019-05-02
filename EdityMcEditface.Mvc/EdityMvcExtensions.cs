@@ -134,10 +134,9 @@ namespace EdityMcEditface.Mvc
         /// </summary>
         /// <param name="services">The services collection.</param>
         /// <param name="editySettings">The edity settings.</param>
-        /// <param name="projectConfiguration">The edity project configuration.</param>
         /// <param name="setupServiceOptions">Callback to configure additional options for setting up services.</param>
         /// <returns>The service collection.</returns>
-        public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, ProjectConfiguration projectConfiguration, Action<EdityServiceOptions> setupServiceOptions = null)
+        public static IServiceCollection AddEdity(this IServiceCollection services, EditySettings editySettings, Action<EdityServiceOptions> setupServiceOptions = null)
         {
             services.AddThreaxSharedHttpClient();
 
@@ -160,7 +159,7 @@ namespace EdityMcEditface.Mvc
             services.TryAddScoped<ITemplateRepository, TemplateRepository>();
             services.TryAddScoped<IAssetRepository, AssetRepository>();
             services.TryAddScoped<IBranchRepository, BranchRepository>();
-            services.TryAddSingleton<IOverrideValuesProvider>(s => new DefaultOverrideValuesProvider(projectConfiguration.OverrideVars));
+            services.TryAddSingleton<IOverrideValuesProvider>(s => new DefaultOverrideValuesProvider(editySettings.OverrideVars));
 
             var baseUrl = HalcyonConventionOptions.HostVariable;
             if(editySettings.BaseUrl != null)
@@ -196,7 +195,7 @@ namespace EdityMcEditface.Mvc
 
             services.TryAddScoped<ITargetFileInfoProvider>(s =>
             {
-                return new DefaultTargetFileInfoProvider(projectConfiguration.DefaultPage);
+                return new DefaultTargetFileInfoProvider(editySettings.DefaultPage);
             });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -216,19 +215,19 @@ namespace EdityMcEditface.Mvc
 
             services.AddSingleton<EditySettings>(s => editySettings);
 
-            switch (projectConfiguration.ProjectMode)
+            switch (editySettings.ProjectMode)
             {
                 case ProjectMode.OneRepo:
                 default:
                     services.AddTransient<ProjectFinder, OneRepo>(s =>
                     {
-                        return new OneRepo(projectConfiguration.ProjectPath, projectConfiguration.EdityCorePath, projectConfiguration.SitePath);
+                        return new OneRepo(editySettings.ProjectPath, editySettings.EdityCorePath, editySettings.SitePath);
                     });
                     break;
                 case ProjectMode.OneRepoPerUser:
                     services.AddTransient<ProjectFinder, OneRepoPerUser>(s =>
                     {
-                        return new OneRepoPerUser(projectConfiguration, s.GetRequiredService<IPhaseDetector>(), s.GetRequiredService<ILogger<OneRepoPerUser>>());
+                        return new OneRepoPerUser(editySettings, s.GetRequiredService<IPhaseDetector>(), s.GetRequiredService<ILogger<OneRepoPerUser>>());
                     });
                     break;
             }
@@ -251,7 +250,7 @@ namespace EdityMcEditface.Mvc
             {
                 return new SiteBuilderSettings()
                 {
-                    OutDir = projectConfiguration.OutputPath
+                    OutDir = editySettings.OutputPath
                 };
             });
 
@@ -274,17 +273,17 @@ namespace EdityMcEditface.Mvc
                 var builder = new SiteBuilder(settings, compilerFactory, fileFinder);
 
                 //Customize settings depending on compiler setting
-                switch (projectConfiguration.Publisher)
+                switch (editySettings.Publisher)
                 {
                     case Publishers.RoundRobin:
                         var newDeployId = Guid.NewGuid().ToString();
                         var outputBaseFolder = settings.OutDir;
                         settings.OutDir = Path.GetFullPath(Path.Combine(settings.OutDir, newDeployId));
-                        builder.AddPublishTask(new RoundRobinPublisher(settings.OutDir, projectConfiguration.DefaultPage));
+                        builder.AddPublishTask(new RoundRobinPublisher(settings.OutDir, editySettings.DefaultPage));
                         break;
                 }
 
-                if (projectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
+                if (editySettings.ProjectMode == ProjectMode.OneRepoPerUser)
                 {
                     builder.AddPreBuildTask(s.GetRequiredService<PullPublish>());
                 }

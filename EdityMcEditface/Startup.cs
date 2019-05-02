@@ -63,11 +63,11 @@ namespace EdityMcEditface
                     { "EditySettings:NoAuth", "false" },
                     { "EditySettings:NoAuthUser", "OnlyUser" },
                     { "EditySettings:DetailedErrors", env.IsEnvironment("Development").ToString() },
-                    { "EdityProject:ProjectMode", "OneRepo" },
-                    { "EdityProject:OutputPath", Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), $"..\\{Path.GetFileName(Directory.GetCurrentDirectory())}-EdityOutput")) },
-                    { "EdityProject:ProjectPath", defaultProjectPath },
-                    { "EdityProject:EdityCorePath", Path.Combine(siteRootPath, "ClientBin/EdityMcEditface") },
-                    { "EdityProject:SitePath", Path.Combine(siteRootPath, "ClientBin/Site") }
+                    { "EditySettings:ProjectMode", "OneRepo" },
+                    { "EditySettings:OutputPath", Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), $"..\\{Path.GetFileName(Directory.GetCurrentDirectory())}-EdityOutput")) },
+                    { "EditySettings:ProjectPath", defaultProjectPath },
+                    { "EditySettings:EdityCorePath", Path.Combine(siteRootPath, "ClientBin/EdityMcEditface") },
+                    { "EditySettings:SitePath", Path.Combine(siteRootPath, "ClientBin/Site") }
                 })
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
@@ -76,7 +76,6 @@ namespace EdityMcEditface
 
             EditySettings = new EditySettings();
             Configuration.Bind("EditySettings", EditySettings);
-            Configuration.Bind("EdityProject", ProjectConfiguration);
 
             //Setup the menu publish task, this is done per project or configuration instead of in the core.
             EditySettings.Events = new EdityEvents()
@@ -90,10 +89,10 @@ namespace EdityMcEditface
                     };
                     serializer.Converters.Add(new StringEnumConverter());
                     args.SiteBuilder.AddPostBuildTask(new PublishMenu(fileFinder, args.SiteBuilder, "menus/mainMenu.json", serializer));
-                    switch (ProjectConfiguration.Publisher)
+                    switch (EditySettings.Publisher)
                     {
                         case Publishers.Direct:
-                            args.SiteBuilder.AddPostBuildTask(new SimpleWebConfigTask(args.SiteBuilder, ProjectConfiguration.DefaultPage));
+                            args.SiteBuilder.AddPostBuildTask(new SimpleWebConfigTask(args.SiteBuilder, EditySettings.DefaultPage));
                             break;
                     }
                 }
@@ -114,12 +113,10 @@ namespace EdityMcEditface
 
         public EditySettings EditySettings { get; private set; }
 
-        public ProjectConfiguration ProjectConfiguration { get; private set; } = new ProjectConfiguration();
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEdity(EditySettings, ProjectConfiguration, o =>
+            services.AddEdity(EditySettings, o =>
             {
                 o.CustomizeTools = tools =>
                 {
@@ -129,11 +126,11 @@ namespace EdityMcEditface
                         var json = await Configuration.CreateSchema();
                         File.WriteAllText("appsettings.schema.json", json);
                     }))
-                    .AddTool("clone", new ToolCommand("Clone a git repo.", a => RepoTools.Clone(a, ProjectConfiguration)));
+                    .AddTool("clone", new ToolCommand("Clone a git repo.", a => RepoTools.Clone(a, EditySettings)));
 
-                    if (ProjectConfiguration.ProjectMode == ProjectMode.OneRepoPerUser)
+                    if (EditySettings.ProjectMode == ProjectMode.OneRepoPerUser)
                     {
-                        tools.AddTool("pushmaster", new ToolCommand("Push a one repo per user shared repo to an origin. Only works in OneRepoPerUser mode.", a => RepoTools.PushMaster(a, ProjectConfiguration)));
+                        tools.AddTool("pushmaster", new ToolCommand("Push a one repo per user shared repo to an origin. Only works in OneRepoPerUser mode.", a => RepoTools.PushMaster(a, EditySettings)));
                     }
                 };
             });

@@ -1,4 +1,5 @@
-﻿using EdityMcEditface.Mvc.Models.Phase;
+﻿using EdityMcEditface.Mvc.Config;
+using EdityMcEditface.Mvc.Models.Phase;
 using LibGit2Sharp;
 using Microsoft.Extensions.Logging;
 using System;
@@ -15,11 +16,11 @@ namespace EdityMcEditface.Mvc.Models.Page
         private IPhaseDetector branchDetector;
         private ILogger<OneRepoPerUser> logger;
 
-        public OneRepoPerUser(ProjectConfiguration projectConfig, IPhaseDetector branchDetector, ILogger<OneRepoPerUser> logger)
+        public OneRepoPerUser(EditySettings editySettings, IPhaseDetector branchDetector, ILogger<OneRepoPerUser> logger)
         {
-            this.projectFolder = projectConfig.ProjectPath;
-            this.EdityCorePath = projectConfig.EdityCorePath;
-            this.SitePath = projectConfig.SitePath;
+            this.projectFolder = editySettings.ProjectPath;
+            this.EdityCorePath = editySettings.EdityCorePath;
+            this.SitePath = editySettings.SitePath;
             this.MasterRepoPath = Path.Combine(projectFolder, "Master");
             this.branchDetector = branchDetector;
             this.logger = logger;

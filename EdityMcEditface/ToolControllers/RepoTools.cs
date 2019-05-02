@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.Mvc;
+using EdityMcEditface.Mvc.Config;
 using LibGit2Sharp;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -14,7 +15,7 @@ namespace EdityMcEditface.ToolControllers
     {
         const string origin = "origin";
 
-        public static Task Clone(ToolArgs a, ProjectConfiguration projectConfig)
+        public static Task Clone(ToolArgs a, EditySettings editySettings)
         {
             if (a.Args.Count < 1)
             {
@@ -22,12 +23,12 @@ namespace EdityMcEditface.ToolControllers
             }
             var log = a.Scope.ServiceProvider.GetRequiredService<ILogger<Repository>>();
             var sourceRepo = a.Args[0];
-            var masterDir = Path.GetFullPath(Path.Combine(projectConfig.ProjectPath, "Master"));
-            var cloneDir = projectConfig.ProjectPath;
+            var masterDir = Path.GetFullPath(Path.Combine(editySettings.ProjectPath, "Master"));
+            var cloneDir = editySettings.ProjectPath;
 
-            if (projectConfig.ProjectMode == ProjectMode.OneRepoPerUser)
+            if (editySettings.ProjectMode == ProjectMode.OneRepoPerUser)
             {
-                cloneDir = Path.Combine(projectConfig.ProjectPath, "Sync");
+                cloneDir = Path.Combine(editySettings.ProjectPath, "Sync");
 
                 if (Directory.Exists(masterDir))
                 {
@@ -51,7 +52,7 @@ namespace EdityMcEditface.ToolControllers
             });
 
             //Create local master repo, if one repo per user
-            if (projectConfig.ProjectMode == ProjectMode.OneRepoPerUser)
+            if (editySettings.ProjectMode == ProjectMode.OneRepoPerUser)
             {
                 //Create master repo if it does not exist
 
@@ -102,9 +103,9 @@ namespace EdityMcEditface.ToolControllers
             return userPassCredentials;
         }
 
-        public static Task PushMaster(ToolArgs a, ProjectConfiguration projectConfig)
+        public static Task PushMaster(ToolArgs a, EditySettings editySettings)
         {
-            if (projectConfig.ProjectMode != ProjectMode.OneRepoPerUser)
+            if (editySettings.ProjectMode != ProjectMode.OneRepoPerUser)
             {
                 throw new InvalidOperationException("The project mode must be OneRepoPerUser to use the pushmaster tool");
             }
@@ -115,13 +116,13 @@ namespace EdityMcEditface.ToolControllers
             }
             var log = a.Scope.ServiceProvider.GetRequiredService<ILogger<Repository>>();
             var destRepo = a.Args[0];
-            var masterDir = Path.GetFullPath(Path.Combine(projectConfig.ProjectPath, "Master"));
+            var masterDir = Path.GetFullPath(Path.Combine(editySettings.ProjectPath, "Master"));
             if (!Directory.Exists(masterDir))
             {
                 throw new InvalidOperationException($"Master dir {masterDir} does not exist. No push will occur.");
             }
 
-            var syncDir = Path.GetFullPath(Path.Combine(projectConfig.ProjectPath, "Sync"));
+            var syncDir = Path.GetFullPath(Path.Combine(editySettings.ProjectPath, "Sync"));
             if (!Directory.Exists(syncDir))
             {
                 throw new InvalidOperationException($"Sync dir {syncDir} does not exist. No push will occur.");

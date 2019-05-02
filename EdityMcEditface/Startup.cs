@@ -100,7 +100,7 @@ namespace EdityMcEditface
                     }
                 };
 
-                o.ServiceOptions.CustomizeTools = tools =>
+                o.Events.CustomizeTools = tools =>
                 {
                     tools
                     .AddTool("updateConfigSchema", new ToolCommand("Update the schema file for this application's configuration.", async a =>

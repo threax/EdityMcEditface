@@ -41,12 +41,6 @@ namespace EdityMcEditface.Mvc.Config
         public IEnumerable<Assembly> AdditionalMvcLibraries { get; set; }
 
         /// <summary>
-        /// Additional service options.
-        /// </summary>
-        [JsonIgnore]
-        public EdityServiceOptions ServiceOptions { get; set; } = new EdityServiceOptions();
-
-        /// <summary>
         /// The base url for the website, can be null unless the site is hosted in a subfolder, then you
         /// should set this to the subfolder path.
         /// </summary>

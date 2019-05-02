@@ -313,7 +313,7 @@ namespace EdityMcEditface.Mvc
                 o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             })
             .AddEdityControllers(editySettings.AdditionalMvcLibraries);
-            editySettings.ServiceOptions.CustomizeMvcBuilder?.Invoke(mvcBuilder);
+            editySettings.Events.CustomizeMvcBuilder?.Invoke(mvcBuilder);
 
             services.AddScoped<ICompileRequestDetector, CompileRequestDetector>();
 
@@ -335,7 +335,7 @@ namespace EdityMcEditface.Mvc
                     .AddXls()
                     .AddJson();
 
-                editySettings.ServiceOptions.CustomizeFileVerifier?.Invoke(verifier);
+                editySettings.Events.CustomizeFileVerifier?.Invoke(verifier);
 
                 return verifier;
             });
@@ -345,7 +345,7 @@ namespace EdityMcEditface.Mvc
                 var tools = new ToolRunner()
                     .UseClientGenTools();
 
-                editySettings.ServiceOptions.CustomizeTools?.Invoke(tools);
+                editySettings.Events.CustomizeTools?.Invoke(tools);
 
                 return tools;
             });

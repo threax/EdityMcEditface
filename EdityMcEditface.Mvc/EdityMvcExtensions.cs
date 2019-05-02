@@ -265,7 +265,6 @@ namespace EdityMcEditface.Mvc
 
             services.AddTransient<ISiteBuilder>(s =>
             {
-                var projectFinder = s.GetRequiredService<ProjectFinder>();
                 var settings = s.GetRequiredService<SiteBuilderSettings>();
                 var compilerFactory = s.GetRequiredService<IContentCompilerFactory>();
                 var fileFinder = s.GetRequiredService<IFileFinder>();

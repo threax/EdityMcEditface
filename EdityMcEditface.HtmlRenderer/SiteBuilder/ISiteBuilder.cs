@@ -43,6 +43,13 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         Task BuildSite();
 
         /// <summary>
+        /// Open a read stream to a file in the source folder.
+        /// </summary>
+        /// <param name="file">The name of the file to open.</param>
+        /// <returns>A stream to the file.</returns>
+        Stream OpenInputReadStream(string file);
+
+        /// <summary>
         /// Open a write stream to file in the destination folder.
         /// </summary>
         /// <param name="file">The file to write to.</param>

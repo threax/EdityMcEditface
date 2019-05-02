@@ -26,7 +26,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 
         public SiteBuilder(SiteBuilderSettings settings, IContentCompilerFactory contentCompilerFactory, IFileFinder fileFinder)
         {
-            this.args = new BuildEventArgs(buildStatusTracker);
+            this.args = new BuildEventArgs(buildStatusTracker, this);
             this.contentCompilerFactory = contentCompilerFactory;
             this.settings = settings;
             this.fileFinder = fileFinder;
@@ -103,6 +103,11 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         public void AddPostPublishTask(IPublishTask task)
         {
             postPublishTasks.Add(task);
+        }
+
+        public Stream OpenInputReadStream(string file)
+        {
+            return fileFinder.ReadFile(file);
         }
 
         public Stream OpenOutputWriteStream(string file)

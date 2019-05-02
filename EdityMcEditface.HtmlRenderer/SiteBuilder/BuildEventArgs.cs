@@ -6,11 +6,14 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 {
     public class BuildEventArgs
     {
-        public BuildEventArgs(IBuildStatusTracker tracker)
+        public BuildEventArgs(IBuildStatusTracker tracker, ISiteBuilder siteBuilder)
         {
             this.Tracker = tracker;
+            this.SiteBuilder = siteBuilder;
         }
 
-        public IBuildStatusTracker Tracker { get; set; }
+        public IBuildStatusTracker Tracker { get; private set; }
+
+        public ISiteBuilder SiteBuilder { get; private set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,17 +28,17 @@ namespace EdityMcEditface.BuildTasks
 
     public class PublishMenu : IBuildTask
     {
-        private IFileFinder fileFinder;
         private JsonSerializer serializer;
         private String menuFile;
-        private ISiteBuilder siteBuilder;
 
-        public PublishMenu(IFileFinder fileFinder, ISiteBuilder siteBuilder, String menuFile, JsonSerializer jsonSerializer)
+        public PublishMenu(String menuFile)
         {
-            this.fileFinder = fileFinder;
-            this.serializer = jsonSerializer;
             this.menuFile = menuFile;
-            this.siteBuilder = siteBuilder;
+            this.serializer = new JsonSerializer()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            };
+            this.serializer.Converters.Add(new StringEnumConverter());
         }
 
         public Task Execute(BuildEventArgs args)
@@ -47,14 +49,14 @@ namespace EdityMcEditface.BuildTasks
             {
                 MenuItem root;
                 //Load menu
-                using (var stream = new JsonTextReader(new StreamReader(this.fileFinder.ReadFile(menuFile))))
+                using (var stream = new JsonTextReader(new StreamReader(args.SiteBuilder.OpenInputReadStream(menuFile))))
                 {
                     root = serializer.Deserialize<MenuItem>(stream);
                 }
 
-                cleanMenuItems(root);
+                cleanMenuItems(root, args.SiteBuilder);
 
-                using (var stream = new StreamWriter(siteBuilder.OpenOutputWriteStream(menuFile)))
+                using (var stream = new StreamWriter(args.SiteBuilder.OpenOutputWriteStream(menuFile)))
                 {
                     serializer.Serialize(stream, root);
                 }
@@ -66,7 +68,7 @@ namespace EdityMcEditface.BuildTasks
             return Task.FromResult(0);
         }
 
-        public void cleanMenuItems(MenuItem parent)
+        private void cleanMenuItems(MenuItem parent, ISiteBuilder siteBuilder)
         {
             if (parent.Children != null)
             {
@@ -74,7 +76,7 @@ namespace EdityMcEditface.BuildTasks
 
                 foreach (var item in parent.Children)
                 {
-                    cleanMenuItems(item);
+                    cleanMenuItems(item, siteBuilder);
 
                     if (item.Link != null)
                     {

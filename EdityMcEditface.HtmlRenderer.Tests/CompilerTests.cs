@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Tests
 {
-    public class Tests
+    public class CompilerTests
     {
         /// <summary>
         /// Test to see if compiler lists merge correctly.

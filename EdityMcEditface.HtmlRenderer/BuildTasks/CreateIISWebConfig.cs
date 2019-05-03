@@ -14,7 +14,7 @@ namespace EdityMcEditface.BuildTasks
 
         public CreateIISWebConfig(BuildTaskDefinition definition)
         {
-            if (definition.Settings.ContainsKey("redirectToHttps"))
+            if (definition.Settings?.ContainsKey("redirectToHttps") == true)
             {
                 redirectToHttps = definition.Settings["redirectToHttps"] as bool? == true;
             }
@@ -31,7 +31,7 @@ namespace EdityMcEditface.BuildTasks
             return Task.FromResult(0);
         }
 
-        public String CreateWebConfig(ISiteBuilder siteBuilder)
+        private String CreateWebConfig(ISiteBuilder siteBuilder)
         {
             var usingDeploymentFolder = false;
             var homePage = siteBuilder.Project.DefaultPage;
@@ -110,7 +110,7 @@ $@"
             webConfig +=
     @"
     <staticContent>
-        <mimeMap fileExtension="".json"" mimeType=""application/json"" />
+      <mimeMap fileExtension="".json"" mimeType=""application/json"" />
     </staticContent>
   </system.webServer>
 </configuration>";
@@ -123,12 +123,12 @@ $@"
             if (redirectToHttps)
             {
                 webConfig += $@"
-	    <rule name=""Redirect-HTTP-HTTPS-IIS"">
-	        <match url=""(.*)"" />
-	        <conditions>
-		        <add input=""{{HTTPS}}"" pattern=""^OFF"" ignoreCase=""true"" />
-	        </conditions>
-	        <action type=""Redirect"" url=""https://{{HTTP_HOST}}/{{R:1}}"" redirectType=""Permanent"" appendQueryString=""true"" />
+        <rule name=""Redirect-HTTP-HTTPS-IIS"">
+          <match url=""(.*)"" />
+          <conditions>
+            <add input=""{{HTTPS}}"" pattern=""^OFF"" ignoreCase=""true"" />
+          </conditions>
+          <action type=""Redirect"" url=""https://{{HTTP_HOST}}/{{R:1}}"" redirectType=""Permanent"" appendQueryString=""true"" />
         </rule>";
             }
 

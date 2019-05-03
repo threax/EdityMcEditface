@@ -21,4 +21,8 @@
     <ProjectReference Include="..\EdityMcEditface.HtmlRenderer\EdityMcEditface.HtmlRenderer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestFiles\CreateIISWebConfigTests\" />
+  </ItemGroup>
+
 </Project>

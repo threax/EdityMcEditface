@@ -51,6 +51,36 @@ namespace EdityMcEditface.HtmlRenderer.Tests
         }
 
         [Fact]
+        public void DirectWithoutCache()
+        {
+            MockDirectSiteBuilder();
+            var taskDefinition = new BuildTaskDefinition()
+            {
+                Settings = new Dictionary<string, object>()
+                {
+                    { "cacheControlMaxAge", "0.00:00:00" }
+                }
+            };
+            var fileName = $"{System.Reflection.MethodBase.GetCurrentMethod().Name}-web.config";
+            TestConfig(taskDefinition, fileName);
+        }
+
+        [Fact]
+        public void DirectNonDefaultCache()
+        {
+            MockDirectSiteBuilder();
+            var taskDefinition = new BuildTaskDefinition()
+            {
+                Settings = new Dictionary<string, object>()
+                {
+                    { "cacheControlMaxAge", "1.23:45:56" }
+                }
+            };
+            var fileName = $"{System.Reflection.MethodBase.GetCurrentMethod().Name}-web.config";
+            TestConfig(taskDefinition, fileName);
+        }
+
+        [Fact]
         public void RoundRobin()
         {
             MockRoundRobinSiteBuilder();

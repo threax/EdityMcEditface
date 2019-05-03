@@ -11,12 +11,18 @@ namespace EdityMcEditface.BuildTasks
     public class CreateIISWebConfig : IBuildTask
     {
         private bool redirectToHttps = false;
+        private TimeSpan cacheControlMaxAge = TimeSpan.FromDays(8);
 
         public CreateIISWebConfig(BuildTaskDefinition definition)
         {
             if (definition.Settings?.ContainsKey("redirectToHttps") == true)
             {
                 redirectToHttps = definition.Settings["redirectToHttps"] as bool? == true;
+            }
+
+            if (definition.Settings?.ContainsKey("cacheControlMaxAge") == true)
+            {
+                cacheControlMaxAge = TimeSpan.ParseExact(definition.Settings["cacheControlMaxAge"] as String, "c", null);
             }
         }
 
@@ -107,6 +113,15 @@ $@"
       </rules>
     </rewrite>";
             }
+
+            if (cacheControlMaxAge > TimeSpan.Zero)
+            {
+                webConfig += $@"
+    <staticContent>
+      <clientCache cacheControlMode=""UseMaxAge"" cacheControlMaxAge=""{cacheControlMaxAge.ToString("c")}"" />
+    </staticContent>";
+            }
+
             webConfig +=
     @"
   </system.webServer>

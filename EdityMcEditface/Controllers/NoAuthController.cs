@@ -2,6 +2,8 @@
 using EdityMcEditface.Mvc;
 using EdityMcEditface.Mvc.Auth;
 using EdityMcEditface.Mvc.Config;
+using EdityMcEditface.Mvc.Models.Page;
+using LibGit2Sharp;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -28,7 +31,7 @@ namespace EdityMcEditface.Controllers
         /// </summary>
         public NoAuthController()
         {
-
+            
         }
 
         /// <summary>
@@ -39,10 +42,10 @@ namespace EdityMcEditface.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> LogIn([FromServices] EditySettings settings, String returnUrl)
+        public async Task<IActionResult> LogIn([FromServices] EditySettings settings, [FromServices] ProjectFinder projectFinder, String returnUrl)
         {
 
-            var identity = new ClaimsIdentity(AllClaims(settings), AuthCoreSchemes.Bearer, "name", "role");
+            var identity = new ClaimsIdentity(AllClaims(settings, projectFinder), AuthCoreSchemes.Bearer, "name", "role");
             await HttpContext.SignInAsync(AuthCoreSchemes.Bearer, new ClaimsPrincipal(identity));
             return SafeRedirect(ref returnUrl);
         }
@@ -51,9 +54,26 @@ namespace EdityMcEditface.Controllers
         /// The claims for the user logging in.
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<Claim> AllClaims(EditySettings settings)
+        private IEnumerable<Claim> AllClaims(EditySettings settings, ProjectFinder projectFinder)
         {
-            yield return new Claim("name", settings.NoAuthUser);
+            //Open the project repo and read the global git settings to get the user info, if that is not found
+            //use UnconfiguredUser as the user name.
+            var projectLocation = projectFinder.MasterRepoPath;
+            var user = "UnconfiguredUser";
+            if (Directory.Exists(projectLocation))
+            {
+                using (var repo = new Repository(Repository.Discover(projectLocation)))
+                {
+                    user = repo.Config.GetValueOrDefault<String>("user.name") ?? user;
+                    var email = repo.Config.GetValueOrDefault<String>("user.email");
+                    if (email != null)
+                    {
+                        yield return new Claim("email", email);
+                    }
+                }
+            }
+
+            yield return new Claim("name", user);
             yield return new Claim("role", Roles.EditPages);
             yield return new Claim("role", Roles.Compile);
             yield return new Claim("role", Roles.UploadAnything);

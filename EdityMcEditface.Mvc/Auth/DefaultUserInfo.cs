@@ -43,14 +43,15 @@ namespace EdityMcEditface.Mvc.Auth
         }
 
         /// <summary>
-        /// The email for the user. Always @nowhere.com for the DefaultUserInfo, if you need customization
-        /// implement your own IUserInfo.
+        /// The email for the user. Will try to find a claim called "email" on the user, otherwise returns
+        /// UniqueUserName@nowhere.com. If you need customization implement your own IUserInfo.
         /// </summary>
         public String Email
         {
             get
             {
-                return UniqueUserName + "@nowhere.com";
+                var userEmail = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(i => i.Type == "email")?.Value;
+                return userEmail ?? UniqueUserName + "@nowhere.com";
             }
         }
     }

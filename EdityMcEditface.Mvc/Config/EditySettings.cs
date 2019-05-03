@@ -24,11 +24,6 @@ namespace EdityMcEditface.Mvc.Config
         public bool DetailedErrors { get; set; }
 
         /// <summary>
-        /// The user account name to use when using NoAuth
-        /// </summary>
-        public String NoAuthUser { get; set; } = "OnlyUser";
-
-        /// <summary>
         /// Some events that are fired during runtime.
         /// </summary>
         [JsonIgnore]

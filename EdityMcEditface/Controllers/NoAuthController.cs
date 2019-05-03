@@ -37,15 +37,15 @@ namespace EdityMcEditface.Controllers
         /// <summary>
         /// Log in
         /// </summary>
-        /// <param name="settings"></param>
+        /// <param name="projectFinder"></param>
         /// <param name="returnUrl"></param>
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> LogIn([FromServices] EditySettings settings, [FromServices] ProjectFinder projectFinder, String returnUrl)
+        public async Task<IActionResult> LogIn([FromServices] ProjectFinder projectFinder, String returnUrl)
         {
 
-            var identity = new ClaimsIdentity(AllClaims(settings, projectFinder), AuthCoreSchemes.Bearer, "name", "role");
+            var identity = new ClaimsIdentity(AllClaims(projectFinder), AuthCoreSchemes.Bearer, "name", "role");
             await HttpContext.SignInAsync(AuthCoreSchemes.Bearer, new ClaimsPrincipal(identity));
             return SafeRedirect(ref returnUrl);
         }
@@ -54,7 +54,7 @@ namespace EdityMcEditface.Controllers
         /// The claims for the user logging in.
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<Claim> AllClaims(EditySettings settings, ProjectFinder projectFinder)
+        private IEnumerable<Claim> AllClaims(ProjectFinder projectFinder)
         {
             //Open the project repo and read the global git settings to get the user info, if that is not found
             //use UnconfiguredUser as the user name.

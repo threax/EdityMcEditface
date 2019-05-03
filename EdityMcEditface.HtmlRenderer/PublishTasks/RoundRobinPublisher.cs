@@ -30,7 +30,7 @@ namespace EdityMcEditface.PublishTasks
                 {
                     try
                     {
-                        IOExtensions.MultiTryDirDelete(dir);
+                        IOExtensions.MultiTryDirDelete(dir, true);
                     }
                     catch (Exception) { }
                 }

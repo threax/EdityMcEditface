@@ -56,13 +56,13 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 
                 foreach (var dir in Directory.EnumerateDirectories(settings.OutDir).Where(i => !i.EndsWith(".git")))
                 {
-                    IOExtensions.MultiTryDirDelete(dir);
+                    IOExtensions.MultiTryDirDelete(dir, true);
                 }
             }
             else
             {
                 //No .git directory erase and recreate output folder
-                IOExtensions.MultiTryDirDelete(settings.OutDir);
+                IOExtensions.MultiTryDirDelete(settings.OutDir, true);
 
                 //Create output folder
                 Directory.CreateDirectory(settings.OutDir);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EdityMcEditface.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -57,7 +58,8 @@ namespace EdityMcEditface.Mvc.Tests
                 DeleteDirectory(dir);
             }
 
-            Directory.Delete(directoryPath, false);
+            //Use the multi try delete, files are not always deleted by the time we get here.
+            IOExtensions.MultiTryDirDelete(directoryPath, false);
         }
     }
 }

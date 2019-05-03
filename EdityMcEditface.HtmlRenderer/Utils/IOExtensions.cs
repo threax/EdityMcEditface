@@ -12,24 +12,25 @@ namespace EdityMcEditface.Utils
         /// Try mulitplie times to delete a directory since this fails a lot.
         /// </summary>
         /// <param name="dir"></param>
-        public static void MultiTryDirDelete(String dir)
+        /// <param name="recursive">True to do recursive delete, false otherwise.</param>
+        public static void MultiTryDirDelete(String dir, bool recursive)
         {
             if (Directory.Exists(dir))
             {
                 try
                 {
-                    Directory.Delete(dir, true);
+                    Directory.Delete(dir, recursive);
                 }
                 catch (Exception)
                 {
                     try
                     {
-                        Directory.Delete(dir, true);
+                        Directory.Delete(dir, recursive);
                     }
                     catch (Exception)
                     {
                         Thread.Sleep(100); //Small timeout if we got this far
-                        Directory.Delete(dir, true); //Last one will throw if needed
+                        Directory.Delete(dir, recursive); //Last one will throw if needed
                     }
                 }
             }

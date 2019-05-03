@@ -36,33 +36,36 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
 
         public async Task BuildSite()
         {
+            args.Tracker.AddMessage("Building website.");
+
             //Pre build tasks
-            foreach(var task in preBuildTasks)
+            foreach (var task in preBuildTasks)
             {
                 await task.Execute(args);
             }
 
-            args.Tracker.AddMessage("Building website.");
-            //Look for .git folder, if one exists move it temporarily
+            //Look for .git folder, if one exists delete files individually
             var gitPath = Path.GetFullPath(Path.Combine(settings.OutDir, ".git"));
-            String tempGitPath = null;
             if (Directory.Exists(gitPath))
             {
-                //Move git folder out to a temp location
-                tempGitPath = Path.GetFullPath(settings.OutDir + "-Git-" + Guid.NewGuid().ToString());
-                Directory.Move(gitPath, tempGitPath);
+                //Delete all top level files and folders except the .git folder.
+                foreach(var file in Directory.EnumerateFiles(settings.OutDir))
+                {
+                    IOExtensions.MultiTryFileDelete(file);
+                }
+
+                foreach(var dir in Directory.EnumerateDirectories(settings.OutDir).Where(i => !i.EndsWith(".git")))
+                {
+                    IOExtensions.MultiTryDirDelete(dir);
+                }
             }
-
-            //Erase output folder
-            IOExtensions.MultiTryDirDelete(settings.OutDir);
-
-            //Create output folder
-            Directory.CreateDirectory(settings.OutDir);
-
-            //Move git folder back if we moved it from the dest directory
-            if (tempGitPath != null)
+            else
             {
-                Directory.Move(tempGitPath, gitPath);
+                //No .git directory erase and recreate output folder
+                IOExtensions.MultiTryDirDelete(settings.OutDir);
+
+                //Create output folder
+                Directory.CreateDirectory(settings.OutDir);
             }
 
             var compilers = contentCompilerFactory.CreateCompilers(fileFinder, settings.OutDir, fileFinder.Project.Compilers);

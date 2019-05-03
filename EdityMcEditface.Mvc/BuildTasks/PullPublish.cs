@@ -10,6 +10,7 @@ namespace EdityMcEditface.BuildTasks
 {
     /// <summary>
     /// This build task ensures a publish repo exists and pulls in any updates. 
+    /// This is used as the source folder when building.
     /// </summary>
     /// <remarks>
     /// This task is in the mvc library since that is where libgit is included.

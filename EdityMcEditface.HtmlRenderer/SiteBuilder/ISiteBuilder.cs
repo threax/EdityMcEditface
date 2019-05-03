@@ -88,5 +88,10 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         /// The edity project settings for this Site Builder.
         /// </summary>
         EdityProject Project { get; }
+
+        /// <summary>
+        /// The settings for this site builder.
+        /// </summary>
+        SiteBuilderSettings Settings { get; }
     }
 }

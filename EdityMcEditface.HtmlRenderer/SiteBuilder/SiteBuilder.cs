@@ -49,12 +49,12 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             if (Directory.Exists(gitPath))
             {
                 //Delete all top level files and folders except the .git folder.
-                foreach(var file in Directory.EnumerateFiles(settings.OutDir))
+                foreach (var file in Directory.EnumerateFiles(settings.OutDir))
                 {
                     IOExtensions.MultiTryFileDelete(file);
                 }
 
-                foreach(var dir in Directory.EnumerateDirectories(settings.OutDir).Where(i => !i.EndsWith(".git")))
+                foreach (var dir in Directory.EnumerateDirectories(settings.OutDir).Where(i => !i.EndsWith(".git")))
                 {
                     IOExtensions.MultiTryDirDelete(dir);
                 }
@@ -145,7 +145,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         public Stream OpenOutputParentWriteStream(string file)
         {
             var outDir = settings.OutDir;
-            if(deploymentFolder != null)
+            if (deploymentFolder != null)
             {
                 //If using a deployment folder, get the parent folder.
                 outDir = Path.GetDirectoryName(outDir);
@@ -188,6 +188,14 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             get
             {
                 return fileFinder.Project;
+            }
+        }
+
+        public SiteBuilderSettings Settings
+        {
+            get
+            {
+                return settings;
             }
         }
     }

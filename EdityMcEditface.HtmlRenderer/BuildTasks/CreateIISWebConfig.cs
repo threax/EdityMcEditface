@@ -10,9 +10,14 @@ namespace EdityMcEditface.BuildTasks
 {
     public class CreateIISWebConfig : IBuildTask
     {
+        private bool redirectToHttps = false;
+
         public CreateIISWebConfig(BuildTaskDefinition definition)
         {
-            
+            if (definition.Settings.ContainsKey("redirectToHttps"))
+            {
+                redirectToHttps = definition.Settings["redirectToHttps"] as bool? == true;
+            }
         }
 
         public Task Execute(BuildEventArgs args)
@@ -55,10 +60,12 @@ $@"
 
             if (usingDeploymentFolder)
             {
-                webConfig +=
-                    $@"
+                webConfig += $@"
     <rewrite>
-      <rules>
+      <rules>";
+                webConfig = AddHttpsRedirect(webConfig);
+
+                webConfig += $@"
         <rule name=""RewriteToGuidDir"">
           <match url=""^(.*)$"" ignoreCase=""false"" />
           <conditions logicalGrouping=""MatchAll"" >
@@ -82,10 +89,12 @@ $@"
             }
             else
             {
-                webConfig +=
-    @"
+                webConfig += @"
     <rewrite>
-      <rules>
+      <rules>";
+                webConfig = AddHttpsRedirect(webConfig);
+
+                webConfig += @"
         <rule name=""RewriteToHtml"">
           <match url=""(.*)"" />
           <conditions logicalGrouping=""MatchAll"" >
@@ -105,6 +114,23 @@ $@"
     </staticContent>
   </system.webServer>
 </configuration>";
+
+            return webConfig;
+        }
+
+        private string AddHttpsRedirect(string webConfig)
+        {
+            if (redirectToHttps)
+            {
+                webConfig += $@"
+	    <rule name=""Redirect-HTTP-HTTPS-IIS"">
+	        <match url=""(.*)"" />
+	        <conditions>
+		        <add input=""{{HTTPS}}"" pattern=""^OFF"" ignoreCase=""true"" />
+	        </conditions>
+	        <action type=""Redirect"" url=""https://{{HTTP_HOST}}/{{R:1}}"" redirectType=""Permanent"" appendQueryString=""true"" />
+        </rule>";
+            }
 
             return webConfig;
         }

@@ -109,9 +109,6 @@ $@"
             }
             webConfig +=
     @"
-    <staticContent>
-      <mimeMap fileExtension="".json"" mimeType=""application/json"" />
-    </staticContent>
   </system.webServer>
 </configuration>";
 

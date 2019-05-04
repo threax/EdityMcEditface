@@ -18,7 +18,7 @@ namespace EdityMcEditface.HtmlRenderer.Tests
 
         public CreateIISWebConfigTests()
         {
-            mockup.Add<BuildEventArgs>(s => new BuildEventArgs(s.Get<IBuildStatusTracker>(), s.Get<ISiteBuilder>()));
+            mockup.Add<BuildEventArgs>(s => new BuildEventArgs(s.Get<IBuildStatusTracker>(), s.Get<ISiteBuilder>(), s.Get<BuilderUserInfo>()));
         }
 
         public void Dispose()

@@ -79,6 +79,11 @@ namespace EdityMcEditface
             {
                 Configuration.Bind("EditySettings", o);
 
+                o.Events.CustomizeBuildTasks = buildTasks =>
+                {
+                    buildTasks.SetBuildTaskType("PublishToGitRepo", typeof(PublishToGitRepo));
+                };
+
                 o.Events.CustomizeTools = tools =>
                 {
                     tools

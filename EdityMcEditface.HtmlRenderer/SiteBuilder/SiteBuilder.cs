@@ -14,8 +14,8 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         private SiteBuilderSettings settings;
         private List<IBuildTask> preBuildTasks = new List<IBuildTask>();
         private List<IBuildTask> postBuildTasks = new List<IBuildTask>();
-        private List<IPublishTask> publishTasks = new List<IPublishTask>();
-        private List<IPublishTask> postPublishTasks = new List<IPublishTask>();
+        private List<IBuildTask> publishTasks = new List<IBuildTask>();
+        private List<IBuildTask> postPublishTasks = new List<IBuildTask>();
         private IContentCompilerFactory contentCompilerFactory;
         private IFileFinder fileFinder;
         private String deploymentFolder;
@@ -23,19 +23,19 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         private int currentFile;
         private int totalFiles;
         private IBuildStatusTracker buildStatusTracker = new BuildStatusTracker();
-        private BuildEventArgs args;
 
         public SiteBuilder(SiteBuilderSettings settings, IContentCompilerFactory contentCompilerFactory, IFileFinder fileFinder, String deploymentFolder)
         {
             this.deploymentFolder = deploymentFolder;
-            this.args = new BuildEventArgs(buildStatusTracker, this);
             this.contentCompilerFactory = contentCompilerFactory;
             this.settings = settings;
             this.fileFinder = fileFinder;
         }
 
-        public async Task BuildSite()
+        public async Task BuildSite(BuilderUserInfo userInfo)
         {
+            var args = new BuildEventArgs(buildStatusTracker, this, userInfo);
+
             args.Tracker.AddMessage("Building website.");
 
             //Pre build tasks
@@ -116,12 +116,12 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
             postBuildTasks.Add(task);
         }
 
-        public void AddPublishTask(IPublishTask task)
+        public void AddPublishTask(IBuildTask task)
         {
             publishTasks.Add(task);
         }
 
-        public void AddPostPublishTask(IPublishTask task)
+        public void AddPostPublishTask(IBuildTask task)
         {
             postPublishTasks.Add(task);
         }

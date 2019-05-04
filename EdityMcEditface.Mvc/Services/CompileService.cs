@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using EdityMcEditface.Mvc.Auth;
 using EdityMcEditface.Mvc.Models.Compiler;
 using System;
 using System.Collections.Generic;
@@ -27,8 +28,14 @@ namespace EdityMcEditface.Mvc.Services
         /// <summary>
         /// Run the compiler.
         /// </summary>
-        public void Compile(ISiteBuilder builder)
+        public void Compile(ISiteBuilder builder, IUserInfo compilingUser)
         {
+            var userInfo = new BuilderUserInfo()
+            {
+                Email = compilingUser.Email,
+                Name = compilingUser.PrettyUserName
+            };
+
             workQueue.Fire(() =>
             {
                 lock (locker)
@@ -44,7 +51,7 @@ namespace EdityMcEditface.Mvc.Services
                 {
                     try
                     {
-                        await builder.BuildSite();
+                        await builder.BuildSite(userInfo);
                         return default(Exception);
                     }
                     catch(Exception ex)

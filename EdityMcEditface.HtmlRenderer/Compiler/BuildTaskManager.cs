@@ -7,17 +7,24 @@ namespace EdityMcEditface.HtmlRenderer.Compiler
 {
     public class BuildTaskManager
     {
-        private Dictionary<String, Type> buildTaskTypeMap = new Dictionary<string, Type>();
+        private Dictionary<String, Func<BuildTaskDefinition, IBuildTask>> buildTaskTypeMap = new Dictionary<string, Func<BuildTaskDefinition, IBuildTask>>();
 
         public void SetBuildTaskType(String name, Type type)
         {
-            buildTaskTypeMap[name] = type;
+            SetBuildTaskBuilder(name, (definition) =>
+            {
+                return Activator.CreateInstance(type, definition) as IBuildTask;
+            });
+        }
+
+        public void SetBuildTaskBuilder(String name, Func<BuildTaskDefinition, IBuildTask> createBuildTask)
+        {
+            buildTaskTypeMap[name] = createBuildTask;
         }
 
         public IBuildTask CreateBuildTask(BuildTaskDefinition definition)
         {
-            buildTaskTypeMap.TryGetValue(definition.Name, out var type);
-            return Activator.CreateInstance(type, definition) as IBuildTask;
+            return buildTaskTypeMap[definition.Name].Invoke(definition);
         }
     }
 }

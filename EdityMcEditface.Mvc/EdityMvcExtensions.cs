@@ -312,6 +312,16 @@ namespace EdityMcEditface.Mvc
                     builder.AddPostBuildTask(buildTaskManager.CreateBuildTask(postBuild));
                 }
 
+                foreach (var publish in fileFinder.Project.PublishTasks)
+                {
+                    builder.AddPublishTask(buildTaskManager.CreateBuildTask(publish));
+                }
+
+                foreach (var postPublish in fileFinder.Project.PostPublishTasks)
+                {
+                    builder.AddPostPublishTask(buildTaskManager.CreateBuildTask(postPublish));
+                }
+
                 editySettings.Events.CustomizeSiteBuilder(new SiteBuilderEventArgs()
                 {
                     SiteBuilder = builder,

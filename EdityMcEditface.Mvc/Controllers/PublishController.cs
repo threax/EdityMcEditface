@@ -1,4 +1,5 @@
-﻿using EdityMcEditface.Mvc.Models.Compiler;
+﻿using EdityMcEditface.Mvc.Auth;
+using EdityMcEditface.Mvc.Models.Compiler;
 using EdityMcEditface.Mvc.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -55,9 +56,9 @@ namespace EdityMcEditface.Mvc.Controllers
         /// <returns>The time statistics when the compilation is complete.</returns>
         [HttpPost("[action]")]
         [HalRel(Rels.Compile)]
-        public CompileProgress Compile()
+        public CompileProgress Compile([FromServices] IUserInfo compilingUser)
         {
-            publishRepo.Compile();
+            publishRepo.Compile(compilingUser);
             return publishRepo.Progress();
         }
 

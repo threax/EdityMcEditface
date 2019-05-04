@@ -58,6 +58,16 @@ namespace EdityMcEditface.HtmlRenderer
         public List<BuildTaskDefinition> PostBuildTasks { get; set; } = new List<BuildTaskDefinition>();
 
         /// <summary>
+        /// Definitions for publish tasks.
+        /// </summary>
+        public List<BuildTaskDefinition> PublishTasks { get; set; } = new List<BuildTaskDefinition>();
+
+        /// <summary>
+        /// Definitions for post publish tasks.
+        /// </summary>
+        public List<BuildTaskDefinition> PostPublishTasks { get; set; } = new List<BuildTaskDefinition>();
+
+        /// <summary>
         /// The list of components to show when editing.
         /// </summary>
         public List<String> EditComponents { get; set; } = new List<String>();

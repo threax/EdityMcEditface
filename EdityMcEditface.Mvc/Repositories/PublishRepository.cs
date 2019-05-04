@@ -1,5 +1,6 @@
 ﻿using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using EdityMcEditface.Mvc.Auth;
 using EdityMcEditface.Mvc.Models;
 using EdityMcEditface.Mvc.Models.Compiler;
 using EdityMcEditface.Mvc.Models.Git;
@@ -80,9 +81,9 @@ namespace EdityMcEditface.Mvc.Repositories
         /// Run the compiler.
         /// </summary>
         /// <returns>The time statistics when the compilation is complete.</returns>
-        public void Compile()
+        public void Compile(IUserInfo compilingUser)
         {
-            this.compileService.Compile(builder);
+            this.compileService.Compile(builder, compilingUser);
         }
 
         /// <summary>

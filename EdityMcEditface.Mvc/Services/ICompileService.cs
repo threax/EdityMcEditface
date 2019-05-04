@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.HtmlRenderer.SiteBuilder;
+using EdityMcEditface.Mvc.Auth;
 using EdityMcEditface.Mvc.Models.Compiler;
 
 namespace EdityMcEditface.Mvc.Services
@@ -9,7 +10,7 @@ namespace EdityMcEditface.Mvc.Services
         /// Run the compiler.
         /// </summary>
         /// <returns>The time statistics when the compilation is complete.</returns>
-        void Compile(ISiteBuilder builder);
+        void Compile(ISiteBuilder builder, IUserInfo compilingUser);
 
         /// <summary>
         /// Get the status of the current build.

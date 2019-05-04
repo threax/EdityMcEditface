@@ -26,7 +26,7 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         /// build phases.
         /// </summary>
         /// <param name="task">The task to add.</param>
-        void AddPublishTask(IPublishTask task);
+        void AddPublishTask(IBuildTask task);
 
         /// <summary>
         /// Add a task runs after publishing is complete. This will run after PublishTasks. If you
@@ -34,13 +34,13 @@ namespace EdityMcEditface.HtmlRenderer.SiteBuilder
         /// published output add it here.
         /// </summary>
         /// <param name="task">The task to add.</param>
-        void AddPostPublishTask(IPublishTask task);
+        void AddPostPublishTask(IBuildTask task);
 
         /// <summary>
         /// Build the site. This will run the PreBuild Tasks, then the main site build then the PostBuild
         /// tasks and then the Publish tasks.
         /// </summary>
-        Task BuildSite();
+        Task BuildSite(BuilderUserInfo userInfo);
 
         /// <summary>
         /// Open a read stream to a file in the source folder.

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EdityMcEditface.PublishTasks
 {
-    public class RoundRobinPublisher : IPublishTask
+    public class RoundRobinPublisher : IBuildTask
     {
         String outputFolder;
 

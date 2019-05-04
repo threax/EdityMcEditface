@@ -6,6 +6,7 @@
   "buildVars": {
     "pathBase": "EdityMcEditface"
   },
+  "additionalContent": ["AutoUploadedImages"],
   "compilers": [
     {
       "type": "Html",

@@ -8,8 +8,8 @@ After cloning the repository go to the root folder of the repo on your command l
 ```
 cd EdityMcEditface
 dotnet restore
-yarn run yarn-install
-yarn run build
+npm install
+npm run build
 dotnet build
 ```
 
@@ -38,7 +38,6 @@ You need to install a current version of [NodeJs](https://nodejs.org/).
 ### Install Yarn and Build Tools
 Run the following commands to install everything:
 ```
- npm install -g yarn
- yarn global add typescript
- yarn global add threax-npm-tk
+ npm install -g typescript
+ npm install -g threax-npm-tk
  ```

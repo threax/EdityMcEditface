@@ -1,12 +1,12 @@
 ﻿{
-  "$schema": "../../../SchemaGenerator/Schema/EdityProject.json",
+  "$schema": "https://www.threax.com/EdityMcEditface/edityschema.json",
   "vars": {
     "siteTitle": "Edity McEditface Manual"
   },
   "buildVars": {
     "pathBase": "EdityMcEditface"
   },
-  "additionalContent": ["AutoUploadedImages", "edityschema.json"],
+  "additionalContent": [ "AutoUploadedImages", "edityschema.json" ],
   "compilers": [
     {
       "type": "Html",

@@ -98,7 +98,9 @@ namespace EdityMcEditface
                         var settings = new JsonSchemaGeneratorSettings()
                         {
                             FlattenInheritanceHierarchy = true,
-                            DefaultEnumHandling = EnumHandling.String
+                            DefaultPropertyNameHandling = PropertyNameHandling.CamelCase,
+                            DefaultEnumHandling = EnumHandling.String,
+                            
                         };
                         var generator = new JsonSchemaGenerator(settings);
                         var schema = await generator.GenerateAsync(typeof(EdityProject));

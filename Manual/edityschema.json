@@ -4,7 +4,7 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "ContentMap": {
+    "contentMap": {
       "type": [
         "null",
         "object"
@@ -14,7 +14,7 @@
         "$ref": "#/definitions/LinkedContentEntry"
       }
     },
-    "Vars": {
+    "vars": {
       "type": [
         "null",
         "object"
@@ -24,7 +24,7 @@
         "type": "string"
       }
     },
-    "BuildVars": {
+    "buildVars": {
       "type": [
         "null",
         "object"
@@ -34,7 +34,7 @@
         "type": "string"
       }
     },
-    "EditPageSettings": {
+    "editPageSettings": {
       "type": [
         "null",
         "object"
@@ -42,7 +42,7 @@
       "description": "This dictionary holds settings that will be echoed to the page as a javascript object. It is used to\nstore client side configuration. These variables cannot be directly output to the page, but instead must\nbe written by calling the editPageSettings() macro. These values will be written in plain text to the page,\nso do not include secret info here.",
       "additionalProperties": {}
     },
-    "LinkedContent": {
+    "linkedContent": {
       "type": [
         "array",
         "null"
@@ -52,7 +52,7 @@
         "type": "string"
       }
     },
-    "AdditionalContent": {
+    "additionalContent": {
       "type": [
         "array",
         "null"
@@ -62,7 +62,7 @@
         "type": "string"
       }
     },
-    "PreBuildTasks": {
+    "preBuildTasks": {
       "type": [
         "array",
         "null"
@@ -72,7 +72,7 @@
         "$ref": "#/definitions/BuildTaskDefinition"
       }
     },
-    "Compilers": {
+    "compilers": {
       "type": [
         "array",
         "null"
@@ -82,7 +82,7 @@
         "$ref": "#/definitions/CompilerDefinition"
       }
     },
-    "PostBuildTasks": {
+    "postBuildTasks": {
       "type": [
         "array",
         "null"
@@ -92,7 +92,7 @@
         "$ref": "#/definitions/BuildTaskDefinition"
       }
     },
-    "PublishTasks": {
+    "publishTasks": {
       "type": [
         "array",
         "null"
@@ -102,7 +102,7 @@
         "$ref": "#/definitions/BuildTaskDefinition"
       }
     },
-    "PostPublishTasks": {
+    "postPublishTasks": {
       "type": [
         "array",
         "null"
@@ -112,7 +112,7 @@
         "$ref": "#/definitions/BuildTaskDefinition"
       }
     },
-    "EditComponents": {
+    "editComponents": {
       "type": [
         "array",
         "null"
@@ -122,7 +122,7 @@
         "type": "string"
       }
     },
-    "DraftComponents": {
+    "draftComponents": {
       "type": [
         "array",
         "null"
@@ -132,7 +132,7 @@
         "type": "string"
       }
     },
-    "DefaultPage": {
+    "defaultPage": {
       "type": [
         "null",
         "string"
@@ -145,7 +145,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Dependencies": {
+        "dependencies": {
           "type": [
             "array",
             "null"
@@ -154,7 +154,7 @@
             "type": "string"
           }
         },
-        "Css": {
+        "css": {
           "type": [
             "array",
             "null"
@@ -163,7 +163,7 @@
             "type": "string"
           }
         },
-        "Js": {
+        "js": {
           "type": [
             "array",
             "null"
@@ -178,13 +178,13 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "File"
+        "file"
       ],
       "properties": {
-        "File": {
+        "file": {
           "type": "string"
         },
-        "Async": {
+        "async": {
           "type": "boolean"
         }
       }
@@ -193,13 +193,13 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Name": {
+        "name": {
           "type": [
             "null",
             "string"
           ]
         },
-        "Settings": {
+        "settings": {
           "type": [
             "null",
             "object"
@@ -212,10 +212,10 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Type": {
+        "type": {
           "$ref": "#/definitions/CompilerTypes"
         },
-        "Extension": {
+        "extension": {
           "type": [
             "null",
             "string"

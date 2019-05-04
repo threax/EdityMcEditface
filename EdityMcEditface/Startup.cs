@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EdityMcEditface.BuildTasks;
+using EdityMcEditface.Mvc;
+using EdityMcEditface.Mvc.Config;
+using EdityMcEditface.ToolControllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using EdityMcEditface.Mvc.Config;
-using EdityMcEditface.Mvc;
-using EdityMcEditface.HtmlRenderer;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json.Converters;
-using Microsoft.AspNetCore.Authorization;
-using EdityMcEditface.BuildTasks;
 using Threax.AspNetCore.BuiltInTools;
-using EdityMcEditface.ToolControllers;
 using Threax.Extensions.Configuration.SchemaBinder;
 
 namespace EdityMcEditface
@@ -75,6 +72,7 @@ namespace EdityMcEditface
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.TryAddScoped<IGitCredentialsProvider, WindowsGitCredentialsProvider>();
             services.AddEdity(o =>
             {
                 Configuration.Bind("EditySettings", o);

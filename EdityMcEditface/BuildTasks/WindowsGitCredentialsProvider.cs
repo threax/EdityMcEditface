@@ -1,10 +1,7 @@
-﻿using EdityMcEditface.Mvc.BuildTasks;
+﻿using EdityMcEditface.Mvc;
 using LibGit2Sharp;
 using Microsoft.Alm.Authentication;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EdityMcEditface.BuildTasks
 {

@@ -8,20 +8,23 @@ using EdityMcEditface.HtmlRenderer.SiteBuilder;
 using EdityMcEditface.Mvc.Auth;
 using EdityMcEditface.Mvc.Config;
 using EdityMcEditface.Mvc.Controllers;
-using EdityMcEditface.Mvc.Models.Phase;
 using EdityMcEditface.Mvc.Models.Compiler;
 using EdityMcEditface.Mvc.Models.Page;
+using EdityMcEditface.Mvc.Models.Phase;
 using EdityMcEditface.Mvc.Models.Templates;
 using EdityMcEditface.Mvc.Repositories;
 using EdityMcEditface.Mvc.Services;
+using EdityMcEditface.PublishTasks;
 using LibGit2Sharp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Threax.AspNetCore.BuiltInTools;
@@ -29,9 +32,6 @@ using Threax.AspNetCore.FileRepository;
 using Threax.AspNetCore.Halcyon.ClientGen;
 using Threax.AspNetCore.Halcyon.Ext;
 using Threax.SharedHttpClient;
-using System.IO;
-using EdityMcEditface.PublishTasks;
-using Microsoft.Extensions.Logging;
 
 namespace EdityMcEditface.Mvc
 {
@@ -159,6 +159,7 @@ namespace EdityMcEditface.Mvc
             services.TryAddScoped<IAssetRepository, AssetRepository>();
             services.TryAddScoped<IBranchRepository, BranchRepository>();
             services.TryAddSingleton<IOverrideValuesProvider>(s => new DefaultOverrideValuesProvider(editySettings.OverrideVars));
+            services.TryAddScoped<IGitCredentialsProvider, DefaultGitCredentialsProvider>();
 
             var baseUrl = HalcyonConventionOptions.HostVariable;
             if(editySettings.BaseUrl != null)

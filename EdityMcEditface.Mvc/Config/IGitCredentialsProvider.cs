@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EdityMcEditface.Mvc.BuildTasks
+namespace EdityMcEditface.Mvc
 {
     public interface IGitCredentialsProvider
     {

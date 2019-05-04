@@ -1,7 +1,6 @@
 ﻿using EdityMcEditface.HtmlRenderer.Compiler;
 using EdityMcEditface.HtmlRenderer.SiteBuilder;
-using EdityMcEditface.Mvc.Auth;
-using EdityMcEditface.Mvc.BuildTasks;
+using EdityMcEditface.Mvc;
 using LibGit2Sharp;
 using System;
 using System.Collections.Generic;

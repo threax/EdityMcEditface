@@ -2,23 +2,22 @@
 using EdityMcEditface.Mvc.Models.Git;
 using LibGit2Sharp;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EdityMcEditface.Mvc.Repositories
 {
     public class SyncRepository : ISyncRepository
     {
+        private IGitCredentialsProvider gitCredentialsProvider;
         private ICommitRepository commitRepo;
         private Repository repo;
 
-        public SyncRepository(Repository repo, ICommitRepository commitRepo)
+        public SyncRepository(Repository repo, ICommitRepository commitRepo, IGitCredentialsProvider gitCredentialsProvider)
         {
             this.repo = repo;
             this.commitRepo = commitRepo;
+            this.gitCredentialsProvider = gitCredentialsProvider;
         }
 
         /// <summary>
@@ -122,7 +121,10 @@ namespace EdityMcEditface.Mvc.Repositories
 
                 try
                 {
-                    repo.Network.Push(repo.Head, new PushOptions());
+                    repo.Network.Push(repo.Head, new PushOptions()
+                    {
+                        CredentialsProvider = gitCredentialsProvider.GetCredentials
+                    });
                 }
                 catch (LibGit2SharpException ex)
                 {

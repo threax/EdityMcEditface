@@ -2,13 +2,9 @@
 using LibGit2Sharp;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using Threax.AspNetCore.Halcyon.Ext;
 using Threax.AspNetCore.Tests;
 using Xunit;
 
@@ -187,7 +183,7 @@ namespace EdityMcEditface.Mvc.Tests
                     var signature = new Signature("Test Bot", "testbot@editymceditface.com", DateTime.Now);
                     repo.Commit("Added test data", signature, signature);
 
-                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>());
+                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>());
                     await syncRepo.Push();
                 }
 
@@ -224,7 +220,7 @@ namespace EdityMcEditface.Mvc.Tests
                     repo.Commit("Added test data", signature, signature);
 
                     //Sync main branch
-                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>());
+                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>());
                     await syncRepo.Push();
 
                     var authorBranchRepo = new BranchRepository(repo, mockup.Get<ICommitRepository>());
@@ -296,7 +292,7 @@ namespace EdityMcEditface.Mvc.Tests
                     Commands.Stage(repo, testFilePath);
                     sig = new Signature(identity, DateTime.Now);
                     repo.Commit("Updated branch data", sig, sig);
-                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>());
+                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>());
                     //Push side branch
                     await syncRepo.Push();
 
@@ -328,13 +324,13 @@ namespace EdityMcEditface.Mvc.Tests
                     var sig = new Signature(identity, DateTime.Now);
                     repo.Commit("Updated branch remotely", sig, sig);
 
-                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>());
+                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>());
                     await syncRepo.Push();
                 }
 
                 using (var repo = new Repository(authorPath))
                 {
-                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>());
+                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>());
                     await syncRepo.Pull(new Signature(identity, DateTime.Now));
 
                     var testFilePath = Path.Combine(dir.Path, "Author/test.txt");

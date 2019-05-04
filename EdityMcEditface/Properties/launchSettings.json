@@ -8,13 +8,6 @@
     }
   },
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
     "EdityMcEditface": {
       "commandName": "Project",
       "commandLineArgs": "--workingDir=\"../Manual\"",
@@ -35,6 +28,13 @@
     "Update Config Schema": {
       "commandName": "Project",
       "commandLineArgs": "tools updateConfigSchema",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Update Edity Schema": {
+      "commandName": "Project",
+      "commandLineArgs": "tools updateEditySchema",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

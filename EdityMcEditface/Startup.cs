@@ -1,4 +1,5 @@
 ﻿using EdityMcEditface.BuildTasks;
+using EdityMcEditface.HtmlRenderer;
 using EdityMcEditface.Mvc;
 using EdityMcEditface.Mvc.Config;
 using EdityMcEditface.ToolControllers;
@@ -9,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using NJsonSchema;
+using NJsonSchema.Generation;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -89,6 +92,18 @@ namespace EdityMcEditface
                     {
                         var json = await Configuration.CreateSchema();
                         File.WriteAllText("appsettings.schema.json", json);
+                    }))
+                    .AddTool("updateEditySchema", new ToolCommand("Update the schema for edity.json in the manual.", async a =>
+                    {
+                        var settings = new JsonSchemaGeneratorSettings()
+                        {
+                            FlattenInheritanceHierarchy = true,
+                            DefaultEnumHandling = EnumHandling.String
+                        };
+                        var generator = new JsonSchemaGenerator(settings);
+                        var schema = await generator.GenerateAsync(typeof(EdityProject));
+
+                        File.WriteAllText("../Manual/edityschema.json", schema.ToJson());
                     }))
                     .AddTool("clone", new ToolCommand("Clone a git repo.", a => RepoTools.Clone(a, o)));
 

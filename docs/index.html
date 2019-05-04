@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap-custom.css?linkver=20190504044935" type="text/css">
+<link rel="stylesheet" href="/lib/sidebar/css/simple-sidebar.css?linkver=20190504044935" type="text/css">
+<link rel="stylesheet" href="/lib/sidebar/css/sidemenu.css?linkver=20190504044935" type="text/css">
+<link rel="stylesheet" href="/lib/edity/css/layout.css?linkver=20190504044935" type="text/css">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top navbar-nomargin" data-hr-run="edity.theme.layouts.default">
+        <a class="navbar-brand" href="#ToggleMenu" data-target="#wrapper" data-toggle="sidebar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="glyphicon glyphicon-menu-hamburger"></span>
+        </a>
+        <div class="navbar-header navbar-nowrap">
+            <a class="navbar-brand" href="/">Edity McEditface Manual</a>
+        </div>
+    </nav>
+
+    <div class="navbar-shadow-short"></div>
+    <div class="navbar-spacer-short"></div>
+
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper" class="sidebar-with-navbar-short">
+            <div class="mainTreeMenu" data-hr-controller="treeMenu" data-hr-config-urlroot="/" data-hr-config-menu="/menus/mainMenu.json" data-hr-config-scrollelement="#sidebar-wrapper" data-hr-model-component="sidebarMenuComponent" data-hr-config-treemenu-version="DD0800A5E414DF42E6F99B2BE5AA35C807B1712CF41D458E2D212895293C9942">
+                <ul class="sidebarMenu" data-hr-model="childItems" data-hr-model-component="sidebarMenuComponent">
+                    <template data-hr-component="sidebarMenuComponent">
+                        <li class="folder">
+                            <div class="item" data-hr-on-click="toggleMenuItem" data-hr-toggle="current" data-hr-class-on="currentFolder"><span data-hr-toggle="children" class="glyphicon" data-hr-class-on="glyphicon-folder-open" data-hr-class-off="glyphicon-folder-close"></span> {{name}}</div>
+                            <div class="children" data-hr-model="children" data-hr-model-component="sidebarMenuComponent" data-hr-toggle="children" data-hr-class-on="expanded" data-hr-style-off="display:none;"></div>
+                        </li>
+                    </template>
+                    <template data-hr-variant="link">
+                        <li class="link">
+                            <a href="{{urlRoot}}{{link}}" target="{{target}}">
+                                <div class="mainBlock" data-hr-toggle="current" data-hr-class-on="currentLink">
+                                    {{name}}
+                                </div>
+                            </a>
+                        </li>
+                    </template>
+                    <template data-hr-variant="root">
+                        <div class="children" data-hr-model="children" data-hr-model-component="sidebarMenuComponent" data-hr-toggle="children" data-hr-class-on="expanded" data-hr-style-off="display:none;"></div>
+                    </template>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 pageContent">
+                        <h1>Edity McEditface Manual</h1>
+<p>Edity McEditface is a next generation CMS that outputs static website content designed to&nbsp;interact with microservices for &quot;server side&quot; functions. The chief goals as as follows:</p>
+<ul>
+	<li>Natural editing interface.
+	<ul>
+		<li>Editing a page shows exactly what that page will look like when it is output minus the editing controls.</li>
+	</ul></li>
+	<li>Produce static content that is native to http and the web.
+	<ul>
+		<li>Produce fully formed .html, .css and .js files for our output. Any additional static data can be served with raw .json files and accessed with plain http.</li>
+		<li>No app&nbsp;processing on the server is required to serve these files. All CMS systems must produce these files anyway, we just produce them ahead of time instead of per request.</li>
+	</ul></li>
+	<li>Development uses static html files.
+	<ul>
+		<li>Variables can be added to these files, but no logic. Any logic must be written in a javascript file.</li>
+		<li>Open and close html tags in the same file. Makes getting correct output much easier.</li>
+		<li>Include files by convention. Any page be it a content page or layout can define a .css, .js and .json (for settings) file. These will be automatically detected and used.</li>
+	</ul></li>
+	<li>Use a linked content system to gather html dependencies.
+	<ul>
+		<li>Instead of manually including your js and css files define them in a centralized location along with anything they depend on. Then you can refer to this in the page settings for a given page this way the locations and versions of these files can easily change without having to update a ton of different pages.</li>
+	</ul></li>
+	<li>Separation of CMS backend from deployed version of the website.
+	<ul>
+		<li>Allows offline content development. Create and edit&nbsp;a website on your local machine and push the output of the compiler to your server.</li>
+		<li>Able to host anywhere that can serve static html content.</li>
+		<li>Also possible to host the CMS to provide easier collaboration.</li>
+		<li>Possibly improve sever security since now you are just serving raw files instead of running a web app with its own potential security holes.</li>
+	</ul></li>
+	<li>Use Git for version management.
+	<ul>
+		<li>Can also support other git clients against the repo in case of emergency.</li>
+		<li>Utilizes LibGit2Sharp internally.</li>
+		<li>Can work in a single shared repo mode or with a repo for each user of the site.</li>
+		<li>Enables chains of approval as changes move from one git repo to the next.</li>
+	</ul></li>
+	<li>NoSql, no database is required to run this program.
+	<ul>
+		<li>This does not prevent server side development, create a micro service and interact with it on your pages SPA style.</li>
+	</ul></li>
+	<li>No opinion on client side frameworks.
+	<ul>
+		<li>Edity McEditface uses the HtmlRapier javascript library with Bootstrap to provide its editing capabilities, but the website being constructed need not use these things.</li>
+	</ul></li>
+</ul>
+                        <div class="footer"></div>
+                    </div>
+                </div>
+                <div class="footer-padding"></div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/lib/polyfill.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/tslib.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/jquery/dist/jquery.min.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/bootstrap/dist/js/bootstrap.min.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/tsbin.prod.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/hr-run.js?linkver=20190504044935"></script>
+
+</body>
+
+</html>

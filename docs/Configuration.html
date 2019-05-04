@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap-custom.css?linkver=20190504044935" type="text/css">
+<link rel="stylesheet" href="/lib/sidebar/css/simple-sidebar.css?linkver=20190504044935" type="text/css">
+<link rel="stylesheet" href="/lib/sidebar/css/sidemenu.css?linkver=20190504044935" type="text/css">
+<link rel="stylesheet" href="/lib/edity/css/layout.css?linkver=20190504044935" type="text/css">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top navbar-nomargin" data-hr-run="edity.theme.layouts.default">
+        <a class="navbar-brand" href="#ToggleMenu" data-target="#wrapper" data-toggle="sidebar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="glyphicon glyphicon-menu-hamburger"></span>
+        </a>
+        <div class="navbar-header navbar-nowrap">
+            <a class="navbar-brand" href="/">Edity McEditface Manual</a>
+        </div>
+    </nav>
+
+    <div class="navbar-shadow-short"></div>
+    <div class="navbar-spacer-short"></div>
+
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper" class="sidebar-with-navbar-short">
+            <div class="mainTreeMenu" data-hr-controller="treeMenu" data-hr-config-urlroot="/" data-hr-config-menu="/menus/mainMenu.json" data-hr-config-scrollelement="#sidebar-wrapper" data-hr-model-component="sidebarMenuComponent" data-hr-config-treemenu-version="DD0800A5E414DF42E6F99B2BE5AA35C807B1712CF41D458E2D212895293C9942">
+                <ul class="sidebarMenu" data-hr-model="childItems" data-hr-model-component="sidebarMenuComponent">
+                    <template data-hr-component="sidebarMenuComponent">
+                        <li class="folder">
+                            <div class="item" data-hr-on-click="toggleMenuItem" data-hr-toggle="current" data-hr-class-on="currentFolder"><span data-hr-toggle="children" class="glyphicon" data-hr-class-on="glyphicon-folder-open" data-hr-class-off="glyphicon-folder-close"></span> {{name}}</div>
+                            <div class="children" data-hr-model="children" data-hr-model-component="sidebarMenuComponent" data-hr-toggle="children" data-hr-class-on="expanded" data-hr-style-off="display:none;"></div>
+                        </li>
+                    </template>
+                    <template data-hr-variant="link">
+                        <li class="link">
+                            <a href="{{urlRoot}}{{link}}" target="{{target}}">
+                                <div class="mainBlock" data-hr-toggle="current" data-hr-class-on="currentLink">
+                                    {{name}}
+                                </div>
+                            </a>
+                        </li>
+                    </template>
+                    <template data-hr-variant="root">
+                        <div class="children" data-hr-model="children" data-hr-model-component="sidebarMenuComponent" data-hr-toggle="children" data-hr-class-on="expanded" data-hr-style-off="display:none;"></div>
+                    </template>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 pageContent">
+                        <h1>Configuration</h1>
+<p>There are 2 major modes for Edity McEditface to run under. These are provided by different builds that are built&nbsp;by setting the LOCAL_RUN_ENABLED Conditional Configuraiton Symbol on and off&nbsp;when building the project.</p>
+<p>When LOCAL_RUN_ENABLED is set the program will have additional command line options that it can take along with a ShutdownController that can close down the web server.</p>
+<h2>Local Mode</h2>
+<p>Local mode&nbsp;allows you to point the CMS at a folder that is a git repo and use that as the content. Any pages created or files uploaded will be added to this git repo.</p>
+<p>You can start a local instance by running EdityMcEditface.exe. You can use the following command line arguments to modify where the program gets its files.</p>
+<ul>
+	<li><code><font face="Courier New">--browse=URL</font></code> open default browser to relative url on site. Start with a /</li>
+	<li><code><font face="Courier New">--server.urls=&quot;http://host:port&quot;</font></code> Set the server url.</li>
+	<li><code><font face="Courier New">--config=PATH</font></code> Use the config file located at PATH</li>
+	<li><code><font face="Courier New">--workingDir=PATH</font></code> Use PATH as the working dir for the program.</li>
+</ul>
+<h2>Hosted Mode</h2>
+<p>Hosted mode allows you to run the cms more like a traditional hosted cms. You must still have another site that hosts the static content for your normal visitors to use. The hosted CMS mostly acts the same as the local one, but does not have any command line options and does not have a way to shut it down.</p>
+<p>Please note that the main EdityMcEditface program that is part of the repository does not have any real authentication. It will create some cookies, but these exist primarily to make the back end mvc code work, no real authenticaiton is provided. You can create your own version of the main edity program and use the libraries combined with your own authentication to make this secure for hosting.</p>
+<h2>Common Configuration</h2>
+<p>No matter if you are using a local or hosted build the configuraiton works more or less the same way.</p>
+<h3>appsettings.json</h3>
+<p>This file is the default Asp.net Core configuration file. In addition to the standard settings for logging and site configuration provided by that file you can create an additional section called EditySettings that looks like the following:</p>
+<p><code>&quot;EditySettings&quot;: {
+	<br>&nbsp; &quot;ReadFromCurrentDirectory&quot;: false,
+	<br>&nbsp; &quot;DetailedErrors&quot;: false,
+	<br>&nbsp; &quot;Compiler&quot;: &quot;Direct&quot;,
+	<br>&nbsp; &quot;ProjectPath&quot;: &quot;..\\Manual&quot;,
+	<br>&nbsp; &quot;OutputPath&quot;: &quot;..\\ManualOutput&quot;,
+	<br>&nbsp; &quot;SiteName&quot;: null,
+	<br>&nbsp; &quot;AppHostConfigPath&quot;: null,
+	<br>&nbsp; &quot;ProjectMode&quot;: &quot;OneRepo&quot;
+	<br>}</code></p>
+<p>The meanings of each variable are as follows:</p>
+<ul>
+	<li><strong>ReadFromCurrentDirectory </strong>- Determines if the server settings, which are in another file, can be read from the current working directory or must be read from the application directory. In hosted mode you should make this false and in local mode it sould be true.</li>
+	<li><strong>DetailedErrors </strong>- True to show stack traces and other detailed info if a server error occures. Ideally false for production.</li>
+	<li><strong>Compiler </strong>- &quot;Direct&quot; or &quot;RoundRobin&quot; - Defaults to Direct
+	<ul>
+		<li><strong>Direct </strong>- Directly compile the website to the OutputPath. OutputPath will be deleted each time a new compile occures. This is best for local mode where you will upload the website output somewhere as a separate step.</li>
+		<li><strong>RoundRobin </strong>- Outputs the site into a randomly created subfolder of OutputPath. When the compilation is complete a web.config will be generated in the root with rewrite rules to point to the new instance. This keeps the content online even during a recompile.</li>
+	</ul></li>
+	<li><strong>ProjectPath </strong>- The path to the root project folder.</li>
+	<li><strong>BackupFilePath </strong>- The path that &quot;backup&quot; files come out of. This is the directory that Edity will use to serve up the files that it needs for a&nbsp;project that are not included in your local project. This is things like the default layout, templates, editors and content files like css and javascript that make the editor work. It is extremely unlikely that you would change this.</li>
+	<li><strong>ProjectMode </strong>- &quot;OneRepo&quot; or &quot;OneRepoPerUser&quot; - Defaults to OneRepo
+	<ul>
+		<li><strong>OneRepo </strong>- Use a single content repository for all editors of the website. Useful in local mode, since that likely syncs somewhere else, but also useful if hosting with just one user.</li>
+		<li><strong>OneRepoPerUser </strong>- Use a set of content directories for each user of the website. These are synchronized through a master repo and publised through a published repo. This is the reccomended mode for hosted websites, especially those with multiple users.</li>
+	</ul></li>
+	<li><strong>OutputPath </strong>- The path to the root output folder.</li>
+</ul>
+<p>&nbsp;</p>
+                        <div class="footer"></div>
+                    </div>
+                </div>
+                <div class="footer-padding"></div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/lib/polyfill.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/tslib.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/jquery/dist/jquery.min.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/bootstrap/dist/js/bootstrap.min.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/tsbin.prod.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/hr-run.js?linkver=20190504044935"></script>
+
+</body>
+
+</html>

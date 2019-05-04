@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editing</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap-custom.css?linkver=20190504044935" type="text/css">
+<link rel="stylesheet" href="/lib/sidebar/css/simple-sidebar.css?linkver=20190504044935" type="text/css">
+<link rel="stylesheet" href="/lib/sidebar/css/sidemenu.css?linkver=20190504044935" type="text/css">
+<link rel="stylesheet" href="/lib/edity/css/layout.css?linkver=20190504044935" type="text/css">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top navbar-nomargin" data-hr-run="edity.theme.layouts.default">
+        <a class="navbar-brand" href="#ToggleMenu" data-target="#wrapper" data-toggle="sidebar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="glyphicon glyphicon-menu-hamburger"></span>
+        </a>
+        <div class="navbar-header navbar-nowrap">
+            <a class="navbar-brand" href="/">Edity McEditface Manual</a>
+        </div>
+    </nav>
+
+    <div class="navbar-shadow-short"></div>
+    <div class="navbar-spacer-short"></div>
+
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper" class="sidebar-with-navbar-short">
+            <div class="mainTreeMenu" data-hr-controller="treeMenu" data-hr-config-urlroot="/" data-hr-config-menu="/menus/mainMenu.json" data-hr-config-scrollelement="#sidebar-wrapper" data-hr-model-component="sidebarMenuComponent" data-hr-config-treemenu-version="DD0800A5E414DF42E6F99B2BE5AA35C807B1712CF41D458E2D212895293C9942">
+                <ul class="sidebarMenu" data-hr-model="childItems" data-hr-model-component="sidebarMenuComponent">
+                    <template data-hr-component="sidebarMenuComponent">
+                        <li class="folder">
+                            <div class="item" data-hr-on-click="toggleMenuItem" data-hr-toggle="current" data-hr-class-on="currentFolder"><span data-hr-toggle="children" class="glyphicon" data-hr-class-on="glyphicon-folder-open" data-hr-class-off="glyphicon-folder-close"></span> {{name}}</div>
+                            <div class="children" data-hr-model="children" data-hr-model-component="sidebarMenuComponent" data-hr-toggle="children" data-hr-class-on="expanded" data-hr-style-off="display:none;"></div>
+                        </li>
+                    </template>
+                    <template data-hr-variant="link">
+                        <li class="link">
+                            <a href="{{urlRoot}}{{link}}" target="{{target}}">
+                                <div class="mainBlock" data-hr-toggle="current" data-hr-class-on="currentLink">
+                                    {{name}}
+                                </div>
+                            </a>
+                        </li>
+                    </template>
+                    <template data-hr-variant="root">
+                        <div class="children" data-hr-model="children" data-hr-model-component="sidebarMenuComponent" data-hr-toggle="children" data-hr-class-on="expanded" data-hr-style-off="display:none;"></div>
+                    </template>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 pageContent">
+                        <h1>Editing</h1>
+<p>Edity McEditface tries to give a natural editing experience that is similar to actually visiting the website itself. This means that the wysiwyg is pretty much 100% accurate since you edit the pages directly.</p>
+<h2>Creating a New Page</h2>
+<p>To create a new page all that is required is visiting it in your browser. Instead of a 404 error you will be shown a screen of templates to choose from to create your new page. The easiest way to create a new page is to create a link for it and then visit the link.</p>
+<h2>Editing a Page</h2>
+<h3>Basics</h3>
+<p>Once you get to the edit screen for a page, click on the text, a toolbar with some formatting options should pop up and you can begin typing in your site content. Your changes are automatically saved to the server. You can also paste images directly from the clipboard into the page and the files will be automatically uploaded, named and linked.</p>
+<h3>History</h3>
+<p>This will show the git history of the page you are currently editing.</p>
+<h3>Media</h3>
+<p>Upload files directly to the cms.</p>
+<h3>Edit Source</h3>
+<p>Edit the page source directly. Don&#39;t spend too much time formatting since CKEditor will probably wipe out your pretty formatting.</p>
+<h3>Publish</h3>
+<p>Publish the website by compiling it based on your current compiler settings from your configuration.</p>
+<h3>Settings</h3>
+<p>Change the page settings, set the title or anything else needed. You must reload the page after applying these to see the effect.</p>
+<h3>Sync</h3>
+<p>Sync your git changes with others. This will push and pull from the remote repositories as needed.</p>
+<h3>Commit</h3>
+<p>Commit your current changes to git.</p>
+<h3>Save</h3>
+<p>Save the current page content. This is done automatically 5 seconds after you finish editing something.</p>
+<h3>Preview</h3>
+<p>See what the page will look like outside the editor. Not usually needed since you are seeing that anyway, but this is an easy way to remove the editor from a page and look at it. Clicking any links from the preview will take you to the editor for that page.</p>
+                        <div class="footer"></div>
+                    </div>
+                </div>
+                <div class="footer-padding"></div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/lib/polyfill.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/tslib.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/jquery/dist/jquery.min.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/bootstrap/dist/js/bootstrap.min.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/tsbin.prod.js?linkver=20190504044935"></script>
+<script type="text/javascript" src="/lib/hr-run.js?linkver=20190504044935"></script>
+
+</body>
+
+</html>

@@ -3,6 +3,9 @@
   "vars": {
     "siteTitle": "Edity McEditface Manual"
   },
+  "buildVars": {
+    "pathBase": "EdityMcEditface"
+  },
   "compilers": [
     {
       "type": "Html",

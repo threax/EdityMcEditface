@@ -12,35 +12,25 @@
 </ul>
 <h2>Hosted Mode</h2>
 <p>Hosted mode allows you to run the cms more like a traditional hosted cms. You must still have another site that hosts the static content for your normal visitors to use. The hosted CMS mostly acts the same as the local one, but does not have any command line options and does not have a way to shut it down.</p>
+<p>Please note that the main EdityMcEditface program that is part of the repository does not have any real authentication. It will create some cookies, but these exist primarily to make the back end mvc code work, no real authenticaiton is provided. You can create your own version of the main edity program and use the libraries combined with your own authentication to make this secure for hosting.</p>
 <h2>Common Configuration</h2>
-<p>No matter if you are using a local or hosted build the configuraiton works more or less the same way. The configuration will be handled on a file by file basis.</p>
+<p>No matter if you are using a local or hosted build the configuraiton works more or less the same way.</p>
 <h3>appsettings.json</h3>
 <p>This file is the default Asp.net Core configuration file. In addition to the standard settings for logging and site configuration provided by that file you can create an additional section called EditySettings that looks like the following:</p>
-<pre style="margin: 0px; line-height: 125%;"><span style="background-color: rgb(255, 240, 240);">&quot;EditySettings&quot;</span><span style="color: rgb(255, 0, 0); background-color: rgb(255, 170, 170);">:</span> {
-    <span style="color: rgb(0, 119, 0);">&quot;ReadFromCurrentDirectory&quot;</span>: <span style="color: rgb(0, 136, 0); font-weight: bold;">false</span>,
-    <span style="color: rgb(0, 119, 0);">&quot;UsersFile&quot;</span>: <font style="background-color: rgb(255, 240, 240);">&quot;Config/users.json&quot;,
-    &quot;</font><font color="#a31515" face="Consolas" size="2"><font color="#a31515" face="Consolas" size="2"><font color="#a31515" face="Consolas" size="2">DetailedErrors&quot;: false,
-</font></font></font><font style="background-color: rgb(255, 240, 240);">&nbsp;&nbsp;&nbsp; &quot;</font><font color="#a31515" face="Consolas" size="2"><font color="#a31515" face="Consolas" size="2"><font color="#a31515" face="Consolas" size="2">SecureCookies&quot;: true,</font></font></font>
-  }</pre>
+<p><code>&quot;EditySettings&quot;: {
+	<br />&nbsp; &quot;ReadFromCurrentDirectory&quot;: false,
+	<br />&nbsp; &quot;DetailedErrors&quot;: false,
+	<br />&nbsp; &quot;Compiler&quot;: &quot;Direct&quot;,
+	<br />&nbsp; &quot;ProjectPath&quot;: &quot;..\\Manual&quot;,
+	<br />&nbsp; &quot;OutputPath&quot;: &quot;..\\ManualOutput&quot;,
+	<br />&nbsp; &quot;SiteName&quot;: null,
+	<br />&nbsp; &quot;AppHostConfigPath&quot;: null,
+	<br />&nbsp; &quot;ProjectMode&quot;: &quot;OneRepo&quot;
+	<br />}</code></p>
 <p>The meanings of each variable are as follows:</p>
 <ul>
 	<li><strong>ReadFromCurrentDirectory </strong>- Determines if the server settings, which are in another file, can be read from the current working directory or must be read from the application directory. In hosted mode you should make this false and in local mode it sould be true.</li>
-	<li><strong>UsersFile </strong>- The location of the file used to store user configuration info.</li>
 	<li><strong>DetailedErrors </strong>- True to show stack traces and other detailed info if a server error occures. Ideally false for production.</li>
-	<li><strong>SecureCookies </strong>- True to make cookies only work over https and false to make it match the request.</li>
-</ul>
-<h3>edityserver.json</h3>
-<p>This file lives in the Config folder within the project root. It determines the settings for the cms itself. This is done separately from appsettings.json to help support local mode. A typical file will look like the following:</p>
-<pre style="margin: 0px; line-height: 125%;">{
-  <span style="color: rgb(0, 119, 0);">&quot;Compiler&quot;</span>: <span style="background-color: rgb(255, 240, 240);">&quot;Direct&quot;</span>,
-  <span style="color: rgb(0, 119, 0);">&quot;ProjectPath&quot;</span>: <span style="background-color: rgb(255, 240, 240);">&quot;..\\Manual&quot;</span>,
-  <span style="color: rgb(0, 119, 0);">&quot;OutputPath&quot;</span>: <span style="background-color: rgb(255, 240, 240);">&quot;..\\ManualOutput&quot;</span>,
-  <span style="color: rgb(0, 119, 0);">&quot;SiteName&quot;</span>: <span style="color: rgb(0, 136, 0); font-weight: bold;">null</span>,
-  <span style="color: rgb(0, 119, 0);">&quot;AppHostConfigPath&quot;</span>: <span style="color: rgb(0, 136, 0); font-weight: bold;">null</span>,
-  <span style="color: rgb(0, 119, 0);">&quot;ProjectMode&quot;</span>: <span style="background-color: rgb(255, 240, 240);">&quot;OneRepo&quot;</span>
-}</pre>
-<p>The meanings of each variable are as follows:</p>
-<ul>
 	<li><strong>Compiler </strong>- &quot;Direct&quot; or &quot;RoundRobin&quot; - Defaults to Direct
 	<ul>
 		<li><strong>Direct </strong>- Directly compile the website to the OutputPath. OutputPath will be deleted each time a new compile occures. This is best for local mode where you will upload the website output somewhere as a separate step.</li>

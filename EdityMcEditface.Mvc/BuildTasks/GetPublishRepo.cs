@@ -42,7 +42,7 @@ namespace EdityMcEditface.BuildTasks
                 args.Tracker.AddMessage($"Pulling changes to publish repo from {url}.");
                 using (Repository repo = new Repository(outDir))
                 {
-                    var result = Commands.Pull(repo, new Signature("PublishAgent", "PublishAgent@notaperson.com", DateTime.Now), new PullOptions());
+                    var result = Commands.Pull(repo, new Signature(args.UserInfo.Name, args.UserInfo.Email, DateTime.Now), new PullOptions());
                     switch (result.Status)
                     {
                         case MergeStatus.Conflicts:

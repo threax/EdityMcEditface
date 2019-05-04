@@ -264,6 +264,7 @@ namespace EdityMcEditface.Mvc
                 buildTaskManager.SetBuildTaskType("PublishMenu", typeof(PublishMenu));
                 buildTaskManager.SetBuildTaskType("CreateIISWebConfig", typeof(CreateIISWebConfig));
                 buildTaskManager.SetBuildTaskType("GetPublishRepo", typeof(GetPublishRepo));
+                buildTaskManager.SetBuildTaskType("PublishToGitRepo", typeof(PublishToGitRepo));
                 editySettings.Events.CustomizeBuildTasks?.Invoke(buildTaskManager);
                 return buildTaskManager;
             });

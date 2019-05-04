@@ -81,7 +81,7 @@ namespace EdityMcEditface
 
                 o.Events.CustomizeBuildTasks = buildTasks =>
                 {
-                    buildTasks.SetBuildTaskType("PublishToGitRepo", typeof(PublishToGitRepo));
+                    buildTasks.SetBuildTaskBuilder("PublishToGitRepo", s => new PublishToGitRepo(s, new WindowsGitCredentialsProvider()));
                 };
 
                 o.Events.CustomizeTools = tools =>

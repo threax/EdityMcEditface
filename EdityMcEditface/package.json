@@ -4,14 +4,14 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^3.4.1",
-    "editymceditface.client": "^14.2.2",
+    "editymceditface.client": "^14.3.1",
     "htmlrapier": "^19.0.2",
     "htmlrapier.form.bootstrap3": "^1.1.0",
     "htmlrapier.halcyon": "^7.1.0",
     "htmlrapier.treemenu": "^6.1.1",
     "htmlrapier.widgets": "^15.8.0",
-    "jsns": "^5.0.0",
-    "jquery": "^3.4.1"
+    "jquery": "^3.4.1",
+    "jsns": "^5.0.0"
   },
   "scripts": {
     "build": "threax-npm-tk build -o ClientBin/Site && threax-npm-tk build -o ClientBin/EdityMcEditface -a node_modules/*/edity-artifacts.json && dotnet bundle",

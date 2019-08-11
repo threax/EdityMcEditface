@@ -32,14 +32,11 @@ namespace EdityMcEditface
             String siteRootPath = runningFolder;
             if (env.IsEnvironment("Development"))
             {
+                //In development mode use the main code folder as the site root, not the publish directory.
+                siteRootPath = Path.GetFullPath(Path.Combine(runningFolder, "../../../"));
                 if (!Directory.Exists(Path.Combine(siteRootPath, "ClientBin")))
                 {
-                    //Probably running inside the output folder, go up the appropriate number of directories
-                    siteRootPath = Path.GetFullPath(Path.Combine(runningFolder, "../../../"));
-                    if (!Directory.Exists(Path.Combine(siteRootPath, "ClientBin")))
-                    {
-                        throw new Exception("Cannot find site root folder containing a ClientBin folder");
-                    }
+                    throw new Exception("Cannot find site root folder containing a ClientBin folder");
                 }
             }
 
@@ -100,7 +97,7 @@ namespace EdityMcEditface
                             FlattenInheritanceHierarchy = true,
                             DefaultPropertyNameHandling = PropertyNameHandling.CamelCase,
                             DefaultEnumHandling = EnumHandling.String,
-                            
+
                         };
                         var generator = new JsonSchemaGenerator(settings);
                         var schema = await generator.GenerateAsync(typeof(EdityProject));

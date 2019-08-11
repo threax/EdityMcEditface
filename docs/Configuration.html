@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuration</title>
-    <link rel="stylesheet" href="/EdityMcEditface/lib/bootstrap/dist/css/bootstrap-custom.css?linkver=20190510060417" type="text/css">
-<link rel="stylesheet" href="/EdityMcEditface/lib/sidebar/css/simple-sidebar.css?linkver=20190510060417" type="text/css">
-<link rel="stylesheet" href="/EdityMcEditface/lib/sidebar/css/sidemenu.css?linkver=20190510060417" type="text/css">
-<link rel="stylesheet" href="/EdityMcEditface/lib/edity/css/layout.css?linkver=20190510060417" type="text/css">
+    <link rel="stylesheet" href="/EdityMcEditface/lib/bootstrap/dist/css/bootstrap-custom.css?linkver=20190811055949" type="text/css">
+<link rel="stylesheet" href="/EdityMcEditface/lib/sidebar/css/simple-sidebar.css?linkver=20190811055949" type="text/css">
+<link rel="stylesheet" href="/EdityMcEditface/lib/sidebar/css/sidemenu.css?linkver=20190811055949" type="text/css">
+<link rel="stylesheet" href="/EdityMcEditface/lib/edity/css/layout.css?linkver=20190811055949" type="text/css">
 
 </head>
 
@@ -59,22 +59,16 @@
                 <div class="row">
                     <div class="col-md-12 pageContent">
                         <h1>Configuration</h1>
-<p>There are 2 major modes for Edity McEditface to run under. These are provided by different builds that are built&nbsp;by setting the LOCAL_RUN_ENABLED Conditional Configuraiton Symbol on and off&nbsp;when building the project.</p>
-<p>When LOCAL_RUN_ENABLED is set the program will have additional command line options that it can take along with a ShutdownController that can close down the web server.</p>
+<p>There are 2 major modes for Edity McEditface to run under local and hosted. The repostiory has the local mode program inside and you can consume the NuGet packages to get hosted mode to work.</p>
 <h2>Local Mode</h2>
-<p>Local mode&nbsp;allows you to point the CMS at a folder that is a git repo and use that as the content. Any pages created or files uploaded will be added to this git repo.</p>
-<p>You can start a local instance by running EdityMcEditface.exe. You can use the following command line arguments to modify where the program gets its files.</p>
+<p>Edity McEditface can run in a local mode where the webserver is started and you edit files on your computer. You can collaborate with others by sharing the git repositories. When the program is launched it will choose a random port, start the server on http and open your default browser to the editor. This will run until you click shutdown in the gui. Files will be served/edited through the current working directory when the program is started.</p>
 <ul>
-	<li><code><font face="Courier New">--browse=URL</font></code> open default browser to relative url on site. Start with a /</li>
-	<li><code><font face="Courier New">--server.urls=&quot;http://host:port&quot;</font></code> Set the server url.</li>
-	<li><code><font face="Courier New">--config=PATH</font></code> Use the config file located at PATH</li>
-	<li><code><font face="Courier New">--workingDir=PATH</font></code> Use PATH as the working dir for the program.</li>
+	<li><code><font face="Courier New">--workingDir=PATH</font></code> Use PATH as the working dir for the program. Otherwise this defaults to the current working directory.</li>
 </ul>
 <h2>Hosted Mode</h2>
-<p>Hosted mode allows you to run the cms more like a traditional hosted cms. You must still have another site that hosts the static content for your normal visitors to use. The hosted CMS mostly acts the same as the local one, but does not have any command line options and does not have a way to shut it down.</p>
-<p>Please note that the main EdityMcEditface program that is part of the repository does not have any real authentication. It will create some cookies, but these exist primarily to make the back end mvc code work, no real authenticaiton is provided. You can create your own version of the main edity program and use the libraries combined with your own authentication to make this secure for hosting.</p>
+<p>Hosted mode allows you to run the cms more like a traditional hosted cms. To do this consume the NuGet packages and call AddEdity and UseEdity in your startup.cs.</p>
 <h2>Common Configuration</h2>
-<p>No matter if you are using a local or hosted build the configuraiton works more or less the same way.</p>
+<p>No matter if you are using a local or hosted build the configuration works more or less the same way.</p>
 <h3>appsettings.json</h3>
 <p>This file is the default Asp.net Core configuration file. In addition to the standard settings for logging and site configuration provided by that file you can create an additional section called EditySettings that looks like the following:</p>
 <p><code>&quot;EditySettings&quot;: {
@@ -113,12 +107,12 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="/EdityMcEditface/lib/polyfill.js?linkver=20190510060417"></script>
-<script type="text/javascript" src="/EdityMcEditface/lib/tslib.js?linkver=20190510060417"></script>
-<script type="text/javascript" src="/EdityMcEditface/lib/jquery/dist/jquery.min.js?linkver=20190510060417"></script>
-<script type="text/javascript" src="/EdityMcEditface/lib/bootstrap/dist/js/bootstrap.min.js?linkver=20190510060417"></script>
-<script type="text/javascript" src="/EdityMcEditface/lib/tsbin.prod.js?linkver=20190510060417"></script>
-<script type="text/javascript" src="/EdityMcEditface/lib/hr-run.js?linkver=20190510060417"></script>
+    <script type="text/javascript" src="/EdityMcEditface/lib/polyfill.js?linkver=20190811055949"></script>
+<script type="text/javascript" src="/EdityMcEditface/lib/tslib.js?linkver=20190811055949"></script>
+<script type="text/javascript" src="/EdityMcEditface/lib/jquery/dist/jquery.min.js?linkver=20190811055949"></script>
+<script type="text/javascript" src="/EdityMcEditface/lib/bootstrap/dist/js/bootstrap.min.js?linkver=20190811055949"></script>
+<script type="text/javascript" src="/EdityMcEditface/lib/tsbin.prod.js?linkver=20190811055949"></script>
+<script type="text/javascript" src="/EdityMcEditface/lib/hr-run.js?linkver=20190811055949"></script>
 
 </body>
 

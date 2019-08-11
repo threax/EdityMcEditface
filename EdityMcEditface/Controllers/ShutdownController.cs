@@ -21,15 +21,20 @@ namespace EdityMcEditface.Controllers
         /// </summary>
         public ShutdownController()
         {
-            
+
         }
 
         /// <summary>
         /// Stop the Edity McEditface process.
         /// </summary>
-        public void Shutdown()
+        public ActionResult Shutdown()
         {
-            Process.GetCurrentProcess().Kill();
+            HttpContext.Response.OnCompleted(() =>
+            {
+                Process.GetCurrentProcess().Kill();
+                return Task.FromResult(0);
+            });
+            return Content("Edity McEdtiface Shut Down.", "text/plain");
         }
     }
 }

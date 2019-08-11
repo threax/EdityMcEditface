@@ -41,12 +41,6 @@ namespace EdityMcEditface
             }
 
             var defaultProjectPath = Directory.GetCurrentDirectory();
-            //Check to see if this is our running folder, if so go into wwwroot
-            if (String.Compare(defaultProjectPath, siteRootPath.TrimEnd('/', '\\')) == 0)
-            {
-                defaultProjectPath = Path.Combine(defaultProjectPath, "wwwroot");
-            }
-
             var builder = new ConfigurationBuilder()
                 .SetBasePath(siteRootPath)
                 .AddInMemoryCollection(new Dictionary<String, String>

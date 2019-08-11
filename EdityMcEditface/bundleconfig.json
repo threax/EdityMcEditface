@@ -2,7 +2,7 @@
 // More info at https://go.microsoft.com/fwlink/?LinkId=808241
 [
   {
-    "outputFileName": "wwwroot/ckeditor.plugins.bundle.min.js",
+    "outputFileName": "ClientBin/EdityMcEditface/ckeditor.plugins.bundle.min.js",
     "inputFiles": [
       "ClientBin/EdityMcEditface/lib/ckeditor/styles.js",
       "ClientBin/EdityMcEditface/lib/ckeditor/plugins/**/*.js"

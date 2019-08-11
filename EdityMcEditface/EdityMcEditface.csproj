@@ -48,4 +48,10 @@
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="ClientBin\**" Exclude="ClientBin\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

@@ -11,6 +11,7 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Net;
 using Threax.AspNetCore.BuiltInTools;
+using System.Runtime.InteropServices;
 
 namespace EdityMcEditface
 {
@@ -28,11 +29,9 @@ namespace EdityMcEditface
                 toolsConfigName = toolsEnv;
             }
 
-#if LOCAL_RUN_ENABLED
             var commandLineConfig = new ConfigurationBuilder()
                 .AddCommandLine(args)
                 .Build();
-#endif
 
             var webHostBuilder = new WebHostBuilder()
                 .UseKestrel()
@@ -40,21 +39,10 @@ namespace EdityMcEditface
                 .UseIISIntegration()
                 .UseStartup<Startup>();
 
-#if LOCAL_RUN_ENABLED
             webHostBuilder.UseConfiguration(commandLineConfig);
 
-            var browseUrl = commandLineConfig["browse"];
-            if (!String.IsNullOrEmpty(browseUrl))
-            {
-                String hostUrl = "http://localhost:" + FreeTcpPort();
-                webHostBuilder.UseUrls(hostUrl);
-                var uri = new Uri(new Uri(hostUrl), browseUrl);
-                ThreadPool.QueueUserWorkItem((a) =>
-                {
-                    Thread.Sleep(200);
-                    Process.Start(uri.ToString());
-                });
-            }
+            String hostUrl = "http://localhost:" + FreeTcpPort();
+            webHostBuilder.UseUrls(hostUrl);
 
             var workingDirPath = commandLineConfig["workingDir"];
             if (!String.IsNullOrEmpty(workingDirPath))
@@ -62,17 +50,27 @@ namespace EdityMcEditface
                 var fullWorkDir = Path.GetFullPath(workingDirPath);
                 Directory.SetCurrentDirectory(fullWorkDir);
             }
-#endif
 
             var host = webHostBuilder.Build();
 
             if (tools.ProcessTools(host))
             {
+                ThreadPool.QueueUserWorkItem((a) =>
+                {
+                    try
+                    {
+                        OpenBrowser(hostUrl);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        Console.WriteLine($"Cannot start browser: {ex.Message}");
+                    }
+                });
+
                 host.Run();
             }
         }
 
-#if LOCAL_RUN_ENABLED
         //This has race conditions, but only used when the browser is being opened from the command line
         //which should basically always work in practice, dont call this for any other reason
         static int FreeTcpPort()
@@ -83,6 +81,23 @@ namespace EdityMcEditface
             l.Stop();
             return port;
         }
-#endif
+
+        public static Process OpenBrowser(string url)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return Process.Start(new ProcessStartInfo("cmd", $"/c start {url}")); // Works ok on windows
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return Process.Start("xdg-open", url);  // Works ok on linux
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return Process.Start("open", url); // Not tested
+            }
+
+            throw new InvalidOperationException("Cannot open browser, unknown OS");
+        }
     }
 }

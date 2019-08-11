@@ -1,5 +1,4 @@
-﻿#if LOCAL_RUN_ENABLED
-using EdityMcEditface.Mvc;
+﻿using EdityMcEditface.Mvc;
 using EdityMcEditface.Mvc.Auth;
 using EdityMcEditface.Mvc.Config;
 using EdityMcEditface.Mvc.Models.Page;
@@ -19,7 +18,6 @@ namespace EdityMcEditface.Controllers
 {
     /// <summary>
     /// This controller will automatically log in a user when they hit the login function.
-    /// This only works if LOCAL_RUN_ENABLED was enabled when the program was compiled.
     /// </summary>
     [Authorize]
     [Route("edity/auth/[action]")]
@@ -134,4 +132,3 @@ namespace EdityMcEditface.Controllers
         }
     }
 }
-#endif

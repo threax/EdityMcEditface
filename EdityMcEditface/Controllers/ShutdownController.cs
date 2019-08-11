@@ -1,5 +1,4 @@
-﻿#if LOCAL_RUN_ENABLED
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,8 +9,7 @@ using System.Threading.Tasks;
 namespace EdityMcEditface.Controllers
 {
     /// <summary>
-    /// This controller will shutdown Edity McEditface, this only works if the program was
-    /// compiled with LOCAL_RUN_ENABLED.
+    /// This controller will shutdown Edity McEditface.
     /// </summary>
     [Route("edity/[controller]/[action]")]
     [Authorize(AuthenticationSchemes = AuthCoreSchemes.Bearer, Roles = LocalEdityRoles.Shutdown)]
@@ -36,4 +34,3 @@ namespace EdityMcEditface.Controllers
         }
     }
 }
-#endif

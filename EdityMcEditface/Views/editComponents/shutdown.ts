@@ -5,4 +5,4 @@
 import * as navmenu from "edity.editorcore.navmenu";
 
 var editMenu = navmenu.getNavMenu("edit-nav-menu-items");
-editMenu.addInjected("ShutdownNavItem", navmenu.ExternalStart + 0, undefined);
+editMenu.addInjected("ShutdownNavItem", navmenu.ExternalStart + 0, () => {});

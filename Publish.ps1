@@ -31,7 +31,8 @@ try{
         dotnet restore $csproj; Test-Error "Could not dotnet restore $csproj."
         npm run clean; Test-Error "Could not npm run clean."
         npm run build; Test-Error "Could not npm run build"
-        dotnet publish -r win-x64 -c Release --self-contained -o "$publishDir"; Test-Error "Error publishing app to $publishDir"
+        dotnet publish -c Release -o "$publishDir/EdityMcEditface"; Test-Error "Error publishing app to $publishDir"
+        Copy-Item EdityMcEditface.ps1 $publishDir/EdityMcEditface.ps1 -ErrorAction Stop
     }
     finally{
         Pop-Location

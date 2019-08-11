@@ -20,7 +20,8 @@
     "editComponents/phase.html",
     "editComponents/draft.html",
     "editComponents/compile.html",
-    "editComponents/branch.html"
+    "editComponents/branch.html",
+    "editComponents/shutdown.html"
   ],
   "draftComponents": [
     "editComponents/commit.html",

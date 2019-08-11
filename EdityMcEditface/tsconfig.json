@@ -47,6 +47,7 @@
   "compileOnSave": true,
   "include": [
     "Editor\\**\\*.ts",
+    "Views\\**\\*.ts",
     "node_modules\\editymceditface.client\\EditorCore\\**\\*.ts",
     "node_modules\\editymceditface.client\\Views\\**\\*.ts",
     "node_modules\\htmlrapier.bootstrap\\src\\**\\*.ts",

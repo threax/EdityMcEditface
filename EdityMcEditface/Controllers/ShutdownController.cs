@@ -27,7 +27,6 @@ namespace EdityMcEditface.Controllers
         /// <summary>
         /// Stop the Edity McEditface process.
         /// </summary>
-        [HttpPost]
         public void Shutdown()
         {
             Process.GetCurrentProcess().Kill();

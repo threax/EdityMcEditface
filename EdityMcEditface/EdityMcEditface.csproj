@@ -24,8 +24,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Alm.Authentication" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="AutoMapper" Version="8.1.1" />
-    <PackageReference Include="LibGit2Sharp" Version="0.26.0" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="LibGit2Sharp" Version="0.26.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
     <PackageReference Include="Threax.AspNetCore.AuthCore" Version="2.0.3" />
@@ -34,9 +34,9 @@
     <PackageReference Include="Threax.AspNetCore.FileRepository" Version="4.0.0" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="11.2.3" />
     <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen.Tools" Version="5.1.0" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="12.7.1" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="12.8.0" />
     <PackageReference Include="Threax.AspNetCore.Models" Version="6.4.0" />
-    <PackageReference Include="Threax.Extensions.Configuration.SchemaBinder" Version="1.3.0" />
+    <PackageReference Include="Threax.Extensions.Configuration.SchemaBinder" Version="1.4.0" />
   </ItemGroup>
 
   <ItemGroup>

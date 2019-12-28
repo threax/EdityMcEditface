@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netcoreapp3.0;netstandard2.0</TargetFrameworks>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>EdityMcEditface.Mvc</AssemblyName>
@@ -22,15 +22,26 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
+
+  <!--<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="3.0.0" />
+  </ItemGroup>-->
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+  </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\EdityMcEditface.HtmlRenderer\EdityMcEditface.HtmlRenderer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="9.0.0" />
-    <PackageReference Include="LibGit2Sharp" Version="0.26.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="LibGit2Sharp" Version="0.26.1" />
     <PackageReference Include="Threax.AspNetCore.AuthCore" Version="2.0.3" />
     <PackageReference Include="Threax.AspNetCore.BuiltInTools" Version="5.3.0" />
     <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="5.0.4" />

@@ -23,14 +23,14 @@ namespace EdityMcEditface
     public class Startup
     {
         private String runningFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-        private IHostingEnvironment env;
+        private IWebHostEnvironment env;
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             this.env = env;
 
             String siteRootPath = runningFolder;
-            if (env.IsEnvironment("Development"))
+            if (env.EnvironmentName == "Development")
             {
                 //In development mode use the main code folder as the site root, not the publish directory.
                 siteRootPath = Path.GetFullPath(Path.Combine(runningFolder, "../../../"));
@@ -48,7 +48,7 @@ namespace EdityMcEditface
                     { "EditySettings:ReadFromCurrentDirectory", "false" },
                     { "EditySettings:NoAuth", "false" },
                     { "EditySettings:NoAuthUser", "OnlyUser" },
-                    { "EditySettings:DetailedErrors", env.IsEnvironment("Development").ToString() },
+                    { "EditySettings:DetailedErrors", (env.EnvironmentName == "Development").ToString() },
                     { "EditySettings:ProjectMode", "OneRepo" },
                     { "EditySettings:OutputPath", Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), $"..\\{Path.GetFileName(Directory.GetCurrentDirectory())}-EdityOutput")) },
                     { "EditySettings:ProjectPath", defaultProjectPath },
@@ -129,7 +129,7 @@ namespace EdityMcEditface
             app.UseAuthentication();
             app.UseAuthorization();
 
-            if (true)
+            if (env.EnvironmentName == "Development")
             {
                 app.UseDeveloperExceptionPage();
             }

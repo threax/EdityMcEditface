@@ -340,7 +340,7 @@ namespace EdityMcEditface.Mvc
                 o.UseConventionalHalcyon(halOptions);
             })
             .
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
             AddNewtonsoftJson
 #elif NETSTANDARD2_0
             AddJsonOptions
@@ -404,7 +404,7 @@ namespace EdityMcEditface.Mvc
                 ContentTypeProvider = new EdityContentTypeProvider()
             });
 
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

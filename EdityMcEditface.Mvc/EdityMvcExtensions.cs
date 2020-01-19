@@ -405,8 +405,6 @@ namespace EdityMcEditface.Mvc
             });
 
 #if NETCOREAPP3_0
-            app.UseRouting();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

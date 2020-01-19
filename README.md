@@ -35,7 +35,7 @@ First install Dotnet Core. The instructions for setting up the sdk on the [hello
 ### Install NodeJs
 You need to install a current version of [NodeJs](https://nodejs.org/).
 
-### Install Yarn and Build Tools
+### Install Npm Build Tools
 Run the following commands to install everything:
 ```
  npm install -g typescript

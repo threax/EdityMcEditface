@@ -27,16 +27,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
-    <PackageReference Include="Threax.AspNetCore.AuthCore" Version="2.0.3" />
-    <PackageReference Include="Threax.AspNetCore.BuiltInTools" Version="5.3.0" />
-    <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="5.0.4" />
+    <PackageReference Include="Threax.AspNetCore.AuthCore" Version="2.0.4" />
+    <PackageReference Include="Threax.AspNetCore.BuiltInTools" Version="5.3.1" />
+    <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="6.0.1" />
     <PackageReference Include="Threax.AspNetCore.FileRepository" Version="4.0.0" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="11.2.3" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen.Tools" Version="5.1.0" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="12.8.0" />
-    <PackageReference Include="Threax.AspNetCore.Models" Version="6.4.0" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="12.3.2" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen.Tools" Version="6.0.1" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="14.4.1" />
+    <PackageReference Include="Threax.AspNetCore.Models" Version="7.0.1" />
   </ItemGroup>
 
 </Project>

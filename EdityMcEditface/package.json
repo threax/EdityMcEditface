@@ -10,7 +10,7 @@
     "htmlrapier.form.bootstrap4": "^3.0.1",
     "htmlrapier.halcyon": "^9.0.0",
     "htmlrapier.sidebar": "^3.1.1",
-    "htmlrapier.treemenu": "^6.1.1",
+    "htmlrapier.treemenu": "^6.1.2",
     "htmlrapier.widgets": "^15.12.1",
     "jquery": "^3.5.1",
     "jsns": "^5.0.0"

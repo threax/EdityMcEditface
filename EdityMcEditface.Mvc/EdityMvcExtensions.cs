@@ -339,13 +339,7 @@ namespace EdityMcEditface.Mvc
                 o.UseExceptionErrorFilters();
                 o.UseConventionalHalcyon(halOptions);
             })
-            .
-#if NETCOREAPP3_1
-            AddNewtonsoftJson
-#elif NETSTANDARD2_0
-            AddJsonOptions
-#endif
-            (o =>
+            .AddNewtonsoftJson(o =>
             {
                 o.SerializerSettings.SetToHalcyonDefault();
                 o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -404,7 +398,6 @@ namespace EdityMcEditface.Mvc
                 ContentTypeProvider = new EdityContentTypeProvider()
             });
 
-#if NETCOREAPP3_1
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -413,18 +406,6 @@ namespace EdityMcEditface.Mvc
                     defaults: new { controller = "Home", action = "Index" }
                 );
             });
-
-#elif NETSTANDARD2_0
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{*file}",
-                    defaults: new { controller = "Home", action = "Index" }
-                );
-            });
-#endif
-
 
             return app;
         }

@@ -6,6 +6,7 @@
     "bootstrap": "^4.5.3",
     "editymceditface.client": "^14.3.2",
     "htmlrapier": "^24.0.2",
+    "htmlrapier.bootstrap": "^8.0.0",
     "htmlrapier.form.bootstrap4": "^3.0.1",
     "htmlrapier.halcyon": "^9.0.0",
     "htmlrapier.sidebar": "^3.1.1",

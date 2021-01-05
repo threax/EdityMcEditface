@@ -5,7 +5,7 @@
     "removeComments": false,
     "sourceMap": true,
     "allowJs": true,
-    "target": "es5",
+    "target": "ES2015",
     "outDir": "obj/tscout/lib",
     "outFile": "ClientBin/EdityMcEditface/lib/tsbin.js",
     "module": "amd",
@@ -14,10 +14,8 @@
     "moduleResolution": "node",
     "alwaysStrict": true,
     "lib": [
-      "dom",
-      "es5",
-      "es2015.promise",
-      "es2015.iterable"
+      "DOM",
+      "ES2015"
     ],
     "paths": {
       "edity.editorcore.*": [

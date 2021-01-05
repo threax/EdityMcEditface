@@ -11,9 +11,9 @@
   },
   {
     "outDir": "lib/bootstrap/dist/css",
-    "less": {
-      "importPaths": [ ".", "node_modules/bootstrap/less" ],
-      "input": "bootstrap/bootstrap-custom.less",
+    "sass": {
+      "importPaths": [ ".", "node_modules/bootstrap/scss" ],
+      "input": "bootstrap/bootstrap-custom.scss",
       "compress": true,
       "basePath": "bootstrap"
     }
@@ -33,9 +33,9 @@
       "Views/**/*.html",
       "Views/**/*.json"
     ],
-    "less": {
-      "importPaths": [ "../bootstrap/less" ],
-      "input": "Views/**/*.less",
+    "sass": {
+      "importPaths": [ ".", "node_modules/bootstrap/scss" ],
+      "input": "Views/**/*.scss",
       "compress": true
     }
   },
@@ -47,9 +47,9 @@
       "Templates/**/*.html",
       "Templates/**/*.json"
     ],
-    "less": {
-      "importPaths": [ "../bootstrap/less" ],
-      "input": "Templates/**/*.less",
+    "sass": {
+      "importPaths": [ ".", "node_modules/bootstrap/scss" ],
+      "input": "Templates/**/*.scss",
       "compress": true
     }
   },

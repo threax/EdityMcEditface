@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^3.4.1",
+    "bootstrap": "^4.5.3",
     "editymceditface.client": "^14.3.2",
     "htmlrapier": "^24.0.2",
-    "htmlrapier.form.bootstrap3": "^1.1.0",
+    "htmlrapier.form.bootstrap4": "^3.0.1",
     "htmlrapier.halcyon": "^9.0.0",
     "htmlrapier.sidebar": "^3.1.1",
     "htmlrapier.treemenu": "^6.1.1",
@@ -15,7 +15,7 @@
     "jsns": "^5.0.0"
   },
   "scripts": {
-    "build": "threax-npm-tk build -o ClientBin/Site && threax-npm-tk build -o ClientBin/EdityMcEditface -a node_modules/*/edity-artifacts.json && dotnet bundle",
+    "build": "threax-npm-tk build -o ClientBin/Site && threax-npm-tk build -o ClientBin/EdityMcEditface -a node_modules/*/edity-artifacts.json",
     "clean": "threax-npm-tk clean -o ClientBin && threax-npm-tk clean -o wwwroot",
     "trash-modules": "threax-npm-tk clean -o node_modules",
     "import-tsconfig": "threax-npm-tk tsconfig"

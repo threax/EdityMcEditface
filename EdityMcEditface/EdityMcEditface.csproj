@@ -47,10 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.6.362" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

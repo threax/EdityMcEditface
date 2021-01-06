@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.5.3",
+    "popper.js": "^1.16.1",
     "editymceditface.client": "^14.3.2",
     "htmlrapier": "^24.0.2",
     "htmlrapier.bootstrap": "^8.0.0",

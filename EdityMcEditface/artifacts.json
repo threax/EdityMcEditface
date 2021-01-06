@@ -26,6 +26,13 @@
     ]
   },
   {
+    "outDir": "lib/popper.js/dist",
+    "pathBase": "node_modules/popper.js/dist/umd",
+    "copy": [
+      "node_modules/popper.js/dist/umd/popper.min.js"
+    ]
+  },
+  {
     "outDir": "edity/layouts",
     "pathBase": "Views",
     "copy": [

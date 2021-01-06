@@ -1,1 +1,14 @@
-﻿@import "bootstrap";
+﻿//$code-color: #4f00fe !default;
+
+$navbar-height: 70px;
+$navbar-expanded-height: 101px;
+
+@import "darkly/_variables.scss";
+@import "bootstrap";
+@import "darkly/_bootswatch.scss";
+
+@import "sidemenu";
+@import "simple-sidebar";
+@import "edity/css/fade";
+@import "edity/css/layout";
+@import "edity/css/loading";

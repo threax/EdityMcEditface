@@ -80,28 +80,28 @@ namespace EdityMcEditface.HtmlRenderer.Transforms
 
         private static String rootEditor =
 @"<div class=""treemenu-editor-rootcontrols"" data-hr-controller=""treeMenuEditRoot"" data-hr-model=""treeMenuEditRoot"" data-hr-keep>
-        <a href = ""#"" data-hr-on-click=""addItem"" ><span class=""glyphicon glyphicon-plus"" ></span></a>
+        <a href = ""#"" data-hr-on-click=""addItem"" >&#x2b;</a>
     </div>";
 
         private static String folderEditor =
 @"<div class=""treemenu-editor"">
-    <a href=""#"" data-hr-on-click=""moveUp""><span class=""glyphicon glyphicon-arrow-up""></span></a>
-    <a href=""#"" data-hr-on-click=""moveDown""><span class=""glyphicon glyphicon-arrow-down""></span></a>
-    <a href=""#"" data-hr-on-click=""moveToParent""><span class=""glyphicon glyphicon-arrow-left""></span></a>
-    <a href=""#"" data-hr-on-click=""moveToChild""><span class=""glyphicon glyphicon-arrow-right""></span></a>
-    <a href=""#"" data-hr-on-click=""addItem""><span class=""glyphicon glyphicon-plus"" ></span></a>
-    <a href=""#"" data-hr-on-click=""editItem""><span class=""glyphicon glyphicon-pencil"" ></span></a>
-    <a href=""#"" data-hr-on-click=""deleteItem""><span class=""glyphicon glyphicon-trash"" ></span></a>
+    <a href=""#"" data-hr-on-click=""moveUp"">&nbsp;&#x2191;&nbsp;</a>
+    <a href=""#"" data-hr-on-click=""moveDown"">&nbsp;&#x2193;&nbsp;</a>
+    <a href=""#"" data-hr-on-click=""moveToParent"">&#x2190;</a>
+    <a href=""#"" data-hr-on-click=""moveToChild"">&#x2192;</a>
+    <a href=""#"" data-hr-on-click=""addItem"">&#x2b;</a>
+    <a href=""#"" data-hr-on-click=""editItem"">&#x270f;</a>
+    <a href=""#"" data-hr-on-click=""deleteItem"">&#x1f5d1;</a>
 </div>";
 
         private static String linkEditor =
 @"<div class=""treemenu-editor"">
-    <a href=""#"" data-hr-on-click=""moveUp""><span class=""glyphicon glyphicon-arrow-up""></span></a>
-    <a href=""#"" data-hr-on-click=""moveDown""><span class=""glyphicon glyphicon-arrow-down""></span></a>
-    <a href=""#"" data-hr-on-click=""moveToParent""><span class=""glyphicon glyphicon-arrow-left""></span></a>
-    <a href=""#"" data-hr-on-click=""moveToChild""><span class=""glyphicon glyphicon-arrow-right""></span></a>
-    <a href=""#"" data-hr-on-click=""editItem""><span class=""glyphicon glyphicon-pencil"" ></span></a>
-    <a href=""#"" data-hr-on-click=""deleteItem""><span class=""glyphicon glyphicon-trash"" ></span></a>
+    <a href=""#"" data-hr-on-click=""moveUp"">&#x2191;</a>
+    <a href=""#"" data-hr-on-click=""moveDown"">&#x2193;</a>
+    <a href=""#"" data-hr-on-click=""moveToParent"">&#x2190;</a>
+    <a href=""#"" data-hr-on-click=""moveToChild"">&#x2192;</a>
+    <a href=""#"" data-hr-on-click=""editItem"">&#x270f;</a>
+    <a href=""#"" data-hr-on-click=""deleteItem"">&#x1f5d1;</a>
 </div>";
     }
 }

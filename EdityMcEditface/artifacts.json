@@ -13,7 +13,7 @@
     "outDir": "lib/bootstrap/dist/css",
     "sass": {
       "importPaths": [ ".", "node_modules/bootstrap/scss", "node_modules/htmlrapier.sidebar/css", "node_modules/EdityMcEditface.Client" ],
-      "input": "bootstrap/bootstrap-custom.scss",
+      "input": "bootstrap/bootstrap-*.scss",
       "compress": true,
       "basePath": "bootstrap"
     }

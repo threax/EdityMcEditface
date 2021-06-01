@@ -382,6 +382,19 @@ namespace EdityMcEditface.Mvc
                 return tools;
             });
 
+            services.AddThreaxProcessHelper(o =>
+            {
+                //o.IncludeLogOutput = false;
+                //o.DecorateProcessRunner = r => new SpyProcessRunner(r)
+                //{
+                //    Events = new ProcessEvents()
+                //    {
+                //        ErrorDataReceived = (o, e) => { if (e.DataReceivedEventArgs.Data != null) Console.WriteLine(e.DataReceivedEventArgs.Data); },
+                //        OutputDataReceived = (o, e) => { if (e.DataReceivedEventArgs.Data != null) Console.WriteLine(e.DataReceivedEventArgs.Data); },
+                //    }
+                //};
+            });
+
             return services;
         }
 

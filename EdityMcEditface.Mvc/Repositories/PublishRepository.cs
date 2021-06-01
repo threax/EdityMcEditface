@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Threax.ProcessHelper;
 
 namespace EdityMcEditface.Mvc.Repositories
 {
@@ -21,12 +22,14 @@ namespace EdityMcEditface.Mvc.Repositories
         private ISiteBuilder builder;
         private ICompileService compileService;
         private ProjectFinder projectFinder;
+        private readonly IProcessRunner processRunner;
 
-        public PublishRepository(ISiteBuilder builder, ICompileService compileService, ProjectFinder projectFinder)
+        public PublishRepository(ISiteBuilder builder, ICompileService compileService, ProjectFinder projectFinder, IProcessRunner processRunner)
         {
             this.builder = builder;
             this.compileService = compileService;
             this.projectFinder = projectFinder;
+            this.processRunner = processRunner;
         }
 
         /// <summary>
@@ -48,12 +51,8 @@ namespace EdityMcEditface.Mvc.Repositories
             {
                 using (var repo = new Repository(publishRepoPath))
                 {
-                    string logMessage = "";
-                    foreach (Remote remote in repo.Network.Remotes)
-                    {
-                        var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
-                        Commands.Fetch(repo, remote.Name, refSpecs, null, logMessage);
-                    }
+                    var startInfo = new ProcessStartInfo("git") { ArgumentList = { "fetch", "--all" }, WorkingDirectory = repo.Info.WorkingDirectory };
+                    processRunner.Run(startInfo);
 
                     var head = repo.Head.Commits.First();
                     var tracked = repo.Head.TrackedBranch.Commits.First();

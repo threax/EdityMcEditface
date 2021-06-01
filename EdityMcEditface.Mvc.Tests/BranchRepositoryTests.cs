@@ -1,11 +1,13 @@
 ﻿using EdityMcEditface.Mvc.Repositories;
 using LibGit2Sharp;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Threax.AspNetCore.Tests;
+using Threax.ProcessHelper;
 using Xunit;
 
 namespace EdityMcEditface.Mvc.Tests
@@ -22,6 +24,19 @@ namespace EdityMcEditface.Mvc.Tests
                 var mock = new Mock<ICommitRepository>();
                 mock.Setup(i => i.HasUncommittedChanges()).Returns(false);
                 return mock.Object;
+            });
+
+            mockup.MockServiceCollection.AddThreaxProcessHelper(o =>
+            {
+                o.IncludeLogOutput = false;
+                o.DecorateProcessRunner = r => new SpyProcessRunner(r)
+                {
+                    Events = new ProcessEvents()
+                    {
+                        ErrorDataReceived = (o, e) => { if (e.DataReceivedEventArgs.Data != null) Console.WriteLine(e.DataReceivedEventArgs.Data); },
+                        OutputDataReceived = (o, e) => { if (e.DataReceivedEventArgs.Data != null) Console.WriteLine(e.DataReceivedEventArgs.Data); },
+                    }
+                };
             });
 
             basePath = this.GetType().Name;
@@ -183,7 +198,7 @@ namespace EdityMcEditface.Mvc.Tests
                     var signature = new Signature("Test Bot", "testbot@editymceditface.com", DateTime.Now);
                     repo.Commit("Added test data", signature, signature);
 
-                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>());
+                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>(), mockup.Get<IProcessRunner>());
                     await syncRepo.Push();
                 }
 
@@ -220,7 +235,7 @@ namespace EdityMcEditface.Mvc.Tests
                     repo.Commit("Added test data", signature, signature);
 
                     //Sync main branch
-                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>());
+                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>(), mockup.Get<IProcessRunner>());
                     await syncRepo.Push();
 
                     var authorBranchRepo = new BranchRepository(repo, mockup.Get<ICommitRepository>());
@@ -292,7 +307,7 @@ namespace EdityMcEditface.Mvc.Tests
                     Commands.Stage(repo, testFilePath);
                     sig = new Signature(identity, DateTime.Now);
                     repo.Commit("Updated branch data", sig, sig);
-                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>());
+                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>(), mockup.Get<IProcessRunner>());
                     //Push side branch
                     await syncRepo.Push();
 
@@ -324,13 +339,13 @@ namespace EdityMcEditface.Mvc.Tests
                     var sig = new Signature(identity, DateTime.Now);
                     repo.Commit("Updated branch remotely", sig, sig);
 
-                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>());
+                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>(), mockup.Get<IProcessRunner>());
                     await syncRepo.Push();
                 }
 
                 using (var repo = new Repository(authorPath))
                 {
-                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>());
+                    var syncRepo = new SyncRepository(repo, mockup.Get<ICommitRepository>(), mockup.Get<IGitCredentialsProvider>(), mockup.Get<IProcessRunner>());
                     await syncRepo.Pull(new Signature(identity, DateTime.Now));
 
                     var testFilePath = Path.Combine(dir.Path, "Author/test.txt");

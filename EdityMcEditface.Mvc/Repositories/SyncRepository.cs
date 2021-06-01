@@ -2,22 +2,26 @@
 using EdityMcEditface.Mvc.Models.Git;
 using LibGit2Sharp;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Threax.ProcessHelper;
 
 namespace EdityMcEditface.Mvc.Repositories
 {
     public class SyncRepository : ISyncRepository
     {
         private IGitCredentialsProvider gitCredentialsProvider;
+        private readonly IProcessRunner processRunner;
         private ICommitRepository commitRepo;
         private Repository repo;
 
-        public SyncRepository(Repository repo, ICommitRepository commitRepo, IGitCredentialsProvider gitCredentialsProvider)
+        public SyncRepository(Repository repo, ICommitRepository commitRepo, IGitCredentialsProvider gitCredentialsProvider, IProcessRunner processRunner)
         {
             this.repo = repo;
             this.commitRepo = commitRepo;
             this.gitCredentialsProvider = gitCredentialsProvider;
+            this.processRunner = processRunner;
         }
 
         /// <summary>
@@ -28,11 +32,11 @@ namespace EdityMcEditface.Mvc.Repositories
         {
             return await Task.Run<SyncInfo>(() =>
             {
-                string logMessage = "";
-                foreach (Remote remote in repo.Network.Remotes)
+                var startInfo = new ProcessStartInfo("git") { ArgumentList = { "fetch", "--all" }, WorkingDirectory = repo.Info.WorkingDirectory };
+                var exit = processRunner.Run(startInfo);
+                if (exit != 0)
                 {
-                    var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
-                    Commands.Fetch(repo, remote.Name, refSpecs, null, logMessage);
+                    throw new InvalidOperationException($"Exit code {exit} running git fetch");
                 }
 
                 var head = repo.Head.Commits.First();
@@ -91,18 +95,11 @@ namespace EdityMcEditface.Mvc.Repositories
                     throw new InvalidOperationException("Cannot pull with uncommitted changes. Please commit first and try again.");
                 }
 
-                try
+                var startInfo = new ProcessStartInfo("git") { ArgumentList = { "pull", "origin" }, WorkingDirectory = repo.Info.WorkingDirectory };
+                var exit = processRunner.Run(startInfo);
+                if (exit != 0)
                 {
-                    var result = Commands.Pull(repo, signature, new PullOptions());
-                    switch (result.Status)
-                    {
-                        case MergeStatus.Conflicts:
-                            throw new Exception("Pull from source resulted in conflicts, please resolve them manually.");
-                    }
-                }
-                catch (LibGit2SharpException ex)
-                {
-                    throw new Exception(ex.Message);
+                    throw new InvalidOperationException($"Exit code {exit} running git pull");
                 }
             });
         }
@@ -119,16 +116,11 @@ namespace EdityMcEditface.Mvc.Repositories
                     throw new InvalidOperationException("Cannot push with uncommitted changes. Please commit first and try again.");
                 }
 
-                try
+                var startInfo = new ProcessStartInfo("git") { ArgumentList = { "push", "origin", "--all" }, WorkingDirectory = repo.Info.WorkingDirectory };
+                var exit = processRunner.Run(startInfo);
+                if(exit != 0)
                 {
-                    repo.Network.Push(repo.Head, new PushOptions()
-                    {
-                        CredentialsProvider = gitCredentialsProvider.GetCredentials
-                    });
-                }
-                catch (LibGit2SharpException ex)
-                {
-                    throw new Exception(ex.Message);
+                    throw new InvalidOperationException($"Exit code {exit} running git push");
                 }
             });
 

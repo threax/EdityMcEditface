@@ -5,13 +5,13 @@
   "dependencies": {
     "bootstrap": "^4.5.3",
     "popper.js": "^1.16.1",
-    "editymceditface.client": "^17.0.0-pre.2",
+    "editymceditface.client": "^17.0.0",
     "htmlrapier": "^25.0.0",
     "htmlrapier.bootstrap": "^9.0.0",
     "htmlrapier.form.bootstrap4": "^4.0.0",
     "htmlrapier.halcyon": "^10.0.0",
-    "htmlrapier.sidebar": "^7.0.0-pre.0",
-    "htmlrapier.treemenu": "^7.0.0-pre.0",
+    "htmlrapier.sidebar": "^7.0.0",
+    "htmlrapier.treemenu": "^7.0.0",
     "htmlrapier.widgets": "^16.0.0",
     "jquery": "^3.5.1",
     "jsns": "^5.1.0"

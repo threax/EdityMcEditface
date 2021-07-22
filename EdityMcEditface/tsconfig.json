@@ -18,30 +18,8 @@
       "ES2015"
     ],
     "paths": {
-      "edity.editorcore.*": [
-        "Editor\\*",
-        "node_modules\\editymceditface.client\\EditorCore\\*"
-      ],
-      "hr.bootstrap.*": [
-        "node_modules\\htmlrapier.bootstrap\\src\\*"
-      ],
-      "hr.form.bootstrap4.*": [
-        "node_modules\\htmlrapier.form.bootstrap4\\src\\*"
-      ],
-      "hr.halcyon.*": [
-        "node_modules\\htmlrapier.halcyon\\src\\*"
-      ],
-      "hr.sidebar.*": [
-        "node_modules\\htmlrapier.sidebar\\src\\*"
-      ],
-      "hr.treemenu.*": [
-        "node_modules\\htmlrapier.treemenu\\src\\*"
-      ],
-      "hr.widgets.*": [
-        "node_modules\\htmlrapier.widgets\\src\\*"
-      ],
-      "hr.*": [
-        "node_modules\\htmlrapier\\src\\*"
+      "edity.services.*": [
+        "Editor\\*"
       ]
     }
   },

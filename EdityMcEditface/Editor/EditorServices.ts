@@ -1,13 +1,13 @@
-﻿import * as bootstrap from 'hr.bootstrap.main';
-import { Fetcher } from 'hr.fetcher';
-import { WindowFetch } from 'hr.windowfetch';
-import { WithCredentialsFetcher } from 'edity.editorcore.WithCredentialsFetcher';
-import * as urlInjector from 'edity.editorcore.BaseUrlInjector';
-import * as controller from 'hr.controller';
-import * as client from 'edity.editorcore.EdityHypermediaClient';
-import * as pageConfig from 'hr.pageconfig';
-import * as hr from 'hr.main';
-import * as bootstrap4form from 'hr.form.bootstrap4.main';
+﻿import * as bootstrap from 'htmlrapier.bootstrap/src/main';
+import { Fetcher } from 'htmlrapier/src/fetcher';
+import { WindowFetch } from 'htmlrapier/src/windowfetch';
+import { WithCredentialsFetcher } from 'editymceditface.client/EditorCore/WithCredentialsFetcher';
+import * as urlInjector from 'editymceditface.client/EditorCore/BaseUrlInjector';
+import * as controller from 'htmlrapier/src/controller';
+import * as client from 'editymceditface.client/EditorCore/EdityHypermediaClient';
+import * as pageConfig from 'htmlrapier/src/pageconfig';
+import * as hr from 'htmlrapier/src/main';
+import * as bootstrap4form from 'htmlrapier.form.bootstrap4/src/main';
 
 //Activate htmlrapier
 hr.setup();

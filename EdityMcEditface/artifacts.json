@@ -4,7 +4,7 @@
     "typescript": {
       "compile": true,
       "shakeModules": {
-        "runners": [ "hr.runattributes", "edity.theme.layouts.default" ],
+        "runners": [ "hr.runattributes", "node_modules/editymceditface.client/Views/default" ],
         "outFile": "tsbin.prod.js"
       }
     }

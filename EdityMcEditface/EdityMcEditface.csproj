@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PreserveCompilationContext>true</PreserveCompilationContext>
+	<TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <AssemblyName>EdityMcEditface</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>EdityMcEditface</PackageId>
@@ -22,18 +23,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.1" />
-    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.3" />
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="Microsoft.Alm.Authentication" Version="4.3.0" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
-    <PackageReference Include="Threax.AspNetCore.AuthCore" Version="2.0.4" />
-    <PackageReference Include="Threax.AspNetCore.BuiltInTools" Version="5.3.1" />
-    <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="6.0.1" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.6.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Threax.AspNetCore.AuthCore" Version="5.0.0" />
+    <PackageReference Include="Threax.AspNetCore.BuiltInTools" Version="6.0.0" />
+    <PackageReference Include="Threax.AspNetCore.ExceptionFilter" Version="6.0.2" />
     <PackageReference Include="Threax.AspNetCore.FileRepository" Version="4.0.0" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="12.3.2" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen.Tools" Version="6.0.1" />
-    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="14.4.1" />
-    <PackageReference Include="Threax.AspNetCore.Models" Version="7.0.1" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen" Version="15.0.0" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.ClientGen.Tools" Version="8.0.0" />
+    <PackageReference Include="Threax.AspNetCore.Halcyon.Ext" Version="15.0.0" />
+    <PackageReference Include="Threax.AspNetCore.Models" Version="8.0.0" />
     <PackageReference Include="Threax.Extensions.Configuration.SchemaBinder" Version="2.0.1" />
   </ItemGroup>
 

@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="Threax.ProcessHelper" Version="1.0.0-pre33" />
-    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
     <PackageReference Include="Threax.AspNetCore.AuthCore" Version="5.0.0" />
     <PackageReference Include="Threax.AspNetCore.BuiltInTools" Version="6.0.0" />
